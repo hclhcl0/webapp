@@ -60,6 +60,9 @@ export default buildConfig({
         pool: {
           connectionString: dbUrl,
         },
+        // Tự động tạo/đồng bộ bảng trong database khi khởi động
+        // Không cần chạy migrate thủ công
+        push: true,
       })
     : sqliteAdapter({
         client: {
@@ -68,19 +71,5 @@ export default buildConfig({
       }),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
-  },
-  // Tự động tạo/cập nhật bảng trong database khi server khởi động
-  onInit: async (payload) => {
-    if (dbUrl) {
-      try {
-        await payload.db.migrate?.();
-        payload.logger.info('✅ Database migrations completed.');
-      } catch (err: any) {
-        // Bỏ qua lỗi "no migrations to run" - đây là bình thường
-        if (!err?.message?.includes('no migrations')) {
-          payload.logger.error({ err }, '❌ Migration failed');
-        }
-      }
-    }
   },
 });
