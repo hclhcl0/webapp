@@ -1,5 +1,6 @@
 /**
  * MIGRATION STATEMENTS — nguồn duy nhất (single source of truth)
+ * Cập nhật lúc: 11/06/2026 15:00
  * Được dùng bởi:
  *   - scripts/migrate.mjs          (CI/CD GitHub Actions)
  *   - src/app/api/db-push/route.ts (API route thủ công)
