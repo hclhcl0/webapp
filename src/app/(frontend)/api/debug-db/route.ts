@@ -8,28 +8,22 @@ export async function GET() {
   try {
     const payload = await getPayload({ config: configPromise });
 
-    if (!payload.db || !payload.db.drizzle) {
-      return NextResponse.json({ error: "Drizzle is not available" });
-    }
-
-    // Try to describe 'users'
-    const usersResult = await payload.db.drizzle.execute(`
-      SELECT column_name, data_type 
-      FROM information_schema.columns 
-      WHERE table_name = 'users'
-    `);
-
-    // Fetch theme-settings schema
-    const themeResult = await payload.db.drizzle.execute(`
-      SELECT column_name, data_type 
-      FROM information_schema.columns 
-      WHERE table_name = 'theme_settings'
+    // Ensure theme_settings table exists manually since we turned off push: true in production
+    await payload.db.drizzle.execute(`
+      CREATE TABLE IF NOT EXISTS "theme_settings" (
+        "id" serial PRIMARY KEY NOT NULL,
+        "org_colors_ban_lanh_dao" varchar,
+        "org_colors_phong" varchar,
+        "org_colors_khoa" varchar,
+        "org_colors_khac" varchar,
+        "updated_at" timestamp(3) with time zone,
+        "created_at" timestamp(3) with time zone
+      );
     `);
 
     return NextResponse.json({
       success: true,
-      usersColumns: usersResult.rows || usersResult,
-      themeColumns: themeResult.rows || themeResult
+      message: "theme_settings table checked/created successfully"
     });
   } catch (error: any) {
     return NextResponse.json({

@@ -98,8 +98,8 @@ export default buildConfig({
           connectionString: dbUrl,
         },
         // Tự động tạo/đồng bộ bảng trong database khi khởi động
-        // Không cần chạy migrate thủ công
-        push: true,
+        // (Chỉ dùng ở môi trường dev để tránh lỗi transaction/lock trên Vercel)
+        push: process.env.NODE_ENV !== 'production',
       })
     : sqliteAdapter({
         client: {
