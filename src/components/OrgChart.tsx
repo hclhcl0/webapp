@@ -18,12 +18,18 @@ type OrgUnit = {
 
 type Props = {
   units: OrgUnit[];
+  themeColors?: {
+    ban_lanh_dao?: string;
+    phong?: string;
+    khoa?: string;
+    khac?: string;
+  };
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  ban_lanh_dao: '#1565c0',
-  phong: '#2e7d32',
-  khoa: '#6a1b9a',
+  ban_lanh_dao: '#0d47a1', // Dark blue
+  phong: '#2e7d32',        // Green
+  khoa: '#1976d2',         // CDC Blue
   khac: '#e65100',
 };
 
@@ -34,8 +40,8 @@ const TYPE_LABELS: Record<string, string> = {
   khac: 'Đơn vị khác',
 };
 
-function OrgNode({ unit, isActive, onClick }: { unit: OrgUnit; isActive: boolean; onClick: () => void }) {
-  const color = TYPE_COLORS[unit.unitType] || '#455a64';
+function OrgNode({ unit, isActive, onClick, colors }: { unit: OrgUnit; isActive: boolean; onClick: () => void; colors: Record<string, string> }) {
+  const color = colors[unit.unitType] || '#455a64';
   const memberCount = unit.members?.length || 0;
   const leaders = unit.members?.filter(m =>
     ['giam_doc', 'pho_giam_doc', 'truong', 'pho_truong'].includes(m.position)
@@ -137,12 +143,12 @@ function OrgNode({ unit, isActive, onClick }: { unit: OrgUnit; isActive: boolean
   );
 }
 
-export function OrgChart({ units }: Props) {
+export function OrgChart({ units, themeColors }: Props) {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const colors = { ...TYPE_COLORS, ...themeColors };
 
   const handleNodeClick = (unitId: string) => {
     setActiveId(prev => prev === unitId ? null : unitId);
-    // Cuộn xuống accordion tương ứng
     setTimeout(() => {
       const el = document.getElementById(`accordion-${unitId}`);
       if (el) {
@@ -162,7 +168,6 @@ export function OrgChart({ units }: Props) {
 
   return (
     <div className="org-chart">
-      {/* Root: Ban lãnh đạo */}
       {leadership.length > 0 && (
         <div className="org-level leadership-level">
           {leadership.map(unit => (
@@ -171,20 +176,19 @@ export function OrgChart({ units }: Props) {
               unit={unit}
               isActive={activeId === unit.id}
               onClick={() => handleNodeClick(unit.id)}
+              colors={colors}
             />
           ))}
         </div>
       )}
 
-      {/* Connector lines */}
       {leadership.length > 0 && departments.length > 0 && (
         <div className="connector-v" aria-hidden="true" />
       )}
 
-      {/* Departments grouped by type */}
       {Object.entries(deptGroups).map(([type, group]) => (
         <div key={type} className="dept-group">
-          <div className="dept-group-label" style={{ color: TYPE_COLORS[type] }}>
+          <div className="dept-group-label" style={{ color: colors[type] || colors.khac }}>
             {TYPE_LABELS[type]}
           </div>
           <div className="org-level dept-level">
@@ -194,6 +198,7 @@ export function OrgChart({ units }: Props) {
                 unit={unit}
                 isActive={activeId === unit.id}
                 onClick={() => handleNodeClick(unit.id)}
+                colors={colors}
               />
             ))}
           </div>

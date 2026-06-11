@@ -12,19 +12,26 @@ export const metadata: Metadata = {
 // Revalidate every hour
 export const revalidate = 3600;
 
-async function getOrgUnits() {
+export default async function CoCoToChucPage() {
   const payload = await getPayload({ config: configPromise });
-  const { docs } = await payload.find({
+
+  const orgUnitsRes = await payload.find({
     collection: 'org-units',
     sort: 'order',
     limit: 100,
     depth: 1,
   });
-  return docs;
-}
 
-export default async function CoCoToChucPage() {
-  const orgUnits = await getOrgUnits();
+  // findGlobal có thể ném lỗi nếu DB chưa migrate xong sau khi deploy
+  let themeColors: Record<string, string> = {};
+  try {
+    const themeSettings = await payload.findGlobal({ slug: 'theme-settings' });
+    themeColors = (themeSettings?.orgColors as Record<string, string>) || {};
+  } catch {
+    // Dùng màu mặc định nếu chưa có dữ liệu global
+  }
+
+  const orgUnits = orgUnitsRes.docs;
 
   const leadership = orgUnits.filter((u: any) => u.unitType === 'ban_lanh_dao');
   const departments = orgUnits.filter((u: any) => u.unitType !== 'ban_lanh_dao');
@@ -53,7 +60,7 @@ export default async function CoCoToChucPage() {
             <span className="section-icon" aria-hidden="true">🏛️</span>
             Sơ đồ Tổ chức
           </h2>
-          <OrgChart units={orgUnits as any[]} />
+          <OrgChart units={orgUnits as any[]} themeColors={themeColors} />
         </section>
 
         {/* Divider */}
@@ -67,7 +74,7 @@ export default async function CoCoToChucPage() {
             <span className="section-icon" aria-hidden="true">👥</span>
             Danh sách Nhân sự
           </h2>
-          <OrgAccordion units={orgUnits as any[]} />
+          <OrgAccordion units={orgUnits as any[]} themeColors={themeColors} />
         </section>
       </div>
 

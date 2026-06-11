@@ -25,6 +25,7 @@ import { Sidebar } from './globals/Sidebar.ts';
 import { Footer } from './globals/Footer.ts';
 import { Settings } from './globals/Settings.ts';
 import { BannerSettings } from './globals/BannerSettings.ts';
+import { ThemeSettings } from './globals/ThemeSettings.ts';
 import { WorkSchedules } from './collections/WorkSchedules.ts';
 import { Videos } from './collections/Videos.ts';
 import { VideoChannels } from './collections/VideoChannels.ts';
@@ -75,6 +76,7 @@ export default buildConfig({
     Footer,
     Settings,
     BannerSettings,
+    ThemeSettings,
   ],
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN

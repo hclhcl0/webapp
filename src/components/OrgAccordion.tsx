@@ -24,6 +24,12 @@ type OrgUnit = {
 
 type Props = {
   units: OrgUnit[];
+  themeColors?: {
+    ban_lanh_dao?: string;
+    phong?: string;
+    khoa?: string;
+    khac?: string;
+  };
 };
 
 const POSITION_LABELS: Record<string, string> = {
@@ -54,9 +60,9 @@ const ACADEMIC_LABELS: Record<string, string> = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  ban_lanh_dao: '#1565c0',
-  phong: '#2e7d32',
-  khoa: '#6a1b9a',
+  ban_lanh_dao: '#0d47a1', // Dark blue
+  phong: '#2e7d32',        // Green
+  khoa: '#1976d2',         // CDC Blue
   khac: '#e65100',
 };
 
@@ -192,9 +198,9 @@ function MemberCard({ member }: { member: Member }) {
   );
 }
 
-function AccordionItem({ unit, defaultOpen = false }: { unit: OrgUnit; defaultOpen?: boolean }) {
+function AccordionItem({ unit, defaultOpen = false, colors }: { unit: OrgUnit; defaultOpen?: boolean; colors: Record<string, string> }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const color = TYPE_COLORS[unit.unitType] || '#455a64';
+  const color = colors[unit.unitType] || '#455a64';
   const members = unit.members || [];
   const leaders = members.filter(m => ['giam_doc', 'pho_giam_doc', 'truong', 'pho_truong'].includes(m.position));
   const staff = members.filter(m => !['giam_doc', 'pho_giam_doc', 'truong', 'pho_truong'].includes(m.position));
@@ -396,7 +402,8 @@ function AccordionItem({ unit, defaultOpen = false }: { unit: OrgUnit; defaultOp
   );
 }
 
-export function OrgAccordion({ units }: Props) {
+export function OrgAccordion({ units, themeColors }: Props) {
+  const colors = { ...TYPE_COLORS, ...themeColors };
   const groups: Record<string, { label: string; units: OrgUnit[] }> = {
     ban_lanh_dao: { label: '🏛️ Ban Lãnh đạo', units: [] },
     phong: { label: '📋 Phòng chức năng', units: [] },
@@ -421,6 +428,7 @@ export function OrgAccordion({ units }: Props) {
                 key={unit.id}
                 unit={unit}
                 defaultOpen={key === 'ban_lanh_dao' && i === 0}
+                colors={colors}
               />
             ))}
           </div>
