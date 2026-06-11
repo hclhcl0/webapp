@@ -97,9 +97,9 @@ export default buildConfig({
         pool: {
           connectionString: dbUrl,
         },
-        // Tự động tạo/đồng bộ bảng trong database khi khởi động
-        // (Chỉ dùng ở môi trường dev để tránh lỗi transaction/lock trên Vercel)
-        push: process.env.NODE_ENV !== 'production',
+        // TEMPORARY: push: true để sync toàn bộ schema vào Vercel Postgres 1 lần
+        // Sau khi deploy thành công, sẽ đổi lại thành false
+        push: true,
       })
     : sqliteAdapter({
         client: {
