@@ -12,7 +12,7 @@
 /* ==========================================
    CUSTOM LOGIN PAGE STYLING (CDC ĐÀ NẴNG)
    ========================================== */
-.login {
+.template-minimal {
   background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
   display: flex !important;
   align-items: center !important;
@@ -20,7 +20,7 @@
   min-height: 100vh !important;
 }
 
-.login__wrap {
+.template-minimal__wrap {
   background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
@@ -34,17 +34,17 @@
 }
 
 /* Hide default title to let AdminLogo brand shine */
-.login h1 {
+.template-minimal h1 {
   display: none !important;
 }
 
 /* Customize form inputs */
-.login .field-type {
+.template-minimal .field-type {
   margin-bottom: 1.25rem !important;
 }
 
-.login input[type="email"],
-.login input[type="password"] {
+.template-minimal input[type="email"],
+.template-minimal input[type="password"] {
   border-radius: 8px !important;
   border: 1.5px solid var(--theme-elevation-200) !important;
   padding: 0.75rem 1rem !important;
@@ -52,14 +52,14 @@
   font-family: inherit !important;
 }
 
-.login input[type="email"]:focus,
-.login input[type="password"]:focus {
+.template-minimal input[type="email"]:focus,
+.template-minimal input[type="password"]:focus {
   border-color: #2a5298 !important;
   box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.15) !important;
 }
 
 /* Customize login button */
-.login button[type="submit"] {
+.template-minimal button[type="submit"] {
   background: #2a5298 !important;
   border: none !important;
   border-radius: 8px !important;
@@ -75,22 +75,22 @@
   cursor: pointer !important;
 }
 
-.login button[type="submit"]:hover {
+.template-minimal button[type="submit"]:hover {
   background: #1e3c72 !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 6px 16px rgba(42, 82, 152, 0.3) !important;
 }
 
-.login button[type="submit"]:active {
+.template-minimal button[type="submit"]:active {
   transform: translateY(1px) !important;
 }
 
 /* Dark mode overrides */
-html[data-theme="dark"] .login {
+html[data-theme="dark"] .template-minimal {
   background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%) !important;
 }
 
-html[data-theme="dark"] .login__wrap {
+html[data-theme="dark"] .template-minimal__wrap {
   background: rgba(20, 30, 45, 0.85) !important;
   border: 1px solid rgba(255, 255, 255, 0.05) !important;
   box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4) !important;

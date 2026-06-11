@@ -1,6 +1,7 @@
 import configPromise from '@payload-config'
 import '@payloadcms/next/css'
 import './custom.css'
+import '../../admin.css'
 import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts'
 import React from 'react'
 
