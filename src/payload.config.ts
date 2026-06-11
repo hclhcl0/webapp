@@ -97,9 +97,9 @@ export default buildConfig({
         pool: {
           connectionString: dbUrl,
         },
-        // TEMPORARY: push: true để sync toàn bộ schema vào Vercel Postgres 1 lần
-        // Sau khi deploy thành công, sẽ đổi lại thành false
-        push: true,
+        // Schema đã được sync lần đầu. Tắt push ở production để tránh deadlock.
+        // Muốn sync schema mới: dùng PAYLOAD_FORCE_PUSH=true trong Vercel env vars
+        push: process.env.PAYLOAD_FORCE_PUSH === 'true' ? true : process.env.NODE_ENV !== 'production',
       })
     : sqliteAdapter({
         client: {
