@@ -7,6 +7,9 @@ import { CategoryNewsBlock } from '../blocks/CategoryNews.ts';
 export const Sidebar: GlobalConfig = {
   slug: 'sidebar',
   label: 'Sidebar (Thanh bên)',
+  admin: {
+    group: 'Giao diện',
+  },
   access: {
     read: () => true,
   },

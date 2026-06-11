@@ -99,6 +99,9 @@ export const Articles: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
+        components: {
+          Field: '@/components/SlugField.tsx#SlugField',
+        },
         description: 'Đường dẫn tĩnh (VD: ten-bai-viet)',
       },
     },

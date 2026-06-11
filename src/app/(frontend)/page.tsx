@@ -7,11 +7,12 @@ import { HeroCarousel } from '@/components/HeroCarousel'
 import { NewsGrid } from '@/components/NewsGrid'
 import { RichText } from '@payloadcms/richtext-lexical/react';
 import { jsxConverters } from '@/components/LexicalConverters';
+import { HomeSectionRenderer } from '@/components/HomeSections/HomeSectionRenderer';
 
 export default async function HomePage() {
   const payload = await getPayload({ config: configPromise });
-  const settings = await payload.findGlobal({ slug: 'settings', depth: 1 });
-  const homeCategories = settings?.homeCategories || [];
+  const settings = await payload.findGlobal({ slug: 'settings', depth: 2 });
+  const homeSections = (settings as any)?.homeSections || [];
   const homeContent = settings?.homeContent;
 
   return (
@@ -26,27 +27,11 @@ export default async function HomePage() {
         </div>
       )}
 
+      {/* Tin mới nhất luôn hiển thị */}
       <NewsGrid />
 
-      {homeCategories.map((item: any, index: number) => {
-        if (!item.category) return null;
-        
-        const catObj = typeof item.category === 'object' ? item.category : null;
-        const catId = catObj ? catObj.id : item.category;
-        const catName = catObj ? catObj.name : 'Chuyên mục';
-        const catSlug = catObj ? catObj.slug : '';
-        
-        return (
-          <NewsGrid 
-            key={`${catId}-${index}`}
-            categoryId={catId} 
-            categoryName={catName} 
-            categorySlug={catSlug}
-            limitOverride={item.limit}
-          />
-        );
-      })}
-
+      {/* Các thành phần tùy chỉnh từ CMS */}
+      <HomeSectionRenderer sections={homeSections} />
     </>
   )
 }

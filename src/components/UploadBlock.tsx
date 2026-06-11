@@ -9,11 +9,12 @@ export async function UploadBlock({ node }: { node: any }) {
   // If already populated
   if (typeof node.value === 'object' && node.value.url) {
     return (
-      <figure className="my-8 text-center">
+      <figure className="my-8 text-center w-full" style={{ width: '100%', display: 'block', margin: '2rem 0' }}>
         <img 
           src={node.value.url} 
           alt="image" 
-          className="max-w-full h-auto mx-auto rounded-xl shadow-sm border border-gray-100" 
+          className="rounded-xl shadow-sm border border-gray-100" 
+          style={{ width: '100%', height: 'auto', display: 'block' }}
         />
       </figure>
     );
@@ -34,11 +35,12 @@ export async function UploadBlock({ node }: { node: any }) {
 
     if (media?.url) {
       return (
-        <figure className="my-8 text-center">
+        <figure className="my-8 text-center w-full" style={{ width: '100%', display: 'block', margin: '2rem 0' }}>
           <img 
             src={media.url} 
             alt="image" 
-            className="max-w-full h-auto mx-auto rounded-xl shadow-sm border border-gray-100" 
+            className="rounded-xl shadow-sm border border-gray-100" 
+            style={{ width: '100%', height: 'auto', display: 'block' }}
           />
         </figure>
       );

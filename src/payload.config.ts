@@ -27,6 +27,7 @@ import { BannerSettings } from './globals/BannerSettings.ts';
 import { WorkSchedules } from './collections/WorkSchedules.ts';
 import { Videos } from './collections/Videos.ts';
 import { VideoChannels } from './collections/VideoChannels.ts';
+import { FormSubmissions } from './collections/FormSubmissions.ts';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -54,6 +55,7 @@ export default buildConfig({
     WorkSchedules,
     VideoChannels,
     Videos,
+    FormSubmissions,
   ],
   globals: [
     Header,

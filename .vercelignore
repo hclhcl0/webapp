@@ -1,0 +1,11 @@
+node_modules
+.next
+scratch
+media
+*.db
+*.sql
+*.png
+news_data.json
+hcdc.html
+*.db-wal
+*.db-shm

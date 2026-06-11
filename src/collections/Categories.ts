@@ -21,6 +21,9 @@ export const Categories: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
+        components: {
+          Field: '@/components/SlugField.tsx#SlugField',
+        },
         description: 'Đường dẫn tĩnh (VD: tin-tuc-su-kien)',
       },
     },

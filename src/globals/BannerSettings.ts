@@ -4,7 +4,7 @@ export const BannerSettings: GlobalConfig = {
   slug: 'banner-settings',
   label: 'Cài đặt Slider',
   admin: {
-    group: 'Quản lý Banner',
+    group: 'Giao diện',
   },
   access: {
     read: () => true,

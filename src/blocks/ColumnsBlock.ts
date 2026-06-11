@@ -8,15 +8,6 @@ import { ButtonBlock } from './ButtonBlock.ts';
 import { RelatedArticlesBlock } from './RelatedArticlesBlock.ts';
 import { CardBlock } from './CardBlock.ts';
 
-console.log("DEBUG PAYLOAD BLOCKS IN COLUMNS:", {
-  VideoBlock: !!VideoBlock,
-  PDFBlock: !!PDFBlock,
-  GalleryBlock: !!GalleryBlock,
-  CalloutBlock: !!CalloutBlock,
-  ButtonBlock: !!ButtonBlock,
-  RelatedArticlesBlock: !!RelatedArticlesBlock,
-  CardBlock: !!CardBlock,
-});
 
 const columnEditor = lexicalEditor({
   features: ({ defaultFeatures }) => [

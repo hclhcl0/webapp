@@ -4,10 +4,10 @@
   color: rgba(255, 255, 255, 0.85);
   padding-top: 0;
   margin-top: 3rem;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
-/* Accent bar on top */
+/* Accent bar trên cùng */
 .topAccent {
   height: 4px;
   background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary-light));
@@ -28,28 +28,28 @@
   }
 }
 
-/* Column headings */
+/* Tiêu đề cột */
 .col h3 {
-  font-size: 0.7rem;
+  font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--secondary-light, #6fb0e0);
+  color: var(--secondary-light);
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Org name */
+/* Tên tổ chức */
 .orgName {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 400;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.5;
   margin-bottom: 1rem;
 }
 
-/* Contact list */
+/* Danh sách liên hệ */
 .contactList {
   list-style: none;
   display: flex;
@@ -61,7 +61,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.72);
   line-height: 1.5;
   font-size: 0.78rem;
 }
@@ -69,10 +69,10 @@
 .contactList li svg {
   flex-shrink: 0;
   margin-top: 2px;
-  color: var(--secondary-light, #6fb0e0);
+  color: var(--secondary-light);
 }
 
-/* Quick links */
+/* Liên kết nhanh */
 .quickLinks {
   list-style: none;
   display: flex;
@@ -83,20 +83,20 @@
 .quickLinks li::before {
   content: '›';
   margin-right: 0.4rem;
-  color: var(--secondary-light, #6fb0e0);
+  color: var(--secondary-light);
 }
 
 .quickLinks a {
-  color: rgba(255, 255, 255, 0.75);
-  transition: color 0.2s ease, padding-left 0.2s ease;
+  color: rgba(255, 255, 255, 0.72);
+  transition: color var(--transition-base), padding-left var(--transition-base);
 }
 
 .quickLinks a:hover {
-  color: #fff;
+  color: var(--white);
   padding-left: 4px;
 }
 
-/* Social Links Array */
+/* Mạng xã hội */
 .socialList {
   display: flex;
   flex-direction: column;
@@ -109,8 +109,8 @@
   align-items: center;
   gap: 0.75rem;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
+  font-size: var(--text-sm);
+  transition: all var(--transition-base);
 }
 
 .socialItemIcon {
@@ -122,29 +122,29 @@
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.9);
-  transition: all 0.25s ease;
+  transition: all var(--transition-base);
   flex-shrink: 0;
 }
 
 .socialItem:hover {
-  color: #fff;
+  color: var(--white);
 }
 
 .socialItem:hover .socialItemIcon {
   background-color: var(--primary);
-  color: #fff;
+  color: var(--white);
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Divider */
+/* Đường kẻ phân cách */
 .divider {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   margin: 0;
 }
 
-/* Copyright bar */
+/* Thanh bản quyền */
 .copyright {
   background-color: rgba(0, 0, 0, 0.2);
   padding: 1rem 0;
@@ -156,6 +156,6 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.45);
 }

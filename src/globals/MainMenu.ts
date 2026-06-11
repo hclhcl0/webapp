@@ -3,6 +3,9 @@ import type { GlobalConfig } from 'payload';
 export const MainMenu: GlobalConfig = {
   slug: 'main-menu',
   label: 'Menu Điều Hướng',
+  admin: {
+    group: 'Giao diện',
+  },
   access: {
     read: () => true,
   },

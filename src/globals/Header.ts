@@ -3,6 +3,9 @@ import type { GlobalConfig } from 'payload';
 export const Header: GlobalConfig = {
   slug: 'header',
   label: 'Header (Cấu hình chung)',
+  admin: {
+    group: 'Giao diện',
+  },
   access: {
     read: () => true,
   },

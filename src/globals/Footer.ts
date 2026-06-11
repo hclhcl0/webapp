@@ -3,6 +3,9 @@ import type { GlobalConfig } from 'payload';
 export const Footer: GlobalConfig = {
   slug: 'footer',
   label: 'Footer (Chân trang & Giới thiệu)',
+  admin: {
+    group: 'Giao diện',
+  },
   access: {
     read: () => true,
   },

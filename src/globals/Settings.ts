@@ -25,6 +25,9 @@ console.log("DEBUG PAYLOAD BLOCKS IN SETTINGS:", {
 export const Settings: GlobalConfig = {
   slug: 'settings',
   label: 'Cấu hình chung (Settings)',
+  admin: {
+    group: 'Giao diện',
+  },
   access: {
     read: () => true,
   },
@@ -63,6 +66,22 @@ export const Settings: GlobalConfig = {
       required: true,
       admin: {
         description: 'Tuỳ chỉnh số lượng thẻ bài viết hiển thị trên cùng một hàng đối với giao diện điện thoại.',
+      }
+    },
+    {
+      name: 'homeNewsLayout',
+      type: 'select',
+      label: 'Bố cục hiển thị (Tin mới nhất)',
+      defaultValue: 'grid',
+      options: [
+        { label: 'Lưới tin tức (Grid)', value: 'grid' },
+        { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
+        { label: 'Danh sách chi tiết (List)', value: 'list' },
+        { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
+        { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
+      ],
+      admin: {
+        description: 'Lựa chọn hiển thị danh sách bài viết mới dưới dạng lưới tĩnh hoặc slider trượt tự động.',
       }
     },
     {
@@ -169,38 +188,365 @@ export const Settings: GlobalConfig = {
             },
             description: 'Màu tạo điểm nhấn cho các họa tiết phụ (VD: #4999d6).',
           }
+        },
+        {
+          name: 'fontFamily',
+          type: 'select',
+          label: 'Font chữ toàn trang (Google Fonts)',
+          defaultValue: 'Inter',
+          options: [
+            { label: 'Inter (Mặc định)', value: 'Inter' },
+            { label: 'Roboto', value: 'Roboto' },
+            { label: 'Be Vietnam Pro (Tiếng Việt)', value: 'Be+Vietnam+Pro' },
+            { label: 'Noto Sans (Tiếng Việt)', value: 'Noto+Sans' },
+            { label: 'Source Sans 3', value: 'Source+Sans+3' },
+            { label: 'Nunito', value: 'Nunito' },
+            { label: 'Outfit', value: 'Outfit' },
+            { label: 'Plus Jakarta Sans', value: 'Plus+Jakarta+Sans' },
+            { label: 'Montserrat (Tiếng Việt)', value: 'Montserrat' },
+            { label: 'Open Sans (Tiếng Việt)', value: 'Open+Sans' },
+            { label: 'Mulish (Tiếng Việt)', value: 'Mulish' },
+            { label: 'Lexend (Tiếng Việt)', value: 'Lexend' },
+            { label: 'Noto Serif (Tiếng Việt - Serif)', value: 'Noto+Serif' },
+            { label: 'Lora (Tiếng Việt - Serif)', value: 'Lora' },
+            { label: 'Barlow (Tiếng Việt)', value: 'Barlow' },
+            { label: 'Cabin (Tiếng Việt)', value: 'Cabin' },
+            { label: 'Comfortaa (Tiếng Việt)', value: 'Comfortaa' },
+          ],
+          admin: {
+            description: 'Chọn font chữ chính hiển thị trên toàn bộ website. Font sẽ được tải từ Google Fonts và áp dụng tức thì sau khi lưu.',
+          }
         }
       ]
     },
     {
-      name: 'homeCategories',
-      type: 'array',
-      label: 'Các khu vực chuyên mục hiển thị trên Trang chủ',
+      name: 'homeSections',
+      type: 'blocks',
+      label: 'Các thành phần trên Trang chủ',
       labels: {
-        singular: 'Khu vực chuyên mục',
-        plural: 'Các khu vực chuyên mục',
+        singular: 'Thành phần',
+        plural: 'Danh sách thành phần',
       },
-      fields: [
+      admin: {
+        description: 'Kéo thả để sắp xếp thứ tự hiển thị. Mỗi thành phần là một khu vực riêng biệt trên trang chủ.',
+      },
+      blocks: [
+        // ── Block 1: Khu vực tin tức theo chuyên mục ──
         {
-          name: 'category',
-          type: 'relationship',
-          relationTo: 'categories',
-          required: true,
-          label: 'Chọn chuyên mục',
+          slug: 'newsCategorySection',
+          interfaceName: 'NewsCategorySection',
+          labels: { singular: '📰 Khu vực Tin tức Chuyên mục', plural: 'Khu vực Tin tức Chuyên mục' },
+          fields: [
+            {
+              name: 'category',
+              type: 'relationship',
+              relationTo: 'categories',
+              required: true,
+              label: 'Chọn chuyên mục',
+            },
+            {
+              name: 'limit',
+              type: 'number',
+              label: 'Số hàng hiển thị',
+              defaultValue: 2,
+              min: 1,
+              max: 20,
+              required: true,
+              admin: {
+                description: 'Số bài viết = Số hàng × Số cột (cấu hình ở trên).',
+              },
+            },
+            {
+              name: 'layout',
+              type: 'select',
+              label: 'Bố cục hiển thị',
+              defaultValue: 'grid',
+              options: [
+                { label: 'Lưới tin tức (Grid)', value: 'grid' },
+                { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
+                { label: 'Danh sách chi tiết (List)', value: 'list' },
+                { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
+                { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
+              ],
+            },
+          ],
         },
+
+        // ── Block 2: Banner hình ảnh ──
         {
-          name: 'limit',
-          type: 'number',
-          label: 'Số hàng hiển thị',
-          defaultValue: 2,
-          min: 1,
-          max: 20,
-          required: true,
-          admin: {
-            description: 'Số bài viết sẽ tự động tính bằng (Số hàng x Số cột Máy tính).',
-          }
-        }
-      ]
+          slug: 'bannerSection',
+          interfaceName: 'BannerSection',
+          labels: { singular: '🖼️ Banner Hình ảnh', plural: 'Banner Hình ảnh' },
+          fields: [
+            {
+              name: 'image',
+              type: 'upload',
+              relationTo: 'media',
+              required: true,
+              label: 'Hình ảnh banner',
+            },
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Tiêu đề (tùy chọn)',
+            },
+            {
+              name: 'subtitle',
+              type: 'text',
+              label: 'Mô tả ngắn (tùy chọn)',
+            },
+            {
+              name: 'linkUrl',
+              type: 'text',
+              label: 'Đường dẫn khi nhấn vào banner',
+            },
+            {
+              name: 'openInNewTab',
+              type: 'checkbox',
+              label: 'Mở liên kết trong tab mới',
+              defaultValue: false,
+            },
+            {
+              name: 'style',
+              type: 'select',
+              label: 'Kiểu hiển thị',
+              defaultValue: 'fullwidth',
+              options: [
+                { label: 'Toàn chiều rộng (Full-width)', value: 'fullwidth' },
+                { label: 'Thẻ có bo góc (Card)', value: 'card' },
+              ],
+            },
+          ],
+        },
+
+        // ── Block 3: Khu vực Video YouTube ──
+        {
+          slug: 'videoSection',
+          interfaceName: 'VideoSection',
+          labels: { singular: '🎬 Khu vực Video YouTube', plural: 'Khu vực Video YouTube' },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Tiêu đề khu vực',
+              defaultValue: 'VIDEO NỔI BẬT',
+            },
+            {
+              name: 'channel',
+              type: 'relationship',
+              relationTo: 'video-channels',
+              label: 'Chọn kênh YouTube hiển thị',
+              required: true,
+            },
+            {
+              name: 'limit',
+              type: 'number',
+              label: 'Số video hiển thị',
+              defaultValue: 4,
+              min: 1,
+              max: 12,
+            },
+            {
+              name: 'layout',
+              type: 'select',
+              label: 'Bố cục video',
+              defaultValue: 'grid',
+              options: [
+                { label: 'Lưới (Grid)', value: 'grid' },
+                { label: 'Video chính + Danh sách phụ', value: 'featured' },
+              ],
+            },
+          ],
+        },
+
+        // ── Block 4: Khu vực TikTok ──
+        {
+          slug: 'tiktokSection',
+          interfaceName: 'TiktokSection',
+          labels: { singular: '📱 Khu vực TikTok', plural: 'Khu vực TikTok' },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Tiêu đề khu vực',
+              defaultValue: 'KÊNH TIKTOK CDC ĐÀ NẴNG',
+            },
+            {
+              name: 'channel',
+              type: 'relationship',
+              relationTo: 'video-channels',
+              label: 'Chọn kênh TikTok hiển thị',
+              required: true,
+            },
+            {
+              name: 'limit',
+              type: 'number',
+              label: 'Số video TikTok hiển thị',
+              defaultValue: 4,
+              min: 1,
+              max: 8,
+            },
+          ],
+        },
+
+        // ── Block 5: Thống kê / Số liệu nổi bật ──
+        {
+          slug: 'statsSection',
+          interfaceName: 'StatsSection',
+          labels: { singular: '📊 Thống kê / Số liệu', plural: 'Thống kê / Số liệu' },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Tiêu đề khu vực (tùy chọn)',
+            },
+            {
+              name: 'backgroundColor',
+              type: 'select',
+              label: 'Màu nền',
+              defaultValue: 'primary',
+              options: [
+                { label: 'Màu chủ đạo (Primary)', value: 'primary' },
+                { label: 'Màu trắng / Sáng', value: 'light' },
+                { label: 'Màu xám nhạt', value: 'gray' },
+              ],
+            },
+            {
+              name: 'stats',
+              type: 'array',
+              label: 'Danh sách chỉ số thống kê',
+              minRows: 1,
+              maxRows: 6,
+              labels: { singular: 'Chỉ số', plural: 'Các chỉ số' },
+              fields: [
+                {
+                  name: 'icon',
+                  type: 'text',
+                  label: 'Icon (emoji hoặc tên icon)',
+                  defaultValue: '🏥',
+                  admin: { description: 'Dán emoji vào đây, VD: 🏥 🧪 💉 👥 🌐' },
+                },
+                {
+                  name: 'value',
+                  type: 'text',
+                  label: 'Con số / Giá trị',
+                  required: true,
+                  admin: { description: 'VD: 1,200 hoặc 99% hoặc 50+' },
+                },
+                {
+                  name: 'label',
+                  type: 'text',
+                  label: 'Nhãn / Tên chỉ số',
+                  required: true,
+                  admin: { description: 'VD: Ca bệnh được điều trị' },
+                },
+                {
+                  name: 'suffix',
+                  type: 'text',
+                  label: 'Hậu tố (tùy chọn)',
+                  admin: { description: 'VD: ca, %, trạm, người' },
+                },
+              ],
+            },
+          ],
+        },
+
+        // ── Block 6: Liên kết nhanh / Dịch vụ trực tuyến ──
+        {
+          slug: 'quickLinksSection',
+          interfaceName: 'QuickLinksSection',
+          labels: { singular: '⚡ Liên kết nhanh / Dịch vụ', plural: 'Liên kết nhanh / Dịch vụ' },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Tiêu đề khu vực',
+              defaultValue: 'DỊCH VỤ TRỰC TUYẾN',
+            },
+            {
+              name: 'links',
+              type: 'array',
+              label: 'Danh sách liên kết',
+              minRows: 1,
+              maxRows: 12,
+              labels: { singular: 'Liên kết', plural: 'Các liên kết' },
+              fields: [
+                {
+                  name: 'icon',
+                  type: 'text',
+                  label: 'Icon (emoji)',
+                  defaultValue: '🔗',
+                  admin: { description: 'Dán emoji, VD: 📋 🏥 💊 🧾 📞 🌐' },
+                },
+                {
+                  name: 'label',
+                  type: 'text',
+                  label: 'Tên liên kết / Dịch vụ',
+                  required: true,
+                },
+                {
+                  name: 'url',
+                  type: 'text',
+                  label: 'Đường dẫn URL',
+                  required: true,
+                },
+                {
+                  name: 'openInNewTab',
+                  type: 'checkbox',
+                  label: 'Mở trong tab mới',
+                  defaultValue: true,
+                },
+                {
+                  name: 'color',
+                  type: 'select',
+                  label: 'Màu thẻ',
+                  defaultValue: 'primary',
+                  options: [
+                    { label: 'Màu chủ đạo', value: 'primary' },
+                    { label: 'Màu phụ / Xanh dương', value: 'secondary' },
+                    { label: 'Xanh lá', value: 'green' },
+                    { label: 'Cam', value: 'orange' },
+                    { label: 'Đỏ', value: 'red' },
+                    { label: 'Tím', value: 'purple' },
+                    { label: 'Xám', value: 'gray' },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+
+        // ── Block 7: Nội dung tự do (RichText) ──
+        {
+          slug: 'richTextSection',
+          interfaceName: 'RichTextSection',
+          labels: { singular: '✍️ Nội dung tự do (RichText)', plural: 'Nội dung tự do' },
+          fields: [
+            {
+              name: 'content',
+              type: 'richText',
+              label: 'Nội dung',
+              editor: lexicalEditor({
+                features: ({ defaultFeatures }) => [
+                  ...defaultFeatures,
+                  BlocksFeature({
+                    blocks: [
+                      ColumnsBlock,
+                      VideoBlock,
+                      TikTokBlock,
+                      PDFBlock,
+                      GalleryBlock,
+                      CalloutBlock,
+                      ButtonBlock,
+                      CardBlock,
+                    ],
+                  }),
+                ],
+              }),
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'sidebarWidgets',

@@ -85,6 +85,20 @@
   }
 }
 
+@media (max-height: 800px) and (min-width: 1025px) {
+  .sizeMedium,
+  .sizeMedium .banner picture,
+  .sizeMedium .banner img {
+    height: 380px;
+  }
+  .sizeLarge,
+  .sizeLarge .banner picture,
+  .sizeLarge .banner img {
+    height: 480px;
+  }
+}
+
+
 /* ─── Effect: Fade ─── */
 .effectWrapper {
   position: relative;

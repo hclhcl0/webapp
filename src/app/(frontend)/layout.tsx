@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
 import "./globals-compiled.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -12,23 +11,22 @@ import configPromise from "@payload-config";
 // để tránh lỗi database chưa được khởi tạo trong quá trình build
 export const dynamic = 'force-dynamic';
 
-const roboto = Roboto({
-  weight: ['400', '500', '700'],
-  subsets: ["latin", "vietnamese"],
-  variable: "--font-roboto",
-});
-
 export const metadata: Metadata = {
   title: "TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG",
   description: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
 };
 
 function hexToRgb(hex: string | undefined | null) {
-  if (!hex) return '0, 122, 140'; // Default rgb for #007a8c
+  if (!hex) return '0, 122, 140';
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   const hexFull = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexFull);
   return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '0, 122, 140';
+}
+
+// Map font value → tên font thực tế (có dấu cách)
+function fontValueToName(value: string): string {
+  return value.replace(/\+/g, ' ');
 }
 
 export default async function RootLayout({
@@ -50,9 +48,20 @@ export default async function RootLayout({
   const secondaryColor = themeConfig?.secondaryColor || '#4999d6';
   const primaryRgb = hexToRgb(primaryColor);
 
+  // Font
+  const fontValue = themeConfig?.fontFamily || 'Inter';
+  const fontName = fontValueToName(fontValue);
+  const googleFontUrl = `https://fonts.googleapis.com/css2?family=${fontValue}:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap`;
+
   return (
-    <html lang="vi" className={`${roboto.variable}`}>
+    <html lang="vi">
       <head>
+        {/* Google Fonts - tải font được chọn từ admin */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href={googleFontUrl} rel="stylesheet" />
+
+        {/* CSS variables: màu sắc + font chữ */}
         <style dangerouslySetInnerHTML={{
           __html: `
             :root {
@@ -60,6 +69,7 @@ export default async function RootLayout({
               --primary-dark: ${primaryDarkColor};
               --secondary: ${secondaryColor};
               --primary-rgb: ${primaryRgb};
+              --font-family: '${fontName}', system-ui, -apple-system, sans-serif;
             }
           `
         }} />
