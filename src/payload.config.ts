@@ -37,6 +37,10 @@ export default buildConfig({
     user: 'users',
     css: path.resolve(dirname, 'admin.css'),
     components: {
+      graphics: {
+        Logo: '@/app/(payload)/admin/components/AdminLogo.tsx#AdminLogo',
+        Icon: '@/app/(payload)/admin/components/AdminIcon.tsx#AdminIcon',
+      },
       beforeDashboard: [
         '@/app/(payload)/admin/components/AuthorWelcome.tsx#AuthorWelcome',
         '@/app/(payload)/admin/components/YouTubeSyncButton.tsx#YouTubeSyncButton',
