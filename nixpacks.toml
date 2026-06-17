@@ -8,9 +8,3 @@ NIXPACKS_NODE_VERSION = '20'
 
 [phases.install]
 cmds = ['npm ci --legacy-peer-deps']
-
-[phases.build]
-cmds = ['npm run build', 'cp -r public .next/standalone/public', 'cp -r .next/static .next/standalone/.next/static']
-
-[start]
-cmd = 'node .next/standalone/server.js'
