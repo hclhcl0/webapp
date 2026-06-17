@@ -3,6 +3,7 @@ providers = ["node"]
 [variables]
 HOSTNAME = '0.0.0.0'
 PORT = '3000'
+PAYLOAD_FORCE_PUSH = 'true'
 
 [phases.install]
 cmds = ['npm ci --legacy-peer-deps']
