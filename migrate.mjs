@@ -32,13 +32,7 @@ pool.on('error', (err) => {
 });
 
 async function run() {
-  console.log('⌛ Chạy prisma db push để cập nhật database schema...');
-  try {
-    execSync('npx prisma db push --accept-data-loss', { stdio: 'inherit' });
-    console.log('✅ Cập nhật prisma database schema thành công.');
-  } catch (err) {
-    console.error('❌ Cập nhật prisma database schema thất bại:', err.message);
-  }
+
 
   const client = await pool.connect();
   console.log('📡 Đã kết nối database.');

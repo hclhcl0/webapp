@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap');
+
 .ContentEditable__root {
   font-family: inherit !important;
 }
@@ -96,3 +98,414 @@ html[data-theme="dark"] .template-minimal__wrap {
   box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.4) !important;
 }
 
+/* ==========================================
+   ZALO ADMIN CUSTOM VIEWS
+   ========================================== */
+.zalo-admin-view {
+  --primary: #2563eb;
+  --bg: #ffffff;
+  --border: #e2e8f0;
+  --radius: 12px; /* Bo góc mượt hơn */
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.03); /* Soft shadow */
+  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.06);
+
+  color: var(--text);
+  font-family: inherit;
+}
+
+html[data-theme="dark"] .zalo-admin-view {
+  --bg: #111827;
+  --border: #374151;
+  --text: #f9fafb;
+  --text-muted: #9ca3af;
+  --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.zalo-admin-view .form-group {
+  margin-bottom: 20px;
+}
+
+.zalo-admin-view .form-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.zalo-admin-view .form-input,
+.zalo-admin-view .form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.01);
+}
+
+.zalo-admin-view .form-input:focus,
+.zalo-admin-view .form-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); /* Focus ring mượt */
+}
+
+.zalo-admin-view .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.zalo-admin-view .btn:active {
+  transform: scale(0.97);
+}
+
+.zalo-admin-view .btn-sm {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+
+.zalo-admin-view .btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+.zalo-admin-view .btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.zalo-admin-view .btn-outline {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+.zalo-admin-view .btn-outline:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+html[data-theme="dark"] .zalo-admin-view .btn-outline:hover {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+.zalo-admin-view .btn-success {
+  background: #22c55e;
+  color: white;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
+}
+.zalo-admin-view .btn-success:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+}
+
+.zalo-admin-view .btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+.zalo-admin-view .btn-ghost:hover {
+  background: #f1f5f9;
+  color: var(--text);
+}
+html[data-theme="dark"] .zalo-admin-view .btn-ghost:hover {
+  background: #374151;
+  color: #f9fafb;
+}
+
+@keyframes spinner-spin {
+  to { transform: rotate(360deg); }
+}
+.zalo-admin-view .spinner {
+  display: inline-block;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 50%;
+  border-top-color: currentColor;
+  animation: spinner-spin 0.6s linear infinite;
+}
+
+
+/* Hide Logout button in Payload Admin */
+
+
+
+
+/* ==========================================
+   SAAS TAILWIND THEME FOR PAYLOAD ADMIN (LIGHT & DARK)
+   ========================================== */
+
+/* LIGHT MODE VARIABLES */
+html[data-theme="light"], :root {
+  --tw-bg: #f8fafc;
+  --tw-card: #ffffff;
+  --tw-border: #e2e8f0;
+  --tw-text-main: #334155;
+  --tw-text-muted: #64748b;
+  --tw-text-hover: #0f172a;
+  
+  --tw-primary: #2563eb;
+  --tw-primary-hover: #1d4ed8;
+  --tw-nav-active-bg: #eff6ff;
+  --tw-nav-active-text: #1d4ed8;
+  
+  --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --tw-shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  
+  --font-body: 'Geist', 'Inter', system-ui, -apple-system, sans-serif !important;
+  --font-heading: 'Geist', 'Inter', system-ui, -apple-system, sans-serif !important;
+  --font-mono: 'Geist Mono', monospace !important;
+}
+
+/* DARK MODE VARIABLES */
+html[data-theme="dark"] {
+  --tw-bg: #0f172a; /* slate-900 */
+  --tw-card: #1e293b; /* slate-800 */
+  --tw-border: #334155; /* slate-700 */
+  --tw-text-main: #cbd5e1; /* slate-300 */
+  --tw-text-muted: #94a3b8; /* slate-400 */
+  --tw-text-hover: #f8fafc; /* slate-50 */
+  
+  --tw-primary: #3b82f6; /* blue-500 */
+  --tw-primary-hover: #60a5fa; /* blue-400 */
+  --tw-nav-active-bg: #1e3a8a; /* blue-900 */
+  --tw-nav-active-text: #bfdbfe; /* blue-200 */
+  
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --tw-shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+/* BASE STYLES */
+body {
+  background-color: var(--tw-bg) !important;
+  font-family: var(--font-body) !important;
+  color: var(--tw-text-main) !important;
+}
+
+/* GLOBAL TYPOGRAPHY OVERRIDES */
+body, input, select, textarea, button, .btn, .nav__link, .dashboard__card, .collection-list, h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body) !important;
+}
+
+code, pre, kbd, samp, .code {
+  font-family: var(--font-mono) !important;
+}
+
+/* CARDS & PANELS */
+.card, .panel, .dashboard__card, .collection-list, .document-drawer__content {
+  background-color: var(--tw-card) !important;
+  border: 1px solid var(--tw-border) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--tw-shadow) !important;
+  color: var(--tw-text-main) !important;
+}
+
+/* INPUTS */
+.field-type input[type="text"],
+.field-type input[type="password"],
+.field-type input[type="email"],
+.field-type input[type="number"],
+.field-type textarea,
+.react-select__control {
+  border-radius: 12px !important;
+  border: 1px solid var(--tw-border) !important;
+  background-color: var(--tw-card) !important;
+  color: var(--tw-text-main) !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.02) !important;
+}
+
+.field-type input:focus,
+.field-type textarea:focus,
+.react-select__control--is-focused {
+  border-color: var(--tw-primary) !important;
+  box-shadow: var(--tw-shadow-focus) !important;
+  outline: none !important;
+}
+
+/* BUTTONS */
+.btn {
+  border-radius: 12px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  box-shadow: var(--tw-shadow) !important;
+  letter-spacing: normal !important;
+}
+
+.btn--style-primary {
+  background-color: var(--tw-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.btn--style-primary:hover {
+  background-color: var(--tw-primary-hover) !important;
+  transform: translateY(-1px) !important;
+}
+
+.btn--style-secondary {
+  background-color: var(--tw-card) !important;
+  border: 1px solid var(--tw-border) !important;
+  color: var(--tw-text-main) !important;
+}
+
+.btn--style-secondary:hover {
+  background-color: var(--tw-bg) !important;
+  color: var(--tw-text-hover) !important;
+}
+
+/* SIDEBAR & HEADER */
+.nav {
+  background-color: var(--tw-card) !important;
+  border-right: 1px solid var(--tw-border) !important;
+}
+
+.nav__link {
+  border-radius: 8px !important;
+  margin: 2px 12px !important;
+  padding: 8px 12px !important;
+  color: var(--tw-text-muted) !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important; /* Fix mobile font boosting */
+}
+
+.nav__link:hover {
+  background-color: var(--tw-bg) !important;
+  color: var(--tw-text-hover) !important;
+}
+
+.nav__link--active, .nav__link.active {
+  background-color: var(--tw-nav-active-bg) !important;
+  color: var(--tw-nav-active-text) !important;
+  font-weight: 600 !important;
+}
+
+.app-header {
+  background-color: var(--tw-card) !important;
+  border-bottom: 1px solid var(--tw-border) !important;
+}
+
+/* Typography Overrides */
+h1, h2, h3, h4, h5, h6, .card-title, .dashboard__title {
+  color: var(--tw-text-hover) !important;
+}
+
+html, body {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ==========================================
+   PREMIUM DARK MODE OVERRIDES (LINEAR STYLE)
+   ========================================== */
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  /* Backgrounds */
+  --theme-bg: #09090b !important; /* zinc-950 */
+  --theme-elevation-50: #0f1115 !important;
+  --theme-elevation-100: #121418 !important;
+  --theme-elevation-150: #16181d !important;
+  --theme-elevation-200: #1c1f26 !important;
+  --theme-elevation-250: #22252d !important;
+  --theme-elevation-300: #272a33 !important;
+  --theme-elevation-350: #2d313a !important;
+  --theme-elevation-400: #333842 !important;
+  --theme-elevation-450: #3e434f !important;
+  --theme-elevation-500: #494e5a !important;
+  --theme-elevation-550: #545b66 !important;
+  --theme-elevation-600: #606773 !important;
+  --theme-elevation-650: #6d7581 !important;
+  --theme-elevation-700: #7b8390 !important;
+  --theme-elevation-750: #8992a0 !important;
+  --theme-elevation-800: #99a2b0 !important;
+  --theme-elevation-850: #a9b3c2 !important;
+  --theme-elevation-900: #bac4d4 !important;
+  --theme-elevation-950: #cbd6e6 !important;
+  --theme-elevation-1000: #dce7f7 !important;
+
+  /* Typography */
+  --theme-text: #ededed !important;
+  --theme-text-muted: #a1a1aa !important; /* zinc-400 */
+  --theme-text-hover: #ffffff !important;
+
+  /* Borders & Dividers */
+  --theme-border: rgba(255, 255, 255, 0.08) !important;
+  --theme-border-hover: rgba(255, 255, 255, 0.15) !important;
+
+  /* Accent Colors (Neon Indigo/Cyan feel) */
+  --theme-success-100: rgba(16, 185, 129, 0.1) !important;
+  --theme-success-200: rgba(16, 185, 129, 0.2) !important;
+  --theme-success-300: rgba(16, 185, 129, 0.3) !important;
+  --theme-success-400: rgba(16, 185, 129, 0.4) !important;
+  --theme-success-500: #10b981 !important;
+  --theme-success-600: #059669 !important;
+  
+  --theme-error-100: rgba(239, 68, 68, 0.1) !important;
+  --theme-error-500: #ef4444 !important;
+
+  /* Input Overrides */
+  --theme-input-bg: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Linear-style component styling */
+html[data-theme="dark"] .nav {
+  background-color: var(--theme-bg) !important;
+  border-right: 1px solid var(--theme-border) !important;
+}
+
+html[data-theme="dark"] .app-header {
+  background-color: rgba(9, 9, 11, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid var(--theme-border) !important;
+}
+
+html[data-theme="dark"] .card {
+  background-color: var(--theme-elevation-50) !important;
+  border: 1px solid var(--theme-border) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  border-radius: 12px !important;
+}
+
+html[data-theme="dark"] .nav__link {
+  color: var(--theme-text-muted) !important;
+}
+
+html[data-theme="dark"] .nav__link:hover {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: var(--theme-text-hover) !important;
+}
+
+html[data-theme="dark"] .nav__link--active, 
+html[data-theme="dark"] .nav__link.active {
+  background-color: rgba(99, 102, 241, 0.15) !important; /* Subtle indigo tint */
+  color: #a5b4fc !important; /* Indigo 300 */
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Custom Primary Button Style for Dark Theme */
+html[data-theme="dark"] .btn--style-primary {
+  background: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%) !important; /* Indigo 600 to 700 */
+  border: 1px solid #4338ca !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.3) !important;
+}
+
+html[data-theme="dark"] .btn--style-primary:hover {
+  background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%) !important; /* Indigo 500 to 600 */
+}

@@ -62,7 +62,7 @@ export const jsxConverters = ({ defaultConverters }: any) => ({
     },
     pdfBlock: ({ node }: any) => {
       const { source, pdfFile, gdriveUrl, displayMode } = node.fields;
-      let url = source === 'upload' ? pdfFile?.url : gdriveUrl;
+      const url = source === 'upload' ? pdfFile?.url : gdriveUrl;
       if (!url) return null;
       
       const { embedUrl, directUrl } = getGDriveEmbedUrl(url);
@@ -207,7 +207,7 @@ export const jsxConverters = ({ defaultConverters }: any) => ({
       if (!videoId) return null;
 
       // Tính toán CSS để căn lề
-      let containerStyle: React.CSSProperties = {
+      const containerStyle: React.CSSProperties = {
         display: 'flex',
         width: '100%',
         margin: '2rem 0',

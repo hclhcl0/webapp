@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable no-console */
+ 
 
 import React, { useState, useEffect, useRef } from "react";
 

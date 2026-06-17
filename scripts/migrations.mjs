@@ -709,5 +709,182 @@ export const MIGRATION_STATEMENTS = [
   // ====================================================
   `ALTER TABLE "articles" ADD COLUMN IF NOT EXISTS "auto_zalo_broadcast" boolean DEFAULT false`,
   `ALTER TABLE "_articles_v" ADD COLUMN IF NOT EXISTS "version_auto_zalo_broadcast" boolean DEFAULT false`,
-];
 
+  // ====================================================
+  // BATCH 15 – Documents: thêm trường hiệu lực, lĩnh vực, người ký
+  // ====================================================
+  `ALTER TABLE "documents" ADD COLUMN IF NOT EXISTS "effective_date" timestamp(3) with time zone`,
+  `ALTER TABLE "documents" ADD COLUMN IF NOT EXISTS "expiry_date" timestamp(3) with time zone`,
+  `ALTER TABLE "documents" ADD COLUMN IF NOT EXISTS "field" varchar`,
+  `ALTER TABLE "documents" ADD COLUMN IF NOT EXISTS "signer" varchar`,
+
+  // ====================================================
+  // BATCH 16 – Tạo bảng procurements (Thông tin mua sắm)
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "procurements" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "title" varchar NOT NULL,
+    "document_number" varchar,
+    "procurement_type" varchar NOT NULL DEFAULT 'thu-moi-chao-gia',
+    "status" varchar NOT NULL DEFAULT 'open',
+    "published_date" timestamp(3) with time zone NOT NULL,
+    "deadline" timestamp(3) with time zone,
+    "file_id" integer,
+    "note" varchar,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT "procurements_file_id_fk" FOREIGN KEY ("file_id") REFERENCES "media" ("id") ON DELETE set null ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "procurements_published_date_idx" ON "procurements" USING btree ("published_date")`,
+  `CREATE INDEX IF NOT EXISTS "procurements_status_idx" ON "procurements" USING btree ("status")`,
+  `CREATE INDEX IF NOT EXISTS "procurements_created_at_idx" ON "procurements" USING btree ("created_at")`,
+
+  // ====================================================
+  // BATCH 17 – Thêm cột drive_url (Google Drive link)
+  // ====================================================
+  `ALTER TABLE "procurements" ADD COLUMN IF NOT EXISTS "drive_url" varchar`,
+  `ALTER TABLE "documents"    ADD COLUMN IF NOT EXISTS "drive_url" varchar`,
+
+  // ====================================================
+  // BATCH 18 – Thêm cột thumbnail_id cho procurements (ảnh đại diện lưới)
+  // ====================================================
+  `ALTER TABLE "procurements" ADD COLUMN IF NOT EXISTS "thumbnail_id" integer`,
+  `DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'procurements_thumbnail_id_fk') THEN
+      ALTER TABLE "procurements" ADD CONSTRAINT "procurements_thumbnail_id_fk" FOREIGN KEY ("thumbnail_id") REFERENCES "media" ("id") ON DELETE set null ON UPDATE no action;
+    END IF;
+  END $$;`,
+
+  // ====================================================
+  // BATCH 19 – Tạo bảng procedure_groups
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "procedure_groups" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "name" varchar NOT NULL,
+    "slug" varchar,
+    "order" numeric,
+    "icon" varchar,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  )`,
+
+  // ====================================================
+  // BATCH 20 – Tạo bảng procedures
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "procedures" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "title" varchar NOT NULL,
+    "slug" varchar,
+    "group_id" integer,
+    "status" varchar DEFAULT 'active',
+    "published_date" timestamp(3) with time zone NOT NULL,
+    "implementation_time" varchar,
+    "fee" varchar,
+    "result" varchar,
+    "requirements" jsonb,
+    "file_id" integer,
+    "drive_url" varchar,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT "procedures_group_id_fk" FOREIGN KEY ("group_id") REFERENCES "procedure_groups" ("id") ON DELETE set null ON UPDATE no action,
+    CONSTRAINT "procedures_file_id_fk" FOREIGN KEY ("file_id") REFERENCES "media" ("id") ON DELETE set null ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "procedures_group_id_idx" ON "procedures" USING btree ("group_id")`,
+  `CREATE INDEX IF NOT EXISTS "procedures_published_date_idx" ON "procedures" USING btree ("published_date")`,
+  `CREATE INDEX IF NOT EXISTS "procedures_status_idx" ON "procedures" USING btree ("status")`,
+
+  // ====================================================
+  // BATCH 21 – Tạo bảng service_categories
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "service_categories" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "name" varchar NOT NULL,
+    "slug" varchar,
+    "order" numeric,
+    "description" varchar,
+    "icon" varchar,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  )`,
+
+  // ====================================================
+  // BATCH 22 – Tạo bảng services
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "services" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "title" varchar NOT NULL,
+    "slug" varchar,
+    "category_id" integer,
+    "status" varchar DEFAULT 'active',
+    "price" varchar,
+    "short_description" varchar,
+    "content" jsonb,
+    "thumbnail_id" integer,
+    "booking_url" varchar,
+    "contact_phone" varchar,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT "services_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "service_categories" ("id") ON DELETE set null ON UPDATE no action,
+    CONSTRAINT "services_thumbnail_id_fk" FOREIGN KEY ("thumbnail_id") REFERENCES "media" ("id") ON DELETE set null ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "services_status_idx" ON "services" USING btree ("status")`,
+
+  // ====================================================
+  // BATCH 23 – Tạo bảng Global services_landing
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "services_landing" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "hero_title" varchar,
+    "hero_subtitle" varchar,
+    "hero_background_image_id" integer,
+    "updated_at" timestamp(3) with time zone,
+    "created_at" timestamp(3) with time zone
+  )`,
+  `CREATE TABLE IF NOT EXISTS "services_landing_features" (
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "title" varchar,
+    "description" varchar,
+    "icon" varchar,
+    CONSTRAINT "services_landing_features_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "services_landing" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE TABLE IF NOT EXISTS "services_landing_process" (
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "title" varchar,
+    "description" varchar,
+    CONSTRAINT "services_landing_process_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "services_landing" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE TABLE IF NOT EXISTS "services_landing_faq" (
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "question" varchar,
+    "answer" varchar,
+    CONSTRAINT "services_landing_faq_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "services_landing" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+
+  // ====================================================
+  // BATCH 24 – Cập nhật Payload system rels cho các bảng mới (procurements, procedure_groups, procedures, service_categories, services)
+  // ====================================================
+  ...['procurements', 'procedure_groups', 'procedures', 'service_categories', 'services'].flatMap(table => [
+    `ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "${table}_id" integer`,
+    `ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT IF EXISTS "payload_locked_documents_rels_${table}_fk"`,
+    `ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_${table}_fk" FOREIGN KEY ("${table}_id") REFERENCES "${table}"("id") ON DELETE cascade ON UPDATE no action`,
+    `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_${table}_id_idx" ON "payload_locked_documents_rels" USING btree ("${table}_id")`,
+
+    `ALTER TABLE "payload_preferences_rels" ADD COLUMN IF NOT EXISTS "${table}_id" integer`,
+    `ALTER TABLE "payload_preferences_rels" DROP CONSTRAINT IF EXISTS "payload_preferences_rels_${table}_fk"`,
+    `ALTER TABLE "payload_preferences_rels" ADD CONSTRAINT "payload_preferences_rels_${table}_fk" FOREIGN KEY ("${table}_id") REFERENCES "${table}"("id") ON DELETE cascade ON UPDATE no action`,
+    `CREATE INDEX IF NOT EXISTS "payload_preferences_rels_${table}_id_idx" ON "payload_preferences_rels" USING btree ("${table}_id")`
+  ]),
+
+  // ====================================================
+  // BATCH 25 – Thêm trường icon, color, order_num vào categories
+  // ====================================================
+  `ALTER TABLE "categories" ADD COLUMN IF NOT EXISTS "icon" varchar`,
+  `ALTER TABLE "categories" ADD COLUMN IF NOT EXISTS "color" varchar`,
+  `ALTER TABLE "categories" ADD COLUMN IF NOT EXISTS "order_num" numeric DEFAULT 0`
+];

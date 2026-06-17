@@ -240,59 +240,10 @@ export default function Sidebar() {
             </div>
           ))}
           
-        {/* PWA Install Button */}
-        {!isStandalone && (
-          <div className="menu-group" style={{ marginTop: "1rem" }}>
-            <button 
-              onClick={handleInstallClick}
-              className="menu-item" 
-              style={{ background: "var(--primary-light)", color: "var(--primary)", border: "1px solid var(--border-focus)", width: "100%", textAlign: "left", cursor: "pointer", fontWeight: 600, padding: "10px 12px" }}
-            >
-              <span className="menu-item-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Download size={18} />
-              </span>
-              Cài đặt App (Lưu ĐT)
-            </button>
-          </div>
-        )}
+
       </nav>
 
-      {/* User info & logout */}
-      <div className="sidebar-footer">
-        <div className="sidebar-user">
-          <div className="sidebar-avatar">{initials}</div>
-          <div className="sidebar-user-info">
-            <div className="sidebar-user-name">
-              {session?.user?.name ?? "Admin"}
-            </div>
-            <div className="sidebar-user-role">
-              {session?.user?.role === "admin" ? "Quản trị viên" : "Nhân viên"}
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <button
-              className="logout-btn"
-              title="Đổi mật khẩu"
-              onClick={() => {
-                setShowPasswordModal(true);
-                setPwError("");
-                setPwSuccess("");
-              }}
-              style={{ padding: "6px", color: "var(--text)", background: "transparent", border: "1px solid var(--border)", borderRadius: "6px" }}
-            >
-              <KeyRound size={16} />
-            </button>
-            <button
-              className="logout-btn"
-              title="Đăng xuất"
-              onClick={() => { window.location.href = "/admin/logout"; }}
-              style={{ padding: "6px", color: "var(--danger)", background: "transparent", border: "1px solid var(--danger)", borderRadius: "6px", opacity: 0.8 }}
-            >
-              <LogOut size={16} />
-            </button>
-          </div>
-        </div>
-      </div>
+
 
       {/* iOS Install Instruction Modal */}
       {showIOSModal && (

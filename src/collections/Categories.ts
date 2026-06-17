@@ -47,5 +47,32 @@ export const Categories: CollectionConfig = {
       type: 'textarea',
       label: 'Mô tả',
     },
+    {
+      name: 'icon',
+      type: 'text',
+      label: 'Biểu tượng (Icon/Emoji)',
+      admin: {
+        position: 'sidebar',
+        description: 'Emoji hoặc tên icon đại diện (VD: 🦟, 💉, 🫁...)',
+      },
+    },
+    {
+      name: 'color',
+      type: 'text',
+      label: 'Màu chủ đề (Hex)',
+      admin: {
+        position: 'sidebar',
+        description: 'Mã màu hex (VD: #E53E3E, #38A169...) dùng làm màu thẻ chủ đề',
+      },
+    },
+    {
+      name: 'orderNum',
+      type: 'number',
+      label: 'Thứ tự sắp xếp',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+      },
+    },
   ],
 };

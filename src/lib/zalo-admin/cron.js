@@ -1,5 +1,6 @@
 import cron from 'node-cron';
-import { prisma } from './prisma';
+import { getPayload } from 'payload';
+import configPromise from '@payload-config';
 
 let isCronStarted = false;
 
@@ -14,12 +15,15 @@ export function initCron() {
   // Chạy mỗi phút
   cron.schedule('* * * * *', async () => {
     try {
+      const payload = await getPayload({ config: configPromise });
       // 1. Lấy cài đặt từ DB
-      const settings = await prisma.systemSetting.findMany({
+      const settingsRes = await payload.find({
+        collection: 'zalo-system-configs',
         where: {
           key: { in: ['zalo_cron_enabled', 'zalo_cron_time', 'zalo_cron_last_run'] }
         }
       });
+      const settings = settingsRes.docs;
       
       let enabled = false;
       let timeStr = "";
@@ -46,11 +50,22 @@ export function initCron() {
         console.log(`⏰ [Zalo Auto Cron] Đã đến giờ gửi hẹn (${timeStr}). Bắt đầu kích hoạt gửi gom bài...`);
 
         // Cập nhật last run ngay lập tức để tránh trùng lặp
-        await prisma.systemSetting.upsert({
-          where: { key: 'zalo_cron_last_run' },
-          update: { value: todayDate, label: 'zalo_cron_last_run' },
-          create: { key: 'zalo_cron_last_run', value: todayDate, label: 'zalo_cron_last_run' },
+        const existing = await payload.find({
+          collection: 'zalo-system-configs',
+          where: { key: { equals: 'zalo_cron_last_run' } }
         });
+        if (existing.docs.length > 0) {
+          await payload.update({
+            collection: 'zalo-system-configs',
+            id: existing.docs[0].id,
+            data: { value: todayDate }
+          });
+        } else {
+          await payload.create({
+            collection: 'zalo-system-configs',
+            data: { key: 'zalo_cron_last_run', value: todayDate, label: 'zalo_cron_last_run' }
+          });
+        }
 
         // Kích hoạt API gửi nội bộ
         const secret = process.env.CRON_SECRET || "zalo-cdc-cron-secret-123";

@@ -111,13 +111,13 @@ export const Articles: CollectionConfig = {
           doc.autoZaloBroadcast
         ) {
           try {
-            const { prisma } = await import('../lib/zalo-admin/prisma');
             const { sendPromotionMessage } = await import('../lib/zalo-admin/zalo');
             // Find all followers
-            const followers = await prisma.follower.findMany({
-              select: { zaloUserId: true }
+            const followersRes = await req.payload.find({
+              collection: 'zalo-followers',
+              limit: 5000,
             });
-            const userIds = followers.map(f => f.zaloUserId);
+            const userIds = followersRes.docs.map(f => f.zaloUserId);
             
             if (userIds.length > 0) {
               const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000';
@@ -140,7 +140,8 @@ export const Articles: CollectionConfig = {
               const payloadStr = JSON.stringify(broadcastData);
 
               // Create log entry
-              const broadcastLog = await prisma.zaloBroadcast.create({
+              const broadcastLog = await req.payload.create({
+                collection: 'zalo-broadcasts',
                 data: {
                   scope: "all",
                   content: doc.title,
@@ -174,14 +175,15 @@ export const Articles: CollectionConfig = {
                   await new Promise(res => setTimeout(res, 100));
                 }
 
-                await prisma.zaloBroadcast.update({
-                  where: { id: broadcastLog.id },
+                await req.payload.update({
+                  collection: 'zalo-broadcasts',
+                  id: broadcastLog.id,
                   data: {
                     status: "completed",
                     sentCount: success + fail,
                     successCount: success,
                     failCount: fail,
-                    completedAt: new Date(),
+                    completedAt: new Date().toISOString(),
                   },
                 });
               }, 100);

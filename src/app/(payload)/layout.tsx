@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import '@payloadcms/next/css'
 import './custom.css'
 import '../../admin.css'
+import './admin-tailwind-compiled.css'
 import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts'
 import React from 'react'
 
@@ -24,9 +25,7 @@ const serverFunction = async function (args: any) {
 const Layout = ({ children }: Args) => {
   return (
     <RootLayout config={configPromise} importMap={importMap} serverFunction={serverFunction}>
-      <GlobalLogoutButton>
-        {children}
-      </GlobalLogoutButton>
+      {children}
     </RootLayout>
   )
 }

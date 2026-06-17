@@ -34,7 +34,7 @@ function useCountUp(target: string, duration = 2000, isVisible: boolean) {
     const suffix = target.slice(target.search(/[\d,.]/) + numericMatch[0].length);
     const isFloat = endNum % 1 !== 0;
 
-    let start = 0;
+    const start = 0;
     const startTime = performance.now();
 
     const tick = (now: number) => {

@@ -76,8 +76,12 @@ export default async function Header() {
           <ul className="flex space-x-1 font-medium text-sm">
             <li><Link href="/" className="px-4 py-3 block hover:bg-blue-800 transition-colors bg-blue-800">TRANG CHỦ</Link></li>
             <li><Link href="/about" className="px-4 py-3 block hover:bg-blue-800 transition-colors">GIỚI THIỆU</Link></li>
+            <li><Link href="/suc-khoe" className="px-4 py-3 block hover:bg-blue-800 transition-colors">SỨC KHỎE</Link></li>
             <li><Link href="/news" className="px-4 py-3 block hover:bg-blue-800 transition-colors">TIN TỨC - SỰ KIỆN</Link></li>
-            <li><Link href="/documents" className="px-4 py-3 block hover:bg-blue-800 transition-colors">VĂN BẢN CHỈ ĐẠO ĐIỀU HÀNH</Link></li>
+            <li><Link href="/documents" className="px-4 py-3 block hover:bg-blue-800 transition-colors">VĂN BẢN</Link></li>
+            <li><Link href="/mua-sam" className="px-4 py-3 block hover:bg-blue-800 transition-colors">MUA SẮM</Link></li>
+            <li><Link href="/dich-vu" className="px-4 py-3 block hover:bg-blue-800 transition-colors">DỊCH VỤ SẢN PHẨM</Link></li>
+            <li><Link href="/procedures" className="px-4 py-3 block hover:bg-blue-800 transition-colors">THỦ TỤC HÀNH CHÍNH</Link></li>
             <li><Link href="/contact" className="px-4 py-3 block hover:bg-blue-800 transition-colors">LIÊN HỆ</Link></li>
           </ul>
         </div>

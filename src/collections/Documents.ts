@@ -3,12 +3,12 @@ import type { CollectionConfig } from 'payload';
 export const Documents: CollectionConfig = {
   slug: 'documents',
   labels: {
-    singular: 'Văn bản pháp quy',
-    plural: 'Văn bản pháp quy',
+    singular: 'Văn bản',
+    plural: 'Văn bản',
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['documentNumber', 'title', 'issuer', 'publishedDate'],
+    defaultColumns: ['documentNumber', 'title', 'documentType', 'publishedDate', 'issuer'],
     group: 'Nội dung',
   },
   access: {
@@ -19,7 +19,10 @@ export const Documents: CollectionConfig = {
       name: 'documentNumber',
       type: 'text',
       required: true,
-      label: 'Số hiệu văn bản',
+      label: 'Số kí hiệu',
+      admin: {
+        placeholder: 'VD: 2042/TB-TTKSBT',
+      },
     },
     {
       name: 'title',
@@ -28,37 +31,96 @@ export const Documents: CollectionConfig = {
       label: 'Trích yếu (Tên văn bản)',
     },
     {
-      name: 'issuer',
-      type: 'text',
-      required: true,
-      label: 'Cơ quan ban hành',
-      defaultValue: 'Sở Y tế / CDC Đà Nẵng',
-    },
-    {
       name: 'publishedDate',
       type: 'date',
       required: true,
       label: 'Ngày ban hành',
+      admin: {
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'dd/MM/yyyy',
+        },
+      },
     },
     {
-      name: 'file',
-      type: 'upload',
-      relationTo: 'media',
-      required: true,
-      label: 'File đính kèm (PDF/DOCX)',
+      name: 'effectiveDate',
+      type: 'date',
+      label: 'Ngày bắt đầu hiệu lực',
+      admin: {
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'dd/MM/yyyy',
+        },
+      },
+    },
+    {
+      name: 'expiryDate',
+      type: 'date',
+      label: 'Ngày hết hiệu lực',
+      admin: {
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'dd/MM/yyyy',
+        },
+      },
     },
     {
       name: 'documentType',
       type: 'select',
+      label: 'Thể loại',
       options: [
         { label: 'Chỉ thị', value: 'chi-thi' },
         { label: 'Quyết định', value: 'quyet-dinh' },
         { label: 'Nghị định', value: 'nghi-dinh' },
         { label: 'Công văn', value: 'cong-van' },
         { label: 'Thông báo', value: 'thong-bao' },
+        { label: 'Thông tư', value: 'thong-tu' },
+        { label: 'Kế hoạch', value: 'ke-hoach' },
+        { label: 'Báo cáo', value: 'bao-cao' },
+        { label: 'Hướng dẫn', value: 'huong-dan' },
         { label: 'Khác', value: 'khac' },
       ],
-      label: 'Loại văn bản',
+    },
+    {
+      name: 'field',
+      type: 'text',
+      label: 'Lĩnh vực',
+      admin: {
+        placeholder: 'VD: Y tế, Thông báo thầu, Phòng chống dịch...',
+      },
+    },
+    {
+      name: 'issuer',
+      type: 'text',
+      required: true,
+      label: 'Cơ quan ban hành',
+      defaultValue: 'Trung tâm Kiểm soát bệnh tật Đà Nẵng',
+    },
+    {
+      name: 'signer',
+      type: 'text',
+      label: 'Người ký',
+      admin: {
+        placeholder: 'VD: Nguyễn Đại Vĩnh',
+      },
+    },
+    {
+      name: 'file',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'File đính kèm (PDF/DOCX) — Tải lên trực tiếp',
+      admin: {
+        description: 'Tải file lên trực tiếp. Nếu đã có link Google Drive bên dưới thì có thể bỏ qua ô này.',
+      },
+    },
+    {
+      name: 'driveUrl',
+      type: 'text',
+      label: 'Link Google Drive (thay thế hoặc bổ sung)',
+      admin: {
+        placeholder: 'https://drive.google.com/file/d/xxxxxxx/view?usp=sharing',
+        description: 'Dán link chia sẻ Google Drive. Hệ thống tự chuyển sang link tải về.',
+      },
     },
   ],
 };

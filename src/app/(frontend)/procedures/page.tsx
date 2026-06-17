@@ -1,101 +1,238 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 import Link from 'next/link';
-import { ChevronRight, FileCheck, Download, Info } from 'lucide-react';
+import { ChevronRight, FileText, Download, Clock, CreditCard, Search, Calendar, ChevronDown, List, Layers, ArrowRight } from 'lucide-react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 
-async function getProcedures() {
+export const dynamic = 'force-dynamic';
+
+async function getProceduresData(searchParamsPromise: Promise<{ [key: string]: string | string[] | undefined }>) {
   try {
+    const searchParams = await searchParamsPromise;
     const payload = await getPayload({ config: configPromise });
-    const { docs } = await payload.find({
-      collection: 'documents', // Use documents since procedures collection isn't defined
+    
+    // Fetch procedure groups
+    const groupsData = await payload.find({
+      collection: 'procedureGroups',
+      sort: 'order',
+      limit: 100,
+    });
+    
+    const groups = groupsData.docs;
+    
+    // Parse filter
+    const selectedGroupSlug = typeof searchParams.nhom === 'string' ? searchParams.nhom : null;
+    let selectedGroupId = null;
+    
+    if (selectedGroupSlug) {
+      const group = groups.find(g => g.slug === selectedGroupSlug);
+      if (group) selectedGroupId = group.id;
+    }
+
+    // Build query for procedures
+    const query: any = {
+      status: { equals: 'active' }
+    };
+    
+    if (selectedGroupId) {
+      query.group = { equals: selectedGroupId };
+    }
+
+    // Fetch procedures
+    const proceduresData = await payload.find({
+      collection: 'procedures',
+      where: query,
       sort: '-publishedDate',
       limit: 100,
     });
-    return docs;
+    
+    return {
+      groups,
+      procedures: proceduresData.docs,
+      selectedGroupSlug
+    };
   } catch (err) {
     console.error('Failed to fetch procedures:', err);
-    return [];
+    return { groups: [], procedures: [], selectedGroupSlug: null };
   }
 }
 
-export default async function ProceduresPage() {
-  const procedures = await getProcedures();
+export default async function ProceduresPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const { groups, procedures, selectedGroupSlug } = await getProceduresData(searchParams);
+
+  const currentGroupName = selectedGroupSlug 
+    ? groups.find(g => g.slug === selectedGroupSlug)?.name || 'Thủ tục hành chính'
+    : 'Tất cả thủ tục hành chính';
 
   return (
-    <div className="container mx-auto px-4 py-6 md:py-10 max-w-7xl">
-      <div className="flex items-center text-sm text-gray-500 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap pb-2">
-        <Link href="/" className="hover:text-gov-primary transition-colors">Trang chủ</Link>
-        <ChevronRight className="w-4 h-4 mx-2 flex-shrink-0" />
-        <span className="font-medium text-gov-primary">Thủ tục hành chính</span>
+    <div className="bg-gray-50/50 min-h-screen pb-16">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-gov-primary to-gov-primary-dark text-white pt-10 pb-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div className="container mx-auto px-4 max-w-7xl relative z-10">
+          <div className="flex items-center text-sm text-blue-100 mb-6 font-medium tracking-wide">
+            <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
+            <ChevronRight className="w-4 h-4 mx-2 opacity-60" />
+            <span className="text-white">Thủ tục hành chính</span>
+          </div>
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
+            Thủ tục Hành chính
+          </h1>
+          <p className="text-blue-100 text-lg md:text-xl max-w-2xl leading-relaxed">
+            Tra cứu, tìm kiếm và tải về các biểu mẫu, quy trình thủ tục hành chính thuộc thẩm quyền giải quyết một cách nhanh chóng và minh bạch.
+          </p>
+        </div>
       </div>
 
-      <h1 className="text-2xl md:text-3xl font-bold text-gov-primary mb-8 border-b-2 border-gov-secondary pb-3 inline-block uppercase tracking-wide">
-        Quy trình & Thủ tục hành chính / Văn bản
-      </h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {procedures.map((proc: any) => {
-          const fileObj = proc.file;
-          const hasFile = !!fileObj;
-          const fileUrl = hasFile ? fileObj.url : '#';
-
-          return (
-            <div key={proc.id} className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow flex flex-col h-full overflow-hidden">
-              <div className="bg-blue-50/50 p-5 border-b border-gray-100 flex-grow">
-                <div className="flex items-start">
-                  <div className="bg-gov-primary/10 p-2 rounded-lg text-gov-primary mr-4 mt-1">
-                    <FileCheck className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-gov-primary leading-tight mb-2">{proc.title}</h3>
-                    {proc.issuer && (
-                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                        Cơ quan thực hiện: <span className="text-gov-secondary">{proc.issuer}</span>
-                      </p>
-                    )}
-                    <p className="text-gray-600 text-sm line-clamp-3">
-                      Số hiệu: {proc.documentNumber}
-                    </p>
-                  </div>
-                </div>
+      <div className="container mx-auto px-4 max-w-7xl -mt-10 relative z-20">
+        <div className="flex flex-col lg:flex-row gap-8">
+          
+          {/* Sidebar Navigation */}
+          <div className="lg:w-1/3 xl:w-1/4 flex-shrink-0">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
+              <div className="p-5 border-b border-gray-100 flex items-center bg-gray-50/50">
+                <Layers className="w-5 h-5 text-gov-primary mr-3" />
+                <h2 className="font-bold text-gray-900 text-lg">Lĩnh vực giải quyết</h2>
               </div>
-              
-              <div className="p-4 bg-gray-50 flex items-center justify-between border-t border-gray-100">
-                <div className="flex items-center text-sm font-medium text-gray-700">
-                  <Info className="w-4 h-4 mr-1 text-gray-400" />
-                  {new Date(proc.publishedDate).toLocaleDateString('vi-VN')}
-                </div>
+              <div className="p-3">
+                <Link
+                  href="/procedures"
+                  className={`flex items-center px-4 py-3 rounded-xl mb-1 transition-all duration-200 ${
+                    !selectedGroupSlug 
+                      ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-semibold' 
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gov-primary font-medium'
+                  }`}
+                >
+                  <div className={`w-2 h-2 rounded-full mr-3 ${!selectedGroupSlug ? 'bg-white' : 'bg-gray-300'}`}></div>
+                  Tất cả lĩnh vực
+                </Link>
                 
-                {hasFile ? (
-                  <a 
-                    href={fileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Tải biểu mẫu đính kèm"
-                    className="inline-flex items-center px-3 py-1.5 bg-gov-primary text-white hover:bg-blue-700 rounded-md text-sm font-bold transition-colors shadow-sm"
-                  >
-                    <Download className="w-4 h-4 mr-1" />
-                    Tải về
-                  </a>
-                ) : (
-                  <span className="inline-flex items-center px-3 py-1.5 bg-gray-200 text-gray-500 rounded-md text-sm font-bold cursor-not-allowed">
-                    Không có biểu mẫu
-                  </span>
-                )}
+                {groups.map((group) => {
+                  const isActive = selectedGroupSlug === group.slug;
+                  return (
+                    <Link
+                      key={group.id}
+                      href={`/procedures?nhom=${group.slug}`}
+                      className={`flex items-center px-4 py-3 rounded-xl mb-1 transition-all duration-200 ${
+                        isActive 
+                          ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-semibold' 
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gov-primary font-medium'
+                      }`}
+                    >
+                      {group.icon ? (
+                        <span className="mr-3 text-lg w-5 text-center">{group.icon}</span>
+                      ) : (
+                        <div className={`w-2 h-2 rounded-full mr-3 ${isActive ? 'bg-white' : 'bg-gray-300'}`}></div>
+                      )}
+                      {group.name}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
-          );
-        })}
-
-        {procedures.length === 0 && (
-          <div className="col-span-full text-center py-16 bg-white rounded-xl border border-gray-200">
-            <FileCheck className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 font-medium">Hệ thống đang cập nhật danh sách văn bản / thủ tục hành chính.</p>
           </div>
-        )}
+
+          {/* Main Content */}
+          <div className="lg:w-2/3 xl:w-3/4">
+            <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-800 flex items-center">
+                <span className="w-2 h-6 bg-gov-secondary rounded-full mr-3"></span>
+                {currentGroupName}
+              </h2>
+              <div className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                {procedures.length} thủ tục
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {procedures.map((proc: any) => {
+                const fileObj = proc.file;
+                const hasFile = !!fileObj || !!proc.driveUrl;
+                
+                let fileUrl = '#';
+                if (proc.driveUrl) {
+                  fileUrl = proc.driveUrl;
+                } else if (fileObj) {
+                  fileUrl = fileObj.url;
+                }
+
+                return (
+                  <div key={proc.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group flex flex-col sm:flex-row overflow-hidden">
+                    <div className="p-6 flex-grow flex flex-col justify-center">
+                      <div className="flex items-start mb-3">
+                        <div className="bg-gov-primary/10 text-gov-primary p-2.5 rounded-xl mr-4 group-hover:bg-gov-primary group-hover:text-white transition-colors shrink-0">
+                          <FileText className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <Link href={`/procedures/${proc.slug || proc.id}`}>
+                            <h3 className="font-bold text-lg text-gray-900 leading-snug group-hover:text-gov-primary transition-colors line-clamp-2 mb-2">
+                              {proc.title}
+                            </h3>
+                          </Link>
+                          
+                          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 font-medium">
+                            {proc.group && typeof proc.group === 'object' && (
+                              <span className="inline-flex items-center bg-gray-100 text-gray-600 px-2.5 py-1 rounded-lg text-xs">
+                                {proc.group.name}
+                              </span>
+                            )}
+                            <span className="flex items-center">
+                              <Calendar className="w-4 h-4 mr-1.5 opacity-70" />
+                              {new Date(proc.publishedDate).toLocaleDateString('vi-VN')}
+                            </span>
+                            {proc.implementationTime && (
+                              <span className="flex items-center">
+                                <Clock className="w-4 h-4 mr-1.5 opacity-70 text-amber-600" />
+                                <span className="text-amber-700">{proc.implementationTime}</span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-50/80 sm:w-48 p-6 flex sm:flex-col items-center sm:items-stretch justify-between sm:justify-center gap-3 border-t sm:border-t-0 sm:border-l border-gray-100 shrink-0">
+                      <Link 
+                        href={`/procedures/${proc.slug || proc.id}`}
+                        className="flex-1 flex justify-center items-center py-2.5 px-4 bg-white border border-gray-200 text-gray-700 hover:border-gov-primary hover:text-gov-primary rounded-xl text-sm font-semibold transition-all duration-200 group-hover:shadow-sm"
+                      >
+                        Chi tiết <ArrowRight className="w-4 h-4 ml-1.5" />
+                      </Link>
+                      
+                      {hasFile && (
+                        <a 
+                          href={fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex justify-center items-center py-2.5 px-4 bg-gov-primary/10 text-gov-primary hover:bg-gov-primary hover:text-white rounded-xl text-sm font-semibold transition-all duration-200 group-hover:shadow-sm"
+                          title="Tải biểu mẫu"
+                        >
+                          <Download className="w-4 h-4 mr-1.5" /> Biểu mẫu
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {procedures.length === 0 && (
+              <div className="text-center py-24 bg-white rounded-2xl border border-gray-100 shadow-sm mt-4">
+                <div className="bg-gray-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-5 border border-gray-100">
+                  <Search className="w-10 h-10 text-gray-400" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Chưa có dữ liệu</h3>
+                <p className="text-gray-500 max-w-md mx-auto text-lg">
+                  Hiện tại chưa có thủ tục hành chính nào trong mục này. Vui lòng chọn lĩnh vực khác.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
