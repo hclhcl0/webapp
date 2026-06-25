@@ -582,7 +582,25 @@ export const Settings: GlobalConfig = {
           admin: {
             description: 'Các quy tắc đặc biệt muốn AI tuân theo. Để trống nếu không cần.',
             rows: 4,
-            placeholder: 'Ví dụ: Luôn nhắc hotline 1900988975 ở cuối mỗi câu trả lời...',
+            placeholder: 'Ví dụ: Luôn nhắc hotline ở cuối mỗi câu trả lời...',
+          },
+        },
+        {
+          name: 'aiHotline',
+          type: 'text',
+          label: 'Số Hotline liên hệ',
+          defaultValue: '1900988975',
+          admin: {
+            description: 'Số điện thoại AI sẽ cung cấp cho người dân khi không tìm thấy thông tin.',
+          },
+        },
+        {
+          name: 'aiAddress',
+          type: 'text',
+          label: 'Địa chỉ cơ quan',
+          defaultValue: '118 Lê Đình Lý, Phường Thanh Khê Đông, Quận Thanh Khê, Thành phố Đà Nẵng',
+          admin: {
+            description: 'Địa chỉ AI sẽ cung cấp cho người dân khi không tìm thấy thông tin.',
           },
         },
         {

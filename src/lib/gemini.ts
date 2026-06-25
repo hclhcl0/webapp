@@ -173,8 +173,8 @@ async function prepareAIContext(userId: string, question: string, providedHistor
   const settings = settingsResult as any;
   const aiChat = settings?.aiChatSettings || {};
   
-  let hotline = "1900988975";
-  let address = "118 Lê Đình Lý, Phường Thanh Khê Đông, Quận Thanh Khê, Thành phố Đà Nẵng";
+  let hotline = aiChat.aiHotline || "1900988975";
+  let address = aiChat.aiAddress || "118 Lê Đình Lý, Phường Thanh Khê Đông, Quận Thanh Khê, Thành phố Đà Nẵng";
   let customPrompt = aiChat.chatCustomPrompt || "";
   let footerMsg = "(Địa chỉ: {address} - Hotline: {hotline})"; // default if not set in settings, but we don't have a field for it yet. Can omit or keep default.
   let aiModel = aiChat.aiModel || "gemini-2.5-flash";
