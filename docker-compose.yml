@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Pass dummy build args to let Next.js build proceed without DB connection
+        - DATABASE_URI=postgres://postgres:123456@db:5432/webcq
+        - PAYLOAD_SECRET=your-secure-payload-secret-here
+    container_name: webapp-nextjs
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Mật khẩu bí mật của Payload CMS (Nên thay đổi thành chuỗi ngẫu nhiên dài)
+      - PAYLOAD_SECRET=your-secure-payload-secret-here
+      # Chuỗi kết nối đến PostgreSQL (Sử dụng service db ở bên dưới)
+      - DATABASE_URI=postgres://postgres:123456@db:5432/webcq
+      - NEXT_TELEMETRY_DISABLED=1
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Mount thư mục lưu trữ file upload của Payload CMS ra máy host để không bị mất dữ liệu khi restart
+      - ./media:/app/media
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: webapp-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=webcq
+    ports:
+      - "5432:5432"
+    volumes:
+      # Mount data database ra máy host để không bị mất dữ liệu
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:
