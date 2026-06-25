@@ -13,7 +13,7 @@ export const AiKnowledge: CollectionConfig = {
     group: 'AI & Trợ lý ảo',
   },
   upload: {
-    staticDir: '../../media/ai-docs',
+    staticDir: 'media/ai-docs',
     mimeTypes: [
       'application/pdf', 
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // docx
