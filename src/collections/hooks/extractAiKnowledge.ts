@@ -2,6 +2,8 @@ import { CollectionBeforeChangeHook } from 'payload';
 import { GoogleGenAI } from '@google/genai';
 import configPromise from '../../payload.config.ts';
 import { getPayload } from 'payload';
+import mammoth from 'mammoth';
+import * as xlsx from 'xlsx';
 
 export const extractAiKnowledgeHook: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
   if (operation === 'create' || operation === 'update') {
@@ -14,11 +16,6 @@ export const extractAiKnowledgeHook: CollectionBeforeChangeHook = async ({ data,
     }
 
     if (file && file.data) {
-      // If content is already provided and not empty, maybe we don't want to overwrite it.
-      // But usually, if they upload a new file, we want to extract it.
-      // We will extract unless they explicitly passed some content and didn't change the file.
-      // Actually, since it's an upload hook, the file is in req.file. 
-      // If it's an update and no new file is uploaded, req.file is undefined.
       
       const payload = await getPayload({ config: configPromise });
       const apiKeys = await payload.find({ 
@@ -40,6 +37,36 @@ export const extractAiKnowledgeHook: CollectionBeforeChangeHook = async ({ data,
         const base64Data = file.data.toString('base64');
         const mimeType = file.mimetype;
 
+        let parts: any[] = [];
+
+        if (mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+          // Parse XLSX
+          const workbook = xlsx.read(file.data);
+          let extractedText = '';
+          for (const sheetName of workbook.SheetNames) {
+            const sheet = workbook.Sheets[sheetName];
+            extractedText += `Sheet: ${sheetName}\n`;
+            extractedText += xlsx.utils.sheet_to_csv(sheet) + '\n\n';
+          }
+          parts = [
+            { text: "Đây là dữ liệu file Excel đã được trích xuất thành định dạng CSV:\n\n" + extractedText },
+            { text: "Hãy đọc dữ liệu trên và trích xuất, tóm tắt thông tin quan trọng sang Markdown. Định dạng lại thành bảng Markdown nếu phù hợp." }
+          ];
+        } else if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+          // Parse DOCX
+          const result = await mammoth.extractRawText({ buffer: file.data });
+          parts = [
+            { text: "Đây là nội dung file Word:\n\n" + result.value },
+            { text: "Hãy đọc nội dung trên và định dạng lại cấu trúc sang chuẩn Markdown." }
+          ];
+        } else {
+          // Pass native inlineData to Gemini for PDF, images, etc.
+          parts = [
+            { inlineData: { data: base64Data, mimeType } },
+            { text: "Hãy đọc tài liệu này và trích xuất văn bản sang Markdown." }
+          ];
+        }
+
         const systemInstruction = "Bạn là chuyên gia số hóa tài liệu. Nhiệm vụ của bạn là đọc file đính kèm và trích xuất toàn bộ nội dung văn bản, số liệu, bảng biểu ra định dạng Markdown chuẩn xác. Nếu là bảng biểu, hãy dùng cú pháp Markdown table. Loại bỏ các header/footer thừa nếu có. Giữ nguyên tối đa các thông tin quan trọng.";
         
         const response = await ai.models.generateContent({
@@ -47,10 +74,7 @@ export const extractAiKnowledgeHook: CollectionBeforeChangeHook = async ({ data,
           contents: [
             {
               role: "user",
-              parts: [
-                { inlineData: { data: base64Data, mimeType } },
-                { text: "Hãy đọc tài liệu này và trích xuất văn bản sang Markdown." }
-              ]
+              parts: parts
             }
           ],
           config: { 
