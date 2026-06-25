@@ -25,10 +25,13 @@ export async function GET(request: Request) {
          models.push(model.name);
       }
       
-      // Filter out non-generative models if needed, or just list ones starting with gemini
+      // Lọc các model thông dụng
       supportedModels = models
-        .filter((m: string) => m.includes("gemini"))
-        .map((m: string) => m.replace("models/", ""));
+        .map((m: string) => m.replace("models/", ""))
+        .filter((m: string) => {
+          // Chỉ lấy các model chính, bỏ qua các version cũ hoặc label thử nghiệm nếu không cần thiết
+          return m.includes("gemini") && !m.includes("vision") && !m.includes("-001") && !m.includes("-002");
+        });
         
     } else if (provider === "groq") {
       const groq = new Groq({ apiKey });

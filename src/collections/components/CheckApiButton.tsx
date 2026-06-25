@@ -74,7 +74,7 @@ export const CheckApiButton: React.FC = () => {
                     value: e.target.value
                   })
                 }}
-                style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: '#fff' }}
+                style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: '#fff', color: '#000', maxWidth: '400px', cursor: 'pointer' }}
               >
                 <option value="">-- Mặc định (Sử dụng cấu hình Global) --</option>
                 {modelsList.map(m => (
