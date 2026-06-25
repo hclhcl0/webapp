@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload';
-import { extractAiKnowledgeHook } from './hooks/extractAiKnowledge.ts';
+import { extractAiKnowledgeHook } from './hooks/extractAiKnowledge';
 
 export const AiKnowledge: CollectionConfig = {
   slug: 'ai-knowledge',

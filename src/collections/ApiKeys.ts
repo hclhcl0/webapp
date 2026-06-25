@@ -37,7 +37,11 @@ export const ApiKeys: CollectionConfig = {
     {
       name: 'preferredModel',
       type: 'text',
-      admin: { hidden: true }
+      label: 'Mô hình ưu tiên (Gán riêng)',
+      admin: { 
+        readOnly: true,
+        description: 'Được tự động gán khi bạn chọn từ nút Kiểm tra bên dưới.'
+      }
     },
     { name: 'usageTokens', type: 'number', defaultValue: 0, label: 'Tổng Token đã dùng', admin: { readOnly: true } },
     { name: 'usageCount', type: 'number', defaultValue: 0, label: 'Số lượt gọi', admin: { readOnly: true } },

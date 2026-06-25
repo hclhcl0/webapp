@@ -24,6 +24,7 @@ import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { InlineToolbarFeatureClient as InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { CheckApiButton as CheckApiButton_d9dc0b8f43c1641f5c0b4ed8765f76d9 } from '@/collections/components/CheckApiButton'
 import { ColorPickerField as ColorPickerField_db2136a52610b552cc1623d001af525c } from '@/components/ColorPickerField.tsx'
 import { AdminIcon as AdminIcon_9f5eba8ffdadf3d52561f60d1de9fa24 } from '@/app/(payload)/admin/components/AdminIcon.tsx'
 import { AdminLogo as AdminLogo_0ec271e8bfb19d99b0e35d61da772365 } from '@/app/(payload)/admin/components/AdminLogo.tsx'
@@ -58,6 +59,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@/collections/components/CheckApiButton#CheckApiButton": CheckApiButton_d9dc0b8f43c1641f5c0b4ed8765f76d9,
   "@/components/ColorPickerField.tsx#ColorPickerField": ColorPickerField_db2136a52610b552cc1623d001af525c,
   "@/app/(payload)/admin/components/AdminIcon.tsx#AdminIcon": AdminIcon_9f5eba8ffdadf3d52561f60d1de9fa24,
   "@/app/(payload)/admin/components/AdminLogo.tsx#AdminLogo": AdminLogo_0ec271e8bfb19d99b0e35d61da772365,
