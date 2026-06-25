@@ -16,6 +16,24 @@ export const ApiKeys: CollectionConfig = {
     { name: 'provider', type: 'select', required: true, options: [{ label: 'Google Gemini', value: 'gemini' }, { label: 'Groq', value: 'groq' }], label: 'Nhà cung cấp' },
     { name: 'apiKey', type: 'text', required: true, label: 'API Key' },
     { name: 'isActive', type: 'checkbox', defaultValue: true, label: 'Đang hoạt động' },
+    { 
+      name: 'checkApiUI', 
+      type: 'ui', 
+      admin: { 
+        components: { 
+          Field: '@/collections/components/CheckApiButton#CheckApiButton' 
+        } 
+      } 
+    },
+    { 
+      name: 'supportedModels', 
+      type: 'text', 
+      label: 'Các Mô Hình Hỗ Trợ', 
+      admin: { 
+        readOnly: true,
+        description: 'Tự động điền sau khi Kiểm tra kết nối thành công.'
+      } 
+    },
     { name: 'usageTokens', type: 'number', defaultValue: 0, label: 'Tổng Token đã dùng', admin: { readOnly: true } },
     { name: 'usageCount', type: 'number', defaultValue: 0, label: 'Số lượt gọi', admin: { readOnly: true } },
   ],
