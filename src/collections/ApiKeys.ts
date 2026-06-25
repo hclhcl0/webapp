@@ -34,6 +34,11 @@ export const ApiKeys: CollectionConfig = {
         description: 'Tự động điền sau khi Kiểm tra kết nối thành công.'
       } 
     },
+    {
+      name: 'preferredModel',
+      type: 'text',
+      admin: { hidden: true }
+    },
     { name: 'usageTokens', type: 'number', defaultValue: 0, label: 'Tổng Token đã dùng', admin: { readOnly: true } },
     { name: 'usageCount', type: 'number', defaultValue: 0, label: 'Số lượt gọi', admin: { readOnly: true } },
   ],

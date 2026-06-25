@@ -6,9 +6,11 @@ import { useFormFields, useForm, Button, toast } from '@payloadcms/ui'
 export const CheckApiButton: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<string | null>(null)
+  const [modelsList, setModelsList] = useState<string[]>([])
   
   const apiKeyField = useFormFields(([fields, dispatch]) => fields.apiKey)
   const providerField = useFormFields(([fields, dispatch]) => fields.provider)
+  const preferredModelField = useFormFields(([fields, dispatch]) => fields.preferredModel)
   const { dispatchFields } = useForm()
 
   const handleCheck = async () => {
@@ -22,6 +24,7 @@ export const CheckApiButton: React.FC = () => {
 
     setLoading(true)
     setResult(null)
+    setModelsList([])
     
     try {
       const res = await fetch(`/api/settings/check-api?key=${encodeURIComponent(apiKey)}&provider=${encodeURIComponent(provider)}`)
@@ -29,14 +32,14 @@ export const CheckApiButton: React.FC = () => {
 
       if (data.success) {
         toast.success('API Key hoạt động tốt!')
-        const modelsStr = data.models.join(', ')
-        setResult(`✅ Hoạt động. Các mô hình: ${modelsStr}`)
+        setModelsList(data.models)
+        setResult(`✅ Hoạt động tốt.`)
         
         // Update the supportedModels field on the form
         dispatchFields({
            type: 'UPDATE',
            path: 'supportedModels',
-           value: modelsStr
+           value: data.models.join(', ')
         })
       } else {
         toast.error(data.error || 'API Key không hợp lệ')
@@ -57,7 +60,29 @@ export const CheckApiButton: React.FC = () => {
       </Button>
       {result && (
         <div style={{ marginTop: '10px', padding: '10px', backgroundColor: result.startsWith('✅') ? '#e6f3e6' : '#fbeaea', border: result.startsWith('✅') ? '1px solid #c3e6c3' : '1px solid #f2c7c7', borderRadius: '4px', color: '#333', fontSize: '13px' }}>
-          {result}
+          <div style={{ marginBottom: modelsList.length > 0 ? '10px' : '0' }}>{result}</div>
+          
+          {modelsList.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <label style={{ fontWeight: 'bold' }}>Chọn mô hình muốn gán cho Key này:</label>
+              <select 
+                value={(preferredModelField?.value as string) || ''}
+                onChange={(e) => {
+                  dispatchFields({
+                    type: 'UPDATE',
+                    path: 'preferredModel',
+                    value: e.target.value
+                  })
+                }}
+                style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: '#fff' }}
+              >
+                <option value="">-- Mặc định (Sử dụng cấu hình Global) --</option>
+                {modelsList.map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       )}
     </div>

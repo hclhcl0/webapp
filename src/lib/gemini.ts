@@ -266,12 +266,14 @@ async function askGemini(userId: string, question: string, providedHistory: any[
   const currentModel = aiModel;
 
   for (let i = 0; i < activeKeys.length; i++) {
+    const keyObj = pool.find(k => k.apiKey === activeKeys[i]);
     const apiKey = activeKeys[i];
+    const modelToUse = keyObj?.preferredModel || currentModel;
 
     try {
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: currentModel,
+        model: modelToUse,
         contents,
         config: { systemInstruction, maxOutputTokens: 2048, temperature: 0.3 }
       });
@@ -341,12 +343,15 @@ async function askGroq(userId: string, question: string, providedHistory: any[] 
 
   let lastError = null;
   for (let i = 0; i < activeKeys.length; i++) {
+    const keyObj = pool.find(k => k.apiKey === activeKeys[i]);
     const apiKey = activeKeys[i];
+    const modelToUse = keyObj?.preferredModel || "llama-3.3-70b-versatile";
+
     try {
       const groq = new Groq({ apiKey });
       const chatCompletion = await groq.chat.completions.create({
         messages: groqMessages,
-        model: "llama-3.3-70b-versatile",
+        model: modelToUse,
         temperature: 0.3,
         max_tokens: 2048,
       });
