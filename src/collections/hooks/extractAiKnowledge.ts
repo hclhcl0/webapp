@@ -1,6 +1,6 @@
 import { CollectionBeforeChangeHook } from 'payload';
 import { GoogleGenAI } from '@google/genai';
-import configPromise from '@payload-config';
+import configPromise from '../../payload.config.ts';
 import { getPayload } from 'payload';
 
 export const extractAiKnowledgeHook: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
