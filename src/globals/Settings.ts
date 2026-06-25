@@ -557,16 +557,6 @@ export const Settings: GlobalConfig = {
           },
         },
         {
-          name: 'geminiApiKeys',
-          type: 'textarea',
-          label: 'Gemini API Keys',
-          admin: {
-            description: 'Nhập mỗi API key trên một dòng riêng. Hệ thống tự xoay vòng (round-robin) để tránh giới hạn tốc độ. Lấy key miễn phí tại: aistudio.google.com',
-            rows: 6,
-            placeholder: 'AIzaSy...\nAIzaSy...',
-          },
-        },
-        {
           name: 'chatWelcomeMessage',
           type: 'text',
           label: 'Tin nhắn chào mừng',
