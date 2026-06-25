@@ -585,6 +585,21 @@ export const Settings: GlobalConfig = {
             placeholder: 'Ví dụ: Luôn nhắc hotline 1900988975 ở cuối mỗi câu trả lời...',
           },
         },
+        {
+          name: 'aiModel',
+          type: 'select',
+          label: 'Mô hình AI sử dụng (Dành cho Chatbot)',
+          defaultValue: 'gemini-2.5-flash',
+          options: [
+            { label: 'Gemini 2.5 Flash (Tốc độ cao, Khuyên dùng)', value: 'gemini-2.5-flash' },
+            { label: 'Gemini 2.5 Pro (Thông minh, Phức tạp)', value: 'gemini-2.5-pro' },
+            { label: 'Gemini 3.1 Flash (Thử nghiệm)', value: 'gemini-3.1-flash' },
+            { label: 'Llama 3.3 70B (Groq - Miễn phí)', value: 'llama-3.3-70b-versatile' }
+          ],
+          admin: {
+            description: 'Chọn mô hình AI mặc định để phục vụ người dân tra cứu.',
+          }
+        },
       ],
     },
     {

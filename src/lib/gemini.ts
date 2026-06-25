@@ -177,6 +177,7 @@ async function prepareAIContext(userId: string, question: string, providedHistor
   let address = "118 Lê Đình Lý, Phường Thanh Khê Đông, Quận Thanh Khê, Thành phố Đà Nẵng";
   let customPrompt = aiChat.chatCustomPrompt || "";
   let footerMsg = "(Địa chỉ: {address} - Hotline: {hotline})"; // default if not set in settings, but we don't have a field for it yet. Can omit or keep default.
+  let aiModel = aiChat.aiModel || "gemini-2.5-flash";
 
   const knowledgeText = retrieveRelevantKnowledge(question, knowledgeChunks);
   
@@ -219,26 +220,21 @@ ${knowledgeText || `(Chưa có tài liệu. Vui lòng gọi ${hotline}.)`}`;
      }
   }
 
-  return { systemInstruction, history, hotline, address, footerMsg: null }; // Removed auto-footer to make chat cleaner
+  return { systemInstruction, history, hotline, address, footerMsg: null, aiModel }; // Removed auto-footer to make chat cleaner
 }
 
-export async function askAI(userId: string, question: string, history: any[] = []) {
-  const now = Date.now();
-  if (!cachedProvider || now - providerCacheTime > PROVIDER_CACHE_TTL) {
-     // Check if we still have a provider setting. We don't have it in Settings global right now, 
-     // so we default to gemini.
-     cachedProvider = "gemini";
-     providerCacheTime = now;
-  }
+export async function askAI(userId: string, question: string, providedHistory: any[] = []) {
+  const ctx = await prepareAIContext(userId, question, providedHistory);
+  const aiModel = ctx.aiModel || "gemini-2.5-flash";
 
-  if (cachedProvider === "groq") {
-    return await askGroq(userId, question, history);
+  if (aiModel.includes("llama") || aiModel.includes("groq")) {
+    return await askGroq(userId, question, providedHistory, ctx);
   } else {
-    return await askGemini(userId, question, history);
+    return await askGemini(userId, question, providedHistory, ctx, aiModel);
   }
 }
 
-async function askGemini(userId: string, question: string, providedHistory: any[] = [], contextOverride?: any) {
+async function askGemini(userId: string, question: string, providedHistory: any[] = [], contextOverride?: any, aiModel: string = "gemini-2.5-flash") {
   const pool = await loadKeyPool("gemini");
   const fallbackKey = process.env.GEMINI_API_KEY;
   if (pool.length === 0 && !fallbackKey) {
@@ -267,13 +263,10 @@ async function askGemini(userId: string, question: string, providedHistory: any[
     }
   }
 
-  const geminiModels = ["gemini-2.5-flash"];
-  let lastError = null;
-  
+  const currentModel = aiModel;
+
   for (let i = 0; i < activeKeys.length; i++) {
     const apiKey = activeKeys[i];
-    const currentModel = geminiModels[geminiModelIndex % geminiModels.length];
-    geminiModelIndex++;
 
     try {
       const ai = new GoogleGenAI({ apiKey });
