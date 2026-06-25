@@ -563,15 +563,13 @@ html[data-theme="dark"] .collection-list a:hover {
   text-decoration: underline;
 }
 
-html[data-theme="dark"] .collection-list input[type="checkbox"],
-html[data-theme="dark"] .checkbox-input {
+html[data-theme="dark"] .collection-list input[type="checkbox"] {
   background-color: var(--theme-elevation-150) !important;
   border: 1px solid var(--theme-border) !important;
   color: var(--tw-primary) !important;
 }
 
-html[data-theme="dark"] .collection-list input[type="checkbox"]:checked,
-html[data-theme="dark"] .checkbox-input--checked {
+html[data-theme="dark"] .collection-list input[type="checkbox"]:checked {
   background-color: var(--tw-primary) !important;
   border-color: var(--tw-primary) !important;
 }
