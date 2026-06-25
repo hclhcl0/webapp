@@ -59,7 +59,15 @@ export const CheckApiButton: React.FC = () => {
         {loading ? 'Đang kiểm tra...' : 'Kiểm tra kết nối & Mô hình'}
       </Button>
       {result && (
-        <div style={{ marginTop: '10px', padding: '10px', backgroundColor: result.startsWith('✅') ? '#e6f3e6' : '#fbeaea', border: result.startsWith('✅') ? '1px solid #c3e6c3' : '1px solid #f2c7c7', borderRadius: '4px', color: '#333', fontSize: '13px' }}>
+        <div style={{ 
+          marginTop: '10px', 
+          padding: '10px', 
+          backgroundColor: 'var(--theme-elevation-50, rgba(128,128,128,0.1))', 
+          border: result.startsWith('✅') ? '1px solid var(--theme-success-500, #28a745)' : '1px solid var(--theme-error-500, #dc3545)', 
+          borderRadius: '4px', 
+          color: 'var(--theme-text, inherit)', 
+          fontSize: '13px' 
+        }}>
           <div style={{ marginBottom: modelsList.length > 0 ? '10px' : '0' }}>{result}</div>
           
           {modelsList.length > 0 && (
@@ -74,11 +82,19 @@ export const CheckApiButton: React.FC = () => {
                     value: e.target.value
                   })
                 }}
-                style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: '#fff', color: '#000', maxWidth: '400px', cursor: 'pointer' }}
+                style={{ 
+                  padding: '8px', 
+                  borderRadius: '4px', 
+                  border: '1px solid var(--theme-elevation-200, #ccc)', 
+                  backgroundColor: 'var(--theme-bg, #222)', 
+                  color: 'var(--theme-text, #fff)', 
+                  maxWidth: '400px', 
+                  cursor: 'pointer' 
+                }}
               >
                 <option value="">-- Mặc định (Sử dụng cấu hình Global) --</option>
                 {modelsList.map(m => (
-                  <option key={m} value={m}>{m}</option>
+                  <option key={m} value={m} style={{ backgroundColor: 'var(--theme-bg, #222)', color: 'var(--theme-text, #fff)' }}>{m}</option>
                 ))}
               </select>
             </div>
