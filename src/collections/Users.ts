@@ -9,6 +9,11 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     group: 'Quản trị hệ thống',
+    components: {
+      beforeList: [
+        '@/components/Admin/UserPermissionsNote#UserPermissionsNote',
+      ],
+    },
   },
   auth: true,
   access: {
