@@ -935,7 +935,7 @@ export const MIGRATION_STATEMENTS = [
   // Thêm cột department_id vào bảng users (liên kết đến departments)
   `ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "department_id" integer`,
   `ALTER TABLE "users" ADD CONSTRAINT "users_department_id_fk"
-    FOREIGN KEY ("department_id") REFERENCES "departments" ("id") ON DELETE set null ON UPDATE no action`
+    FOREIGN KEY ("department_id") REFERENCES "departments" ("id") ON DELETE set null ON UPDATE no action`,
   // ====================================================
   // BATCH 22 – Site Settings
   // ====================================================
