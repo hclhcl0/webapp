@@ -11,7 +11,7 @@ export const Users: CollectionConfig = {
     group: 'Quản trị hệ thống',
     components: {
       beforeList: [
-        '@/components/Admin/UserPermissionsNote#UserPermissionsNote',
+        '@/components/Admin/UserPermissionsNote.tsx#UserPermissionsNote',
       ],
     },
   },

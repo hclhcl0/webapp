@@ -1,3 +1,4 @@
+import { UserPermissionsNote as UserPermissionsNote_4784da27a43493924eba2534787a9e85 } from '@/components/Admin/UserPermissionsNote.tsx'
 import { SlugField as SlugField_d15d88479cc1fc005dbf907ac003f860 } from '@/components/SlugField.tsx'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -30,11 +31,11 @@ import { ColorPickerField as ColorPickerField_db2136a52610b552cc1623d001af525c }
 import { AdminIcon as AdminIcon_9f5eba8ffdadf3d52561f60d1de9fa24 } from '@/app/(payload)/admin/components/AdminIcon.tsx'
 import { AdminLogo as AdminLogo_0ec271e8bfb19d99b0e35d61da772365 } from '@/app/(payload)/admin/components/AdminLogo.tsx'
 import { AuthorWelcome as AuthorWelcome_59589bfc5409bc24cf137e45629d787e } from '@/app/(payload)/admin/components/AuthorWelcome.tsx'
-import { UserPermissionsNote as UserPermissionsNote_a1b2c3d4e5f6 } from '@/components/Admin/UserPermissionsNote'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "@/components/Admin/UserPermissionsNote.tsx#UserPermissionsNote": UserPermissionsNote_4784da27a43493924eba2534787a9e85,
   "@/components/SlugField.tsx#SlugField": SlugField_d15d88479cc1fc005dbf907ac003f860,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -67,6 +68,5 @@ export const importMap = {
   "@/app/(payload)/admin/components/AdminIcon.tsx#AdminIcon": AdminIcon_9f5eba8ffdadf3d52561f60d1de9fa24,
   "@/app/(payload)/admin/components/AdminLogo.tsx#AdminLogo": AdminLogo_0ec271e8bfb19d99b0e35d61da772365,
   "@/app/(payload)/admin/components/AuthorWelcome.tsx#AuthorWelcome": AuthorWelcome_59589bfc5409bc24cf137e45629d787e,
-  "@/components/Admin/UserPermissionsNote#UserPermissionsNote": UserPermissionsNote_a1b2c3d4e5f6,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
