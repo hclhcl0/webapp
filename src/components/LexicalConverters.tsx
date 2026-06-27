@@ -3,6 +3,9 @@ import { RichText } from '@payloadcms/richtext-lexical/react';
 import Script from 'next/script';
 
 import { UploadBlock } from './UploadBlock';
+import { TableBlock } from './PageBlocks/TableBlock';
+import { FaqBlock } from './PageBlocks/FaqBlock';
+import { EmbedBlock } from './PageBlocks/EmbedBlock';
 
 function getGDriveEmbedUrl(url: string): { embedUrl: string; directUrl: string } {
   if (url && url.includes('drive.google.com')) {
@@ -237,6 +240,46 @@ export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }
             </blockquote>
             <Script src="https://www.tiktok.com/embed.js" strategy="lazyOnload" />
           </div>
+        </div>
+      );
+    },
+    tableBlock: ({ node }: any) => <TableBlock {...node.fields} />,
+    faqBlock: ({ node }: any) => <FaqBlock {...node.fields} />,
+    embedBlock: ({ node }: any) => <EmbedBlock {...node.fields} />,
+    quoteBlock: ({ node }: any) => {
+      const { quote, author, role } = node.fields;
+      if (!quote) return null;
+      return (
+        <blockquote className="my-6 p-6 md:p-8 bg-blue-50/50 rounded-2xl border-l-4 border-[var(--primary)] relative">
+          <div className="absolute top-4 left-4 text-4xl text-[var(--primary)] opacity-20 font-serif">"</div>
+          <p className="text-lg md:text-xl font-medium text-gray-800 leading-relaxed mb-4 relative z-10 italic">
+            {quote}
+          </p>
+          {author && (
+            <footer className="mt-4 flex items-center">
+              <div className="w-8 h-1 bg-[var(--primary)] mr-4 rounded-full"></div>
+              <div>
+                <strong className="text-gray-900 block">{author}</strong>
+                {role && <span className="text-sm text-gray-600 block">{role}</span>}
+              </div>
+            </footer>
+          )}
+        </blockquote>
+      );
+    },
+    audioBlock: ({ node }: any) => {
+      const { title, sourceType, audioFile, audioUrl, description } = node.fields;
+      const src = sourceType === 'upload' ? audioFile?.url : audioUrl;
+      if (!src) return null;
+
+      return (
+        <div className="my-6 p-5 md:p-6 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3">
+          {title && <h3 className="text-lg font-bold text-gray-900">{title}</h3>}
+          {description && <p className="text-sm text-gray-600">{description}</p>}
+          <audio controls className="w-full mt-2 outline-none rounded-full" preload="metadata">
+            <source src={src} />
+            Trình duyệt của bạn không hỗ trợ thẻ audio.
+          </audio>
         </div>
       );
     },

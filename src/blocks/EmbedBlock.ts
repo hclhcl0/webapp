@@ -22,6 +22,7 @@ export const EmbedBlock: Block = {
         { label: 'Mã nhúng tùy chỉnh (HTML/iFrame)', value: 'custom' },
         { label: 'Google Maps', value: 'googlemaps' },
         { label: 'Facebook Fanpage / Post', value: 'facebook' },
+        { label: 'Biểu mẫu điền thông tin (Google Form, Microsoft Form)', value: 'form' },
       ],
     },
     {
@@ -30,8 +31,8 @@ export const EmbedBlock: Block = {
       label: 'Mã HTML / iFrame nhúng',
       admin: {
         rows: 6,
-        description: 'Dán trực tiếp mã iFrame hoặc mã nhúng vào đây.',
-        condition: (_, siblingData) => siblingData?.embedType === 'custom',
+        description: 'Dán trực tiếp mã iFrame hoặc mã nhúng vào đây. Hỗ trợ Google Form, Microsoft Form, v.v.',
+        condition: (_, siblingData) => siblingData?.embedType === 'custom' || siblingData?.embedType === 'form',
       },
     },
     {

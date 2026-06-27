@@ -2,7 +2,7 @@ import React from 'react';
 
 interface Props {
   title?: string;
-  embedType?: 'custom' | 'googlemaps' | 'facebook';
+  embedType?: 'custom' | 'googlemaps' | 'facebook' | 'form';
   htmlCode?: string;
   googleMapsUrl?: string;
   facebookUrl?: string;
@@ -45,7 +45,7 @@ export function EmbedBlock({ title, embedType = 'custom', htmlCode, googleMapsUr
         </div>
       )}
 
-      {embedType === 'custom' && htmlCode && (
+      {(embedType === 'custom' || embedType === 'form') && htmlCode && (
         <div
           className="rounded-xl overflow-hidden border border-gray-200 shadow-sm"
           dangerouslySetInnerHTML={{ __html: htmlCode }}

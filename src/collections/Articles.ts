@@ -8,6 +8,11 @@ import { CalloutBlock } from '../blocks/CalloutBlock.ts';
 import { ButtonBlock } from '../blocks/ButtonBlock.ts';
 import { RelatedArticlesBlock } from '../blocks/RelatedArticlesBlock.ts';
 import { ColumnsBlock } from '../blocks/ColumnsBlock.ts';
+import { TableBlock } from '../blocks/TableBlock.ts';
+import { FaqBlock } from '../blocks/FaqBlock.ts';
+import { EmbedBlock } from '../blocks/EmbedBlock.ts';
+import { QuoteBlock } from '../blocks/QuoteBlock.ts';
+import { AudioBlock } from '../blocks/AudioBlock.ts';
 import { CardBlock } from '../blocks/CardBlock.ts';
 
 /**
@@ -342,7 +347,10 @@ export const Articles: CollectionConfig = {
           HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5', 'h6'] }),
           AlignFeature(),
           HTMLConverterFeature({}),
-          BlocksFeature({ blocks: [VideoBlock, TikTokBlock, PDFBlock, GalleryBlock, CalloutBlock, ButtonBlock, RelatedArticlesBlock, ColumnsBlock] }),
+          BlocksFeature({ blocks: [
+            VideoBlock, TikTokBlock, PDFBlock, GalleryBlock, CalloutBlock, ButtonBlock, RelatedArticlesBlock, ColumnsBlock,
+            TableBlock, FaqBlock, EmbedBlock, QuoteBlock, AudioBlock
+          ] }),
         ]
       }),
       required: true,

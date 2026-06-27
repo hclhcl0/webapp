@@ -19,6 +19,8 @@ import { DividerBlock } from '../blocks/DividerBlock.ts';
 import { CtaBannerBlock } from '../blocks/CtaBannerBlock.ts';
 import { EmbedBlock } from '../blocks/EmbedBlock.ts';
 import { TableBlock } from '../blocks/TableBlock.ts';
+import { QuoteBlock } from '../blocks/QuoteBlock.ts';
+import { AudioBlock } from '../blocks/AudioBlock.ts';
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -163,6 +165,9 @@ export const Pages: CollectionConfig = {
         // Bài viết
         RelatedArticlesBlock,
         CategoryNewsBlock,
+        // Quote & Audio
+        QuoteBlock,
+        AudioBlock,
         // Legacy
         HeroBannerBlock,
       ],
