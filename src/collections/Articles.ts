@@ -34,8 +34,32 @@ export const Articles: CollectionConfig = {
       if (user && ['admin', 'editor', 'moderator'].includes(user.role as string)) {
         return true;
       }
-      // Author xem được bài đã public HOẶC bài nháp của chính mình
+      // Author: lọc theo chuyên mục được phân công + bài nháp của chính mình
       if (user && user.role === 'author') {
+        const allowedCategories = (user as any)?.allowedCategories as any[] | undefined;
+
+        // Nếu Author có danh sách chuyên mục được phân công
+        if (allowedCategories && allowedCategories.length > 0) {
+          const allowedIds = allowedCategories.map((c: any) =>
+            typeof c === 'string' ? c : c?.id
+          ).filter(Boolean);
+
+          return {
+            or: [
+              // Bài đã public TRONG chuyên mục được phân công
+              {
+                and: [
+                  { _status: { equals: 'published' } },
+                  { category: { in: allowedIds } },
+                ],
+              },
+              // Bài nháp của chính mình (không giới hạn chuyên mục)
+              { author: { equals: user.id } },
+            ],
+          };
+        }
+
+        // Nếu Author chưa được phân chuyên mục → chỉ xem bài public + bài nháp của mình
         return {
           or: [
             { _status: { equals: 'published' } },
