@@ -936,4 +936,119 @@ export const MIGRATION_STATEMENTS = [
   `ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "department_id" integer`,
   `ALTER TABLE "users" ADD CONSTRAINT "users_department_id_fk"
     FOREIGN KEY ("department_id") REFERENCES "departments" ("id") ON DELETE set null ON UPDATE no action`
+  // ====================================================
+  // BATCH 22 – Site Settings
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "site_settings" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "header_site_name" varchar NOT NULL DEFAULT 'Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng',
+    "header_logo_id" integer,
+    "header_logo_customization_logo_height" numeric DEFAULT 80,
+    "header_logo_customization_logo_position" varchar DEFAULT 'left',
+    "header_logo_customization_show_site_name" boolean DEFAULT true,
+    "header_logo_customization_site_name_line1" varchar DEFAULT 'TRUNG TÂM KIỂM SOÁT BỆNH TẬT',
+    "header_logo_customization_site_name_line2" varchar DEFAULT 'THÀNH PHỐ ĐÀ NẴNG',
+    "header_logo_customization_site_tagline" varchar DEFAULT 'Phòng bệnh chủ động-vươn rộng tương lai',
+    "header_logo_customization_logo_banner_image_id" integer,
+    "header_logo_customization_mobile_logo_id" integer,
+    "header_logo_customization_mobile_logo_height" numeric DEFAULT 40,
+    "header_logo_customization_logo_hover_effect" varchar DEFAULT 'bounce',
+    "header_logo_customization_mobile_show_site_name" boolean DEFAULT false,
+    "header_search_customization_position" varchar DEFAULT 'navbar',
+    "header_search_customization_style" varchar DEFAULT 'popup',
+    "header_search_customization_width" numeric DEFAULT 250,
+    "header_hotline_phone" varchar DEFAULT '0236 3890 407',
+    "header_hotline_action_link" varchar DEFAULT '#',
+    "header_hotline_position" varchar DEFAULT 'topbar',
+    "header_social_links_facebook" varchar,
+    "header_social_links_youtube" varchar,
+    "header_social_links_twitter" varchar,
+    "header_social_links_instagram" varchar,
+    "menu_menu_position" varchar DEFAULT 'below',
+    "sidebar_width_ratio" varchar DEFAULT 'Sidebar 33% - Main 67%',
+    "sidebar_gap_size" varchar DEFAULT 'Vừa',
+    "footer_about_text" varchar,
+    "footer_address_main" varchar,
+    "footer_address_sub" varchar,
+    "footer_phone" varchar,
+    "footer_email" varchar,
+    "footer_copyright_text" varchar DEFAULT '© Bản quyền thuộc về TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG',
+    "footer_designer_credit" varchar DEFAULT 'thiết kế bởi CNTT CDC Đà Nẵng',
+    "theme_org_layout" varchar DEFAULT 'chart_accordion',
+    "theme_org_colors_ban_lanh_dao" varchar DEFAULT '#0d47a1',
+    "theme_org_colors_phong" varchar DEFAULT '#2e7d32',
+    "theme_org_colors_khoa" varchar DEFAULT '#1976d2',
+    "theme_org_colors_khac" varchar DEFAULT '#e65100',
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT "site_settings_header_logo_id_fk" FOREIGN KEY ("header_logo_id") REFERENCES "media" ("id") ON DELETE set null ON UPDATE no action,
+    CONSTRAINT "site_settings_header_logo_customization_logo_banner_image_id_fk" FOREIGN KEY ("header_logo_customization_logo_banner_image_id") REFERENCES "media" ("id") ON DELETE set null ON UPDATE no action,
+    CONSTRAINT "site_settings_header_logo_customization_mobile_logo_id_fk" FOREIGN KEY ("header_logo_customization_mobile_logo_id") REFERENCES "media" ("id") ON DELETE set null ON UPDATE no action
+  )`,
+  `CREATE TABLE IF NOT EXISTS "site_settings_menu_menu_items" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "label" varchar NOT NULL,
+    "url" varchar,
+    CONSTRAINT "site_settings_menu_menu_items_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_menu_menu_items_order_idx" ON "site_settings_menu_menu_items" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_menu_menu_items_parent_idx" ON "site_settings_menu_menu_items" USING btree ("_parent_id")`,
+  
+  `CREATE TABLE IF NOT EXISTS "site_settings_menu_menu_items_sub_items" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "label" varchar NOT NULL,
+    "url" varchar NOT NULL,
+    CONSTRAINT "site_settings_menu_menu_items_sub_items_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings_menu_menu_items" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_menu_menu_items_sub_items_order_idx" ON "site_settings_menu_menu_items_sub_items" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_menu_menu_items_sub_items_parent_idx" ON "site_settings_menu_menu_items_sub_items" USING btree ("_parent_id")`,
+  
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_category_news" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar NOT NULL,
+    "category_info_id" integer NOT NULL,
+    "limit" numeric DEFAULT 4,
+    CONSTRAINT "site_settings_blocks_category_news_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "site_settings_blocks_category_news_category_info_id_fk" 
+      FOREIGN KEY ("category_info_id") REFERENCES "categories" ("id") ON DELETE set null ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_category_news_order_idx" ON "site_settings_blocks_category_news" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_category_news_parent_idx" ON "site_settings_blocks_category_news" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_category_news_path_idx" ON "site_settings_blocks_category_news" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_footer_quick_links" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "label" varchar NOT NULL,
+    "url" varchar NOT NULL,
+    CONSTRAINT "site_settings_footer_quick_links_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_quick_links_order_idx" ON "site_settings_footer_quick_links" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_quick_links_parent_idx" ON "site_settings_footer_quick_links" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_footer_social_links" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "platform" varchar NOT NULL,
+    "label" varchar NOT NULL,
+    "url" varchar NOT NULL,
+    CONSTRAINT "site_settings_footer_social_links_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_social_links_order_idx" ON "site_settings_footer_social_links" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_social_links_parent_idx" ON "site_settings_footer_social_links" USING btree ("_parent_id")`
 ];
