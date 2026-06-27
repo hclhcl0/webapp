@@ -21,6 +21,11 @@ import { EmbedBlock } from '../blocks/EmbedBlock.ts';
 import { TableBlock } from '../blocks/TableBlock.ts';
 import { QuoteBlock } from '../blocks/QuoteBlock.ts';
 import { AudioBlock } from '../blocks/AudioBlock.ts';
+import { FileDownloadsBlock } from '../blocks/FileDownloadsBlock.ts';
+import { SliderBlock } from '../blocks/SliderBlock.ts';
+import { InfographicBlock } from '../blocks/InfographicBlock.ts';
+import { ZaloWidgetBlock } from '../blocks/ZaloWidgetBlock.ts';
+import { LivestreamBlock } from '../blocks/LivestreamBlock.ts';
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -168,6 +173,12 @@ export const Pages: CollectionConfig = {
         // Quote & Audio
         QuoteBlock,
         AudioBlock,
+        // New Media Blocks
+        FileDownloadsBlock,
+        SliderBlock,
+        InfographicBlock,
+        ZaloWidgetBlock,
+        LivestreamBlock,
         // Legacy
         HeroBannerBlock,
       ],

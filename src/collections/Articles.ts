@@ -13,6 +13,11 @@ import { FaqBlock } from '../blocks/FaqBlock.ts';
 import { EmbedBlock } from '../blocks/EmbedBlock.ts';
 import { QuoteBlock } from '../blocks/QuoteBlock.ts';
 import { AudioBlock } from '../blocks/AudioBlock.ts';
+import { FileDownloadsBlock } from '../blocks/FileDownloadsBlock.ts';
+import { SliderBlock } from '../blocks/SliderBlock.ts';
+import { InfographicBlock } from '../blocks/InfographicBlock.ts';
+import { ZaloWidgetBlock } from '../blocks/ZaloWidgetBlock.ts';
+import { LivestreamBlock } from '../blocks/LivestreamBlock.ts';
 import { CardBlock } from '../blocks/CardBlock.ts';
 
 /**
@@ -349,7 +354,8 @@ export const Articles: CollectionConfig = {
           HTMLConverterFeature({}),
           BlocksFeature({ blocks: [
             VideoBlock, TikTokBlock, PDFBlock, GalleryBlock, CalloutBlock, ButtonBlock, RelatedArticlesBlock, ColumnsBlock,
-            TableBlock, FaqBlock, EmbedBlock, QuoteBlock, AudioBlock
+            TableBlock, FaqBlock, EmbedBlock, QuoteBlock, AudioBlock,
+            FileDownloadsBlock, SliderBlock, InfographicBlock, ZaloWidgetBlock, LivestreamBlock
           ] }),
         ]
       }),

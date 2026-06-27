@@ -6,6 +6,8 @@ import { UploadBlock } from './UploadBlock';
 import { TableBlock } from './PageBlocks/TableBlock';
 import { FaqBlock } from './PageBlocks/FaqBlock';
 import { EmbedBlock } from './PageBlocks/EmbedBlock';
+import { SliderClientBlock } from './blocks/SliderClientBlock';
+import { InfographicClientBlock } from './blocks/InfographicClientBlock';
 
 function getGDriveEmbedUrl(url: string): { embedUrl: string; directUrl: string } {
   if (url && url.includes('drive.google.com')) {
@@ -280,6 +282,98 @@ export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }
             <source src={src} />
             Trình duyệt của bạn không hỗ trợ thẻ audio.
           </audio>
+        </div>
+      );
+    },
+    fileDownloadsBlock: ({ node }: any) => {
+      const { title, files } = node.fields;
+      if (!files?.length) return null;
+      return (
+        <div className="my-6 bg-gray-50 border border-gray-200 p-5 rounded-2xl">
+          <h3 className="font-bold text-lg mb-4 text-gov-primary border-b border-gray-200 pb-2">{title || 'Tài liệu đính kèm'}</h3>
+          <ul className="space-y-3">
+            {files.map((f: any, i: number) => {
+              const file = f.file;
+              if (!file || !file.url) return null;
+              const ext = file.filename.split('.').pop()?.toUpperCase() || 'FILE';
+              const name = f.customName || file.filename;
+              return (
+                <li key={i} className="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-xl hover:border-gov-secondary transition-colors">
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded min-w-12 text-center">{ext}</span>
+                    <a href={file.url} download target="_blank" rel="noreferrer" className="text-gray-800 font-medium hover:text-gov-secondary truncate">
+                      {name}
+                    </a>
+                  </div>
+                  <a href={file.url} download target="_blank" rel="noreferrer" className="shrink-0 bg-gov-primary/10 text-gov-primary hover:bg-gov-primary hover:text-white px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors">
+                    Tải về
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      );
+    },
+    sliderBlock: ({ node }: any) => {
+      return <SliderClientBlock images={node.fields.images} autoplay={node.fields.autoplay} />;
+    },
+    infographicBlock: ({ node }: any) => {
+      return <InfographicClientBlock image={node.fields.image} caption={node.fields.caption} />;
+    },
+    zaloWidgetBlock: ({ node }: any) => {
+      const { oaId, title, widgetType } = node.fields;
+      if (!oaId) return null;
+      
+      let html = '';
+      if (widgetType === 'chat') {
+         html = `<div class="zalo-chat-widget" data-oaid="${oaId}" data-welcome-message="Rất vui khi được hỗ trợ bạn!" data-autopopup="0" data-width="" data-height=""></div>`;
+      } else if (widgetType === 'article') {
+         html = `<div class="zalo-article-widget" data-oaid="${oaId}" data-limit="5" data-width="100%" data-height="500"></div>`;
+      } else if (widgetType === 'follow') {
+         html = `<div class="zalo-follow-only-button" data-oaid="${oaId}"></div>`;
+      }
+
+      return (
+        <div className="my-6 p-6 bg-blue-50/50 rounded-2xl border border-blue-100 flex flex-col items-center">
+          {title && <h3 className="font-bold text-[#0180c7] mb-4 text-center">{title}</h3>}
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <Script src="https://sp.zalo.me/plugins/workspace.js" strategy="lazyOnload" />
+        </div>
+      );
+    },
+    livestreamBlock: ({ node }: any) => {
+      const { title, platform, videoId, status, description } = node.fields;
+      if (!videoId) return null;
+      
+      return (
+        <div className="my-8 rounded-2xl overflow-hidden border border-gray-200 shadow-md">
+          <div className="bg-gray-900 px-4 py-3 flex items-center justify-between">
+            <h3 className="text-white font-bold m-0 flex items-center gap-2">
+              <span className="text-xl">📡</span> {title}
+            </h3>
+            {status === 'live' && (
+              <span className="flex items-center gap-2 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold animate-pulse">
+                <span className="w-2 h-2 bg-white rounded-full"></span> TRỰC TIẾP
+              </span>
+            )}
+            {status === 'upcoming' && <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">Sắp diễn ra</span>}
+            {status === 'ended' && <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-sm font-bold">Đã phát</span>}
+          </div>
+          
+          <div className="aspect-video bg-black w-full relative">
+            {platform === 'youtube' ? (
+              <iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${videoId}?autoplay=${status === 'live' ? 1 : 0}`} frameBorder="0" allowFullScreen></iframe>
+            ) : (
+              <iframe src={`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoId)}&show_text=false`} width="100%" height="100%" style={{ border: 'none', overflow: 'hidden' }} scrolling="no" frameBorder="0" allowFullScreen allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            )}
+          </div>
+          
+          {description && (
+             <div className="bg-gray-50 p-4 border-t border-gray-200">
+               <p className="text-gray-700 m-0">{description}</p>
+             </div>
+          )}
         </div>
       );
     },
