@@ -8,6 +8,8 @@ type OrgUnit = {
   unitType: 'ban_lanh_dao' | 'phong' | 'khoa' | 'khac';
   order: number;
   shortDescription?: string;
+  phone?: string;
+  email?: string;
   members?: Array<{
     memberName: string;
     position: string;
@@ -67,76 +69,82 @@ function OrgNode({ unit, isActive, onClick, colors }: { unit: OrgUnit; isActive:
           ))}
         </div>
       )}
-      {memberCount > 0 && (
-        <div className="node-count">{memberCount} nhân sự</div>
+      {unit.phone && (
+        <div className="node-contact">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          {unit.phone}
+        </div>
+      )}
+      {unit.email && (
+        <div className="node-contact">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          {unit.email}
+        </div>
       )}
 
       <style>{`
         .org-node {
           background: white;
-          border: 2px solid var(--node-color);
-          border-radius: 0.75rem;
-          padding: 0.75rem 1rem;
+          border: 1px solid #f1f5f9;
+          border-bottom: 3px solid var(--node-color);
+          border-radius: 1rem;
+          padding: 1rem 1.25rem;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           text-align: center;
-          min-width: 150px;
-          max-width: 200px;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+          min-width: 160px;
+          max-width: 220px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
           position: relative;
         }
         .org-node:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-          background: var(--node-color);
-          color: white;
+          transform: translateY(-4px);
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+          border-color: color-mix(in srgb, var(--node-color) 20%, transparent);
         }
         .org-node.active {
-          background: var(--node-color);
-          color: white;
-          transform: translateY(-3px);
-          box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+          transform: translateY(-2px);
+          box-shadow: 0 0 0 2px white, 0 0 0 4px var(--node-color);
+          border-color: var(--node-color);
         }
         .node-header {
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.5rem;
         }
         .node-type-badge {
           font-size: 0.65rem;
-          font-weight: 600;
+          font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.05em;
           color: var(--node-color);
-          background: color-mix(in srgb, var(--node-color) 12%, transparent);
-          padding: 2px 6px;
+          background: color-mix(in srgb, var(--node-color) 8%, transparent);
+          padding: 3px 8px;
           border-radius: 999px;
           display: inline-block;
         }
-        .org-node:hover .node-type-badge,
-        .org-node.active .node-type-badge {
-          color: white;
-          background: rgba(255,255,255,0.25);
-        }
         .node-name {
-          font-size: 0.85rem;
-          font-weight: 700;
+          font-size: 0.9rem;
+          font-weight: 800;
           line-height: 1.3;
           margin: 0.25rem 0;
-          color: #1a237e;
-        }
-        .org-node:hover .node-name,
-        .org-node.active .node-name {
-          color: white;
+          color: #0f172a;
+          letter-spacing: -0.01em;
         }
         .leader-name {
-          font-size: 0.72rem;
+          font-size: 0.75rem;
           display: block;
-          opacity: 0.75;
+          color: #64748b;
+          font-weight: 500;
+          margin-top: 4px;
         }
-        .node-count {
-          font-size: 0.7rem;
+        .node-contact {
+          font-size: 0.75rem;
           margin-top: 0.25rem;
-          opacity: 0.6;
-          font-style: italic;
+          color: #94a3b8;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
         }
       `}</style>
     </button>
@@ -216,40 +224,44 @@ export function OrgChart({ units, themeColors }: Props) {
           align-items: center;
           gap: 0;
           overflow-x: auto;
-          padding: 0.5rem;
+          padding: 1rem;
         }
         .org-level {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 0.75rem;
+          gap: 1rem;
           width: 100%;
         }
         .leadership-level {
-          gap: 1rem;
+          gap: 1.5rem;
           margin-bottom: 0;
         }
         .connector-v {
-          width: 3px;
-          height: 2rem;
-          background: linear-gradient(to bottom, #1565c0, #e2e8f0);
-          border-radius: 2px;
-          margin: 0.25rem 0;
+          width: 2px;
+          height: 2.5rem;
+          background: linear-gradient(to bottom, #cbd5e1, rgba(203, 213, 225, 0));
+          margin: 0.5rem 0;
         }
         .dept-group {
           width: 100%;
           margin-top: 1.5rem;
+          background: #ffffff;
+          padding: 1.5rem;
+          border-radius: 1.5rem;
+          box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.01);
+          border: 1px solid #f1f5f9;
         }
         .dept-group-label {
           text-align: center;
-          font-size: 0.75rem;
-          font-weight: 700;
+          font-size: 0.8rem;
+          font-weight: 800;
           text-transform: uppercase;
-          letter-spacing: 0.06em;
-          margin-bottom: 0.75rem;
+          letter-spacing: 0.1em;
+          margin-bottom: 1.5rem;
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 1rem;
         }
         .dept-group-label::before,
         .dept-group-label::after {
@@ -257,16 +269,22 @@ export function OrgChart({ units, themeColors }: Props) {
           flex: 1;
           height: 1px;
           background: currentColor;
-          opacity: 0.2;
+          opacity: 0.15;
         }
         .dept-level {
           justify-content: center;
         }
         .org-chart-hint {
-          margin-top: 1.5rem;
-          font-size: 0.8rem;
+          margin-top: 2rem;
+          font-size: 0.85rem;
           color: #94a3b8;
           text-align: center;
+          background: #f1f5f9;
+          padding: 0.5rem 1rem;
+          border-radius: 100px;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
         }
       `}</style>
     </div>

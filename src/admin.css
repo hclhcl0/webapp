@@ -682,3 +682,17 @@ html[data-theme="dark"] [class*="PopupList"] {
   border-color: var(--theme-border) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
 }
+
+/* ==========================================
+   FIX TABS FONT SYNCHRONIZATION
+   ========================================== */
+.tabs-field__tab-button,
+.tabs-field__tabs button,
+.tabs-field__tabs .tabs-field__tab-button,
+[class*="tabs-field__tab-button"],
+[class*="tabs-field__tabs"] button,
+button[class*="tab"] {
+  font-family: var(--font-body), "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+  font-weight: 500 !important;
+  letter-spacing: normal !important;
+}

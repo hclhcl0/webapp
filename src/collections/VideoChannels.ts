@@ -53,6 +53,16 @@ export const VideoChannels: CollectionConfig = {
       },
     },
     {
+      name: 'syncButton',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/Admin/SyncVideoButton#SyncVideoButton',
+        },
+        condition: (data: any) => data?.platform === 'youtube',
+      },
+    },
+    {
       name: 'tiktokHandle',
       type: 'text',
       label: 'TikTok Username (không có @)',

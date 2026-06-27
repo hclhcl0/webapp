@@ -26,11 +26,12 @@ export const Header = async () => {
 
   try {
     const payload = await getPayload({ config: configPromise });
-    const globalHeader = await payload.findGlobal({ slug: 'header', depth: 2 });
-    const globalMenu = await payload.findGlobal({ slug: 'main-menu', depth: 2 }) as any;
-    menuItems = globalMenu?.menuItems || [];
-    menuPosition = globalMenu?.menuPosition || 'right';
-    const lc = (globalHeader as any).logoCustomization || {};
+    const s = await payload.findGlobal({ slug: 'site-settings', depth: 2 }) as any;
+    const headerData = s?.header || {};
+    const menuData = s?.menu || {};
+    menuItems = menuData?.menuItems || [];
+    menuPosition = menuData?.menuPosition || 'right';
+    const lc = headerData.logoCustomization || {};
     logoConfig = {
       height: lc.logoHeight || 52,
       position: lc.logoPosition || 'left',
@@ -44,17 +45,17 @@ export const Header = async () => {
       mobileShowSiteName: lc.mobileShowSiteName === true,
       hoverEffect: lc.logoHoverEffect || 'scale-tilt',
     };
-    const sc = (globalHeader as any).searchCustomization || {};
+    const sc = headerData.searchCustomization || {};
     searchConfig = { position: sc.position || 'hotline', style: sc.style || 'inline', width: sc.width || 250 };
-    fb = globalHeader.socialLinks?.facebook;
-    tw = globalHeader.socialLinks?.twitter;
-    yt = globalHeader.socialLinks?.youtube;
-    ig = globalHeader.socialLinks?.instagram;
-    phone = globalHeader.hotline?.phone || '0909 408 895';
-    actionLink = globalHeader.hotline?.actionLink || '#';
-    hotlinePosition = globalHeader.hotline?.position || 'below-nav';
-    logoUrl = (globalHeader.logo as any)?.url || '/logo.png';
-    siteName = globalHeader.siteName || 'CDC Đà Nẵng';
+    fb = headerData.socialLinks?.facebook;
+    tw = headerData.socialLinks?.twitter;
+    yt = headerData.socialLinks?.youtube;
+    ig = headerData.socialLinks?.instagram;
+    phone = headerData.hotline?.phone || '0909 408 895';
+    actionLink = headerData.hotline?.actionLink || '#';
+    hotlinePosition = headerData.hotline?.position || 'below-nav';
+    logoUrl = (headerData.logo as any)?.url || '/logo.png';
+    siteName = headerData.siteName || 'CDC Đà Nẵng';
   } catch (e) {
     console.error('Header: error fetching global header data:', e);
   }

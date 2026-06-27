@@ -68,6 +68,29 @@ export const OrgUnits: CollectionConfig = {
       },
     },
     {
+      type: 'row',
+      fields: [
+        {
+          name: 'phone',
+          type: 'text',
+          label: 'Số điện thoại liên hệ',
+          admin: {
+            width: '50%',
+            description: 'Số điện thoại của đơn vị/phòng/khoa',
+          },
+        },
+        {
+          name: 'email',
+          type: 'email',
+          label: 'Email liên hệ',
+          admin: {
+            width: '50%',
+            description: 'Email của đơn vị/phòng/khoa',
+          },
+        },
+      ],
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',

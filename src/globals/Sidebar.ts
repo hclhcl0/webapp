@@ -8,7 +8,7 @@ export const Sidebar: GlobalConfig = {
   slug: 'sidebar',
   label: 'Sidebar (Thanh bên)',
   admin: {
-    group: 'Giao diện',
+    group: 'Cài đặt giao diện',
   },
   access: {
     read: () => true,

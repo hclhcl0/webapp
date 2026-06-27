@@ -18,7 +18,8 @@ export const Footer = async () => {
 
   try {
     const payload = await getPayload({ config: configPromise });
-    globalFooter = await payload.findGlobal({ slug: 'footer' });
+    const s = await payload.findGlobal({ slug: 'site-settings' }) as any;
+    globalFooter = s?.footer || {};
     aboutText = globalFooter.aboutText || aboutText;
     addressMain = globalFooter.addressMain || addressMain;
     addressSub = globalFooter.addressSub || '';

@@ -20,14 +20,10 @@ import { Articles } from './collections/Articles.ts';
 import { Pages } from './collections/Pages.ts';
 import { Banners } from './collections/Banners.ts';
 import { Documents } from './collections/Documents.ts';
-import { Header } from './globals/Header.ts';
-import { MainMenu } from './globals/MainMenu.ts';
-import { Sidebar } from './globals/Sidebar.ts';
-import { Footer } from './globals/Footer.ts';
+import { SiteSettings } from './globals/SiteSettings.ts';
 import { ServicesLanding } from './globals/ServicesLanding.ts';
 import { Settings } from './globals/Settings.ts';
 import { BannerSettings } from './globals/BannerSettings.ts';
-import { ThemeSettings } from './globals/ThemeSettings.ts';
 import { WorkSchedules } from './collections/WorkSchedules.ts';
 import { Videos } from './collections/Videos.ts';
 import { VideoChannels } from './collections/VideoChannels.ts';
@@ -49,6 +45,12 @@ export default buildConfig({
   onInit: async (payload) => {
     // const { initCron } = await import('./lib/zalo-admin/cron.js');
     // initCron();
+    
+    // Khởi chạy Cronjob đồng bộ Video
+    if (process.env.NODE_ENV !== 'development') { // Tránh chạy nhiều lần khi dev hot-reload
+      const { initVideoSyncCron } = await import('./cron/videoSync.ts');
+      initVideoSyncCron();
+    }
   },
   admin: {
     user: 'users',
@@ -92,14 +94,10 @@ export default buildConfig({
     Services,
   ],
   globals: [
-    Header,
-    MainMenu,
-    Sidebar,
-    Footer,
+    SiteSettings,
     ServicesLanding,
     Settings,
     BannerSettings,
-    ThemeSettings,
   ],
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN

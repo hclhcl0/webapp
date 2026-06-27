@@ -4,7 +4,7 @@ export const Footer: GlobalConfig = {
   slug: 'footer',
   label: 'Footer (Chân trang & Giới thiệu)',
   admin: {
-    group: 'Giao diện',
+    group: 'Cài đặt giao diện',
   },
   access: {
     read: () => true,

@@ -4,7 +4,7 @@ export const ThemeSettings: GlobalConfig = {
   slug: 'theme-settings',
   label: 'Cài đặt Giao diện',
   admin: {
-    group: 'Hệ thống',
+    group: 'Cài đặt giao diện',
   },
   access: {
     read: () => true,
@@ -62,6 +62,42 @@ export const ThemeSettings: GlobalConfig = {
                       admin: { description: 'Nhập mã màu HEX (VD: #e65100)', width: '50%' },
                     },
                   ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Kiểu hiển thị Cơ cấu tổ chức',
+          fields: [
+            {
+              name: 'orgLayout',
+              type: 'select',
+              label: 'Chọn kiểu giao diện trang Cơ cấu tổ chức',
+              defaultValue: 'chart_accordion',
+              admin: {
+                description: 'Thay đổi sẽ có hiệu lực ngay trên trang web.',
+              },
+              options: [
+                {
+                  label: '🏛️ Sơ đồ + Danh sách (mặc định) — Sơ đồ cây + accordion nhân sự',
+                  value: 'chart_accordion',
+                },
+                {
+                  label: '📁 Thẻ danh sách (Card Grid) — Mỗi phòng/khoa là 1 thẻ, click xem nhân sự',
+                  value: 'card_grid',
+                },
+                {
+                  label: '📋 Bảng đơn giản (Simple Table) — Danh sách dạng bảng gọn nhẹ nhất',
+                  value: 'simple_table',
+                },
+                {
+                  label: '🗂️ Tabs theo nhóm — 3 tab: Ban lãnh đạo / Phòng chức năng / Khoa chuyên môn',
+                  value: 'tabs',
+                },
+                {
+                  label: '🌳 Chỉ Sơ đồ Org Chart — Chỉ hiện sơ đồ cây, không có danh sách nhân sự',
+                  value: 'chart_only',
                 },
               ],
             },

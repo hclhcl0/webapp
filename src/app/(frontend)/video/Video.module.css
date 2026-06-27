@@ -208,9 +208,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   transform: scale(0.9);
   transition: transform 0.2s;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .videoCard:hover .playBtn {
@@ -227,16 +231,19 @@
 /* Badges */
 .platformBadge {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
+  top: 0.6rem;
+  left: 0.6rem;
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  justify-content: center;
   color: white;
-  padding: 0.2rem 0.6rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 

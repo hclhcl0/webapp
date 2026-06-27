@@ -4,7 +4,7 @@ export const Header: GlobalConfig = {
   slug: 'header',
   label: 'Header (Cấu hình chung)',
   admin: {
-    group: 'Giao diện',
+    group: 'Cài đặt giao diện',
   },
   access: {
     read: () => true,

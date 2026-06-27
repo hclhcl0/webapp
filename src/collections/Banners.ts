@@ -7,7 +7,7 @@ export const Banners: CollectionConfig = {
     plural: 'Danh sách Banner',
   },
   admin: {
-    group: 'Giao diện',
+    group: 'Cài đặt giao diện',
     useAsTitle: 'title',
     defaultColumns: ['title', 'position', 'order', 'isActive'],
   },
