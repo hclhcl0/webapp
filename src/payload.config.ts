@@ -5,6 +5,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob';
+import { s3Storage } from '@payloadcms/storage-s3';
 import { vi } from '@payloadcms/translations/languages/vi';
 
 // DATABASE_URI = custom Postgres URL
@@ -107,6 +108,26 @@ export default buildConfig({
               media: true,
             },
             token: process.env.BLOB_READ_WRITE_TOKEN,
+          }),
+        ]
+      : []),
+    ...(process.env.S3_BUCKET && process.env.S3_ACCESS_KEY_ID && process.env.S3_SECRET_ACCESS_KEY
+      ? [
+          s3Storage({
+            collections: {
+              media: true,
+            },
+            bucket: process.env.S3_BUCKET,
+            config: {
+              credentials: {
+                accessKeyId: process.env.S3_ACCESS_KEY_ID,
+                secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+              },
+              region: process.env.S3_REGION || 'auto',
+              endpoint: process.env.S3_ENDPOINT,
+              // Required for Cloudflare R2 and MinIO:
+              forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+            },
           }),
         ]
       : []),
