@@ -34,6 +34,9 @@ export const Pages: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
+    update: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
+    delete: ({ req: { user } }) => user?.role === 'admin',
   },
   versions: {
     drafts: true,

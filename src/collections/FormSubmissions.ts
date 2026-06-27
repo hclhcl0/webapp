@@ -13,10 +13,10 @@ export const FormSubmissions: CollectionConfig = {
     description: 'Lưu trữ các phản hồi và yêu cầu liên hệ từ người dùng.',
   },
   access: {
-    read: ({ req: { user } }) => Boolean(user),
-    create: () => true, // Public — allow form submission
-    update: ({ req: { user } }) => Boolean(user),
-    delete: ({ req: { user } }) => Boolean(user),
+    read: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
+    create: () => true, // Public — cho phép gửi form liên hệ từ website
+    update: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
+    delete: ({ req: { user } }) => user?.role === 'admin',
   },
   fields: [
     {

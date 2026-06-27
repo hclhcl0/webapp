@@ -12,6 +12,9 @@ export const Tags: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: ({ req: { user } }) => ['admin', 'editor', 'moderator', 'author'].includes(user?.role as string),
+    update: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
+    delete: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
   },
   fields: [
     {

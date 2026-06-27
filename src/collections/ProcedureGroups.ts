@@ -13,6 +13,9 @@ export const ProcedureGroups: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
+    update: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
+    delete: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
   },
   fields: [
     {
