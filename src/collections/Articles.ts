@@ -10,6 +10,32 @@ import { RelatedArticlesBlock } from '../blocks/RelatedArticlesBlock.ts';
 import { ColumnsBlock } from '../blocks/ColumnsBlock.ts';
 import { CardBlock } from '../blocks/CardBlock.ts';
 
+/**
+ * Trích xuất danh sách ID chuyên mục được phân công của user.
+ * Trả về mảng ID nếu có, hoặc null nếu không giới hạn (để trống).
+ */
+function getAllowedCategoryIds(user: any): string[] | null {
+  const cats = user?.allowedCategories as any[] | undefined;
+  if (!cats || cats.length === 0) return null; // null = không giới hạn
+  return cats.map((c: any) => (typeof c === 'string' ? c : c?.id)).filter(Boolean);
+}
+
+/**
+ * Tạo Payload query filter theo danh sách chuyên mục.
+ * Dùng cho các vai trò cần lọc theo chuyên mục (Editor, Moderator, Author).
+ */
+function buildCategoryFilter(allowedIds: string[], userId: string | number, includeOwn: boolean) {
+  const categoryCondition = { category: { in: allowedIds } };
+  if (!includeOwn) return categoryCondition; // Moderator/Editor: chỉ lọc category
+  // Author: xem bài trong chuyên mục OR bài nháp của chính mình
+  return {
+    or: [
+      categoryCondition,
+      { author: { equals: userId } },
+    ],
+  };
+}
+
 export const Articles: CollectionConfig = {
   slug: 'articles',
   labels: {
@@ -29,37 +55,26 @@ export const Articles: CollectionConfig = {
     },
   },
   access: {
+    // ─── READ ────────────────────────────────────────────────────────────────
     read: ({ req: { user } }) => {
-      // Admin, Editor, Moderator xem tất cả bài (kể cả nháp)
-      if (user && ['admin', 'editor', 'moderator'].includes(user.role as string)) {
-        return true;
+      // Admin: xem tất cả, không giới hạn
+      if (user?.role === 'admin') return true;
+
+      // Editor & Moderator: xem tất cả HOẶC chỉ chuyên mục được phân công
+      if (user && ['editor', 'moderator'].includes(user.role as string)) {
+        const allowedIds = getAllowedCategoryIds(user);
+        if (!allowedIds) return true; // Không giới hạn nếu để trống
+        // Lọc theo chuyên mục (kể cả bài nháp trong chuyên mục đó)
+        return buildCategoryFilter(allowedIds, user.id, false);
       }
-      // Author: lọc theo chuyên mục được phân công + bài nháp của chính mình
-      if (user && user.role === 'author') {
-        const allowedCategories = (user as any)?.allowedCategories as any[] | undefined;
 
-        // Nếu Author có danh sách chuyên mục được phân công
-        if (allowedCategories && allowedCategories.length > 0) {
-          const allowedIds = allowedCategories.map((c: any) =>
-            typeof c === 'string' ? c : c?.id
-          ).filter(Boolean);
-
-          return {
-            or: [
-              // Bài đã public TRONG chuyên mục được phân công
-              {
-                and: [
-                  { _status: { equals: 'published' } },
-                  { category: { in: allowedIds } },
-                ],
-              },
-              // Bài nháp của chính mình (không giới hạn chuyên mục)
-              { author: { equals: user.id } },
-            ],
-          };
+      // Author: xem bài trong chuyên mục được phân công + bài nháp của chính mình
+      if (user?.role === 'author') {
+        const allowedIds = getAllowedCategoryIds(user);
+        if (allowedIds) {
+          return buildCategoryFilter(allowedIds, user.id, true);
         }
-
-        // Nếu Author chưa được phân chuyên mục → chỉ xem bài public + bài nháp của mình
+        // Chưa phân chuyên mục: xem bài public + bài nháp của mình
         return {
           or: [
             { _status: { equals: 'published' } },
@@ -67,27 +82,51 @@ export const Articles: CollectionConfig = {
           ],
         };
       }
-      // Public / Guest chỉ xem được bài đã public
-      return {
-        _status: { equals: 'published' },
-      };
+
+      // Public / Guest: chỉ bài đã xuất bản
+      return { _status: { equals: 'published' } };
     },
+
+    // ─── CREATE ───────────────────────────────────────────────────────────────
     create: ({ req: { user } }) => {
       if (!user) return false;
       return ['admin', 'editor', 'moderator', 'author'].includes(user.role as string);
     },
+
+    // ─── UPDATE ───────────────────────────────────────────────────────────────
     update: ({ req: { user } }) => {
       if (!user) return false;
-      // Admin, Editor, Moderator sửa được tất cả
-      if (['admin', 'editor', 'moderator'].includes(user.role as string)) return true;
-      // Author chỉ sửa bài của mình
+      // Admin: sửa tất cả
+      if (user.role === 'admin') return true;
+
+      // Editor & Moderator: sửa tất cả HOẶC chỉ chuyên mục được phân công
+      if (['editor', 'moderator'].includes(user.role as string)) {
+        const allowedIds = getAllowedCategoryIds(user);
+        if (!allowedIds) return true; // Không giới hạn
+        return { category: { in: allowedIds } };
+      }
+
+      // Author: chỉ sửa bài của chính mình
       return { author: { equals: user.id } };
     },
+
+    // ─── DELETE ───────────────────────────────────────────────────────────────
     delete: ({ req: { user } }) => {
       if (!user) return false;
-      // Moderator KHÔNG được xóa bài
-      if (['admin', 'editor'].includes(user.role as string)) return true;
-      // Author chỉ được xóa bài nháp của mình
+      // Admin: xóa tất cả
+      if (user.role === 'admin') return true;
+
+      // Editor: xóa tất cả HOẶC chỉ chuyên mục được phân công
+      if (user.role === 'editor') {
+        const allowedIds = getAllowedCategoryIds(user);
+        if (!allowedIds) return true; // Không giới hạn
+        return { category: { in: allowedIds } };
+      }
+
+      // Moderator: KHÔNG được xóa bài (dù có phân chuyên mục hay không)
+      if (user.role === 'moderator') return false;
+
+      // Author: chỉ xóa bài nháp của chính mình
       return { author: { equals: user.id } };
     },
   },
