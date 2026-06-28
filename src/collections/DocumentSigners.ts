@@ -8,7 +8,7 @@ export const DocumentSigners: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    group: 'Nội dung',
+    hidden: true,
   },
   access: {
     read: () => true,
