@@ -142,10 +142,14 @@ export default async function DocumentsPage() {
                       <td className={styles.infoLabel}><Building2 size={13} /> Cơ quan ban hành</td>
                       <td className={styles.infoValue}><a href="#" className={styles.infoLink}>{doc.issuer}</a></td>
                     </tr>
-                    {doc.signer && (
+                    {(doc.signerRef || doc.signer) && (
                       <tr>
                         <td className={styles.infoLabel}><Pen size={13} /> Người ký</td>
-                        <td className={styles.infoValue}>{doc.signer}</td>
+                        <td className={styles.infoValue}>
+                          {doc.signerRef 
+                            ? (typeof doc.signerRef === 'object' ? doc.signerRef.name : doc.signerRef) 
+                            : doc.signer}
+                        </td>
                       </tr>
                     )}
                   </tbody>

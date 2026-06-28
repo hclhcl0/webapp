@@ -21,6 +21,7 @@ import { Articles } from './collections/Articles.ts';
 import { Pages } from './collections/Pages.ts';
 import { Banners } from './collections/Banners.ts';
 import { Documents } from './collections/Documents.ts';
+import { DocumentSigners } from './collections/DocumentSigners.ts';
 import { SiteSettings } from './globals/SiteSettings.ts';
 import { ServicesLanding } from './globals/ServicesLanding.ts';
 import { Settings } from './globals/Settings.ts';
@@ -81,6 +82,7 @@ export default buildConfig({
     Pages,
     Banners,
     Documents,
+    DocumentSigners,
     WorkSchedules,
     VideoChannels,
     Videos,

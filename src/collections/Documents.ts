@@ -103,9 +103,19 @@ export const Documents: CollectionConfig = {
     {
       name: 'signer',
       type: 'text',
+      label: 'Người ký (Dữ liệu cũ)',
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: 'signerRef',
+      type: 'relationship',
+      relationTo: 'document-signers',
+      hasMany: false,
       label: 'Người ký',
       admin: {
-        placeholder: 'VD: Nguyễn Đại Vĩnh',
+        description: 'Chọn từ danh sách hoặc bấm dấu + để lưu người mới',
       },
     },
     {

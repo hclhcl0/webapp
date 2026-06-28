@@ -1,4 +1,4 @@
-import { CollectionBeforeChangeHook } from 'payload';
+import type { CollectionBeforeChangeHook } from 'payload';
 import { GoogleGenAI } from '@google/genai';
 import configPromise from '../../payload.config.ts';
 import { getPayload } from 'payload';
