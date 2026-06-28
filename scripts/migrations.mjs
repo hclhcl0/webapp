@@ -1050,5 +1050,33 @@ export const MIGRATION_STATEMENTS = [
       FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
   )`,
   `CREATE INDEX IF NOT EXISTS "site_settings_footer_social_links_order_idx" ON "site_settings_footer_social_links" USING btree ("_order")`,
-  `CREATE INDEX IF NOT EXISTS "site_settings_footer_social_links_parent_idx" ON "site_settings_footer_social_links" USING btree ("_parent_id")`
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_social_links_parent_idx" ON "site_settings_footer_social_links" USING btree ("_parent_id")`,
+
+  // ====================================================
+  // BATCH X – Add DocumentSigners Collection and relationship in Documents
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "document_signers" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "name" varchar NOT NULL,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS "document_signers_updated_at_idx" ON "document_signers" USING btree ("updated_at")`,
+  `CREATE INDEX IF NOT EXISTS "document_signers_created_at_idx" ON "document_signers" USING btree ("created_at")`,
+  
+  `ALTER TABLE "documents_rels" ADD COLUMN IF NOT EXISTS "document_signers_id" integer`,
+  `DO $$ BEGIN
+    ALTER TABLE "documents_rels" ADD CONSTRAINT "documents_rels_document_signers_fk" FOREIGN KEY ("document_signers_id") REFERENCES "document_signers"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION
+    WHEN duplicate_object THEN null;
+  END $$;`,
+  `CREATE INDEX IF NOT EXISTS "documents_rels_document_signers_id_idx" ON "documents_rels" USING btree ("document_signers_id")`,
+  
+  `ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "document_signers_id" integer`,
+  `DO $$ BEGIN
+    ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_document_signers_fk" FOREIGN KEY ("document_signers_id") REFERENCES "document_signers"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION
+    WHEN duplicate_object THEN null;
+  END $$;`,
+  `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_document_signers_id_idx" ON "payload_locked_documents_rels" USING btree ("document_signers_id")`
 ];
