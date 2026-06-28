@@ -7,8 +7,8 @@ import { Search, LogIn, Menu, X, ChevronDown } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaYoutube, FaInstagram } from 'react-icons/fa';
 import styles from './Header.module.css';
 
-interface SubItem { label: string; url: string; }
-interface MenuItem { id?: string; label: string; url?: string; subItems?: SubItem[]; }
+interface SubItem { label: string; url?: string; presetUrl?: string; openInNewTab?: boolean; }
+interface MenuItem { id?: string; label: string; url?: string; presetUrl?: string; openInNewTab?: boolean; subItems?: SubItem[]; }
 interface LogoConfig {
   height: number;
   position: string;
@@ -110,6 +110,7 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
   }, []);
 
   const isActive = (url?: string) => url && (pathname === url || pathname.startsWith(url + '/'));
+  const resolveUrl = (item: { url?: string; presetUrl?: string }) => item.presetUrl || item.url || '';
 
   const renderHotlineBar = () => (
     <div className={styles.trendingBar}>
@@ -306,8 +307,8 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
               return (
                 <li key={key} className={styles.mobileItem}>
                   <div className={styles.mobileItemRow}>
-                    {item.url
-                      ? <Link href={item.url} onClick={() => setMobileOpen(false)} className={isActive(item.url) ? styles.activeItem : ''}>{item.label}</Link>
+                    {item.url || item.presetUrl
+                      ? <Link href={resolveUrl(item)} onClick={() => setMobileOpen(false)} target={item.openInNewTab ? '_blank' : undefined} rel={item.openInNewTab ? 'noreferrer' : undefined} className={isActive(resolveUrl(item)) ? styles.activeItem : ''}>{item.label}</Link>
                       : <span>{item.label}</span>
                     }
                     {hasDropdown && (
@@ -321,9 +322,11 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
                       {item.subItems!.map((sub, si) => (
                         <li key={si}>
                           <Link
-                            href={sub.url}
+                            href={sub.presetUrl || sub.url || '#'}
                             onClick={() => setMobileOpen(false)}
-                            className={isActive(sub.url) ? styles.activeItem : ''}
+                            target={sub.openInNewTab ? '_blank' : undefined}
+                            rel={sub.openInNewTab ? 'noreferrer' : undefined}
+                            className={isActive(sub.presetUrl || sub.url) ? styles.activeItem : ''}
                           >
                             {sub.label}
                           </Link>
@@ -430,8 +433,8 @@ function NavMenu({ menuItems, pathname, styles, openDropdown, setOpenDropdown, i
               onMouseEnter={() => hasDropdown && setOpenDropdown(key)}
               onMouseLeave={() => setOpenDropdown(null)}
             >
-              {item.url ? (
-                <a href={item.url} className={hasDropdown ? styles.dropdownToggle : ''}>
+              {(() => { const resolvedUrl = item.presetUrl || item.url; return resolvedUrl ? (
+                <a href={resolvedUrl} className={hasDropdown ? styles.dropdownToggle : ''} target={item.openInNewTab ? '_blank' : undefined} rel={item.openInNewTab ? 'noreferrer' : undefined}>
                   {item.label}
                   {hasDropdown && <ChevronDown size={14} className={styles.chevron} />}
                 </a>
@@ -440,12 +443,12 @@ function NavMenu({ menuItems, pathname, styles, openDropdown, setOpenDropdown, i
                   {item.label}
                   {hasDropdown && <ChevronDown size={14} className={styles.chevron} />}
                 </span>
-              )}
+              ); })()}
               {hasDropdown && (
                 <ul className={`${styles.dropdown} ${openDropdown === key ? styles.dropdownOpen : ''}`}>
                   {item.subItems.map((sub: any, si: number) => (
                     <li key={si}>
-                      <a href={sub.url} className={isActive(sub.url) ? styles.activeSubItem : ''}>
+                      <a href={sub.presetUrl || sub.url || '#'} className={isActive(sub.presetUrl || sub.url) ? styles.activeSubItem : ''} target={sub.openInNewTab ? '_blank' : undefined} rel={sub.openInNewTab ? 'noreferrer' : undefined}>
                         {sub.label}
                       </a>
                     </li>
