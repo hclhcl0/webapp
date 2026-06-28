@@ -62,7 +62,15 @@ export default buildConfig({
         Logo: '@/app/(payload)/admin/components/AdminLogo.tsx#AdminLogo',
         Icon: '@/app/(payload)/admin/components/AdminIcon.tsx#AdminIcon',
       },
-
+      views: {
+        UserGuide: {
+          Component: '@/components/Admin/UserGuideView.tsx',
+          path: '/huong-dan',
+        }
+      },
+      afterNavLinks: [
+        '@/components/Admin/GuideNavLink.tsx'
+      ],
       beforeDashboard: [
         '@/app/(payload)/admin/components/AuthorWelcome.tsx#AuthorWelcome',
       ]
