@@ -7,6 +7,7 @@ export const Services: CollectionConfig = {
     plural: 'Dịch vụ - Sản phẩm',
   },
   admin: {
+    description: '👉 Đường dẫn xem trên website: /dich-vu/[slug]',
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'price', 'status'],
     group: 'Dịch vụ sản phẩm',

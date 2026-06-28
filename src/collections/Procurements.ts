@@ -7,6 +7,7 @@ export const Procurements: CollectionConfig = {
     plural: 'Thông tin mua sắm',
   },
   admin: {
+    description: '👉 Đường dẫn xem trên website: /mua-sam',
     useAsTitle: 'title',
     defaultColumns: ['title', 'procurementType', 'status', 'deadline', 'publishedDate'],
     group: 'Nội dung',

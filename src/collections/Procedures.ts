@@ -7,6 +7,7 @@ export const Procedures: CollectionConfig = {
     plural: 'Thủ tục hành chính',
   },
   admin: {
+    description: '👉 Đường dẫn xem trên website: /procedures/[slug]',
     useAsTitle: 'title',
     defaultColumns: ['title', 'group', 'publishedDate', 'status'],
     group: 'Thủ tục hành chính',

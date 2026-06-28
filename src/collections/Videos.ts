@@ -7,6 +7,7 @@ export const Videos: CollectionConfig = {
     plural: 'Thư viện Video',
   },
   admin: {
+    description: '👉 Đường dẫn xem trên website: /video',
     useAsTitle: 'title',
     defaultColumns: ['title', 'platform', 'channel', 'publishedDate'],
     group: 'Thư viện Video',

@@ -7,6 +7,7 @@ export const WorkSchedules: CollectionConfig = {
     plural: 'Lịch công tác',
   },
   admin: {
+    description: '👉 Đường dẫn xem trên website: /lich-cong-tac',
     useAsTitle: 'title',
     defaultColumns: ['title', 'date', 'location', 'status'],
     group: 'Nội dung',

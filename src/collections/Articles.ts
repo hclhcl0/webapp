@@ -53,6 +53,7 @@ export const Articles: CollectionConfig = {
     plural: 'Danh sách bài viết',
   },
   admin: {
+    description: '👉 Đường dẫn xem trên website: /bai-viet/[slug] hoặc /suc-khoe/...',
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'publishedAt', 'reviewStatus', 'status'],
     group: 'Nội dung',

@@ -7,6 +7,7 @@ export const Categories: CollectionConfig = {
     plural: 'Chuyên mục bài viết',
   },
   admin: {
+    description: '👉 Đường dẫn xem trên website: /chuyen-muc/[slug]',
     useAsTitle: 'name',
     group: 'Nội dung',
   },

@@ -34,6 +34,7 @@ export const Pages: CollectionConfig = {
     plural: 'Các trang nội dung',
   },
   admin: {
+    description: '👉 Đường dẫn xem trên website: /[slug]',
     useAsTitle: 'title',
     group: 'Nội dung',
     defaultColumns: ['title', 'slug', 'pageType', 'updatedAt'],
