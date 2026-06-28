@@ -10,6 +10,7 @@ export const Documents: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['documentNumber', 'title', 'documentType', 'publishedDate', 'issuer'],
     group: 'Nội dung',
+    description: '👉 Đường dẫn xem trên website: /documents',
   },
   access: {
     read: () => true,
