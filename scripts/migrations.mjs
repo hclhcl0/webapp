@@ -635,10 +635,18 @@ export const MIGRATION_STATEMENTS = [
     "unit_type" varchar DEFAULT 'khoa' NOT NULL,
     "order" numeric DEFAULT 99,
     "short_description" varchar,
+    "phone" varchar,
+    "email" varchar,
     "image_id" integer REFERENCES "media"("id") ON DELETE set null,
     "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
     "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   )`,
+  `ALTER TABLE "org_units" ADD COLUMN IF NOT EXISTS "order" numeric DEFAULT 99`,
+  `ALTER TABLE "org_units" ADD COLUMN IF NOT EXISTS "short_description" varchar`,
+  `ALTER TABLE "org_units" ADD COLUMN IF NOT EXISTS "phone" varchar`,
+  `ALTER TABLE "org_units" ADD COLUMN IF NOT EXISTS "email" varchar`,
+  `ALTER TABLE "org_units" ADD COLUMN IF NOT EXISTS "image_id" integer`,
+  `DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'org_units_image_id_fk') THEN ALTER TABLE "org_units" ADD CONSTRAINT "org_units_image_id_fk" FOREIGN KEY ("image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action; END IF; END $$;`,
   `CREATE INDEX IF NOT EXISTS "org_units_created_at_idx" ON "org_units" USING btree ("created_at")`,
 
   `CREATE TABLE IF NOT EXISTS "org_units_members" (
@@ -652,6 +660,10 @@ export const MIGRATION_STATEMENTS = [
     "avatar_id" integer REFERENCES "media"("id") ON DELETE set null,
     "bio" varchar
   )`,
+  `ALTER TABLE "org_units_members" ADD COLUMN IF NOT EXISTS "academic_title" varchar`,
+  `ALTER TABLE "org_units_members" ADD COLUMN IF NOT EXISTS "email" varchar`,
+  `ALTER TABLE "org_units_members" ADD COLUMN IF NOT EXISTS "avatar_id" integer`,
+  `ALTER TABLE "org_units_members" ADD COLUMN IF NOT EXISTS "bio" varchar`,
   `CREATE INDEX IF NOT EXISTS "org_units_members_order_idx" ON "org_units_members" USING btree ("_order")`,
   `CREATE INDEX IF NOT EXISTS "org_units_members_parent_id_idx" ON "org_units_members" USING btree ("_parent_id")`,
 
