@@ -1087,5 +1087,78 @@ export const MIGRATION_STATEMENTS = [
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_ban_lanh_dao" varchar`,
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_phong" varchar`,
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_khoa" varchar`,
-  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_khac" varchar`
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_khac" varchar`,
+
+  // ====================================================
+  // BATCH X - SiteSettings: menu fields
+  // ====================================================
+  `ALTER TABLE "site_settings_menu_menu_items" ADD COLUMN IF NOT EXISTS "preset_url" varchar`,
+  `ALTER TABLE "site_settings_menu_menu_items" ADD COLUMN IF NOT EXISTS "open_in_new_tab" boolean`,
+  `ALTER TABLE "site_settings_menu_menu_items_sub_items" ADD COLUMN IF NOT EXISTS "preset_url" varchar`,
+  `ALTER TABLE "site_settings_menu_menu_items_sub_items" ADD COLUMN IF NOT EXISTS "open_in_new_tab" boolean`,
+
+  // ====================================================
+  // BATCH X - AI Knowledge & API Keys
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "ai_knowledge" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "title" varchar NOT NULL,
+    "category" varchar NOT NULL,
+    "extraction_model" varchar,
+    "content" varchar,
+    "embedding" varchar,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS "ai_knowledge_updated_at_idx" ON "ai_knowledge" USING btree ("updated_at")`,
+  `CREATE INDEX IF NOT EXISTS "ai_knowledge_created_at_idx" ON "ai_knowledge" USING btree ("created_at")`,
+
+  `CREATE TABLE IF NOT EXISTS "ai_knowledge_rels" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "order" integer,
+    "parent_id" integer NOT NULL,
+    "path" varchar NOT NULL,
+    "users_id" integer,
+    "departments_id" integer
+  )`,
+  `DO $$ BEGIN
+    ALTER TABLE "ai_knowledge_rels" ADD CONSTRAINT "ai_knowledge_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "ai_knowledge"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+  `DO $$ BEGIN
+    ALTER TABLE "ai_knowledge_rels" ADD CONSTRAINT "ai_knowledge_rels_users_fk" FOREIGN KEY ("users_id") REFERENCES "users"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+  `DO $$ BEGIN
+    ALTER TABLE "ai_knowledge_rels" ADD CONSTRAINT "ai_knowledge_rels_departments_fk" FOREIGN KEY ("departments_id") REFERENCES "departments"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+  `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_order_idx" ON "ai_knowledge_rels" USING btree ("order")`,
+  `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_parent_idx" ON "ai_knowledge_rels" USING btree ("parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_path_idx" ON "ai_knowledge_rels" USING btree ("path")`,
+  `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_users_id_idx" ON "ai_knowledge_rels" USING btree ("users_id")`,
+  `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_departments_id_idx" ON "ai_knowledge_rels" USING btree ("departments_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "api_keys" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "label" varchar NOT NULL,
+    "provider" varchar NOT NULL,
+    "api_key" varchar NOT NULL,
+    "is_active" boolean,
+    "supported_models" varchar,
+    "preferred_model" varchar,
+    "usage_tokens" double precision,
+    "usage_count" double precision,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS "api_keys_updated_at_idx" ON "api_keys" USING btree ("updated_at")`,
+  `CREATE INDEX IF NOT EXISTS "api_keys_created_at_idx" ON "api_keys" USING btree ("created_at")`,
+
+  ...['ai_knowledge', 'api_keys'].flatMap(table => [
+    `ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "${table}_id" integer`,
+    `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_${table}_fk" FOREIGN KEY ("${table}_id") REFERENCES "${table}"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+    `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_${table}_id_idx" ON "payload_locked_documents_rels" USING btree ("${table}_id")`,
+
+    `ALTER TABLE "payload_preferences_rels" ADD COLUMN IF NOT EXISTS "${table}_id" integer`,
+    `DO $$ BEGIN ALTER TABLE "payload_preferences_rels" ADD CONSTRAINT "payload_preferences_rels_${table}_fk" FOREIGN KEY ("${table}_id") REFERENCES "${table}"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+    `CREATE INDEX IF NOT EXISTS "payload_preferences_rels_${table}_id_idx" ON "payload_preferences_rels" USING btree ("${table}_id")`
+  ])
 ];
