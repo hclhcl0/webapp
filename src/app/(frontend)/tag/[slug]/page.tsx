@@ -58,6 +58,39 @@ export default async function TagPage({ params, searchParams }: PageParams) {
   }
 
   const tag = tags[0];
+  
+  // 1.5 Tìm kiếm thông tin menu từ SiteSettings để hiển thị breadcrumb
+  let breadcrumbTitle = `Từ khóa: ${tag.title}`;
+  let pageTitle = `Chủ đề: ${tag.title}`;
+  let parentMenuTitle = '';
+  
+  try {
+    const siteSettings = await payload.findGlobal({ slug: 'site-settings' });
+    if (siteSettings?.menu?.menuItems) {
+      const targetUrl = `/tag/${slug}`;
+      for (const item of siteSettings.menu.menuItems) {
+        if (item.url === targetUrl) {
+          breadcrumbTitle = item.label;
+          pageTitle = item.label;
+          break;
+        }
+        
+        if (item.subItems) {
+          for (const sub of item.subItems) {
+            if (sub.url === targetUrl) {
+              parentMenuTitle = item.label;
+              breadcrumbTitle = sub.label;
+              pageTitle = sub.label;
+              break;
+            }
+          }
+        }
+        if (breadcrumbTitle !== `Từ khóa: ${tag.title}`) break;
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching site settings for breadcrumb', error);
+  }
 
   // 2. Lấy bài viết thuộc tag này (có phân trang)
   const result = await payload.find({
@@ -80,11 +113,17 @@ export default async function TagPage({ params, searchParams }: PageParams) {
       <div className="flex items-center text-sm text-gray-500 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap pb-2">
         <Link href="/" className="hover:text-gov-primary transition-colors">Trang chủ</Link>
         <span className="mx-2 flex-shrink-0">/</span>
-        <span className="font-medium text-gov-primary">Từ khóa: {tag.title}</span>
+        {parentMenuTitle && (
+          <>
+            <span className="text-gray-500">{parentMenuTitle}</span>
+            <span className="mx-2 flex-shrink-0">/</span>
+          </>
+        )}
+        <span className="font-medium text-gov-primary">{breadcrumbTitle}</span>
       </div>
 
       <h1 className="text-2xl md:text-3xl font-bold text-gov-primary mb-8 border-b-2 border-gov-secondary pb-3 inline-block tracking-wide">
-        Chủ đề: {tag.title}
+        {pageTitle}
       </h1>
 
       {articles.length === 0 ? (
