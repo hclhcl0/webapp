@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob';
 import { s3Storage } from '@payloadcms/storage-s3';
 import { vi } from '@payloadcms/translations/languages/vi';
+import { withRBAC, globalsWithRBAC } from './lib/rbac.ts';
 
 // DATABASE_URI = custom Postgres URL
 // POSTGRES_URL = auto-injected by Vercel Postgres addon
@@ -80,7 +81,7 @@ export default buildConfig({
     supportedLanguages: { vi },
     fallbackLanguage: 'vi',
   },
-  collections: [
+  collections: withRBAC([
     Departments,
     Users,
     Media,
@@ -103,13 +104,13 @@ export default buildConfig({
     Procedures,
     ServiceCategories,
     Services,
-  ],
-  globals: [
+  ]),
+  globals: globalsWithRBAC([
     SiteSettings,
     ServicesLanding,
     Settings,
     BannerSettings,
-  ],
+  ]),
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN
       ? [

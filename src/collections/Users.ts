@@ -17,6 +17,7 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   access: {
+    admin: ({ req: { user } }) => user?.role && user.role !== 'user',
     // Chỉ Admin mới được xem và quản lý danh sách user, hoặc user tự xem chính mình
     read: ({ req: { user } }) => {
       if (!user) return false;
