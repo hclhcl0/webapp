@@ -30,7 +30,9 @@ import { CheckApiButton as CheckApiButton_d9dc0b8f43c1641f5c0b4ed8765f76d9 } fro
 import { ColorPickerField as ColorPickerField_db2136a52610b552cc1623d001af525c } from '@/components/ColorPickerField.tsx'
 import { AdminIcon as AdminIcon_9f5eba8ffdadf3d52561f60d1de9fa24 } from '@/app/(payload)/admin/components/AdminIcon.tsx'
 import { AdminLogo as AdminLogo_0ec271e8bfb19d99b0e35d61da772365 } from '@/app/(payload)/admin/components/AdminLogo.tsx'
+import { default as default_dba050a67c75dfc8bf48ee1410f2a2d2 } from '@/components/Admin/GuideNavLink.tsx'
 import { AuthorWelcome as AuthorWelcome_59589bfc5409bc24cf137e45629d787e } from '@/app/(payload)/admin/components/AuthorWelcome.tsx'
+import { default as default_1aa2999a49364743565bf91f3348acdc } from '@/components/Admin/UserGuideView.tsx'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -67,6 +69,8 @@ export const importMap = {
   "@/components/ColorPickerField.tsx#ColorPickerField": ColorPickerField_db2136a52610b552cc1623d001af525c,
   "@/app/(payload)/admin/components/AdminIcon.tsx#AdminIcon": AdminIcon_9f5eba8ffdadf3d52561f60d1de9fa24,
   "@/app/(payload)/admin/components/AdminLogo.tsx#AdminLogo": AdminLogo_0ec271e8bfb19d99b0e35d61da772365,
+  "@/components/Admin/GuideNavLink.tsx#default": default_dba050a67c75dfc8bf48ee1410f2a2d2,
   "@/app/(payload)/admin/components/AuthorWelcome.tsx#AuthorWelcome": AuthorWelcome_59589bfc5409bc24cf137e45629d787e,
+  "@/components/Admin/UserGuideView.tsx#default": default_1aa2999a49364743565bf91f3348acdc,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
