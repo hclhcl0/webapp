@@ -696,3 +696,33 @@ button[class*="tab"] {
   font-weight: 500 !important;
   letter-spacing: normal !important;
 }
+
+/* ==========================================
+   FIX TABS BACKGROUND IN DARK MODE
+   ========================================== */
+html[data-theme="dark"] .tabs-field__tabs,
+html[data-theme="dark"] [class*="tabs-field__tabs"] {
+  background-color: transparent !important;
+}
+
+html[data-theme="dark"] .tabs-field__tab-button,
+html[data-theme="dark"] [class*="tabs-field__tab-button"] {
+  background-color: transparent !important;
+  color: var(--theme-text) !important;
+}
+
+html[data-theme="dark"] .tabs-field__tab-button--active,
+html[data-theme="dark"] [class*="tabs-field__tab-button--active"],
+html[data-theme="dark"] .tabs-field__tab-button.active,
+html[data-theme="dark"] [class*="tabs-field__tab-button"].active {
+  background-color: var(--theme-elevation-100) !important;
+  color: #fff !important;
+  border-bottom-color: transparent !important;
+}
+
+html[data-theme="dark"] .tabs-field__content,
+html[data-theme="dark"] [class*="tabs-field__content"],
+html[data-theme="dark"] .tabs-field,
+html[data-theme="dark"] [class*="tabs-field"] {
+  background-color: transparent !important;
+}
