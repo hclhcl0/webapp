@@ -41,6 +41,8 @@ import { Services } from './collections/Services.ts';
 import { ServiceCategories } from './collections/ServiceCategories.ts';
 
 
+import { seedAccounts } from './lib/seedAccounts.ts';
+
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
@@ -48,6 +50,8 @@ export default buildConfig({
   onInit: async (payload) => {
     // const { initCron } = await import('./lib/zalo-admin/cron.js');
     // initCron();
+    await seedAccounts(payload);
+
     
     // Khởi chạy Cronjob đồng bộ Video
     if (process.env.NODE_ENV !== 'development') { // Tránh chạy nhiều lần khi dev hot-reload

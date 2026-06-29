@@ -1,0 +1,35 @@
+import { Payload } from 'payload';
+
+export const seedAccounts = async (payload: Payload) => {
+  const testUsers = [
+    { email: 'admin@test.com', name: 'Test Admin', role: 'admin' },
+    { email: 'moderator@test.com', name: 'Test Moderator', role: 'moderator' },
+    { email: 'editor@test.com', name: 'Test Editor', role: 'editor' },
+    { email: 'author@test.com', name: 'Test Author', role: 'author' },
+    { email: 'user@test.com', name: 'Test User', role: 'user' },
+  ];
+
+  for (const u of testUsers) {
+    try {
+      const existing = await payload.find({
+        collection: 'users',
+        where: { email: { equals: u.email } },
+      });
+      
+      if (existing.totalDocs === 0) {
+        await payload.create({
+          collection: 'users',
+          data: {
+            email: u.email,
+            password: 'password', // Default simple password for testing
+            name: u.name,
+            role: u.role,
+          },
+        });
+        payload.logger.info(`[Seed] Created ${u.role} account: ${u.email}`);
+      }
+    } catch (error: any) {
+      payload.logger.error(`[Seed] Error creating ${u.email}: ${error.message}`);
+    }
+  }
+};
