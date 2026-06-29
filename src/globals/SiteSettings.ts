@@ -12,24 +12,20 @@ export const SiteSettings: GlobalConfig = {
     update: ({ req: { user } }: any) => user?.role === 'admin',
   },
   hooks: {
-    beforeChange: [
-      ({ data }) => {
-        if (data?.menu?.menuItems && Array.isArray(data.menu.menuItems)) {
-          data.menu.menuItems = data.menu.menuItems.map((item: any) => {
-            if (typeof item.id === 'string' && item.id.length === 24) {
-              delete item.id;
+    beforeValidate: [
+      ({ data, req }) => {
+        const removeMongoIDs = (obj: any) => {
+          if (Array.isArray(obj)) {
+            obj.forEach(removeMongoIDs);
+          } else if (obj !== null && typeof obj === 'object') {
+            if (typeof obj.id === 'string' && obj.id.length === 24) {
+              delete obj.id;
             }
-            if (item.subItems && Array.isArray(item.subItems)) {
-              item.subItems = item.subItems.map((sub: any) => {
-                if (typeof sub.id === 'string' && sub.id.length === 24) {
-                  delete sub.id;
-                }
-                return sub;
-              });
-            }
-            return item;
-          });
-        }
+            Object.values(obj).forEach(removeMongoIDs);
+          }
+        };
+        if (data) removeMongoIDs(data);
+        if (req?.body) removeMongoIDs(req.body);
         return data;
       },
     ],
