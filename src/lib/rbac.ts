@@ -1,4 +1,4 @@
-import { CollectionConfig, GlobalConfig } from 'payload';
+import type { CollectionConfig, GlobalConfig } from 'payload';
 
 export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] => {
   return collections.map((col) => {

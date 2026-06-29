@@ -1,4 +1,4 @@
-import { Payload } from 'payload';
+import type { Payload } from 'payload';
 
 export const seedAccounts = async (payload: Payload) => {
   const testUsers = [
