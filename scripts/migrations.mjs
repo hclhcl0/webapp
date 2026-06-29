@@ -1064,6 +1064,14 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "document_signers_updated_at_idx" ON "document_signers" USING btree ("updated_at")`,
   `CREATE INDEX IF NOT EXISTS "document_signers_created_at_idx" ON "document_signers" USING btree ("created_at")`,
   
+  `ALTER TABLE "documents" ADD COLUMN IF NOT EXISTS "signer_ref_id" integer`,
+  `DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'documents_signer_ref_id_fk') THEN
+      ALTER TABLE "documents" ADD CONSTRAINT "documents_signer_ref_id_fk" FOREIGN KEY ("signer_ref_id") REFERENCES "document_signers"("id") ON DELETE set null ON UPDATE no action;
+    END IF;
+  END $$;`,
+  `CREATE INDEX IF NOT EXISTS "documents_signer_ref_id_idx" ON "documents" USING btree ("signer_ref_id")`,
+
   `ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "document_signers_id" integer`,
   `DO $$ BEGIN
     ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_document_signers_fk" FOREIGN KEY ("document_signers_id") REFERENCES "document_signers"("id") ON DELETE set null ON UPDATE no action;
