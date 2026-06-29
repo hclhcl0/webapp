@@ -11,6 +11,29 @@ export const SiteSettings: GlobalConfig = {
     read: () => true,
     update: ({ req: { user } }: any) => user?.role === 'admin',
   },
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        if (data?.menu?.menuItems && Array.isArray(data.menu.menuItems)) {
+          data.menu.menuItems = data.menu.menuItems.map((item: any) => {
+            if (typeof item.id === 'string' && item.id.length === 24) {
+              delete item.id;
+            }
+            if (item.subItems && Array.isArray(item.subItems)) {
+              item.subItems = item.subItems.map((sub: any) => {
+                if (typeof sub.id === 'string' && sub.id.length === 24) {
+                  delete sub.id;
+                }
+                return sub;
+              });
+            }
+            return item;
+          });
+        }
+        return data;
+      },
+    ],
+  },
   fields: [
     {
       type: 'tabs',
