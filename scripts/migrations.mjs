@@ -1152,5 +1152,55 @@ export const MIGRATION_STATEMENTS = [
     `ALTER TABLE "payload_preferences_rels" ADD COLUMN IF NOT EXISTS "${table}_id" integer`,
     `DO $$ BEGIN ALTER TABLE "payload_preferences_rels" ADD CONSTRAINT "payload_preferences_rels_${table}_fk" FOREIGN KEY ("${table}_id") REFERENCES "${table}"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;`,
     `CREATE INDEX IF NOT EXISTS "payload_preferences_rels_${table}_id_idx" ON "payload_preferences_rels" USING btree ("${table}_id")`
+  ]),
+
+  // ====================================================
+  // BATCH X - Fix ID types for arrays and blocks
+  // ====================================================
+  ...[
+    "settings_blocks_categories_widget",
+    "settings_blocks_recent_articles_widget",
+    "settings_blocks_tiktok_widget",
+    "settings_blocks_facebook_widget",
+    "settings_blocks_banner_widget",
+    "settings_blocks_custom_html_widget",
+    "main_menu_menu_items",
+    "main_menu_menu_items_sub_items",
+    "settings_blocks_news_category_section",
+    "settings_blocks_banner_section",
+    "settings_blocks_video_section",
+    "settings_blocks_tiktok_section",
+    "settings_blocks_stats_section",
+    "settings_blocks_stats_section_stats",
+    "settings_blocks_quick_links_section",
+    "settings_blocks_quick_links_section_links",
+    "settings_blocks_rich_text_section",
+    "pages_blocks_rich_text_block",
+    "pages_blocks_section_title_block",
+    "pages_blocks_card_grid_block",
+    "pages_blocks_card_grid_block_cards",
+    "pages_blocks_steps_block",
+    "pages_blocks_steps_block_steps",
+    "pages_blocks_faq_block",
+    "pages_blocks_faq_block_faqs",
+    "pages_blocks_divider_block",
+    "pages_blocks_cta_banner_block",
+    "pages_blocks_embed_block",
+    "pages_blocks_table_block",
+    "pages_blocks_table_block_headers",
+    "pages_blocks_table_block_rows",
+    "pages_blocks_table_block_rows_cells",
+    "org_units_members",
+    "services_landing_features",
+    "services_landing_process",
+    "services_landing_faq",
+    "site_settings_menu_menu_items",
+    "site_settings_menu_menu_items_sub_items",
+    "site_settings_blocks_category_news",
+    "site_settings_footer_quick_links",
+    "site_settings_footer_social_links"
+  ].flatMap(table => [
+    `DO $$ BEGIN ALTER TABLE "${table}" ALTER COLUMN "id" DROP DEFAULT; EXCEPTION WHEN others THEN null; END $$;`,
+    `DO $$ BEGIN ALTER TABLE "${table}" ALTER COLUMN "id" TYPE varchar USING "id"::varchar; EXCEPTION WHEN others THEN null; END $$;`
   ])
 ];
