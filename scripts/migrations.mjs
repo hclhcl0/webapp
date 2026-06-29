@@ -1064,14 +1064,6 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "document_signers_updated_at_idx" ON "document_signers" USING btree ("updated_at")`,
   `CREATE INDEX IF NOT EXISTS "document_signers_created_at_idx" ON "document_signers" USING btree ("created_at")`,
   
-  `ALTER TABLE "documents_rels" ADD COLUMN IF NOT EXISTS "document_signers_id" integer`,
-  `DO $$ BEGIN
-    ALTER TABLE "documents_rels" ADD CONSTRAINT "documents_rels_document_signers_fk" FOREIGN KEY ("document_signers_id") REFERENCES "document_signers"("id") ON DELETE set null ON UPDATE no action;
-  EXCEPTION
-    WHEN duplicate_object THEN null;
-  END $$;`,
-  `CREATE INDEX IF NOT EXISTS "documents_rels_document_signers_id_idx" ON "documents_rels" USING btree ("document_signers_id")`,
-  
   `ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "document_signers_id" integer`,
   `DO $$ BEGIN
     ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_document_signers_fk" FOREIGN KEY ("document_signers_id") REFERENCES "document_signers"("id") ON DELETE set null ON UPDATE no action;
@@ -1107,9 +1099,14 @@ export const MIGRATION_STATEMENTS = [
     "extraction_model" varchar,
     "content" varchar,
     "embedding" varchar,
+    "uploaded_by_id" integer,
     "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
     "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   )`,
+  `DO $$ BEGIN
+    ALTER TABLE "ai_knowledge" ADD CONSTRAINT "ai_knowledge_uploaded_by_fk" FOREIGN KEY ("uploaded_by_id") REFERENCES "users"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+  `CREATE INDEX IF NOT EXISTS "ai_knowledge_uploaded_by_id_idx" ON "ai_knowledge" USING btree ("uploaded_by_id")`,
   `CREATE INDEX IF NOT EXISTS "ai_knowledge_updated_at_idx" ON "ai_knowledge" USING btree ("updated_at")`,
   `CREATE INDEX IF NOT EXISTS "ai_knowledge_created_at_idx" ON "ai_knowledge" USING btree ("created_at")`,
 
@@ -1118,14 +1115,10 @@ export const MIGRATION_STATEMENTS = [
     "order" integer,
     "parent_id" integer NOT NULL,
     "path" varchar NOT NULL,
-    "users_id" integer,
     "departments_id" integer
   )`,
   `DO $$ BEGIN
     ALTER TABLE "ai_knowledge_rels" ADD CONSTRAINT "ai_knowledge_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "ai_knowledge"("id") ON DELETE cascade ON UPDATE no action;
-  EXCEPTION WHEN duplicate_object THEN null; END $$;`,
-  `DO $$ BEGIN
-    ALTER TABLE "ai_knowledge_rels" ADD CONSTRAINT "ai_knowledge_rels_users_fk" FOREIGN KEY ("users_id") REFERENCES "users"("id") ON DELETE cascade ON UPDATE no action;
   EXCEPTION WHEN duplicate_object THEN null; END $$;`,
   `DO $$ BEGIN
     ALTER TABLE "ai_knowledge_rels" ADD CONSTRAINT "ai_knowledge_rels_departments_fk" FOREIGN KEY ("departments_id") REFERENCES "departments"("id") ON DELETE cascade ON UPDATE no action;
@@ -1133,7 +1126,6 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_order_idx" ON "ai_knowledge_rels" USING btree ("order")`,
   `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_parent_idx" ON "ai_knowledge_rels" USING btree ("parent_id")`,
   `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_path_idx" ON "ai_knowledge_rels" USING btree ("path")`,
-  `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_users_id_idx" ON "ai_knowledge_rels" USING btree ("users_id")`,
   `CREATE INDEX IF NOT EXISTS "ai_knowledge_rels_departments_id_idx" ON "ai_knowledge_rels" USING btree ("departments_id")`,
 
   `CREATE TABLE IF NOT EXISTS "api_keys" (
