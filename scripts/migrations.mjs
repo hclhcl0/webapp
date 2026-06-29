@@ -1078,5 +1078,14 @@ export const MIGRATION_STATEMENTS = [
   EXCEPTION
     WHEN duplicate_object THEN null;
   END $$;`,
-  `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_document_signers_id_idx" ON "payload_locked_documents_rels" USING btree ("document_signers_id")`
+  `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_document_signers_id_idx" ON "payload_locked_documents_rels" USING btree ("document_signers_id")`,
+
+  // ====================================================
+  // BATCH X - SiteSettings: theme fields
+  // ====================================================
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_layout" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_ban_lanh_dao" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_phong" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_khoa" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_khac" varchar`
 ];
