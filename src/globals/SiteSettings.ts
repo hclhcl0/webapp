@@ -14,18 +14,20 @@ export const SiteSettings: GlobalConfig = {
   hooks: {
     beforeValidate: [
       ({ data, req }) => {
-        const removeMongoIDs = (obj: any) => {
+        const convertMongoIDsToInteger = (obj: any) => {
           if (Array.isArray(obj)) {
-            obj.forEach(removeMongoIDs);
+            obj.forEach(convertMongoIDsToInteger);
           } else if (obj !== null && typeof obj === 'object') {
             if (typeof obj.id === 'string' && obj.id.length === 24) {
-              delete obj.id;
+              // Convert the first 8 characters of the Mongo ID to a positive integer
+              const parsed = parseInt(obj.id.substring(0, 8), 16);
+              obj.id = isNaN(parsed) ? Math.floor(Math.random() * 2147483647) : parsed;
             }
-            Object.values(obj).forEach(removeMongoIDs);
+            Object.values(obj).forEach(convertMongoIDsToInteger);
           }
         };
-        if (data) removeMongoIDs(data);
-        if (req?.body) removeMongoIDs(req.body);
+        if (data) convertMongoIDsToInteger(data);
+        if (req?.body) convertMongoIDsToInteger(req.body);
         return data;
       },
     ],
