@@ -247,17 +247,6 @@ export const SiteSettings: GlobalConfig = {
               name: 'menuItems',
               type: 'array',
               label: 'Danh sách Menu',
-              defaultValue: [
-                { label: 'Home', url: '/' },
-                { label: 'Giới thiệu', url: '/category/gioi-thieu/' },
-                { label: 'Sức khỏe', url: '/suc-khoe' },
-                { label: 'Dịch vụ', url: '/category/hoat-dong-dich-vu/' },
-                { label: 'Đào tạo', url: '/category/dao-tao/' },
-                { label: 'Công đoàn', url: '/category/hoat-dong-cong-doan/' },
-                { label: 'Mua sắm', url: '/category/thong-tin-mua-sam/' },
-                { label: 'Hành chính', url: '#' },
-                { label: 'Liên Hệ', url: '/lien-he.html' },
-              ],
               fields: [
                 {
                   name: 'label',
