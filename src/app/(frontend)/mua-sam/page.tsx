@@ -121,9 +121,7 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
           <ShoppingCart size={24} className={styles.pageTitleIcon} />
           <h1 className={`${styles.pageTitle} !text-xl md:!text-2xl !mb-4`}>THÔNG TIN MUA SẮM</h1>
         </div>
-        <p className={styles.subtitle}>
-          Thông báo mua sắm, mời chào giá và kết quả đấu thầu của Trung tâm Kiểm soát bệnh tật Đà Nẵng.
-        </p>
+
       </div>
 
       {/* Status filter tabs */}
