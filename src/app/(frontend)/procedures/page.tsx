@@ -71,43 +71,43 @@ export default async function ProceduresPage({
   return (
     <div className="bg-gray-50/50 min-h-screen pb-16">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-gov-primary to-gov-primary-dark text-white pt-10 pb-20 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-gov-primary to-gov-primary-dark text-white pt-6 pb-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-4 max-w-7xl relative z-10">
-          <div className="flex items-center text-sm text-blue-100 mb-6 font-medium tracking-wide">
+          <div className="flex items-center text-sm text-blue-100 mb-4 font-medium tracking-wide">
             <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
             <ChevronRight className="w-4 h-4 mx-2 opacity-60" />
             <span className="text-white">Thủ tục hành chính</span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
+          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
             Thủ tục Hành chính
           </h1>
-          <p className="text-blue-100 text-lg md:text-xl max-w-2xl leading-relaxed">
+          <p className="text-blue-100 text-base max-w-2xl leading-relaxed">
             Tra cứu, tìm kiếm và tải về các biểu mẫu, quy trình thủ tục hành chính thuộc thẩm quyền giải quyết một cách nhanh chóng và minh bạch.
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 max-w-7xl -mt-10 relative z-20">
-        <div className="flex flex-col lg:flex-row gap-8">
+      <div className="container mx-auto px-4 max-w-7xl -mt-6 relative z-20">
+        <div className="flex flex-col lg:flex-row gap-6">
           
           {/* Sidebar Navigation */}
           <div className="lg:w-1/3 xl:w-1/4 flex-shrink-0">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
-              <div className="p-5 border-b border-gray-100 flex items-center bg-gray-50/50">
-                <Layers className="w-5 h-5 text-gov-primary mr-3" />
-                <h2 className="font-bold text-gray-900 text-lg">Lĩnh vực giải quyết</h2>
+              <div className="p-4 border-b border-gray-100 flex items-center bg-gray-50/50">
+                <Layers className="w-4 h-4 text-gov-primary mr-2" />
+                <h2 className="font-bold text-gray-900 text-base">Lĩnh vực giải quyết</h2>
               </div>
               <div className="p-3">
                 <Link
                   href="/procedures"
-                  className={`flex items-center px-4 py-3 rounded-xl mb-1 transition-all duration-200 ${
+                  className={`flex items-center px-3 py-2 text-sm rounded-xl mb-1 transition-all duration-200 ${
                     !selectedGroupSlug 
-                      ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-semibold' 
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gov-primary font-medium'
+                      ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-medium' 
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gov-primary'
                   }`}
                 >
-                  <div className={`w-2 h-2 rounded-full mr-3 ${!selectedGroupSlug ? 'bg-white' : 'bg-gray-300'}`}></div>
+                  <div className={`w-1.5 h-1.5 rounded-full mr-2 ${!selectedGroupSlug ? 'bg-white' : 'bg-gray-300'}`}></div>
                   Tất cả lĩnh vực
                 </Link>
                 
@@ -117,16 +117,16 @@ export default async function ProceduresPage({
                     <Link
                       key={group.id}
                       href={`/procedures?nhom=${group.slug}`}
-                      className={`flex items-center px-4 py-3 rounded-xl mb-1 transition-all duration-200 ${
+                      className={`flex items-center px-3 py-2 text-sm rounded-xl mb-1 transition-all duration-200 ${
                         isActive 
-                          ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-semibold' 
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gov-primary font-medium'
+                          ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-medium' 
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gov-primary'
                       }`}
                     >
                       {group.icon ? (
-                        <span className="mr-3 text-lg w-5 text-center">{group.icon}</span>
+                        <span className="mr-2 text-base w-4 text-center">{group.icon}</span>
                       ) : (
-                        <div className={`w-2 h-2 rounded-full mr-3 ${isActive ? 'bg-white' : 'bg-gray-300'}`}></div>
+                        <div className={`w-1.5 h-1.5 rounded-full mr-2 ${isActive ? 'bg-white' : 'bg-gray-300'}`}></div>
                       )}
                       {group.name}
                     </Link>
@@ -138,12 +138,12 @@ export default async function ProceduresPage({
 
           {/* Main Content */}
           <div className="lg:w-2/3 xl:w-3/4">
-            <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-800 flex items-center">
-                <span className="w-2 h-6 bg-gov-secondary rounded-full mr-3"></span>
+            <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-gray-800 flex items-center">
+                <span className="w-1.5 h-5 bg-gov-secondary rounded-full mr-3"></span>
                 {currentGroupName}
               </h2>
-              <div className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+              <div className="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
                 {procedures.length} thủ tục
               </div>
             </div>
@@ -162,31 +162,31 @@ export default async function ProceduresPage({
 
                 return (
                   <div key={proc.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group flex flex-col sm:flex-row overflow-hidden">
-                    <div className="p-6 flex-grow flex flex-col justify-center">
-                      <div className="flex items-start mb-3">
-                        <div className="bg-gov-primary/10 text-gov-primary p-2.5 rounded-xl mr-4 group-hover:bg-gov-primary group-hover:text-white transition-colors shrink-0">
-                          <FileText className="w-6 h-6" />
+                    <div className="p-4 flex-grow flex flex-col justify-center">
+                      <div className="flex items-start mb-2">
+                        <div className="bg-gov-primary/10 text-gov-primary p-2 rounded-xl mr-3 group-hover:bg-gov-primary group-hover:text-white transition-colors shrink-0">
+                          <FileText className="w-5 h-5" />
                         </div>
                         <div>
                           <Link href={`/procedures/${proc.slug || proc.id}`}>
-                            <h3 className="font-bold text-lg text-gray-900 leading-snug group-hover:text-gov-primary transition-colors line-clamp-2 mb-2">
+                            <h3 className="font-bold text-base text-gray-900 leading-snug group-hover:text-gov-primary transition-colors line-clamp-2 mb-1.5">
                               {proc.title}
                             </h3>
                           </Link>
                           
-                          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 font-medium">
+                          <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium">
                             {proc.group && typeof proc.group === 'object' && (
-                              <span className="inline-flex items-center bg-gray-100 text-gray-600 px-2.5 py-1 rounded-lg text-xs">
+                              <span className="inline-flex items-center bg-gray-100 text-gray-600 px-2 py-0.5 rounded-lg">
                                 {proc.group.name}
                               </span>
                             )}
                             <span className="flex items-center">
-                              <Calendar className="w-4 h-4 mr-1.5 opacity-70" />
+                              <Calendar className="w-3.5 h-3.5 mr-1 opacity-70" />
                               {new Date(proc.publishedDate).toLocaleDateString('vi-VN')}
                             </span>
                             {proc.implementationTime && (
                               <span className="flex items-center">
-                                <Clock className="w-4 h-4 mr-1.5 opacity-70 text-amber-600" />
+                                <Clock className="w-3.5 h-3.5 mr-1 opacity-70 text-amber-600" />
                                 <span className="text-amber-700">{proc.implementationTime}</span>
                               </span>
                             )}
@@ -195,12 +195,12 @@ export default async function ProceduresPage({
                       </div>
                     </div>
                     
-                    <div className="bg-gray-50/80 sm:w-48 p-6 flex sm:flex-col items-center sm:items-stretch justify-between sm:justify-center gap-3 border-t sm:border-t-0 sm:border-l border-gray-100 shrink-0">
+                    <div className="bg-gray-50/80 sm:w-40 p-4 flex sm:flex-col items-center sm:items-stretch justify-between sm:justify-center gap-2 border-t sm:border-t-0 sm:border-l border-gray-100 shrink-0">
                       <Link 
                         href={`/procedures/${proc.slug || proc.id}`}
-                        className="flex-1 flex justify-center items-center py-2.5 px-4 bg-white border border-gray-200 text-gray-700 hover:border-gov-primary hover:text-gov-primary rounded-xl text-sm font-semibold transition-all duration-200 group-hover:shadow-sm"
+                        className="flex-1 flex justify-center items-center py-2 px-3 bg-white border border-gray-200 text-gray-700 hover:border-gov-primary hover:text-gov-primary rounded-xl text-xs font-semibold transition-all duration-200 group-hover:shadow-sm"
                       >
-                        Chi tiết <ArrowRight className="w-4 h-4 ml-1.5" />
+                        Chi tiết <ArrowRight className="w-3.5 h-3.5 ml-1" />
                       </Link>
                       
                       {hasFile && (
@@ -208,10 +208,10 @@ export default async function ProceduresPage({
                           href={fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 flex justify-center items-center py-2.5 px-4 bg-gov-primary/10 text-gov-primary hover:bg-gov-primary hover:text-white rounded-xl text-sm font-semibold transition-all duration-200 group-hover:shadow-sm"
+                          className="flex-1 flex justify-center items-center py-2 px-3 bg-gov-primary/10 text-gov-primary hover:bg-gov-primary hover:text-white rounded-xl text-xs font-semibold transition-all duration-200 group-hover:shadow-sm"
                           title="Tải biểu mẫu"
                         >
-                          <Download className="w-4 h-4 mr-1.5" /> Biểu mẫu
+                          <Download className="w-3.5 h-3.5 mr-1" /> Biểu mẫu
                         </a>
                       )}
                     </div>
