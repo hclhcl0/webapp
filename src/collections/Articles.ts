@@ -55,7 +55,8 @@ export const Articles: CollectionConfig = {
   admin: {
     description: '👉 Đường dẫn xem trên website: /bai-viet/[slug] hoặc /suc-khoe/...',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'publishedAt', 'reviewStatus', 'status'],
+    defaultColumns: ['title', 'category', 'reviewStatus', '_status', 'publishedAt'],
+    listSearchableFields: ['title', 'slug', 'description', 'author_name'],
     group: 'Nội dung',
     preview: (doc) => {
       if (doc?.slug) {
