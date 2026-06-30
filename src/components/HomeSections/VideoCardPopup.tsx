@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 function getYoutubeId(url: string) {
@@ -57,7 +58,7 @@ export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFe
         </div>
       </div>
 
-      {mounted && isOpen && yId && (
+      {mounted && isOpen && yId && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4">
           <div className="absolute inset-0 cursor-pointer" onClick={() => setIsOpen(false)}></div>
           <div className="relative w-full max-w-4xl bg-black rounded-lg overflow-hidden shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-200">
@@ -78,10 +79,11 @@ export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFe
               ></iframe>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
       
-      {mounted && isOpen && !yId && (
+      {mounted && isOpen && !yId && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4">
           <div className="absolute inset-0 cursor-pointer" onClick={() => setIsOpen(false)}></div>
           <div className="relative bg-white p-6 rounded-lg z-10 max-w-md w-full text-center">
@@ -91,7 +93,8 @@ export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFe
             </a>
             <button onClick={() => setIsOpen(false)} className="ml-3 text-gray-500 hover:text-gray-800 font-medium">Đóng</button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
