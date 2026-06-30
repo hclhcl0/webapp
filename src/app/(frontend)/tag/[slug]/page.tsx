@@ -110,19 +110,7 @@ export default async function TagPage({ params, searchParams }: PageParams) {
 
   return (
     <div className="container mx-auto px-4 py-6 md:py-10 max-w-7xl">
-      <div className="flex items-center text-sm text-gray-500 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap pb-2">
-        <Link href="/" className="hover:text-gov-primary transition-colors">Trang chủ</Link>
-        <span className="mx-2 flex-shrink-0">/</span>
-        {parentMenuTitle && (
-          <>
-            <span className="text-gray-500">{parentMenuTitle}</span>
-            <span className="mx-2 flex-shrink-0">/</span>
-          </>
-        )}
-        <span className="font-medium text-gov-primary">{breadcrumbTitle}</span>
-      </div>
-
-      <h1 className="text-2xl md:text-3xl font-bold text-gov-primary mb-8 border-b-2 border-gov-secondary pb-3 inline-block tracking-wide">
+      <h1 className="text-xl md:text-2xl font-bold text-gov-primary mb-6 border-b-2 border-gov-secondary pb-2.5 inline-block tracking-wide">
         {pageTitle}
       </h1>
 

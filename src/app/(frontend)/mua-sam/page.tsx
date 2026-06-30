@@ -115,18 +115,11 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
 
   return (
     <div className="container py-8">
-      {/* Breadcrumb */}
-      <nav className={styles.breadcrumb}>
-        <Link href="/">Trang chủ</Link>
-        <ChevronRight size={14} />
-        <span>Thông tin mua sắm</span>
-      </nav>
-
       {/* Page header */}
       <div className={styles.pageHeader}>
         <div className={styles.pageTitleRow}>
-          <ShoppingCart size={28} className={styles.pageTitleIcon} />
-          <h1 className={styles.pageTitle}>THÔNG TIN MUA SẮM</h1>
+          <ShoppingCart size={24} className={styles.pageTitleIcon} />
+          <h1 className={`${styles.pageTitle} !text-xl md:!text-2xl !mb-4`}>THÔNG TIN MUA SẮM</h1>
         </div>
         <p className={styles.subtitle}>
           Thông báo mua sắm, mời chào giá và kết quả đấu thầu của Trung tâm Kiểm soát bệnh tật Đà Nẵng.

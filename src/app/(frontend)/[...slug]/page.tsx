@@ -68,13 +68,7 @@ export async function generateMetadata({
 // Breadcrumb
 // ─────────────────────────────────────────────
 function Breadcrumb({ title }: { title: string }) {
-  return (
-    <nav className="flex items-center text-sm text-gray-500 mb-6 flex-wrap gap-1" aria-label="Breadcrumb">
-      <Link href="/" className="hover:text-[var(--primary)] transition-colors">Trang chủ</Link>
-      <ChevronRight size={14} className="text-gray-400" />
-      <span className="text-gray-700 font-medium truncate max-w-xs">{title}</span>
-    </nav>
-  );
+  return null;
 }
 
 // ─────────────────────────────────────────────
@@ -174,7 +168,7 @@ export default async function DynamicPage({
     return (
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <Breadcrumb title={page.title} />
-        <h1 className="text-3xl md:text-4xl font-black text-[var(--primary)] mb-2">{page.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-[var(--primary)] mb-2">{page.title}</h1>
         <div className="h-1 w-20 bg-[var(--primary)] rounded-full mb-8" />
         {content.length > 0 ? (
           <PageBlockRenderer blocks={content} />
@@ -192,7 +186,7 @@ export default async function DynamicPage({
         <div className="max-w-3xl mx-auto">
           <Breadcrumb title={page.title} />
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-12">
-            <h1 className="text-2xl md:text-3xl font-black text-[var(--primary)] mb-6 pb-4 border-b border-gray-100">
+            <h1 className="text-xl md:text-2xl font-bold text-[var(--primary)] mb-6 pb-4 border-b border-gray-100">
               {page.title}
             </h1>
             {content.length > 0 ? (
@@ -240,7 +234,7 @@ export default async function DynamicPage({
         <div>
           <Breadcrumb title={page.title} />
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:py-10 md:px-12">
-            <h1 className="text-2xl md:text-3xl font-black text-[var(--primary)] mb-6 pb-4 border-b border-gray-100 leading-tight">
+            <h1 className="text-xl md:text-2xl font-bold text-[var(--primary)] mb-6 pb-4 border-b border-gray-100 leading-tight">
               {page.title}
             </h1>
             {content.length > 0 ? (

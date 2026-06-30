@@ -56,14 +56,7 @@ export default async function DocumentsPage() {
 
   return (
     <div className="container py-8">
-      {/* Breadcrumb */}
-      <nav className={styles.breadcrumb}>
-        <Link href="/">Trang chủ</Link>
-        <ChevronRight size={14} />
-        <span>Văn bản</span>
-      </nav>
-
-      <h1 className={styles.pageTitle}>VĂN BẢN</h1>
+      <h1 className={`${styles.pageTitle} !text-xl md:!text-2xl !mb-4`}>VĂN BẢN</h1>
       <p className={styles.subtitle}>
         Hệ thống tra cứu văn bản của Trung tâm Kiểm soát bệnh tật Đà Nẵng.
       </p>

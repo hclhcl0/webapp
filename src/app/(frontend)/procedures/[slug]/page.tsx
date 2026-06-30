@@ -108,21 +108,7 @@ export default async function ProcedureDetailPage({
   return (
     <div className="bg-gray-50/50 min-h-screen pb-20">
       <div className="container mx-auto px-4 pt-8 pb-4 max-w-5xl">
-        {/* Breadcrumbs */}
-        <div className="flex flex-wrap items-center text-sm text-gray-500 mb-6 font-medium">
-          <Link href="/" className="hover:text-gov-primary transition-colors">Trang chủ</Link>
-          <ChevronRight className="w-4 h-4 mx-2 flex-shrink-0 opacity-50" />
-          <Link href="/procedures" className="hover:text-gov-primary transition-colors whitespace-nowrap">Thủ tục hành chính</Link>
-          
-          {procedure.group && typeof procedure.group === 'object' && (
-            <>
-              <ChevronRight className="w-4 h-4 mx-2 flex-shrink-0 opacity-50" />
-              <Link href={`/procedures?nhom=${procedure.group.slug}`} className="hover:text-gov-primary transition-colors whitespace-nowrap">
-                {procedure.group.name}
-              </Link>
-            </>
-          )}
-        </div>
+
 
         <Link href="/procedures" className="inline-flex items-center text-sm font-bold text-gray-600 hover:text-gov-primary transition-colors mb-6 group">
           <div className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center mr-3 group-hover:border-gov-primary group-hover:bg-blue-50 transition-colors shadow-sm">
