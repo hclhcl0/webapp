@@ -71,10 +71,10 @@ export default async function ProceduresPage({
   return (
     <div className="bg-gray-50/50 min-h-screen pb-16">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-gov-primary to-gov-primary-dark text-white pt-6 pb-12 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-gov-primary to-gov-primary-dark text-white py-3.5 relative overflow-hidden shadow-inner">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-4 max-w-7xl relative z-10">
-          <div className="flex items-center text-sm text-blue-100 mb-4 font-medium tracking-wide">
+          <div className="flex items-center text-sm text-blue-100 font-medium tracking-wide">
             <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
             <ChevronRight className="w-4 h-4 mx-2 opacity-60" />
             <span className="text-white">Thủ tục hành chính</span>
@@ -82,7 +82,7 @@ export default async function ProceduresPage({
         </div>
       </div>
 
-      <div className="container mx-auto px-4 max-w-7xl -mt-6 relative z-20">
+      <div className="container mx-auto px-4 max-w-7xl mt-6 relative z-20">
         <div className="flex flex-col lg:flex-row gap-6">
           
           {/* Sidebar Navigation */}
