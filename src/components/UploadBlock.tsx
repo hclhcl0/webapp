@@ -3,7 +3,7 @@ import configPromise from '@payload-config';
 import React from 'react';
 
 export async function UploadBlock({ node, fallbackAlt }: { node: any, fallbackAlt?: string }) {
-  console.log("UploadBlock received node:", node);
+  // Removed console.log
   if (!node?.value) return null;
 
   // If already populated
