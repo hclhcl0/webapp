@@ -79,12 +79,6 @@ export default async function ProceduresPage({
             <ChevronRight className="w-4 h-4 mx-2 opacity-60" />
             <span className="text-white">Thủ tục hành chính</span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
-            Thủ tục Hành chính
-          </h1>
-          <p className="text-blue-100 text-base max-w-2xl leading-relaxed">
-            Tra cứu, tìm kiếm và tải về các biểu mẫu, quy trình thủ tục hành chính thuộc thẩm quyền giải quyết một cách nhanh chóng và minh bạch.
-          </p>
         </div>
       </div>
 
