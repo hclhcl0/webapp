@@ -151,7 +151,7 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
           {items.map((item: any) => {
             const sc       = STATUS_CONFIG[item.effectiveStatus] ?? STATUS_CONFIG.closed;
             const typeLabel = TYPE_LABELS[item.procurementType] ?? item.procurementType;
-            const fileUrl  = resolveFileUrl(item.file?.url, item.driveUrl);
+            const fileUrl  = resolveFileUrl(item.file?.url, item.driveUrl) || item.thumbnail?.url;
             const fileName = item.file?.filename
               ?? (item.driveUrl ? driveLinkLabel(item.driveUrl) : null)
               ?? 'file';
