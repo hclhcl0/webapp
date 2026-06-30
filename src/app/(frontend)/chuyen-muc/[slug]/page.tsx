@@ -93,24 +93,24 @@ export default async function CategoryPage({ params, searchParams }: PageParams)
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
             {articles.map((article: any) => {
               const mediaUrl = article.image?.url || 'https://via.placeholder.com/800x450?text=CDC+Da+Nang';
               
               return (
-                <div key={article.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all group flex flex-col">
-                  <div className="aspect-video bg-gray-100 w-full relative overflow-hidden">
-                    <Link href={`/bai-viet/${article.slug || article.id}`}>
+                <div key={article.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all group flex flex-row h-auto sm:h-[140px]">
+                  <div className="w-[120px] sm:w-[220px] shrink-0 bg-gray-100 relative overflow-hidden">
+                    <Link href={`/bai-viet/${article.slug || article.id}`} className="block w-full h-full">
                       <img src={mediaUrl} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     </Link>
                   </div>
-                  <div className="p-5 flex flex-col flex-grow">
-                    <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-gov-primary transition-colors line-clamp-3 leading-tight">
+                  <div className="p-3 sm:p-4 flex flex-col flex-grow min-w-0">
+                    <h3 className="text-[14px] sm:text-[15px] font-bold text-gray-900 mb-1.5 group-hover:text-gov-primary transition-colors line-clamp-3 leading-snug">
                       <Link href={`/bai-viet/${article.slug || article.id}`}>
                         {article.title}
                       </Link>
                     </h3>
-                    <div className="flex items-center gap-4 text-xs text-gray-500 mb-4 font-medium mt-auto">
+                    <div className="flex items-center gap-4 text-[11px] sm:text-xs text-gray-500 font-medium mt-auto pt-2">
                       <span className="flex items-center"><Calendar className="w-3.5 h-3.5 mr-1" /> {new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}</span>
                       <span className="flex items-center"><Eye className="w-3.5 h-3.5 mr-1" /> {article.views || 0}</span>
                     </div>
