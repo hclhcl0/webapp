@@ -2,6 +2,7 @@ import { buildConfig } from 'payload';
 import { sqliteAdapter } from '@payloadcms/db-sqlite';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import sharp from 'sharp';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob';
@@ -47,6 +48,7 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
+  sharp,
   onInit: async (payload) => {
     // const { initCron } = await import('./lib/zalo-admin/cron.js');
     // initCron();
