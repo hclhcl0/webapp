@@ -211,6 +211,17 @@
   pointer-events: auto;
 }
 
+/* Cầu nối vô hình chống rớt chuột khi di chuột từ menu cha xuống menu con */
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: transparent;
+}
+
 .dropdown li a {
   display: block;
   padding: 0.6rem 1.1rem;
