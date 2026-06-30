@@ -89,19 +89,19 @@ export default async function ProceduresPage({
           <div className="lg:w-1/3 xl:w-1/4 flex-shrink-0">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
               <div className="p-4 border-b border-gray-100 flex items-center bg-gray-50/50">
-                <Layers className="w-4 h-4 text-gov-primary mr-2" />
-                <h2 className="font-bold text-gray-900 text-base">Lĩnh vực giải quyết</h2>
+                <Layers className="w-5 h-5 text-gov-primary mr-2.5" />
+                <h2 className="font-bold text-gray-900 text-[15px] uppercase tracking-wide">Lĩnh vực giải quyết</h2>
               </div>
               <div className="p-3">
                 <Link
                   href="/procedures"
-                  className={`flex items-center px-3 py-2 text-sm rounded-xl mb-1 transition-all duration-200 ${
+                  className={`flex items-center px-3.5 py-2.5 text-[15px] rounded-xl mb-1 transition-all duration-200 ${
                     !selectedGroupSlug 
-                      ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-medium' 
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gov-primary'
+                      ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-semibold' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gov-primary font-medium'
                   }`}
                 >
-                  <div className={`w-1.5 h-1.5 rounded-full mr-2 ${!selectedGroupSlug ? 'bg-white' : 'bg-gray-300'}`}></div>
+                  <div className={`w-1.5 h-1.5 rounded-full mr-3 ${!selectedGroupSlug ? 'bg-white' : 'bg-gray-300'}`}></div>
                   Tất cả lĩnh vực
                 </Link>
                 
@@ -111,16 +111,16 @@ export default async function ProceduresPage({
                     <Link
                       key={group.id}
                       href={`/procedures?nhom=${group.slug}`}
-                      className={`flex items-center px-3 py-2 text-sm rounded-xl mb-1 transition-all duration-200 ${
+                      className={`flex items-center px-3.5 py-2.5 text-[15px] rounded-xl mb-1 transition-all duration-200 ${
                         isActive 
-                          ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-medium' 
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gov-primary'
+                          ? 'bg-gov-primary text-white shadow-md shadow-gov-primary/20 font-semibold' 
+                          : 'text-gray-700 hover:bg-gray-50 hover:text-gov-primary font-medium'
                       }`}
                     >
                       {group.icon ? (
-                        <span className="mr-2 text-base w-4 text-center">{group.icon}</span>
+                        <span className="mr-3 text-[15px] w-4 text-center">{group.icon}</span>
                       ) : (
-                        <div className={`w-1.5 h-1.5 rounded-full mr-2 ${isActive ? 'bg-white' : 'bg-gray-300'}`}></div>
+                        <div className={`w-1.5 h-1.5 rounded-full mr-3 ${isActive ? 'bg-white' : 'bg-gray-300'}`}></div>
                       )}
                       {group.name}
                     </Link>
