@@ -46,9 +46,6 @@ export const Pages: CollectionConfig = {
     update: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
     delete: ({ req: { user } }) => user?.role === 'admin',
   },
-  versions: {
-    drafts: true,
-  },
   fields: [
     // ── Thông tin cơ bản ──
     {
