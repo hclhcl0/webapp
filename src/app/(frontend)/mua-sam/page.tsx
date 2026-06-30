@@ -181,7 +181,13 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
                   </div>
 
                   {/* Title */}
-                  <h2 className={styles.title}>{item.title}</h2>
+                  {fileUrl ? (
+                    <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="hover:text-gov-primary transition-colors cursor-pointer">
+                      <h2 className={styles.title}>{item.title}</h2>
+                    </a>
+                  ) : (
+                    <h2 className={styles.title}>{item.title}</h2>
+                  )}
 
                   {/* Note */}
                   {item.note && <p className={styles.note}>{item.note}</p>}
@@ -210,7 +216,7 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
                         className={styles.downloadBtn}
                       >
                         <FileText size={15} />
-                        <span>{isFromDrive ? '📁 Google Drive' : 'Tải tài liệu'}</span>
+                        <span>{isFromDrive ? '📁 Google Drive' : 'Xem / Tải file'}</span>
                         <Download size={13} />
                       </a>
                     )}
