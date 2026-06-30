@@ -1448,6 +1448,117 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "pages_blocks_zalo_widget_block_parent_idx" ON "pages_blocks_zalo_widget_block" USING btree ("_parent_id")`,
   `CREATE INDEX IF NOT EXISTS "pages_blocks_zalo_widget_block_path_idx" ON "pages_blocks_zalo_widget_block" USING btree ("_path")`,
 
+  // ====================================================
+  // BATCH X – _pages_v versioned tables (required for versions: { drafts: true })
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "_pages_v" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "parent_id" integer,
+    "version_title" varchar,
+    "version_slug" varchar,
+    "version_page_type" varchar DEFAULT 'standard',
+    "version_layout" varchar DEFAULT 'withSidebar',
+    "version_seo_title" varchar,
+    "version_seo_description" text,
+    "version_seo_og_image_id" integer,
+    "version_updated_at" timestamp(3) with time zone,
+    "version_created_at" timestamp(3) with time zone,
+    "version__status" varchar DEFAULT 'draft',
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "latest" boolean,
+    "autosave" boolean
+  )`,
+  `DO $$ BEGIN ALTER TABLE "_pages_v" ADD CONSTRAINT "_pages_v_parent_id_fk" FOREIGN KEY ("parent_id") REFERENCES "pages"("id") ON DELETE set null ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_parent_id_idx" ON "_pages_v" USING btree ("parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_version_slug_idx" ON "_pages_v" USING btree ("version_slug")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_created_at_idx" ON "_pages_v" USING btree ("created_at")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_updated_at_idx" ON "_pages_v" USING btree ("updated_at")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_latest_idx" ON "_pages_v" USING btree ("latest")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_autosave_idx" ON "_pages_v" USING btree ("autosave")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_zalo_widget_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "oa_id" varchar,
+    "title" varchar,
+    "widget_type" varchar,
+    CONSTRAINT "_pages_v_blocks_zalo_widget_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_zalo_widget_block_order_idx" ON "_pages_v_blocks_zalo_widget_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_zalo_widget_block_parent_idx" ON "_pages_v_blocks_zalo_widget_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_zalo_widget_block_path_idx" ON "_pages_v_blocks_zalo_widget_block" USING btree ("_path")`,
+
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_livestream_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar,
+    "platform" varchar,
+    "video_id" varchar,
+    "status" varchar,
+    "description" varchar,
+    CONSTRAINT "_pages_v_blocks_livestream_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_livestream_block_order_idx" ON "_pages_v_blocks_livestream_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_livestream_block_parent_idx" ON "_pages_v_blocks_livestream_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_livestream_block_path_idx" ON "_pages_v_blocks_livestream_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_hero_banner" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar,
+    "description" varchar,
+    "link" varchar,
+    "tag" varchar,
+    "image_id" integer,
+    CONSTRAINT "_pages_v_blocks_hero_banner_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_hero_banner_order_idx" ON "_pages_v_blocks_hero_banner" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_hero_banner_parent_idx" ON "_pages_v_blocks_hero_banner" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_hero_banner_path_idx" ON "_pages_v_blocks_hero_banner" USING btree ("_path")`,
+
+  // _pages_v_rels for relationships used in _pages_v (seo og image, etc.)
+  `CREATE TABLE IF NOT EXISTS "_pages_v_rels" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "order" integer,
+    "parent_id" integer NOT NULL,
+    "path" varchar NOT NULL,
+    "pages_id" integer,
+    "media_id" integer,
+    "articles_id" integer,
+    "categories_id" integer,
+    CONSTRAINT "_pages_v_rels_parent_fk"
+      FOREIGN KEY ("parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "_pages_v_rels_pages_fk"
+      FOREIGN KEY ("pages_id") REFERENCES "pages" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "_pages_v_rels_media_fk"
+      FOREIGN KEY ("media_id") REFERENCES "media" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "_pages_v_rels_articles_fk"
+      FOREIGN KEY ("articles_id") REFERENCES "articles" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "_pages_v_rels_categories_fk"
+      FOREIGN KEY ("categories_id") REFERENCES "categories" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_rels_order_idx" ON "_pages_v_rels" USING btree ("order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_rels_parent_idx" ON "_pages_v_rels" USING btree ("parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_rels_path_idx" ON "_pages_v_rels" USING btree ("path")`,
+
+  // payload_locked_documents_rels for _pages_v (needed so admin can lock versions)
+  `ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "_pages_v_id" integer`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels__pages_v_fk" FOREIGN KEY ("_pages_v_id") REFERENCES "_pages_v"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+  `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels__pages_v_id_idx" ON "payload_locked_documents_rels" USING btree ("_pages_v_id")`,
 
 
   // ====================================================
