@@ -1910,6 +1910,9 @@
   .pb-6 {
     padding-bottom: calc(var(--spacing) * 6);
   }
+  .pb-8 {
+    padding-bottom: calc(var(--spacing) * 8);
+  }
   .pb-16 {
     padding-bottom: calc(var(--spacing) * 16);
   }
@@ -3622,6 +3625,11 @@
       padding-block: calc(var(--spacing) * 20);
     }
   }
+  .md\:pt-4 {
+    @media (width >= 48rem) {
+      padding-top: calc(var(--spacing) * 4);
+    }
+  }
   .md\:pr-10 {
     @media (width >= 48rem) {
       padding-right: calc(var(--spacing) * 10);
@@ -3635,6 +3643,11 @@
   .md\:pb-6 {
     @media (width >= 48rem) {
       padding-bottom: calc(var(--spacing) * 6);
+    }
+  }
+  .md\:pb-10 {
+    @media (width >= 48rem) {
+      padding-bottom: calc(var(--spacing) * 10);
     }
   }
   .md\:pl-20 {

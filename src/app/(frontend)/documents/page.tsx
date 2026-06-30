@@ -55,7 +55,7 @@ export default async function DocumentsPage() {
   const documents = await getDocuments();
 
   return (
-    <div className="container py-8">
+    <div className="container pt-2 md:pt-4 pb-8">
       <h1 className={`${styles.pageTitle} !text-xl md:!text-2xl !mb-4`}>VĂN BẢN</h1>
       <p className={styles.subtitle}>
         Hệ thống tra cứu văn bản của Trung tâm Kiểm soát bệnh tật Đà Nẵng.

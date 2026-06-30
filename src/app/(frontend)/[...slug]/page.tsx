@@ -166,7 +166,7 @@ export default async function DynamicPage({
   // ── Layout: toàn chiều rộng ─────────────────
   if (layout === 'fullWidth') {
     return (
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="container mx-auto px-4 pt-2 md:pt-4 pb-8 max-w-7xl">
         <Breadcrumb title={page.title} />
         <h1 className="text-2xl md:text-3xl font-bold text-[var(--primary)] mb-2">{page.title}</h1>
         <div className="h-1 w-20 bg-[var(--primary)] rounded-full mb-8" />
@@ -182,7 +182,7 @@ export default async function DynamicPage({
   // ── Layout: nội dung hẹp ────────────────────
   if (layout === 'narrow') {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pt-2 md:pt-4 pb-8">
         <div className="max-w-3xl mx-auto">
           <Breadcrumb title={page.title} />
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-12">
@@ -227,7 +227,7 @@ export default async function DynamicPage({
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 pt-2 md:pt-4 pb-8 max-w-7xl">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
 
         {/* Main */}

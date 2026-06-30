@@ -6,7 +6,7 @@ import { ChevronRight, CalendarDays, Clock, MapPin, Users } from 'lucide-react';
 
 export default function SchedulePage() {
   return (
-    <div className="container mx-auto px-4 py-6 md:py-10 max-w-5xl">
+    <div className="container mx-auto px-4 pt-2 md:pt-4 pb-6 md:pb-10 max-w-5xl">
       <h1 className="text-xl md:text-2xl font-bold text-gov-primary mb-6 border-b-2 border-gov-secondary pb-2.5 inline-block uppercase tracking-wide">
         Lịch Làm Việc Cơ Quan
       </h1>

@@ -114,7 +114,7 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
   ];
 
   return (
-    <div className="container py-8">
+    <div className="container pt-2 md:pt-4 pb-8">
       {/* Page header */}
       <div className={styles.pageHeader}>
         <div className={styles.pageTitleRow}>
