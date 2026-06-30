@@ -133,11 +133,11 @@ export default async function ProceduresPage({
           {/* Main Content */}
           <div className="lg:w-2/3 xl:w-3/4">
             <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-800 flex items-center">
-                <span className="w-1.5 h-5 bg-gov-secondary rounded-full mr-3"></span>
+              <h2 className="text-base font-bold text-gray-800 flex items-center">
+                <span className="w-1.5 h-4 bg-gov-secondary rounded-full mr-2.5"></span>
                 {currentGroupName}
               </h2>
-              <div className="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+              <div className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2.5 py-0.5 rounded-full">
                 {procedures.length} thủ tục
               </div>
             </div>
@@ -215,12 +215,12 @@ export default async function ProceduresPage({
             </div>
 
             {procedures.length === 0 && (
-              <div className="text-center py-24 bg-white rounded-2xl border border-gray-100 shadow-sm mt-4">
-                <div className="bg-gray-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-5 border border-gray-100">
-                  <Search className="w-10 h-10 text-gray-400" />
+              <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm mt-4">
+                <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
+                  <Search className="w-7 h-7 text-gray-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">Chưa có dữ liệu</h3>
-                <p className="text-gray-500 max-w-md mx-auto text-lg">
+                <h3 className="text-lg font-semibold text-gray-800 mb-1.5">Chưa có dữ liệu</h3>
+                <p className="text-gray-500 max-w-md mx-auto text-sm">
                   Hiện tại chưa có thủ tục hành chính nào trong mục này. Vui lòng chọn lĩnh vực khác.
                 </p>
               </div>
