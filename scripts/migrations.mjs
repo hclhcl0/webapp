@@ -1477,6 +1477,543 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "_pages_v_latest_idx" ON "_pages_v" USING btree ("latest")`,
   `CREATE INDEX IF NOT EXISTS "_pages_v_autosave_idx" ON "_pages_v" USING btree ("autosave")`,
 
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_rich_text_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "content" jsonb,
+    CONSTRAINT "_pages_v_blocks_rich_text_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_rich_text_block_order_idx" ON "_pages_v_blocks_rich_text_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_rich_text_block_parent_idx" ON "_pages_v_blocks_rich_text_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_rich_text_block_path_idx" ON "_pages_v_blocks_rich_text_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_section_title_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    "subtitle" varchar,
+    "level" varchar DEFAULT 'h2',
+    "alignment" varchar DEFAULT 'left',
+    "style" varchar DEFAULT 'underline',
+    CONSTRAINT "_pages_v_blocks_section_title_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_section_title_block_order_idx" ON "_pages_v_blocks_section_title_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_section_title_block_parent_idx" ON "_pages_v_blocks_section_title_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_section_title_block_path_idx" ON "_pages_v_blocks_section_title_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_callout_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "type" varchar,
+    "title" varchar,
+    "content" varchar,
+    CONSTRAINT "_pages_v_blocks_callout_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_callout_block_order_idx" ON "_pages_v_blocks_callout_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_callout_block_parent_idx" ON "_pages_v_blocks_callout_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_callout_block_path_idx" ON "_pages_v_blocks_callout_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_columns_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "layout" varchar,
+    "col1" varchar,
+    "col2" varchar,
+    "col3" varchar,
+    CONSTRAINT "_pages_v_blocks_columns_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_columns_block_order_idx" ON "_pages_v_blocks_columns_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_columns_block_parent_idx" ON "_pages_v_blocks_columns_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_columns_block_path_idx" ON "_pages_v_blocks_columns_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_divider_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "style" varchar DEFAULT 'line',
+    "size" varchar DEFAULT 'md',
+    CONSTRAINT "_pages_v_blocks_divider_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_divider_block_order_idx" ON "_pages_v_blocks_divider_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_divider_block_parent_idx" ON "_pages_v_blocks_divider_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_divider_block_path_idx" ON "_pages_v_blocks_divider_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_card_grid_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "columns" varchar DEFAULT '3',
+    "card_style" varchar DEFAULT 'shadow',
+    CONSTRAINT "_pages_v_blocks_card_grid_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_card_grid_block_order_idx" ON "_pages_v_blocks_card_grid_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_card_grid_block_parent_idx" ON "_pages_v_blocks_card_grid_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_card_grid_block_path_idx" ON "_pages_v_blocks_card_grid_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_card_grid_block_cards" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    "icon" varchar,
+    "image_id" integer,
+    "title" varchar,
+    "description" text,
+    "link_url" varchar,
+    "link_label" varchar,
+    "highlight" boolean DEFAULT false,
+    CONSTRAINT "_pages_v_blocks_card_grid_block_cards_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_card_grid_block" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_card_grid_block_cards_order_idx" ON "_pages_v_blocks_card_grid_block_cards" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_card_grid_block_cards_parent_idx" ON "_pages_v_blocks_card_grid_block_cards" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_card_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "image_id" integer,
+    "title" varchar,
+    "description" varchar,
+    "link_url" varchar,
+    "link_label" varchar,
+    CONSTRAINT "_pages_v_blocks_card_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_card_block_order_idx" ON "_pages_v_blocks_card_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_card_block_parent_idx" ON "_pages_v_blocks_card_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_card_block_path_idx" ON "_pages_v_blocks_card_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_steps_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    "layout" varchar DEFAULT 'vertical',
+    CONSTRAINT "_pages_v_blocks_steps_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_steps_block_order_idx" ON "_pages_v_blocks_steps_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_steps_block_parent_idx" ON "_pages_v_blocks_steps_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_steps_block_path_idx" ON "_pages_v_blocks_steps_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_steps_block_steps" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    "icon" varchar,
+    "title" varchar,
+    "description" text,
+    "note" varchar,
+    CONSTRAINT "_pages_v_blocks_steps_block_steps_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_steps_block" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_steps_block_steps_order_idx" ON "_pages_v_blocks_steps_block_steps" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_steps_block_steps_parent_idx" ON "_pages_v_blocks_steps_block_steps" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_faq_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    CONSTRAINT "_pages_v_blocks_faq_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_faq_block_order_idx" ON "_pages_v_blocks_faq_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_faq_block_parent_idx" ON "_pages_v_blocks_faq_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_faq_block_path_idx" ON "_pages_v_blocks_faq_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_faq_block_faqs" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    "question" varchar,
+    "answer" text,
+    CONSTRAINT "_pages_v_blocks_faq_block_faqs_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_faq_block" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_faq_block_faqs_order_idx" ON "_pages_v_blocks_faq_block_faqs" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_faq_block_faqs_parent_idx" ON "_pages_v_blocks_faq_block_faqs" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_button_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "label" varchar,
+    "url" varchar,
+    "style" varchar,
+    "open_in_new_tab" boolean,
+    CONSTRAINT "_pages_v_blocks_button_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_button_block_order_idx" ON "_pages_v_blocks_button_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_button_block_parent_idx" ON "_pages_v_blocks_button_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_button_block_path_idx" ON "_pages_v_blocks_button_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_cta_banner_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    "description" text,
+    "style" varchar DEFAULT 'primary',
+    "background_image_id" integer,
+    "primary_button_label" varchar,
+    "primary_button_url" varchar,
+    "primary_button_open_in_new_tab" boolean DEFAULT false,
+    "secondary_button_label" varchar,
+    "secondary_button_url" varchar,
+    "secondary_button_open_in_new_tab" boolean DEFAULT false,
+    CONSTRAINT "_pages_v_blocks_cta_banner_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_cta_banner_block_order_idx" ON "_pages_v_blocks_cta_banner_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_cta_banner_block_parent_idx" ON "_pages_v_blocks_cta_banner_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_cta_banner_block_path_idx" ON "_pages_v_blocks_cta_banner_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_video_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "platform" varchar,
+    "video_url" varchar,
+    "embed_code" varchar,
+    "caption" varchar,
+    CONSTRAINT "_pages_v_blocks_video_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_video_block_order_idx" ON "_pages_v_blocks_video_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_video_block_parent_idx" ON "_pages_v_blocks_video_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_video_block_path_idx" ON "_pages_v_blocks_video_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_tiktok_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "video_id" varchar,
+    "video_url" varchar,
+    "max_width" double precision,
+    "alignment" varchar,
+    CONSTRAINT "_pages_v_blocks_tiktok_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_tiktok_block_order_idx" ON "_pages_v_blocks_tiktok_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_tiktok_block_parent_idx" ON "_pages_v_blocks_tiktok_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_tiktok_block_path_idx" ON "_pages_v_blocks_tiktok_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_gallery_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "style" varchar,
+    CONSTRAINT "_pages_v_blocks_gallery_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_gallery_block_order_idx" ON "_pages_v_blocks_gallery_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_gallery_block_parent_idx" ON "_pages_v_blocks_gallery_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_gallery_block_path_idx" ON "_pages_v_blocks_gallery_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_gallery_block_images" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    "image_id" integer,
+    "caption" varchar,
+    CONSTRAINT "_pages_v_blocks_gallery_block_images_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_gallery_block" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_gallery_block_images_order_idx" ON "_pages_v_blocks_gallery_block_images" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_gallery_block_images_parent_idx" ON "_pages_v_blocks_gallery_block_images" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_pdf_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "source" varchar,
+    "pdf_file_id" integer,
+    "gdrive_url" varchar,
+    "display_mode" varchar,
+    "caption" varchar,
+    CONSTRAINT "_pages_v_blocks_pdf_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_pdf_block_order_idx" ON "_pages_v_blocks_pdf_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_pdf_block_parent_idx" ON "_pages_v_blocks_pdf_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_pdf_block_path_idx" ON "_pages_v_blocks_pdf_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_embed_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    "embed_type" varchar DEFAULT 'custom',
+    "html_code" text,
+    "google_maps_url" varchar,
+    "facebook_url" varchar,
+    "height" numeric DEFAULT 400,
+    CONSTRAINT "_pages_v_blocks_embed_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_embed_block_order_idx" ON "_pages_v_blocks_embed_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_embed_block_parent_idx" ON "_pages_v_blocks_embed_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_embed_block_path_idx" ON "_pages_v_blocks_embed_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_table_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    "caption" varchar,
+    "striped" boolean DEFAULT true,
+    "bordered" boolean DEFAULT true,
+    CONSTRAINT "_pages_v_blocks_table_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_order_idx" ON "_pages_v_blocks_table_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_parent_idx" ON "_pages_v_blocks_table_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_path_idx" ON "_pages_v_blocks_table_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_table_block_headers" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    "label" varchar,
+    "align" varchar DEFAULT 'left',
+    CONSTRAINT "_pages_v_blocks_table_block_headers_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_table_block" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_headers_order_idx" ON "_pages_v_blocks_table_block_headers" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_headers_parent_idx" ON "_pages_v_blocks_table_block_headers" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_table_block_rows" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    CONSTRAINT "_pages_v_blocks_table_block_rows_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_table_block" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_rows_order_idx" ON "_pages_v_blocks_table_block_rows" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_rows_parent_idx" ON "_pages_v_blocks_table_block_rows" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_table_block_rows_cells" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    "content" varchar,
+    "highlight" boolean DEFAULT false,
+    CONSTRAINT "_pages_v_blocks_table_block_rows_cells_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_table_block_rows" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_rows_cells_order_idx" ON "_pages_v_blocks_table_block_rows_cells" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_table_block_rows_cells_parent_idx" ON "_pages_v_blocks_table_block_rows_cells" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_related_articles_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    CONSTRAINT "_pages_v_blocks_related_articles_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_related_articles_block_order_idx" ON "_pages_v_blocks_related_articles_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_related_articles_block_parent_idx" ON "_pages_v_blocks_related_articles_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_related_articles_block_path_idx" ON "_pages_v_blocks_related_articles_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_category_news" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    "category_info_id" integer,
+    "limit" double precision,
+    CONSTRAINT "_pages_v_blocks_category_news_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_category_news_order_idx" ON "_pages_v_blocks_category_news" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_category_news_parent_idx" ON "_pages_v_blocks_category_news" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_category_news_path_idx" ON "_pages_v_blocks_category_news" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_quote_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "quote" varchar,
+    "author" varchar,
+    "role" varchar,
+    CONSTRAINT "_pages_v_blocks_quote_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_quote_block_order_idx" ON "_pages_v_blocks_quote_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_quote_block_parent_idx" ON "_pages_v_blocks_quote_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_quote_block_path_idx" ON "_pages_v_blocks_quote_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_audio_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    "source_type" varchar,
+    "audio_file_id" integer,
+    "audio_url" varchar,
+    "description" varchar,
+    CONSTRAINT "_pages_v_blocks_audio_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_audio_block_order_idx" ON "_pages_v_blocks_audio_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_audio_block_parent_idx" ON "_pages_v_blocks_audio_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_audio_block_path_idx" ON "_pages_v_blocks_audio_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_file_downloads_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "title" varchar,
+    CONSTRAINT "_pages_v_blocks_file_downloads_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_order_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_parent_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_path_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_file_downloads_block_files" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    "file_id" integer,
+    "custom_name" varchar,
+    CONSTRAINT "_pages_v_blocks_file_downloads_block_files_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_file_downloads_block" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_files_order_idx" ON "_pages_v_blocks_file_downloads_block_files" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_files_parent_idx" ON "_pages_v_blocks_file_downloads_block_files" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_slider_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "autoplay" boolean,
+    CONSTRAINT "_pages_v_blocks_slider_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_slider_block_order_idx" ON "_pages_v_blocks_slider_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_slider_block_parent_idx" ON "_pages_v_blocks_slider_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_slider_block_path_idx" ON "_pages_v_blocks_slider_block" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_slider_block_images" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_uuid" varchar,
+    "image_id" integer,
+    "caption" varchar,
+    CONSTRAINT "_pages_v_blocks_slider_block_images_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v_blocks_slider_block" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_slider_block_images_order_idx" ON "_pages_v_blocks_slider_block_images" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_slider_block_images_parent_idx" ON "_pages_v_blocks_slider_block_images" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_infographic_block" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "_uuid" varchar,
+    "image_id" integer,
+    "caption" varchar,
+    CONSTRAINT "_pages_v_blocks_infographic_block_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_infographic_block_order_idx" ON "_pages_v_blocks_infographic_block" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_infographic_block_parent_idx" ON "_pages_v_blocks_infographic_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_infographic_block_path_idx" ON "_pages_v_blocks_infographic_block" USING btree ("_path")`,
+
   `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_zalo_widget_block" (
     "id" serial PRIMARY KEY NOT NULL,
     "_order" integer NOT NULL,
