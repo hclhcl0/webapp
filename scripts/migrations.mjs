@@ -1609,5 +1609,77 @@ export const MIGRATION_STATEMENTS = [
   ].flatMap(table => [
     `DO $$ BEGIN ALTER TABLE "${table}" ALTER COLUMN "id" DROP DEFAULT; EXCEPTION WHEN others THEN null; END $$;`,
     `DO $$ BEGIN ALTER TABLE "${table}" ALTER COLUMN "id" TYPE varchar USING "id"::varchar; EXCEPTION WHEN others THEN null; END $$;`
-  ])
+  ]),
+
+  // ====================================================
+  // BATCH X+1 – Add _uuid column to all _pages_v_blocks_* tables
+  // Payload CMS requires a _uuid column in every versioned block table
+  // ====================================================
+  ...[
+    "_pages_v_blocks_rich_text_block",
+    "_pages_v_blocks_section_title_block",
+    "_pages_v_blocks_callout_block",
+    "_pages_v_blocks_columns_block",
+    "_pages_v_blocks_divider_block",
+    "_pages_v_blocks_card_grid_block",
+    "_pages_v_blocks_card_grid_block_cards",
+    "_pages_v_blocks_card_block",
+    "_pages_v_blocks_steps_block",
+    "_pages_v_blocks_steps_block_steps",
+    "_pages_v_blocks_faq_block",
+    "_pages_v_blocks_faq_block_faqs",
+    "_pages_v_blocks_button_block",
+    "_pages_v_blocks_cta_banner_block",
+    "_pages_v_blocks_video_block",
+    "_pages_v_blocks_tiktok_block",
+    "_pages_v_blocks_gallery_block",
+    "_pages_v_blocks_gallery_block_images",
+    "_pages_v_blocks_pdf_block",
+    "_pages_v_blocks_embed_block",
+    "_pages_v_blocks_table_block",
+    "_pages_v_blocks_table_block_headers",
+    "_pages_v_blocks_table_block_rows",
+    "_pages_v_blocks_table_block_rows_cells",
+    "_pages_v_blocks_related_articles_block",
+    "_pages_v_blocks_category_news",
+    "_pages_v_blocks_quote_block",
+    "_pages_v_blocks_audio_block",
+    "_pages_v_blocks_file_downloads_block",
+    "_pages_v_blocks_file_downloads_block_files",
+    "_pages_v_blocks_slider_block",
+    "_pages_v_blocks_slider_block_images",
+    "_pages_v_blocks_infographic_block",
+    "_pages_v_blocks_zalo_widget_block",
+    "_pages_v_blocks_livestream_block",
+    "_pages_v_blocks_hero_banner"
+  ].map(table =>
+    `ALTER TABLE "${table}" ADD COLUMN IF NOT EXISTS "_uuid" varchar`
+  ),
+
+  // Also add _uuid to pages_blocks_* tables in the newer batch (added without _uuid)
+  ...[
+    "pages_blocks_audio_block",
+    "pages_blocks_button_block",
+    "pages_blocks_callout_block",
+    "pages_blocks_card_block",
+    "pages_blocks_category_news",
+    "pages_blocks_columns_block",
+    "pages_blocks_file_downloads_block",
+    "pages_blocks_file_downloads_block_files",
+    "pages_blocks_gallery_block",
+    "pages_blocks_gallery_block_images",
+    "pages_blocks_hero_banner",
+    "pages_blocks_infographic_block",
+    "pages_blocks_livestream_block",
+    "pages_blocks_pdf_block",
+    "pages_blocks_quote_block",
+    "pages_blocks_related_articles_block",
+    "pages_blocks_slider_block",
+    "pages_blocks_slider_block_images",
+    "pages_blocks_tiktok_block",
+    "pages_blocks_video_block",
+    "pages_blocks_zalo_widget_block"
+  ].map(table =>
+    `ALTER TABLE "${table}" ADD COLUMN IF NOT EXISTS "_uuid" varchar`
+  ),
 ];
