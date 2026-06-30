@@ -1070,9 +1070,11 @@ export const MIGRATION_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS "document_signers" (
     "id" serial PRIMARY KEY NOT NULL,
     "name" varchar NOT NULL,
+    "position" varchar,
     "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
     "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   )`,
+  `ALTER TABLE "document_signers" ADD COLUMN IF NOT EXISTS "position" varchar`,
   `CREATE INDEX IF NOT EXISTS "document_signers_updated_at_idx" ON "document_signers" USING btree ("updated_at")`,
   `CREATE INDEX IF NOT EXISTS "document_signers_created_at_idx" ON "document_signers" USING btree ("created_at")`,
   
