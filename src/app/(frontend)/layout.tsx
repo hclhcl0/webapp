@@ -31,6 +31,8 @@ function fontValueToName(value: string): string {
   return value.replace(/\+/g, ' ');
 }
 
+import { draftMode } from 'next/headers';
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -38,7 +40,10 @@ export default async function RootLayout({
 }>) {
   let themeConfig: any = null;
   let popupConfig: any = null;
+  let isDraftMode = false;
   try {
+    const { isEnabled } = await draftMode();
+    isDraftMode = isEnabled;
     const payload = await getPayload({ config: configPromise });
     const settings = await payload.findGlobal({ slug: 'site-settings', depth: 2 });
     themeConfig = (settings as any)?.themeConfig;
@@ -84,7 +89,7 @@ export default async function RootLayout({
         <Footer />
         <BackToTop />
         <ChatWidget />
-        <SitePopup popupConfig={popupConfig} />
+        {!isDraftMode && <SitePopup popupConfig={popupConfig} />}
       </body>
     </html>
   );
