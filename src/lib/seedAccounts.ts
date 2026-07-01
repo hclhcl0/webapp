@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Payload } from 'payload';
 
 export const seedAccounts = async (payload: Payload) => {

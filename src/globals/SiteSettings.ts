@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload';
+import { Settings } from './Settings.ts';
 import { CategoryNewsBlock } from '../blocks/CategoryNews.ts';
 
 export const SiteSettings: GlobalConfig = {
@@ -617,7 +618,6 @@ export const SiteSettings: GlobalConfig = {
         // ─────────────────────────────────────────────
         {
           label: 'Trang chủ',
-          name: 'homepage',
           fields: [
             {
               name: 'homeNewsLimit',
@@ -670,7 +670,7 @@ export const SiteSettings: GlobalConfig = {
         // ─────────────────────────────────────────────
         {
           label: 'AI Chat',
-          name: 'aiChat',
+          name: 'aiChatSettings',
           fields: [
             {
               name: 'chatEnabled',
@@ -727,7 +727,7 @@ export const SiteSettings: GlobalConfig = {
         // ─────────────────────────────────────────────
         {
           label: 'Tiện ích Đọc bài',
-          name: 'readerTools',
+          name: 'articleReaderTools',
           fields: [
             {
               name: 'showFontSize',
@@ -775,5 +775,6 @@ export const SiteSettings: GlobalConfig = {
         },
       ],
     },
+    ...(Settings.fields as any[]).filter(f => ['homeContent', 'themeConfig', 'homeSections', 'sidebarWidgets'].includes(f.name))
   ],
 };

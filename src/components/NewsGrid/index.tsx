@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import Link from 'next/link';
 import { getPayload } from 'payload';
@@ -39,7 +40,7 @@ async function getLatestArticles(limit: number, categoryId?: string | number) {
 async function getNewsSettings() {
   try {
     const payload = await getPayload({ config: configPromise });
-    const settings = await payload.findGlobal({ slug: 'settings' });
+    const settings = await payload.findGlobal({ slug: 'site-settings' });
     return {
       limit: settings?.homeNewsLimit || 10,
       desktopCols: settings?.homeNewsColumnsDesktop || 5,

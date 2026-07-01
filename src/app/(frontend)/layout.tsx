@@ -38,7 +38,7 @@ export default async function RootLayout({
   let themeConfig: any = null;
   try {
     const payload = await getPayload({ config: configPromise });
-    const settings = await payload.findGlobal({ slug: 'settings' });
+    const settings = await payload.findGlobal({ slug: 'site-settings' });
     themeConfig = (settings as any)?.themeConfig;
   } catch (e) {
     console.error("Error fetching settings in layout:", e);

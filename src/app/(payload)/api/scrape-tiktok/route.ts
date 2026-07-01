@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
   const payload = await getPayload({ config: configPromise });
 
   // Đọc Settings để lấy handle đã cấu hình
-  const settings = await payload.findGlobal({ slug: 'settings' });
+  const settings = await payload.findGlobal({ slug: 'site-settings' });
   const handle = (settings as any)?.tiktokCache?.tiktokHandle;
 
   if (!handle) {
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
 
     // BƯỚC 2: Lưu cache vào Postgres thông qua Payload CMS
     await payload.updateGlobal({
-      slug: 'settings',
+      slug: 'site-settings',
       data: {
         tiktokCache: {
           videoId: video.videoId,

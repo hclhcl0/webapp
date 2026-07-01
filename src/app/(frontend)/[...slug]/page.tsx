@@ -215,7 +215,7 @@ export default async function DynamicPage({
 
   let sidebarWidgets: any[] = [];
   try {
-    const globalSettings = await payload.findGlobal({ slug: 'settings', depth: 2 });
+    const globalSettings = await payload.findGlobal({ slug: 'site-settings', depth: 2 });
     sidebarWidgets = (globalSettings as any).sidebarWidgets || [];
   } catch {}
 

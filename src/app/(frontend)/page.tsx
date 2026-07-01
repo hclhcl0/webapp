@@ -11,7 +11,7 @@ import { HomeSectionRenderer } from '@/components/HomeSections/HomeSectionRender
 
 export default async function HomePage() {
   const payload = await getPayload({ config: configPromise });
-  const settings = await payload.findGlobal({ slug: 'settings', depth: 2 });
+  const settings = await payload.findGlobal({ slug: 'site-settings', depth: 2 });
   const homeSections = (settings as any)?.homeSections || [];
   const homeContent = settings?.homeContent;
 

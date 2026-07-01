@@ -109,7 +109,7 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
   let sidebarWidgets: any[] = [];
   let readerToolsConfig: ReaderToolsConfig = {};
   try {
-    const globalSettings = await payload.findGlobal({ slug: 'settings', depth: 2 });
+    const globalSettings = await payload.findGlobal({ slug: 'site-settings', depth: 2 });
     sidebarWidgets = (globalSettings as any).sidebarWidgets || [];
     readerToolsConfig = (globalSettings as any).articleReaderTools || {};
   } catch (err) {
