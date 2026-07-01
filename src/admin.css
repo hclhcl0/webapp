@@ -667,7 +667,11 @@ html[data-theme="dark"] [class*="Popup__content"] {
 [class*="popup__content"],
 [class*="Popup__content"],
 [class*="popup-button-list"],
-[class*="PopupList"] {
+[class*="PopupList"],
+[class*="slash-menu"],
+[class*="typeahead-popover"],
+[class*="lexical-typeahead"],
+[class*="lexical-dropdown"] {
   background-color: var(--tw-card) !important;
   border: 1px solid var(--tw-border) !important;
   border-radius: 10px !important;
@@ -677,10 +681,29 @@ html[data-theme="dark"] [class*="Popup__content"] {
 html[data-theme="dark"] [class*="popup__content"],
 html[data-theme="dark"] [class*="Popup__content"],
 html[data-theme="dark"] [class*="popup-button-list"],
-html[data-theme="dark"] [class*="PopupList"] {
+html[data-theme="dark"] [class*="PopupList"],
+html[data-theme="dark"] [class*="slash-menu"],
+html[data-theme="dark"] [class*="typeahead-popover"],
+html[data-theme="dark"] [class*="lexical-typeahead"],
+html[data-theme="dark"] [class*="lexical-dropdown"] {
   background-color: var(--theme-elevation-150) !important;
   border-color: var(--theme-border) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Lexical slash menu items hover state */
+[class*="slash-menu"] li:hover,
+[class*="slash-menu"] li[aria-selected="true"],
+[class*="typeahead-popover"] li:hover,
+[class*="typeahead-popover"] li[aria-selected="true"] {
+  background-color: var(--tw-bg) !important;
+}
+
+html[data-theme="dark"] [class*="slash-menu"] li:hover,
+html[data-theme="dark"] [class*="slash-menu"] li[aria-selected="true"],
+html[data-theme="dark"] [class*="typeahead-popover"] li:hover,
+html[data-theme="dark"] [class*="typeahead-popover"] li[aria-selected="true"] {
+  background-color: var(--theme-elevation-200) !important;
 }
 
 /* ==========================================
