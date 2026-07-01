@@ -3698,6 +3698,16 @@
       display: none;
     }
   }
+  .\[\&\>iframe\]\:h-full {
+    &>iframe {
+      height: 100%;
+    }
+  }
+  .\[\&\>iframe\]\:w-full {
+    &>iframe {
+      width: 100%;
+    }
+  }
 }
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;

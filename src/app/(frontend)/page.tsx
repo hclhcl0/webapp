@@ -15,15 +15,20 @@ export default async function HomePage() {
   const homeSections = (settings as any)?.homeSections || [];
   const homeContent = settings?.homeContent;
 
+  const isHomeContentEmpty = !homeContent || 
+    (homeContent.root?.children?.length === 1 && 
+     homeContent.root.children[0].type === 'paragraph' && 
+     (!homeContent.root.children[0].children || homeContent.root.children[0].children.length === 0));
+
   return (
     <>
       <HeroCarousel />
       
-      {homeContent && (
+      {!isHomeContentEmpty && (
         <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="prose prose-lg max-w-none prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl">
+           <div className="prose prose-lg max-w-none prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl text-gray-700">
              <RichText data={homeContent} converters={getJsxConverters('Hình ảnh minh họa trang chủ')} />
-          </div>
+           </div>
         </div>
       )}
 
