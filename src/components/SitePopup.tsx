@@ -15,6 +15,7 @@ export interface SitePopupProps {
     delaySeconds?: number | null;
     showOnce?: boolean | null;
     transparentBackground?: boolean | null;
+    videoUrl?: string | null;
   };
 }
 
@@ -46,6 +47,7 @@ export function SitePopup({ popupConfig }: SitePopupProps) {
       delaySeconds={popupConfig.delaySeconds}
       showOnce={popupConfig.showOnce}
       transparentBackground={transparentBackground}
+      displayVideoUrl={popupConfig.videoUrl}
     />
   );
 }

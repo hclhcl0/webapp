@@ -23,6 +23,7 @@ export function SitePopupClient({
   delaySeconds: number | null | undefined;
   showOnce: boolean | null | undefined;
   transparentBackground?: boolean | null | undefined;
+  displayVideoUrl?: string | null | undefined;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
@@ -81,7 +82,23 @@ export function SitePopupClient({
           </svg>
         </button>
 
-        {displayImage?.url && (
+        {displayVideoUrl ? (
+          <div className="relative w-full aspect-video bg-black flex-shrink-0">
+            <iframe
+              src={displayVideoUrl.includes('youtube.com') || displayVideoUrl.includes('youtu.be') 
+                ? `https://www.youtube.com/embed/${
+                    displayVideoUrl.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/) && 
+                    displayVideoUrl.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/)?.[2]?.length === 11
+                      ? displayVideoUrl.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/)?.[2]
+                      : ''
+                  }?autoplay=1&mute=1` 
+                : displayVideoUrl}
+              className="w-full h-full border-0 absolute inset-0"
+              allow="autoplay; encrypted-media; fullscreen"
+              allowFullScreen
+            />
+          </div>
+        ) : displayImage?.url ? (
           <div className="relative w-full h-48 sm:h-64 md:h-72 bg-gray-100 flex-shrink-0">
             <Image
               src={displayImage.url}
@@ -92,10 +109,10 @@ export function SitePopupClient({
               priority
             />
           </div>
-        )}
+        ) : null}
 
         <div className={`flex flex-col max-h-[60vh] overflow-y-auto custom-scrollbar ${transparentBackground ? 'p-0' : 'p-6 sm:p-8'}`}>
-          {displayTitle && (
+          {displayTitle && !transparentBackground && (
             <h2 id="popup-title" className="text-xl sm:text-2xl font-bold text-[var(--primary)] mb-4 uppercase text-center">
               {displayTitle}
             </h2>

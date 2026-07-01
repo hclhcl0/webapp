@@ -18,7 +18,10 @@ export default async function HomePage() {
   const isHomeContentEmpty = !homeContent || 
     (homeContent.root?.children?.length === 1 && 
      homeContent.root.children[0].type === 'paragraph' && 
-     (!homeContent.root.children[0].children || homeContent.root.children[0].children.length === 0));
+     (!homeContent.root.children[0].children || 
+      homeContent.root.children[0].children.length === 0 || 
+      (homeContent.root.children[0].children.length === 1 && (!homeContent.root.children[0].children[0].text || homeContent.root.children[0].children[0].text.trim() === ''))
+     ));
 
   return (
     <>

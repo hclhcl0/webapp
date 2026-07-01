@@ -847,6 +847,15 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
+              name: 'videoUrl',
+              type: 'text',
+              label: 'Đường dẫn Video (YouTube, MP4...)',
+              admin: {
+                condition: (data) => data?.popup?.enabled && data?.popup?.type !== 'article',
+                description: 'Nhập link YouTube để hiển thị video trên cùng của popup (thay vì hình ảnh tĩnh)',
+              },
+            },
+            {
               name: 'content',
               type: 'richText',
               label: 'Nội dung chi tiết',
