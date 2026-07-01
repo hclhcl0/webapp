@@ -1,6 +1,10 @@
 import type { GlobalConfig } from 'payload';
 import { Settings } from './Settings.ts';
 import { CategoryNewsBlock } from '../blocks/CategoryNews.ts';
+import { lexicalEditor, BlocksFeature } from '@payloadcms/richtext-lexical';
+import { VideoBlock } from '../blocks/VideoBlock.ts';
+import { EmbedBlock } from '../blocks/EmbedBlock.ts';
+import { TikTokBlock } from '../blocks/TikTokBlock.ts';
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -836,6 +840,18 @@ export const SiteSettings: GlobalConfig = {
               name: 'content',
               type: 'richText',
               label: 'Nội dung chi tiết',
+              editor: lexicalEditor({
+                features: ({ defaultFeatures }) => [
+                  ...defaultFeatures,
+                  BlocksFeature({
+                    blocks: [
+                      VideoBlock,
+                      EmbedBlock,
+                      TikTokBlock,
+                    ],
+                  }),
+                ],
+              }),
               admin: {
                 condition: (data) => data?.popup?.enabled && data?.popup?.type !== 'article',
               },
