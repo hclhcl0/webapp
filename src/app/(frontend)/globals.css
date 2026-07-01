@@ -152,14 +152,27 @@
   width: 100%;
 }
 
+@media (max-width: 767px) {
+  main .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Đảm bảo chữ trong prose không bị sát mép trên mobile */
+  main .container .prose,
+  main .container .article-content,
+  main .container .rich-text {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
 @media (min-width: 1280px) {
   .container,
   .max-w-7xl.container {
     max-width: 1200px !important;
   }
 }
-
-
 
 /* ══════════════════════════════════════════════════
    BUTTONS
