@@ -81,7 +81,6 @@ export default async function Header() {
             <li><Link href="/documents" className="px-4 py-3 block hover:bg-blue-800 transition-colors">VĂN BẢN</Link></li>
             <li><Link href="/mua-sam" className="px-4 py-3 block hover:bg-blue-800 transition-colors">MUA SẮM</Link></li>
             <li><Link href="/dich-vu" className="px-4 py-3 block hover:bg-blue-800 transition-colors">DỊCH VỤ SẢN PHẨM</Link></li>
-            <li><Link href="/procedures" className="px-4 py-3 block hover:bg-blue-800 transition-colors">THỦ TỤC HÀNH CHÍNH</Link></li>
             <li><Link href="/contact" className="px-4 py-3 block hover:bg-blue-800 transition-colors">LIÊN HỆ</Link></li>
           </ul>
         </div>
