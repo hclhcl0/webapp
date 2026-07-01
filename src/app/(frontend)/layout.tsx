@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BackToTop } from "@/components/BackToTop";
 import ChatWidget from "@/components/ChatWidget/ChatWidget";
+import { SitePopup } from "@/components/SitePopup";
 
 import { getPayload } from "payload";
 import configPromise from "@payload-config";
@@ -36,10 +37,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   let themeConfig: any = null;
+  let popupConfig: any = null;
   try {
     const payload = await getPayload({ config: configPromise });
     const settings = await payload.findGlobal({ slug: 'site-settings' });
     themeConfig = (settings as any)?.themeConfig;
+    popupConfig = (settings as any)?.popup;
   } catch (e) {
     console.error("Error fetching settings in layout:", e);
   }
@@ -81,6 +84,7 @@ export default async function RootLayout({
         <Footer />
         <BackToTop />
         <ChatWidget />
+        <SitePopup popupConfig={popupConfig} />
       </body>
     </html>
   );

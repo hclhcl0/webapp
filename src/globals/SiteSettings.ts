@@ -773,6 +773,82 @@ export const SiteSettings: GlobalConfig = {
             },
           ],
         },
+        // ─────────────────────────────────────────────
+        // TAB 10: THÔNG BÁO (POPUP)
+        // ─────────────────────────────────────────────
+        {
+          label: 'Thông báo (Popup)',
+          name: 'popup',
+          fields: [
+            {
+              name: 'enabled',
+              type: 'checkbox',
+              label: 'Bật cửa sổ thông báo (Popup)',
+              defaultValue: false,
+              admin: {
+                description: 'Khi bật, cửa sổ popup sẽ hiển thị ngay khi người dùng truy cập trang web.',
+              },
+            },
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Tiêu đề thông báo',
+              defaultValue: 'THÔNG BÁO QUAN TRỌNG',
+              admin: {
+                condition: (data) => data?.popup?.enabled,
+              },
+            },
+            {
+              name: 'image',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Ảnh banner minh họa',
+              admin: {
+                condition: (data) => data?.popup?.enabled,
+                description: 'Hiển thị ở trên cùng của popup. Kích thước khuyến nghị: ngang (landscape).',
+              },
+            },
+            {
+              name: 'content',
+              type: 'richText',
+              label: 'Nội dung chi tiết',
+              admin: {
+                condition: (data) => data?.popup?.enabled,
+              },
+            },
+            {
+              name: 'linkUrl',
+              type: 'text',
+              label: 'Đường dẫn chuyển hướng (URL)',
+              admin: {
+                condition: (data) => data?.popup?.enabled,
+                description: 'Nếu điền, sẽ có nút "Tìm hiểu thêm" để người dùng bấm vào xem chi tiết.',
+              },
+            },
+            {
+              name: 'delaySeconds',
+              type: 'number',
+              label: 'Thời gian trễ (giây)',
+              defaultValue: 1,
+              min: 0,
+              max: 30,
+              admin: {
+                condition: (data) => data?.popup?.enabled,
+                description: 'Chờ bao nhiêu giây sau khi trang tải xong mới hiện popup.',
+              },
+            },
+            {
+              name: 'showOnce',
+              type: 'checkbox',
+              label: 'Chỉ hiển thị 1 lần cho mỗi người dùng',
+              defaultValue: true,
+              admin: {
+                condition: (data) => data?.popup?.enabled,
+                description: 'Khi bật, nếu người dùng đã đóng popup, lần sau truy cập sẽ không hiện lại để tránh phiền hà (lưu qua localStorage).',
+              },
+            },
+          ],
+        },
       ],
     },
     ...(Settings.fields as any[]).filter(f => ['homeContent', 'themeConfig', 'homeSections', 'sidebarWidgets'].includes(f.name))
