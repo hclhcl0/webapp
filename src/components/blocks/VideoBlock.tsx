@@ -13,7 +13,8 @@ export default function VideoBlock({ data }: { data: any }) {
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  const videoId = data.youtubeUrl ? getYoutubeId(data.youtubeUrl) : null;
+  const videoUrl = data.videoUrl || data.youtubeUrl;
+  const videoId = videoUrl ? getYoutubeId(videoUrl) : null;
   const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
 
   return (
@@ -39,6 +40,10 @@ export default function VideoBlock({ data }: { data: any }) {
                 <PlayCircle className="w-10 h-10" />
               </div>
             </div>
+          </div>
+        ) : data.platform === 'custom' && data.embedCode ? (
+          <div className="relative aspect-video w-full bg-black">
+            <div dangerouslySetInnerHTML={{ __html: data.embedCode }} className="w-full h-full [&>iframe]:w-full [&>iframe]:h-full" />
           </div>
         ) : (
           <div className="p-4 bg-gray-100 aspect-video flex items-center justify-center text-gray-500">

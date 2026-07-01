@@ -31,6 +31,8 @@ function getGDriveEmbedUrl(url: string): { embedUrl: string; directUrl: string }
   return { embedUrl: url, directUrl: url };
 }
 
+import VideoBlock from './blocks/VideoBlock';
+
 export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }: any) => ({
   ...defaultConverters,
   upload: ({ node }: any) => <UploadBlock node={node} fallbackAlt={fallbackAlt} />,
@@ -55,16 +57,7 @@ export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }
         </div>
       );
     },
-    videoBlock: ({ node }: any) => {
-      const { source, youtubeId, customEmbed } = node.fields;
-      if (source === 'youtube' && youtubeId) {
-        return <div className="aspect-video my-3 rounded-xl overflow-hidden"><iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${youtubeId}`} title="YouTube" frameBorder="0" allowFullScreen></iframe></div>;
-      }
-      if (source === 'custom' && customEmbed) {
-         return <div className="aspect-video my-3 rounded-xl overflow-hidden" dangerouslySetInnerHTML={{ __html: customEmbed }} />
-      }
-      return null;
-    },
+    videoBlock: ({ node }: any) => <VideoBlock data={node.fields} />,
     pdfBlock: ({ node }: any) => {
       const { source, pdfFile, gdriveUrl, displayMode } = node.fields;
       const url = source === 'upload' ? pdfFile?.url : gdriveUrl;
