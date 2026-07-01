@@ -36,8 +36,7 @@ import { OrgUnits } from './collections/OrgUnits.ts';
 import { AiKnowledge } from './collections/AiKnowledge.ts';
 import { ApiKeys } from './collections/ApiKeys.ts';
 import { Procurements } from './collections/Procurements.ts';
-import { Procedures } from './collections/Procedures.ts';
-import { ProcedureGroups } from './collections/ProcedureGroups.ts';
+
 import { Services } from './collections/Services.ts';
 import { ServiceCategories } from './collections/ServiceCategories.ts';
 
@@ -106,8 +105,7 @@ export default buildConfig({
     AiKnowledge,
     ApiKeys,
     Procurements,
-    ProcedureGroups,
-    Procedures,
+
     ServiceCategories,
     Services,
   ]),
