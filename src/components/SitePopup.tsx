@@ -14,6 +14,7 @@ export interface SitePopupProps {
     linkUrl?: string | null;
     delaySeconds?: number | null;
     showOnce?: boolean | null;
+    transparentBackground?: boolean | null;
   };
 }
 
@@ -25,6 +26,7 @@ export function SitePopup({ popupConfig }: SitePopupProps) {
   const displayImage = isArticle ? popupConfig.article.image : popupConfig.image;
   const displayLinkUrl = isArticle ? `/bai-viet/${popupConfig.article.slug}` : popupConfig.linkUrl;
   const articleDescription = isArticle ? popupConfig.article.description : null;
+  const transparentBackground = popupConfig.transparentBackground;
 
   const renderedContent = !isArticle && popupConfig.content ? (
     <RichText 
@@ -43,6 +45,7 @@ export function SitePopup({ popupConfig }: SitePopupProps) {
       renderedContent={renderedContent}
       delaySeconds={popupConfig.delaySeconds}
       showOnce={popupConfig.showOnce}
+      transparentBackground={transparentBackground}
     />
   );
 }

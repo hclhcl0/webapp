@@ -19,7 +19,7 @@ export default function VideoBlock({ data }: { data: any }) {
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden my-4">
+      <div className={`rounded-xl shadow-sm overflow-hidden my-4 ${data.title ? 'bg-white border border-gray-100' : 'bg-transparent'}`}>
         {data.title && (
           <div className="bg-gov-primary text-white p-3 flex items-center">
             <PlayCircle className="w-5 h-5 mr-2" />

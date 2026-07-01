@@ -22,6 +22,7 @@ export function SitePopupClient({
   renderedContent: React.ReactNode;
   delaySeconds: number | null | undefined;
   showOnce: boolean | null | undefined;
+  transparentBackground?: boolean | null | undefined;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
@@ -63,7 +64,9 @@ export function SitePopupClient({
       />
       
       <div 
-        className={`relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col transform transition-transform duration-300 ease-out ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}
+        className={`relative w-full max-w-2xl overflow-hidden flex flex-col transform transition-transform duration-300 ease-out ${
+          transparentBackground ? 'bg-transparent' : 'bg-white rounded-2xl shadow-2xl'
+        } ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="popup-title"
@@ -91,7 +94,7 @@ export function SitePopupClient({
           </div>
         )}
 
-        <div className="p-6 sm:p-8 flex flex-col max-h-[60vh] overflow-y-auto custom-scrollbar">
+        <div className={`flex flex-col max-h-[60vh] overflow-y-auto custom-scrollbar ${transparentBackground ? 'p-0' : 'p-6 sm:p-8'}`}>
           {displayTitle && (
             <h2 id="popup-title" className="text-xl sm:text-2xl font-bold text-[var(--primary)] mb-4 uppercase text-center">
               {displayTitle}

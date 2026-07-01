@@ -807,6 +807,16 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
+              name: 'transparentBackground',
+              type: 'checkbox',
+              label: 'Giao diện trong suốt (Xóa nền trắng và viền)',
+              defaultValue: false,
+              admin: {
+                condition: (data) => data?.popup?.enabled && data?.popup?.type === 'manual',
+                description: 'Dùng khi bạn chỉ chèn một video hoặc hình ảnh và không muốn có nền trắng xung quanh.',
+              },
+            },
+            {
               name: 'article',
               type: 'relationship',
               relationTo: 'articles',
