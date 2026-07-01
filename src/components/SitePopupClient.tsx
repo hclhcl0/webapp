@@ -104,7 +104,7 @@ export function SitePopupClient({
             </div>
           ) : (
             renderedContent && (
-              <div className="prose prose-sm sm:prose-base max-w-none text-gray-700">
+              <div className="prose prose-lg max-w-none prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl text-gray-700">
                 {renderedContent}
               </div>
             )
