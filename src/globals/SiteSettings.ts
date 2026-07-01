@@ -790,12 +790,36 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
+              name: 'type',
+              type: 'select',
+              label: 'Kiểu hiển thị',
+              defaultValue: 'manual',
+              options: [
+                { label: 'Tự soạn thảo (Manual)', value: 'manual' },
+                { label: 'Lấy từ Bài viết (Article)', value: 'article' },
+              ],
+              admin: {
+                condition: (data) => data?.popup?.enabled,
+              },
+            },
+            {
+              name: 'article',
+              type: 'relationship',
+              relationTo: 'articles',
+              label: 'Chọn Bài viết',
+              hasMany: false,
+              admin: {
+                condition: (data) => data?.popup?.enabled && data?.popup?.type === 'article',
+                description: 'Hệ thống sẽ lấy Tiêu đề, Ảnh đại diện, Mô tả ngắn và tự động gắn link "Đọc tiếp" trỏ đến bài viết này.',
+              },
+            },
+            {
               name: 'title',
               type: 'text',
               label: 'Tiêu đề thông báo',
               defaultValue: 'THÔNG BÁO QUAN TRỌNG',
               admin: {
-                condition: (data) => data?.popup?.enabled,
+                condition: (data) => data?.popup?.enabled && data?.popup?.type !== 'article',
               },
             },
             {
@@ -804,7 +828,7 @@ export const SiteSettings: GlobalConfig = {
               relationTo: 'media',
               label: 'Ảnh banner minh họa',
               admin: {
-                condition: (data) => data?.popup?.enabled,
+                condition: (data) => data?.popup?.enabled && data?.popup?.type !== 'article',
                 description: 'Hiển thị ở trên cùng của popup. Kích thước khuyến nghị: ngang (landscape).',
               },
             },
@@ -813,7 +837,7 @@ export const SiteSettings: GlobalConfig = {
               type: 'richText',
               label: 'Nội dung chi tiết',
               admin: {
-                condition: (data) => data?.popup?.enabled,
+                condition: (data) => data?.popup?.enabled && data?.popup?.type !== 'article',
               },
             },
             {
@@ -821,7 +845,7 @@ export const SiteSettings: GlobalConfig = {
               type: 'text',
               label: 'Đường dẫn chuyển hướng (URL)',
               admin: {
-                condition: (data) => data?.popup?.enabled,
+                condition: (data) => data?.popup?.enabled && data?.popup?.type !== 'article',
                 description: 'Nếu điền, sẽ có nút "Tìm hiểu thêm" để người dùng bấm vào xem chi tiết.',
               },
             },

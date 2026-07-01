@@ -9,6 +9,8 @@ import { getJsxConverters } from '@/components/LexicalConverters';
 export interface SitePopupProps {
   popupConfig?: {
     enabled?: boolean | null;
+    type?: string | null;
+    article?: any;
     title?: string | null;
     image?: any;
     content?: any;
@@ -20,13 +22,11 @@ export interface SitePopupProps {
 
 export function SitePopup({ popupConfig }: SitePopupProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [shouldRender, setShouldRender] = useState(false); // For fade-out animation
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    // If not enabled or no config, do nothing
     if (!popupConfig?.enabled) return;
 
-    // Check localStorage if showOnce is true
     if (popupConfig.showOnce) {
       const closed = localStorage.getItem('cdc_popup_closed');
       if (closed === 'true') {
@@ -34,11 +34,9 @@ export function SitePopup({ popupConfig }: SitePopupProps) {
       }
     }
 
-    // Set delay to show popup
     const delay = (popupConfig.delaySeconds || 0) * 1000;
     const timer = setTimeout(() => {
       setShouldRender(true);
-      // Give a tiny delay for the DOM to render before applying opacity 1
       setTimeout(() => setIsOpen(true), 10);
     }, delay);
 
@@ -47,13 +45,9 @@ export function SitePopup({ popupConfig }: SitePopupProps) {
 
   const handleClose = () => {
     setIsOpen(false);
-    
-    // Remember that user closed it
     if (popupConfig?.showOnce) {
       localStorage.setItem('cdc_popup_closed', 'true');
     }
-
-    // Wait for fade-out animation to finish before unmounting
     setTimeout(() => {
       setShouldRender(false);
     }, 300);
@@ -61,22 +55,24 @@ export function SitePopup({ popupConfig }: SitePopupProps) {
 
   if (!shouldRender || !popupConfig) return null;
 
+  const isArticle = popupConfig.type === 'article' && popupConfig.article;
+  const displayTitle = isArticle ? popupConfig.article.title : popupConfig.title;
+  const displayImage = isArticle ? popupConfig.article.image : popupConfig.image;
+  const displayLinkUrl = isArticle ? `/bai-viet/${popupConfig.article.slug}` : popupConfig.linkUrl;
+
   return (
     <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-      {/* Backdrop overlay */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer transition-opacity"
         onClick={handleClose}
       />
       
-      {/* Modal Dialog */}
       <div 
         className={`relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col transform transition-transform duration-300 ease-out ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="popup-title"
       >
-        {/* Close Button (Absolute positioned) */}
         <button
           onClick={handleClose}
           className="absolute top-3 right-3 z-10 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-md transition-colors focus:outline-none focus:ring-2 focus:ring-white"
@@ -87,12 +83,11 @@ export function SitePopup({ popupConfig }: SitePopupProps) {
           </svg>
         </button>
 
-        {/* Image Banner */}
-        {popupConfig.image?.url && (
+        {displayImage?.url && (
           <div className="relative w-full h-48 sm:h-64 md:h-72 bg-gray-100 flex-shrink-0">
             <Image
-              src={popupConfig.image.url}
-              alt={popupConfig.image.alt || popupConfig.title || 'Thông báo popup'}
+              src={displayImage.url}
+              alt={displayImage.alt || displayTitle || 'Thông báo popup'}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 42rem"
@@ -101,31 +96,36 @@ export function SitePopup({ popupConfig }: SitePopupProps) {
           </div>
         )}
 
-        {/* Content Area */}
         <div className="p-6 sm:p-8 flex flex-col max-h-[60vh] overflow-y-auto custom-scrollbar">
-          {popupConfig.title && (
+          {displayTitle && (
             <h2 id="popup-title" className="text-xl sm:text-2xl font-bold text-[var(--primary)] mb-4 uppercase text-center">
-              {popupConfig.title}
+              {displayTitle}
             </h2>
           )}
 
-          {popupConfig.content && (
-            <div className="prose prose-sm sm:prose-base max-w-none text-gray-700">
-              <RichText 
-                data={popupConfig.content} 
-                converters={getJsxConverters('Hình minh họa Popup')} 
-              />
+          {isArticle ? (
+            <div className="prose prose-sm sm:prose-base max-w-none text-gray-700 text-center mb-4">
+              <p>{popupConfig.article.description || 'Vui lòng nhấn Đọc tiếp để xem chi tiết.'}</p>
             </div>
+          ) : (
+            popupConfig.content && (
+              <div className="prose prose-sm sm:prose-base max-w-none text-gray-700">
+                <RichText 
+                  data={popupConfig.content} 
+                  converters={getJsxConverters('Hình minh họa Popup')} 
+                />
+              </div>
+            )
           )}
 
-          {popupConfig.linkUrl && (
-            <div className="mt-8 flex justify-center">
+          {displayLinkUrl && (
+            <div className="mt-6 flex justify-center">
               <Link 
-                href={popupConfig.linkUrl}
+                href={displayLinkUrl}
                 className="inline-block px-8 py-3 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white font-medium rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all text-center w-full sm:w-auto"
                 onClick={handleClose}
               >
-                Tìm hiểu thêm
+                Đọc tiếp
               </Link>
             </div>
           )}

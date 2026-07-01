@@ -40,7 +40,7 @@ export default async function RootLayout({
   let popupConfig: any = null;
   try {
     const payload = await getPayload({ config: configPromise });
-    const settings = await payload.findGlobal({ slug: 'site-settings' });
+    const settings = await payload.findGlobal({ slug: 'site-settings', depth: 2 });
     themeConfig = (settings as any)?.themeConfig;
     popupConfig = (settings as any)?.popup;
   } catch (e) {
