@@ -2221,4 +2221,390 @@ export const MIGRATION_STATEMENTS = [
   ].map(table =>
     `ALTER TABLE "${table}" ADD COLUMN IF NOT EXISTS "_uuid" varchar`
   ),
+
+  // ====================================================
+  // BATCH 25 - Add site_settings blocks (Migrated from Settings)
+  // ====================================================
+  
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_categories_widget" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar NOT NULL DEFAULT 'Chuyên mục',
+    "limit" numeric DEFAULT 10,
+    CONSTRAINT "site_settings_blocks_categories_widget_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_categories_widget_order_idx" ON "site_settings_blocks_categories_widget" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_categories_widget_parent_idx" ON "site_settings_blocks_categories_widget" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_categories_widget_path_idx" ON "site_settings_blocks_categories_widget" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_recent_articles_widget" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar NOT NULL DEFAULT 'Tin mới cập nhật',
+    "limit" numeric DEFAULT 5,
+    CONSTRAINT "site_settings_blocks_recent_articles_widget_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_recent_articles_widget_order_idx" ON "site_settings_blocks_recent_articles_widget" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_recent_articles_widget_parent_idx" ON "site_settings_blocks_recent_articles_widget" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_recent_articles_widget_path_idx" ON "site_settings_blocks_recent_articles_widget" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_tiktok_widget" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar DEFAULT 'Kênh TikTok CDC',
+    "channel_id" integer,
+    CONSTRAINT "site_settings_blocks_tiktok_widget_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_tiktok_widget_order_idx" ON "site_settings_blocks_tiktok_widget" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_tiktok_widget_parent_idx" ON "site_settings_blocks_tiktok_widget" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_tiktok_widget_path_idx" ON "site_settings_blocks_tiktok_widget" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_facebook_widget" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar DEFAULT 'Fanpage CDC',
+    "page_url" varchar NOT NULL DEFAULT 'https://www.facebook.com/cdcdanang',
+    "height" numeric DEFAULT 350,
+    CONSTRAINT "site_settings_blocks_facebook_widget_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_facebook_widget_order_idx" ON "site_settings_blocks_facebook_widget" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_facebook_widget_parent_idx" ON "site_settings_blocks_facebook_widget" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_facebook_widget_path_idx" ON "site_settings_blocks_facebook_widget" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_banner_widget" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar,
+    "image_id" integer,
+    "link_url" varchar,
+    "open_in_new_tab" boolean DEFAULT true,
+    CONSTRAINT "site_settings_blocks_banner_widget_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_banner_widget_order_idx" ON "site_settings_blocks_banner_widget" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_banner_widget_parent_idx" ON "site_settings_blocks_banner_widget" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_banner_widget_path_idx" ON "site_settings_blocks_banner_widget" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_custom_html_widget" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar,
+    "html_content" text NOT NULL,
+    CONSTRAINT "site_settings_blocks_custom_html_widget_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_custom_html_widget_order_idx" ON "site_settings_blocks_custom_html_widget" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_custom_html_widget_parent_idx" ON "site_settings_blocks_custom_html_widget" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_custom_html_widget_path_idx" ON "site_settings_blocks_custom_html_widget" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_news_category_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "category_id" integer,
+    "limit" numeric DEFAULT 2,
+    "layout" varchar DEFAULT 'grid',
+    CONSTRAINT "site_settings_blocks_news_category_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_news_category_section_order_idx" ON "site_settings_blocks_news_category_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_news_category_section_parent_idx" ON "site_settings_blocks_news_category_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_news_category_section_path_idx" ON "site_settings_blocks_news_category_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_banner_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "image_id" integer,
+    "title" varchar,
+    "subtitle" varchar,
+    "link_url" varchar,
+    "open_in_new_tab" boolean DEFAULT false,
+    "style" varchar DEFAULT 'fullwidth',
+    CONSTRAINT "site_settings_blocks_banner_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_banner_section_order_idx" ON "site_settings_blocks_banner_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_banner_section_parent_idx" ON "site_settings_blocks_banner_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_banner_section_path_idx" ON "site_settings_blocks_banner_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_video_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar DEFAULT 'VIDEO NỔI BẬT',
+    "channel_id" integer,
+    "limit" numeric DEFAULT 4,
+    "layout" varchar DEFAULT 'grid',
+    CONSTRAINT "site_settings_blocks_video_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_order_idx" ON "site_settings_blocks_video_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_parent_idx" ON "site_settings_blocks_video_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_path_idx" ON "site_settings_blocks_video_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_tiktok_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar DEFAULT 'KENH TIKTOK CDC DA NANG',
+    "channel_id" integer,
+    "limit" numeric DEFAULT 4,
+    CONSTRAINT "site_settings_blocks_tiktok_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_tiktok_section_order_idx" ON "site_settings_blocks_tiktok_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_tiktok_section_parent_idx" ON "site_settings_blocks_tiktok_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_tiktok_section_path_idx" ON "site_settings_blocks_tiktok_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_stats_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar,
+    "background_color" varchar DEFAULT 'primary',
+    CONSTRAINT "site_settings_blocks_stats_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_stats_section_order_idx" ON "site_settings_blocks_stats_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_stats_section_parent_idx" ON "site_settings_blocks_stats_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_stats_section_path_idx" ON "site_settings_blocks_stats_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_quick_links_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar DEFAULT 'DICH VU TRUC TUYEN',
+    CONSTRAINT "site_settings_blocks_quick_links_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_quick_links_section_order_idx" ON "site_settings_blocks_quick_links_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_quick_links_section_parent_idx" ON "site_settings_blocks_quick_links_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_quick_links_section_path_idx" ON "site_settings_blocks_quick_links_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_rich_text_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "content" jsonb,
+    CONSTRAINT "site_settings_blocks_rich_text_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_rich_text_section_order_idx" ON "site_settings_blocks_rich_text_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_rich_text_section_parent_idx" ON "site_settings_blocks_rich_text_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_rich_text_section_path_idx" ON "site_settings_blocks_rich_text_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_category_news" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar,
+    "category_info_id" integer,
+    "limit" numeric DEFAULT 10,
+    CONSTRAINT "site_settings_blocks_category_news_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+    
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_category_news_order_idx" ON "site_settings_blocks_category_news" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_category_news_parent_idx" ON "site_settings_blocks_category_news" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_category_news_path_idx" ON "site_settings_blocks_category_news" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_stats_section_stats" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "icon" varchar DEFAULT '🏥',
+    "value" varchar NOT NULL,
+    "label" varchar NOT NULL,
+    "suffix" varchar,
+    CONSTRAINT "site_settings_blocks_stats_section_stats_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings_blocks_stats_section" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_stats_section_stats_order_idx" ON "site_settings_blocks_stats_section_stats" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_stats_section_stats_parent_idx" ON "site_settings_blocks_stats_section_stats" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_quick_links_section_links" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "icon" varchar DEFAULT '🔗',
+    "label" varchar NOT NULL,
+    "url" varchar NOT NULL,
+    "open_in_new_tab" boolean DEFAULT true,
+    "color" varchar DEFAULT 'primary',
+    CONSTRAINT "site_settings_blocks_quick_links_section_links_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings_blocks_quick_links_section" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_quick_links_section_links_order_idx" ON "site_settings_blocks_quick_links_section_links" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_quick_links_section_links_parent_idx" ON "site_settings_blocks_quick_links_section_links" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_menu_menu_items" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "label" varchar,
+    "preset_url" varchar,
+    "url" varchar,
+    "open_in_new_tab" boolean,
+    CONSTRAINT "site_settings_menu_menu_items_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_menu_menu_items_order_idx" ON "site_settings_menu_menu_items" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_menu_menu_items_parent_idx" ON "site_settings_menu_menu_items" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_menu_menu_items_sub_items" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "label" varchar,
+    "preset_url" varchar,
+    "url" varchar,
+    "open_in_new_tab" boolean,
+    CONSTRAINT "site_settings_menu_menu_items_sub_items_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings_menu_menu_items" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_menu_menu_items_sub_items_order_idx" ON "site_settings_menu_menu_items_sub_items" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_menu_menu_items_sub_items_parent_idx" ON "site_settings_menu_menu_items_sub_items" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_footer_quick_links" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "label" varchar,
+    "url" varchar,
+    CONSTRAINT "site_settings_footer_quick_links_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_quick_links_order_idx" ON "site_settings_footer_quick_links" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_quick_links_parent_idx" ON "site_settings_footer_quick_links" USING btree ("_parent_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_footer_social_links" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "platform" varchar,
+    "label" varchar,
+    "url" varchar,
+    CONSTRAINT "site_settings_footer_social_links_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_social_links_order_idx" ON "site_settings_footer_social_links" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_footer_social_links_parent_idx" ON "site_settings_footer_social_links" USING btree ("_parent_id")`,
+
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_site_name" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_id" integer`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_logo_height" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_logo_position" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_show_site_name" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_site_name_line1" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_site_name_line2" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_site_tagline" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_logo_banner_image_id" integer`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_mobile_logo_id" integer`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_mobile_logo_height" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_logo_hover_effect" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_logo_customization_mobile_show_site_name" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_search_customization_position" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_search_customization_style" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_search_customization_width" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_hotline_phone" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_hotline_action_link" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_hotline_position" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_social_links_facebook" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_social_links_youtube" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_social_links_twitter" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "header_social_links_instagram" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "menu_menu_position" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "sidebar_width_ratio" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "sidebar_gap_size" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "footer_about_text" text`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "footer_address_main" text`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "footer_address_sub" text`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "footer_phone" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "footer_email" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "footer_copyright_text" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "footer_designer_credit" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_layout" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_ban_lanh_dao" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_phong" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_khoa" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_org_colors_khac" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "banner_hero_slider_size" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "banner_hero_slider_custom_height" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "banner_hero_slider_effect" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "banner_hero_slider_autoplay_delay" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "home_news_limit" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "home_news_columns_desktop" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "home_news_columns_mobile" numeric`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "home_news_layout" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "ai_chat_settings_chat_enabled" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "ai_chat_settings_chat_welcome_message" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "ai_chat_settings_chat_custom_prompt" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "ai_chat_settings_ai_hotline" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "ai_chat_settings_ai_address" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "ai_chat_settings_ai_model" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "article_reader_tools_show_font_size" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "article_reader_tools_show_t_t_s" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "article_reader_tools_show_share_f_b" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "article_reader_tools_show_share_zalo" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "article_reader_tools_show_copy_link" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "article_reader_tools_show_print" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "article_reader_tools_show_read_progress" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "home_content" jsonb`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_primary_color" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_primary_dark_color" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_secondary_color" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_font_family" varchar`,
+
 ];
