@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
+import { Pagination } from '@/components/Pagination';
 import { FileText, Download, ChevronRight, Calendar, Building2, Pen, Tag, Layers, Clock, CalendarX } from 'lucide-react';
 import styles from './Documents.module.css';
 import { resolveFileUrl, isGoogleDriveUrl, driveLinkLabel } from '@/lib/driveUrl';
@@ -35,24 +36,35 @@ function formatDate(dateStr: string | null | undefined): string {
   });
 }
 
-async function getDocuments() {
+async function getDocuments(page: number = 1) {
   try {
     const payload = await getPayload({ config: configPromise });
-    const { docs } = await payload.find({
+    const result = await payload.find({
       collection: 'documents',
       sort: '-publishedDate',
-      limit: 100,
+      limit: 15,
+      page: page,
       depth: 1,
     });
-    return docs;
+    return result;
   } catch (error) {
     console.error('Error fetching documents:', error);
-    return [];
+    return { docs: [], totalPages: 0, page: 1, hasPrevPage: false, hasNextPage: false };
   }
 }
 
-export default async function DocumentsPage() {
-  const documents = await getDocuments();
+export default async function DocumentsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }> | { [key: string]: string | string[] | undefined };
+}) {
+  // Await searchParams in Next.js 15
+  const params = await searchParams;
+  const pageStr = params?.page;
+  const page = typeof pageStr === 'string' ? parseInt(pageStr, 10) || 1 : 1;
+
+  const data = await getDocuments(page);
+  const documents = data.docs || [];
 
   return (
     <div className="container pt-2 md:pt-4 pb-8">
@@ -172,6 +184,15 @@ export default async function DocumentsPage() {
             );
           })}
         </div>
+      )}
+
+      {data.totalPages > 1 && (
+        <Pagination
+          totalPages={data.totalPages}
+          currentPage={data.page}
+          hasPrevPage={data.hasPrevPage}
+          hasNextPage={data.hasNextPage}
+        />
       )}
     </div>
   );
