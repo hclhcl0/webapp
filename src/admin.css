@@ -1,14 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap');
 
-.ContentEditable__root {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+body,
+html,
+.ContentEditable__root,
+[class*="placeholder"],
+.editor-placeholder,
+.payload-lexical-placeholder {
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
 
 /* Optional: Additional Lexical typography fixes */
 .ContentEditable__root p, 
 .ContentEditable__root span, 
-.ContentEditable__root div {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+.ContentEditable__root div,
+[class*="placeholder"],
+.editor-placeholder {
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
 
 /* ==========================================
