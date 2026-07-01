@@ -27,7 +27,6 @@ import { DocumentSigners } from './collections/DocumentSigners.ts';
 import { SiteSettings } from './globals/SiteSettings.ts';
 import { ServicesLanding } from './globals/ServicesLanding.ts';
 import { Settings } from './globals/Settings.ts';
-import { BannerSettings } from './globals/BannerSettings.ts';
 import { WorkSchedules } from './collections/WorkSchedules.ts';
 import { Videos } from './collections/Videos.ts';
 import { VideoChannels } from './collections/VideoChannels.ts';
@@ -113,7 +112,6 @@ export default buildConfig({
     SiteSettings,
     ServicesLanding,
     Settings,
-    BannerSettings,
   ]),
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN
