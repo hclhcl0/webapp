@@ -66,7 +66,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
     return (
       <section className={styles.newsSection}>
         <div className="container">
-          <div className="flex justify-between items-center mb-4 px-4 md:px-0">
+          <div className="flex justify-between items-center mb-4">
             <h2 className={styles.sectionTitle} style={{ marginBottom: 0 }}>
               {title}
             </h2>
@@ -80,7 +80,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
   return (
     <section className={styles.newsSection}>
       <div className="container">
-        <div className="flex justify-between items-center mb-4 px-4 md:px-0">
+        <div className="flex justify-between items-center mb-4">
           <h2 className={styles.sectionTitle} style={{ marginBottom: 0 }}>
             {title}
           </h2>

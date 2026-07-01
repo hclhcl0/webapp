@@ -3446,6 +3446,11 @@
       padding: calc(var(--spacing) * 12);
     }
   }
+  .md\:px-0 {
+    @media (width >= 48rem) {
+      padding-inline: calc(var(--spacing) * 0);
+    }
+  }
   .md\:px-3 {
     @media (width >= 48rem) {
       padding-inline: calc(var(--spacing) * 3);
@@ -3880,6 +3885,16 @@
   padding-left: 1rem;
   padding-right: 1rem;
   width: 100%;
+}
+@media (max-width: 767px) {
+  main .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  main .container .prose, main .container .article-content, main .container .rich-text {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 @media (min-width: 1280px) {
   .container, .max-w-7xl.container {

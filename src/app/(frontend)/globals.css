@@ -154,9 +154,10 @@
 
 @media (max-width: 767px) {
   main .container {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
   }
+
   
   /* Đảm bảo chữ trong prose không bị sát mép trên mobile */
   main .container .prose,

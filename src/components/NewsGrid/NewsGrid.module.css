@@ -556,14 +556,3 @@
   font-size: var(--text-xs);
   color: var(--text-muted);
 }
-
-
-
-/* --- MOBILE EDGE-TO-EDGE OVERRIDES --- */
-@media (max-width: 767px) {
-  .card, .listItem, .bigCard, .sideItem, .compactContainer {
-    border-radius: 0 !important;
-    border-left: none !important;
-    border-right: none !important;
-  }
-}
