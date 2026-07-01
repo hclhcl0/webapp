@@ -308,6 +308,7 @@
   right: 0;
   width: min(260px, 70vw);
   height: 100vh;
+  background-color: #ffffff;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
   z-index: 999;
   overflow-y: auto;

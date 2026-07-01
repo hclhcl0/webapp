@@ -12,7 +12,9 @@ export function SitePopupClient({
   articleDescription,
   renderedContent,
   delaySeconds,
-  showOnce
+  showOnce,
+  transparentBackground,
+  displayVideoUrl
 }: {
   displayTitle: string | null | undefined;
   displayImage: any;
@@ -58,7 +60,7 @@ export function SitePopupClient({
   if (!shouldRender) return null;
 
   return (
-    <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer transition-opacity"
         onClick={handleClose}
