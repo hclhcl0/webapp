@@ -16,6 +16,7 @@ export const Settings: GlobalConfig = {
   label: 'Cấu hình Website',
   admin: {
     group: 'Cấu hình',
+    hidden: true,
   },
   access: {
     read: () => true,

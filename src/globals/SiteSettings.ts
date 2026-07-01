@@ -611,6 +611,168 @@ export const SiteSettings: GlobalConfig = {
             },
           ],
         },
+
+        // ─────────────────────────────────────────────
+        // TAB 7: TRANG CHỦ
+        // ─────────────────────────────────────────────
+        {
+          label: 'Trang chủ',
+          name: 'homepage',
+          fields: [
+            {
+              name: 'homeNewsLimit',
+              type: 'number',
+              label: 'Số hàng hiển thị (Tin mới nhất)',
+              defaultValue: 2,
+              min: 1,
+              max: 20,
+              required: true,
+              admin: {
+                description: 'Số lượng bài viết = Số hàng × Số cột.',
+              },
+            },
+            {
+              name: 'homeNewsColumnsDesktop',
+              type: 'number',
+              label: 'Số bài viết trên 1 hàng (Máy tính)',
+              defaultValue: 5,
+              min: 1,
+              max: 6,
+              required: true,
+            },
+            {
+              name: 'homeNewsColumnsMobile',
+              type: 'number',
+              label: 'Số bài viết trên 1 hàng (Điện thoại)',
+              defaultValue: 2,
+              min: 1,
+              max: 4,
+              required: true,
+            },
+            {
+              name: 'homeNewsLayout',
+              type: 'select',
+              label: 'Bố cục hiển thị (Tin mới nhất)',
+              defaultValue: 'grid',
+              options: [
+                { label: 'Lưới tin tức (Grid)', value: 'grid' },
+                { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
+                { label: 'Danh sách chi tiết (List)', value: 'list' },
+                { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
+                { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
+              ],
+            },
+          ],
+        },
+
+        // ─────────────────────────────────────────────
+        // TAB 8: AI CHAT
+        // ─────────────────────────────────────────────
+        {
+          label: 'AI Chat',
+          name: 'aiChat',
+          fields: [
+            {
+              name: 'chatEnabled',
+              type: 'checkbox',
+              label: 'Bật widget AI Chat trên website',
+              defaultValue: true,
+              admin: {
+                description: 'Tích vào để hiển thị nút chat AI ở góc dưới phải trang web.',
+              },
+            },
+            {
+              name: 'chatWelcomeMessage',
+              type: 'text',
+              label: 'Tin nhắn chào mừng',
+              defaultValue: 'Xin chào! Tôi là Trợ lý AI của CDC Đà Nẵng. Tôi có thể giúp gì cho bạn hôm nay?',
+            },
+            {
+              name: 'chatCustomPrompt',
+              type: 'textarea',
+              label: 'Hướng dẫn bổ sung cho AI (tùy chọn)',
+              admin: {
+                rows: 4,
+                placeholder: 'Ví dụ: Luôn nhắc hotline ở cuối mỗi câu trả lời...',
+              },
+            },
+            {
+              name: 'aiHotline',
+              type: 'text',
+              label: 'Số Hotline liên hệ',
+              defaultValue: '1900988975',
+            },
+            {
+              name: 'aiAddress',
+              type: 'text',
+              label: 'Địa chỉ cơ quan',
+              defaultValue: '118 Lê Đình Lý, Phường Thanh Khê Đông, Quận Thanh Khê, Thành phố Đà Nẵng',
+            },
+            {
+              name: 'aiModel',
+              type: 'select',
+              label: 'Mô hình AI sử dụng',
+              defaultValue: 'gemini-2.5-flash',
+              options: [
+                { label: 'Gemini 2.5 Flash (Tốc độ cao, Khuyên dùng)', value: 'gemini-2.5-flash' },
+                { label: 'Gemini 2.5 Pro (Thông minh, Phức tạp)', value: 'gemini-2.5-pro' },
+                { label: 'Llama 3.3 70B (Groq - Miễn phí)', value: 'llama-3.3-70b-versatile' },
+              ],
+            },
+          ],
+        },
+
+        // ─────────────────────────────────────────────
+        // TAB 9: TIỆN ÍCH ĐỌC BÀI
+        // ─────────────────────────────────────────────
+        {
+          label: 'Tiện ích Đọc bài',
+          name: 'readerTools',
+          fields: [
+            {
+              name: 'showFontSize',
+              type: 'checkbox',
+              label: 'Cỡ chữ (A / A+ / A++)',
+              defaultValue: true,
+            },
+            {
+              name: 'showTTS',
+              type: 'checkbox',
+              label: 'Đọc bài viết (Text-to-Speech)',
+              defaultValue: true,
+            },
+            {
+              name: 'showShareFB',
+              type: 'checkbox',
+              label: 'Chia sẻ Facebook',
+              defaultValue: true,
+            },
+            {
+              name: 'showShareZalo',
+              type: 'checkbox',
+              label: 'Chia sẻ Zalo',
+              defaultValue: true,
+            },
+            {
+              name: 'showCopyLink',
+              type: 'checkbox',
+              label: 'Chép link bài viết',
+              defaultValue: true,
+            },
+            {
+              name: 'showPrint',
+              type: 'checkbox',
+              label: 'In trang',
+              defaultValue: true,
+            },
+            {
+              name: 'showReadProgress',
+              type: 'checkbox',
+              label: 'Thanh tiến trình đọc bài',
+              defaultValue: true,
+            },
+          ],
+        },
       ],
     },
   ],
