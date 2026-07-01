@@ -328,6 +328,7 @@ export const Settings: GlobalConfig = {
               relationTo: 'video-channels',
               label: 'Chọn kênh YouTube hiển thị',
               required: true,
+              maxDepth: 0,
             },
             {
               name: 'limit',
@@ -368,6 +369,7 @@ export const Settings: GlobalConfig = {
               relationTo: 'video-channels',
               label: 'Chọn kênh TikTok hiển thị',
               required: true,
+              maxDepth: 0,
             },
             {
               name: 'limit',
@@ -643,7 +645,7 @@ export const Settings: GlobalConfig = {
           labels: { singular: 'Widget TikTok Player', plural: 'Widget TikTok Player' },
           fields: [
             { name: 'title', type: 'text', label: 'Tiêu đề tiện ích', defaultValue: 'Kênh TikTok CDC' },
-            { name: 'channel', type: 'relationship', relationTo: 'video-channels', label: 'Chọn Kênh TikTok hiển thị', required: true },
+            { name: 'channel', type: 'relationship', relationTo: 'video-channels', label: 'Chọn Kênh TikTok hiển thị', required: true, maxDepth: 0 },
           ]
         },
         {
