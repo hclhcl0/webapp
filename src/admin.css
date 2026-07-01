@@ -671,7 +671,12 @@ html[data-theme="dark"] [class*="Popup__content"] {
 [class*="slash-menu"],
 [class*="typeahead-popover"],
 [class*="lexical-typeahead"],
-[class*="lexical-dropdown"] {
+[class*="lexical-dropdown"],
+[class*="react-datepicker"],
+[class*="datepicker"],
+[class*="menu-list"],
+[class*="floating-toolbar"],
+[class*="link-editor"] {
   background-color: var(--tw-card) !important;
   border: 1px solid var(--tw-border) !important;
   border-radius: 10px !important;
@@ -685,7 +690,12 @@ html[data-theme="dark"] [class*="PopupList"],
 html[data-theme="dark"] [class*="slash-menu"],
 html[data-theme="dark"] [class*="typeahead-popover"],
 html[data-theme="dark"] [class*="lexical-typeahead"],
-html[data-theme="dark"] [class*="lexical-dropdown"] {
+html[data-theme="dark"] [class*="lexical-dropdown"],
+html[data-theme="dark"] [class*="react-datepicker"],
+html[data-theme="dark"] [class*="datepicker"],
+html[data-theme="dark"] [class*="menu-list"],
+html[data-theme="dark"] [class*="floating-toolbar"],
+html[data-theme="dark"] [class*="link-editor"] {
   background-color: var(--theme-elevation-150) !important;
   border-color: var(--theme-border) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
