@@ -292,7 +292,7 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
       )}
 
       {/* Mobile Menu Drawer */}
-      <div ref={mobileDrawerRef} className={`${styles.mobileDrawer} ${mobileOpen ? styles.mobileOpen : ''}`}>
+      <div ref={mobileDrawerRef} className={`${styles.mobileDrawer} ${mobileOpen ? styles.mobileOpen : ''} bg-white dark:bg-gray-900`}>
         <div className={styles.mobileDrawerHeader}>
           <span className={styles.mobileDrawerTitle}>MENU</span>
           <button className={styles.mobileDrawerClose} onClick={() => setMobileOpen(false)} aria-label="Đóng menu">
@@ -318,7 +318,7 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
                     )}
                   </div>
                   {hasDropdown && openDropdown === key && (
-                    <ul className={styles.mobileSubMenu}>
+                    <ul className={`${styles.mobileSubMenu} bg-[var(--primary-50)] dark:bg-gray-800`}>
                       {item.subItems!.map((sub, si) => (
                         <li key={si}>
                           <Link
@@ -445,7 +445,7 @@ function NavMenu({ menuItems, pathname, styles, openDropdown, setOpenDropdown, i
                 </span>
               ); })()}
               {hasDropdown && (
-                <ul className={`${styles.dropdown} ${openDropdown === key ? styles.dropdownOpen : ''}`}>
+                <ul className={`${styles.dropdown} ${openDropdown === key ? styles.dropdownOpen : ''} bg-white dark:bg-gray-800`}>
                   {item.subItems.map((sub: any, si: number) => (
                     <li key={si}>
                       <a href={sub.presetUrl || sub.url || '#'} className={isActive(sub.presetUrl || sub.url) ? styles.activeSubItem : ''} target={sub.openInNewTab ? '_blank' : undefined} rel={sub.openInNewTab ? 'noreferrer' : undefined}>
