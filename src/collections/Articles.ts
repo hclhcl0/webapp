@@ -280,7 +280,10 @@ export const Articles: CollectionConfig = {
         position: 'sidebar',
       },
       access: {
-        update: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
+        update: ({ req: { user } }) => {
+          const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
+          return role === 'admin' || role === 'editor';
+        },
       },
     },
     {
@@ -387,7 +390,10 @@ export const Articles: CollectionConfig = {
         position: 'sidebar',
       },
       access: {
-        update: ({ req: { user } }) => user?.role === 'admin' || user?.role === 'editor',
+        update: ({ req: { user } }) => {
+          const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
+          return role === 'admin' || role === 'editor';
+        },
       },
     },
     {
