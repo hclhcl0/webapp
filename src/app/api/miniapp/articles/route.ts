@@ -35,16 +35,17 @@ export async function GET(request: Request) {
     params.set('where[category.slug][equals]', category);
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
-  const res = await fetch(`${baseUrl}/api/articles?${params}`, {
-    next: { revalidate: 60 },
-  });
+  try {
+    const baseUrl = 'http://localhost:3000'; // Luôn dùng localhost để gọi nội bộ không bị lỗi SSL/DNS
+    const res = await fetch(`${baseUrl}/api/articles?${params}`, {
+      next: { revalidate: 60 },
+    });
 
-  if (!res.ok) {
-    return NextResponse.json({ error: 'Lỗi lấy bài viết' }, { status: 502, headers: CORS_HEADERS });
-  }
+    if (!res.ok) {
+      return NextResponse.json({ error: 'Lỗi lấy bài viết', status: res.status }, { status: 502, headers: CORS_HEADERS });
+    }
 
-  const data = await res.json();
+    const data = await res.json();
 
   const docs = (data.docs || []).map((a: any) => {
     const imgPath = a.image?.sizes?.card?.url || a.image?.url || '';
@@ -64,4 +65,9 @@ export async function GET(request: Request) {
     { docs, totalDocs: data.totalDocs, totalPages: data.totalPages, page: data.page },
     { headers: CORS_HEADERS }
   );
+  } catch (err: any) {
+    console.error('Fetch error:', err);
+    return NextResponse.json({ error: 'Server Error: ' + err.message }, { status: 500, headers: CORS_HEADERS });
+  }
 }
+
