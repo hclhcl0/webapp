@@ -46,7 +46,7 @@ export async function GET(request: Request) {
       depth: 1,
     });
 
-    const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://cms.zcdc.vnos.org';
+    const baseUrl = 'https://ecdc.vnos.org';
 
     const docs = (data.docs || []).map((a: any) => {
       const imgPath = a.image?.sizes?.card?.url || a.image?.url || '';
