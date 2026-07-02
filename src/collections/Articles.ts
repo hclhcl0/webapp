@@ -68,11 +68,13 @@ export const Articles: CollectionConfig = {
   access: {
     // ─── READ ────────────────────────────────────────────────────────────────
     read: ({ req: { user } }) => {
+      const role = user ? (Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase()) : null;
+      
       // Admin: xem tất cả, không giới hạn
-      if (user?.role === 'admin') return true;
+      if (role === 'admin') return true;
 
       // Editor & Moderator: xem tất cả HOẶC chỉ chuyên mục được phân công
-      if (user && ['editor', 'moderator'].includes(user.role as string)) {
+      if (user && ['editor', 'moderator'].includes(role as string)) {
         const allowedIds = getAllowedCategoryIds(user);
         if (!allowedIds) return true; // Không giới hạn nếu để trống
         // Lọc theo chuyên mục (kể cả bài nháp trong chuyên mục đó)
@@ -80,7 +82,7 @@ export const Articles: CollectionConfig = {
       }
 
       // Author: xem bài trong chuyên mục được phân công + bài nháp của chính mình
-      if (user?.role === 'author') {
+      if (role === 'author') {
         const allowedIds = getAllowedCategoryIds(user);
         if (allowedIds) {
           return buildCategoryFilter(allowedIds, user.id, true);
@@ -101,17 +103,20 @@ export const Articles: CollectionConfig = {
     // ─── CREATE ───────────────────────────────────────────────────────────────
     create: ({ req: { user } }) => {
       if (!user) return false;
-      return ['admin', 'editor', 'moderator', 'author'].includes(user.role as string);
+      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      return ['admin', 'editor', 'moderator', 'author'].includes(role as string);
     },
 
     // ─── UPDATE ───────────────────────────────────────────────────────────────
     update: ({ req: { user } }) => {
       if (!user) return false;
+      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      
       // Admin: sửa tất cả
-      if (user.role === 'admin') return true;
+      if (role === 'admin') return true;
 
       // Editor & Moderator: sửa tất cả HOẶC chỉ chuyên mục được phân công
-      if (['editor', 'moderator'].includes(user.role as string)) {
+      if (['editor', 'moderator'].includes(role as string)) {
         const allowedIds = getAllowedCategoryIds(user);
         if (!allowedIds) return true; // Không giới hạn
         return { category: { in: allowedIds } };
@@ -124,18 +129,20 @@ export const Articles: CollectionConfig = {
     // ─── DELETE ───────────────────────────────────────────────────────────────
     delete: ({ req: { user } }) => {
       if (!user) return false;
+      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      
       // Admin: xóa tất cả
-      if (user.role === 'admin') return true;
+      if (role === 'admin') return true;
 
       // Editor: xóa tất cả HOẶC chỉ chuyên mục được phân công
-      if (user.role === 'editor') {
+      if (role === 'editor') {
         const allowedIds = getAllowedCategoryIds(user);
         if (!allowedIds) return true; // Không giới hạn
         return { category: { in: allowedIds } };
       }
 
       // Moderator: KHÔNG được xóa bài (dù có phân chuyên mục hay không)
-      if (user.role === 'moderator') return false;
+      if (role === 'moderator') return false;
 
       // Author: chỉ xóa bài nháp của chính mình
       return { author: { equals: user.id } };
