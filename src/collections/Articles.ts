@@ -60,8 +60,7 @@ export const Articles: CollectionConfig = {
     group: 'Nội dung',
     preview: (doc) => {
       if (doc?.slug) {
-        const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000';
-        return `${baseUrl}/bai-viet/${doc.slug}?preview=true`;
+        return `/bai-viet/${doc.slug}?preview=true`;
       }
       return null;
     },
