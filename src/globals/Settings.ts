@@ -510,36 +510,7 @@ export const Settings: GlobalConfig = {
           ],
         },
 
-        // ── Block 7: Nội dung tự do (RichText) ──
-        {
-          slug: 'richTextSection',
-          interfaceName: 'RichTextSection',
-          labels: { singular: '✍️ Nội dung tự do (RichText)', plural: 'Nội dung tự do' },
-          fields: [
-            {
-              name: 'content',
-              type: 'richText',
-              label: 'Nội dung',
-              editor: lexicalEditor({
-                features: ({ defaultFeatures }) => [
-                  ...defaultFeatures,
-                  BlocksFeature({
-                    blocks: [
-                      ColumnsBlock,
-                      VideoBlock,
-                      TikTokBlock,
-                      PDFBlock,
-                      GalleryBlock,
-                      CalloutBlock,
-                      ButtonBlock,
-                      CardBlock,
-                    ],
-                  }),
-                ],
-              }),
-            },
-          ],
-        },
+        // ── Block 7: Nội dung tự do (RichText) đã bị loại bỏ để tránh lỗi vòng lặp ──
       ],
     },
     {
