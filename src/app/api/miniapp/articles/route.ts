@@ -62,6 +62,7 @@ export async function GET(request: Request) {
         if (node.format & 8) text = `<u>${text}</u>`;
         return text;
       }
+      if (node.type === 'linebreak') return '<br />';
       if (node.type === 'paragraph') return `<p style="margin-bottom:12px;">${(node.children || []).map(lexicalToHtml).join('')}</p>`;
       if (node.type === 'heading') return `<${node.tag} style="margin-top:16px;margin-bottom:12px;">${(node.children || []).map(lexicalToHtml).join('')}</${node.tag}>`;
       if (node.type === 'list') return `<${node.tag} style="margin-left:20px;margin-bottom:12px;">${(node.children || []).map(lexicalToHtml).join('')}</${node.tag}>`;
