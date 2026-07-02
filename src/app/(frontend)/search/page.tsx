@@ -68,13 +68,13 @@ export default async function SearchPage({ searchParams }: PageParams) {
             return (
               <article key={article.id} className={styles.card}>
                 <div className={styles.imageHolder}>
-                  <Link href={`/news/${article.slug || article.id}`}>
+                  <Link href={`/bai-viet/${article.slug || article.id}`}>
                     <img src={mediaUrl} alt={article.title} />
                   </Link>
                 </div>
                 <div className={styles.body}>
                   <h3 className={styles.title}>
-                    <Link href={`/news/${article.slug || article.id}`}>
+                    <Link href={`/bai-viet/${article.slug || article.id}`}>
                       {article.title}
                     </Link>
                   </h3>

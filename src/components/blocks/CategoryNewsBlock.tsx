@@ -71,7 +71,7 @@ export default async function CategoryNewsBlock({ data }: { data: any }) {
                   )}
                 </div>
                 <h3 className="font-bold text-gov-primary text-lg group-hover:text-gov-secondary transition-colors line-clamp-2">
-                  <Link href={`/news/${news[0].slug || news[0].id}`}>{news[0].title}</Link>
+                  <Link href={`/bai-viet/${news[0].slug || news[0].id}`}>{news[0].title}</Link>
                 </h3>
                 <p className="text-sm text-gray-500 mt-1 mb-2">{new Date(news[0].publishedAt).toLocaleDateString('vi-VN')}</p>
                 <p className="text-gray-600 text-sm line-clamp-3">{news[0].description}</p>
@@ -84,7 +84,7 @@ export default async function CategoryNewsBlock({ data }: { data: any }) {
                 <div key={item.id} className="group flex items-start border-b border-gray-100 pb-3 last:border-0">
                   <ChevronRight className="w-5 h-5 text-gov-secondary mr-2 flex-shrink-0 mt-0.5 group-hover:translate-x-1 transition-transform" />
                   <div>
-                    <Link href={`/news/${item.slug || item.id}`} className="font-semibold text-gray-800 group-hover:text-gov-primary transition-colors line-clamp-2 leading-snug">
+                    <Link href={`/bai-viet/${item.slug || item.id}`} className="font-semibold text-gray-800 group-hover:text-gov-primary transition-colors line-clamp-2 leading-snug">
                       {item.title}
                     </Link>
                     <p className="text-xs text-gray-400 mt-1">{new Date(item.publishedAt).toLocaleDateString('vi-VN')}</p>

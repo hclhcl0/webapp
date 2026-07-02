@@ -22,7 +22,7 @@ export default async function NewsListBlock({ data }: { data: any }) {
     <div className="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
       <div className="flex justify-between items-center border-b-2 border-gov-primary pb-3 mb-6">
         <h3 className="text-xl font-bold text-gov-primary uppercase tracking-wide">{data.title}</h3>
-        <Link href="/news" className="text-sm font-medium text-gray-500 hover:text-gov-secondary transition-colors">
+        <Link href="/bai-viet" className="text-sm font-medium text-gray-500 hover:text-gov-secondary transition-colors">
           Xem tất cả &raquo;
         </Link>
       </div>
@@ -34,7 +34,7 @@ export default async function NewsListBlock({ data }: { data: any }) {
             </div>
             <div className="flex flex-col justify-center">
               <h4 className="font-bold text-gray-900 group-hover:text-gov-primary text-lg mb-2 leading-tight transition-colors">
-                <Link href={`/news/${item.slug}`}>{item.title}</Link>
+                <Link href={`/bai-viet/${item.slug}`}>{item.title}</Link>
               </h4>
               <p className="text-xs text-gray-500 mb-2 flex items-center font-medium">
                 <Calendar className="w-3.5 h-3.5 mr-1.5 text-gov-secondary"/> {new Date(item.publishedAt).toLocaleDateString('vi-VN')}
