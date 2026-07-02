@@ -36,7 +36,7 @@ export default async function HomePage() {
       )}
 
       {/* Tin mới nhất luôn hiển thị */}
-      <NewsGrid />
+      <NewsGrid limitOverride={6} />
 
       {/* Các thành phần tùy chỉnh từ CMS */}
       <HomeSectionRenderer sections={homeSections} />

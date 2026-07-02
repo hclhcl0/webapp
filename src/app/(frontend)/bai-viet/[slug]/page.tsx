@@ -135,7 +135,7 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 py-8 max-w-[1400px]">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
         
         {/* Main Content Wrapper - relative for sidebar positioning */}
@@ -143,52 +143,56 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
           {/* Reading Progress Bar */}
           <ReadingProgressBar show={readerToolsConfig.showReadProgress ?? true} />
 
-          <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:py-10 md:pl-20 md:pr-10 lg:pr-14 overflow-visible min-w-0">
+          <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 py-4 md:py-8 md:pl-16 overflow-visible min-w-0">
             
             {/* Desktop Sticky Reader Tools - pinned to left edge inside article card */}
-            <div className="hidden md:block absolute top-10 left-4 w-12 h-full z-10">
+            <div className="hidden md:block absolute top-8 left-3 w-10 h-full z-10">
               <div className="sticky top-28">
                 <ArticleReaderTools mode="tools" toolsConfig={readerToolsConfig} />
               </div>
             </div>
 
-            <div className="flex items-center text-sm text-gray-500 mb-4 md:mb-6 overflow-x-auto whitespace-nowrap pb-2">
-               <Link href="/" className="hover:text-gov-primary transition-colors">Trang chủ</Link>
-               <span className="mx-2 flex-shrink-0">/</span>
-               <Link href={`/chuyen-muc/${catSlug}`} className="hover:text-gov-primary transition-colors">{catName}</Link>
-            </div>
-            
-            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 md:mb-6 leading-tight break-words">
-               {article.title}
-            </h1>
-            
-            <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm text-gray-500 border-b border-gray-100 pb-3 mb-3 md:pb-6 md:mb-8">
-               <span className="flex items-center gap-1.5">
-                   <Calendar size={14} className="md:w-4 md:h-4"/>
-                   {new Date((article as any).publishedAt || article.createdAt).toLocaleDateString('vi-VN')}
-               </span>
-               <span className="flex items-center gap-1.5"><Eye size={14} className="md:w-4 md:h-4"/> {(article as any).views || 0} lượt xem</span>
-               {(article as any).author_name && <span className="flex items-center gap-1.5">Tác giả: <span className="font-medium text-gray-700">{(article as any).author_name}</span></span>}
-               <Link href={`/chuyen-muc/${catSlug}`} className="bg-gov-secondary/10 text-gov-secondary hover:bg-gov-secondary hover:text-white transition-colors px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[10px] md:text-xs font-medium">
-                 {catName}
-               </Link>
-               <div className="ml-auto flex items-center w-full md:w-auto mt-2 md:mt-0">
-                 <ArticleReaderTools mode="tts" toolsConfig={readerToolsConfig} />
-               </div>
-            </div>
+            <div className="px-4 md:px-0 md:pr-6 lg:pr-8">
+              <div className="flex items-center text-sm text-gray-500 mb-4 md:mb-6 overflow-x-auto whitespace-nowrap pb-2">
+                 <Link href="/" className="hover:text-gov-primary transition-colors">Trang chủ</Link>
+                 <span className="mx-2 flex-shrink-0">/</span>
+                 <Link href={`/chuyen-muc/${catSlug}`} className="hover:text-gov-primary transition-colors">{catName}</Link>
+              </div>
+              
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 md:mb-6 leading-tight break-words">
+                 {article.title}
+              </h1>
+              
+              <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm text-gray-500 border-b border-gray-100 pb-3 mb-3 md:pb-6 md:mb-8">
+                 <span className="flex items-center gap-1.5">
+                     <Calendar size={14} className="md:w-4 md:h-4"/>
+                     {new Date((article as any).publishedAt || article.createdAt).toLocaleDateString('vi-VN')}
+                 </span>
+                 <span className="flex items-center gap-1.5"><Eye size={14} className="md:w-4 md:h-4"/> {(article as any).views || 0} lượt xem</span>
+                 {(article as any).author_name && <span className="flex items-center gap-1.5">Tác giả: <span className="font-medium text-gray-700">{(article as any).author_name}</span></span>}
+                 <Link href={`/chuyen-muc/${catSlug}`} className="bg-gov-secondary/10 text-gov-secondary hover:bg-gov-secondary hover:text-white transition-colors px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[10px] md:text-xs font-medium">
+                   {catName}
+                 </Link>
+                 <div className="ml-auto flex items-center w-full md:w-auto mt-2 md:mt-0">
+                   <ArticleReaderTools mode="tts" toolsConfig={readerToolsConfig} />
+                 </div>
+              </div>
 
-            {/* Mobile Reader Tools */}
-            <div className="md:hidden mb-4 -mt-1">
-              <ArticleReaderTools mode="tools" toolsConfig={readerToolsConfig} />
+              {/* Mobile Reader Tools */}
+              <div className="md:hidden mb-4 -mt-1">
+                <ArticleReaderTools mode="tools" toolsConfig={readerToolsConfig} />
+              </div>
             </div>
 
             {/* Main Prose Content */}
-            <div className="prose prose-base md:prose-lg max-w-none break-words prose-p:!my-1.5 md:prose-p:!my-2 prose-headings:!my-3 md:prose-headings:!my-4 prose-ul:!my-1 prose-li:!my-0.5 prose-img:!my-3 prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl w-full min-w-0 overflow-hidden">
-               {article.content ? (
-                  <RichText data={article.content} converters={getJsxConverters(`Hình ảnh minh họa cho bài viết: ${article.title}`)} />
-               ) : (
-                  <p>Nội dung đang cập nhật...</p>
-               )}
+            <div className="px-1 md:px-0 md:pr-4 lg:pr-6">
+              <div className="prose prose-base md:prose-lg max-w-none break-words prose-p:!my-1.5 md:prose-p:!my-2 prose-headings:!my-3 md:prose-headings:!my-4 prose-ul:!my-1 prose-li:!my-0.5 prose-img:!my-3 prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl w-full min-w-0 overflow-hidden">
+                 {article.content ? (
+                    <RichText data={article.content} converters={getJsxConverters(`Hình ảnh minh họa cho bài viết: ${article.title}`)} />
+                 ) : (
+                    <p>Nội dung đang cập nhật...</p>
+                 )}
+              </div>
             </div>
           </article>
         </div>

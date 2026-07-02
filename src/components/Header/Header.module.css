@@ -97,14 +97,14 @@
 .logoLine1 {
   font-weight: 800;
   color: var(--primary);
-  font-size: var(--text-sm);
+  font-size: 1.1rem;
   line-height: 1.2;
   letter-spacing: 0.02em;
 }
 .logoLine2 {
   font-weight: 600;
   color: var(--primary-dark);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   line-height: 1.2;
 }
 .logoTagline {
@@ -653,14 +653,26 @@
 
 @media (max-width: 1024px) {
   .hideSiteNameOnMobile { display: none !important; }
+  .logoTagline { display: none !important; }
+  .logo {
+    flex: 1;
+  }
+  .logo a {
+    width: 100%;
+  }
+  .logoTextBlock {
+    flex: 1;
+    align-items: center;
+    text-align: center;
+  }
   .logoLine1 {
-    font-size: var(--text-xs);
-    line-height: 1.45;
-    padding-top: 6px;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    padding-top: 2px;
     margin-top: 2px;
   }
   .logoLine2 {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     line-height: 1.35;
   }
 }

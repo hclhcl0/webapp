@@ -142,7 +142,6 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
         <div className={styles.hotlineActions}>
           <span className={styles.hotlineLabel}>SỐ ĐIỆN THOẠI TỔNG ĐÀI</span>
           <a href={`tel:${phone.replace(/\s+/g, '')}`} className={styles.hotlineNumber}>{phone}</a>
-          <Link href={actionLink} target="_blank" className={`btn btn-primary ${styles.askBtn}`}>Đặt Câu Hỏi</Link>
         </div>
       </div>
     </div>
@@ -185,7 +184,6 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
               <div className={styles.topbarHotline} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', borderLeft: '1px solid rgba(255, 255, 255, 0.25)', paddingLeft: '0.75rem' }}>
                 <span className={styles.topbarHotlineLabel} style={{ fontSize: '0.7rem', fontWeight: 600, opacity: 0.85 }}>TỔNG ĐÀI:</span>
                 <a href={`tel:${phone.replace(/\s+/g, '')}`} className={styles.topbarHotlineNumber} style={{ backgroundColor: '#ef4444', color: '#fff', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: 'bold', fontSize: '0.75rem' }}>{phone}</a>
-                <Link href={actionLink} target="_blank" className="btn btn-primary" style={{ padding: '0.15rem 0.5rem', fontSize: '0.7rem', borderRadius: '4px' }}>Đặt Câu Hỏi</Link>
               </div>
             )}
             <Link href="/admin" className="flex items-center gap-1.5" style={{ fontSize: '0.65rem', opacity: 0.9, borderLeft: '1px solid rgba(255, 255, 255, 0.25)', paddingLeft: '0.75rem' }}>
@@ -197,7 +195,14 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
 
       {hotlinePosition === 'above-nav' && renderHotlineBar()}
       {/* Main Nav */}
-      <div className={styles.mainNav}>
+      <div 
+        className={styles.mainNav}
+        style={{
+          backgroundImage: `url('${logoConfig.bannerImageUrl || '/bg-building.svg'}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         <div className={`container py-3 md:py-4 ${menuPosition === 'below' ? styles.logoRow : 'flex justify-between items-center'}`}>
           {/* Logo — always shown (left or center) */}
           {menuPosition !== 'left' && (
@@ -292,7 +297,7 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
       )}
 
       {/* Mobile Menu Drawer */}
-      <div ref={mobileDrawerRef} className={`${styles.mobileDrawer} ${mobileOpen ? styles.mobileOpen : ''} bg-white dark:bg-gray-900`}>
+      <div ref={mobileDrawerRef} className={`${styles.mobileDrawer} ${mobileOpen ? styles.mobileOpen : ''} bg-white`}>
         <div className={styles.mobileDrawerHeader}>
           <span className={styles.mobileDrawerTitle}>MENU</span>
           <button className={styles.mobileDrawerClose} onClick={() => setMobileOpen(false)} aria-label="Đóng menu">
@@ -318,7 +323,7 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
                     )}
                   </div>
                   {hasDropdown && openDropdown === key && (
-                    <ul className={`${styles.mobileSubMenu} bg-[var(--primary-50)] dark:bg-gray-800`}>
+                    <ul className={`${styles.mobileSubMenu} bg-[var(--primary-50)]`}>
                       {item.subItems!.map((sub, si) => (
                         <li key={si}>
                           <Link
@@ -375,7 +380,7 @@ function LogoBlock({ logoUrl, siteName, logoConfig, styles }: any) {
     logoConfig.position === 'center' ? styles.logoCenter :
     logoConfig.position === 'right'  ? styles.logoRight  : '';
 
-  const showSiteNameClass = logoConfig.mobileShowSiteName ? '' : styles.hideSiteNameOnMobile;
+  const showSiteNameClass = ''; // Luôn hiển thị tên cơ quan trên di động theo yêu cầu
 
   return (
     <div className={`${styles.logo} ${alignClass}`}>
@@ -406,13 +411,6 @@ function LogoBlock({ logoUrl, siteName, logoConfig, styles }: any) {
           </div>
         )}
       </a>
-      {logoConfig.bannerImageUrl && (
-        <img
-          src={logoConfig.bannerImageUrl}
-          alt="Logo banner"
-          className={styles.logoBannerImg}
-        />
-      )}
     </div>
   );
 }
@@ -445,7 +443,7 @@ function NavMenu({ menuItems, pathname, styles, openDropdown, setOpenDropdown, i
                 </span>
               ); })()}
               {hasDropdown && (
-                <ul className={`${styles.dropdown} ${openDropdown === key ? styles.dropdownOpen : ''} bg-white dark:bg-gray-800`}>
+                <ul className={`${styles.dropdown} ${openDropdown === key ? styles.dropdownOpen : ''} bg-white`}>
                   {item.subItems.map((sub: any, si: number) => (
                     <li key={si}>
                       <a href={sub.presetUrl || sub.url || '#'} className={isActive(sub.presetUrl || sub.url) ? styles.activeSubItem : ''} target={sub.openInNewTab ? '_blank' : undefined} rel={sub.openInNewTab ? 'noreferrer' : undefined}>
