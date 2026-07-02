@@ -47,6 +47,19 @@ const dirname = path.dirname(filename);
 
 export default buildConfig({
   sharp,
+  cors: [
+    'https://h5.zadn.vn',
+    'https://zalo.me',
+    'https://zcdc.vnos.org',
+    'https://cms.zcdc.vnos.org',
+    '*',
+  ],
+  csrf: [
+    'https://h5.zadn.vn',
+    'https://zalo.me',
+    'https://zcdc.vnos.org',
+    'https://cms.zcdc.vnos.org',
+  ],
   onInit: async (payload) => {
     // const { initCron } = await import('./lib/zalo-admin/cron.js');
     // initCron();
