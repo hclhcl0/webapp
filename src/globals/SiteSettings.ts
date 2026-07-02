@@ -908,6 +908,55 @@ export const SiteSettings: GlobalConfig = {
             },
           ],
         },
+        // ─────────────────────────────────────────────
+        // TAB 11: ZALO MINI APP
+        // ─────────────────────────────────────────────
+        {
+          label: 'Zalo Mini App',
+          name: 'zaloMiniApp',
+          fields: [
+            {
+              name: 'themeColor',
+              type: 'text',
+              label: 'Màu chủ đạo (Hex)',
+              defaultValue: '#007a8c',
+              admin: {
+                description: 'Mã màu Hex cho Mini App (VD: #007a8c, #00a651)',
+              },
+            },
+            {
+              name: 'bannerImage',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Ảnh Banner Trang chủ',
+            },
+            {
+              name: 'features',
+              type: 'group',
+              label: 'Bật/Tắt Tính năng',
+              fields: [
+                {
+                  name: 'enableAppointments',
+                  type: 'checkbox',
+                  label: 'Cho phép Đặt lịch khám',
+                  defaultValue: true,
+                },
+                {
+                  name: 'enableTestResults',
+                  type: 'checkbox',
+                  label: 'Cho phép Tra cứu kết quả xét nghiệm',
+                  defaultValue: true,
+                },
+              ]
+            },
+            {
+              name: 'hotline',
+              type: 'text',
+              label: 'Số điện thoại Hotline Zalo',
+              defaultValue: '1900988975',
+            }
+          ],
+        },
       ],
     },
     ...(Settings.fields as any[]).filter(f => ['homeContent', 'themeConfig', 'homeSections', 'sidebarWidgets'].includes(f.name))
