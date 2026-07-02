@@ -22,6 +22,7 @@ export async function GET(request: Request) {
     const limit    = parseInt(searchParams.get('limit') || '10', 10);
     const search   = searchParams.get('search') || '';
     const category = searchParams.get('category') || '';
+    const slugParam = searchParams.get('slug') || '';
 
     const payload = await getPayload({ config: configPromise });
 
@@ -30,6 +31,9 @@ export async function GET(request: Request) {
       _status: { equals: 'published' }
     };
 
+    if (slugParam) {
+      whereQuery.slug = { equals: slugParam };
+    }
     if (search) {
       whereQuery.title = { like: search };
     }
