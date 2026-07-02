@@ -2631,4 +2631,19 @@ export const MIGRATION_STATEMENTS = [
     END IF;
   END $;`,
 
+
+  // ====================================================
+  // BATCH: Add missing SiteSettings columns
+  // ====================================================
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "zalo_mini_app_theme_color" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "zalo_mini_app_banner_image_id" integer`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "zalo_mini_app_features_enable_appointments" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "zalo_mini_app_features_enable_test_results" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "zalo_mini_app_hotline" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "home_content" jsonb`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_primary_color" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_primary_dark_color" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_secondary_color" varchar`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_font_family" varchar`,
+
 ];
