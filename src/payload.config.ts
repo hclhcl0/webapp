@@ -49,16 +49,22 @@ export default buildConfig({
   sharp,
   cors: [
     'https://h5.zadn.vn',
+    'https://h5.zdn.vn',
     'https://zalo.me',
     'https://zcdc.vnos.org',
     'https://cms.zcdc.vnos.org',
+    'https://ecdc.vnos.org',
+    'https://cms.ecdc.vnos.org',
     '*',
   ],
   csrf: [
     'https://h5.zadn.vn',
+    'https://h5.zdn.vn',
     'https://zalo.me',
     'https://zcdc.vnos.org',
     'https://cms.zcdc.vnos.org',
+    'https://ecdc.vnos.org',
+    'https://cms.ecdc.vnos.org',
   ],
   onInit: async (payload) => {
     // const { initCron } = await import('./lib/zalo-admin/cron.js');
