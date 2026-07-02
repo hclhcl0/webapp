@@ -124,7 +124,6 @@ export default buildConfig({
   globals: globalsWithRBAC([
     SiteSettings,
     ServicesLanding,
-    Settings,
   ]),
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN
