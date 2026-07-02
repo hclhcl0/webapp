@@ -21,7 +21,7 @@ export const Settings: GlobalConfig = {
   access: {
     read: () => true,
     // Chỉ Admin mới được sửa cấu hình website
-    update: ({ req: { user } }: any) => user?.role === 'admin',
+    update: ({ req: { user } }: any) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
   },
   fields: [
     {

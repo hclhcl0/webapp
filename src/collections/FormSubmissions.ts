@@ -16,7 +16,7 @@ export const FormSubmissions: CollectionConfig = {
     read: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
     create: () => true, // Public — cho phép gửi form liên hệ từ website
     update: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    delete: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
   },
   fields: [
     {

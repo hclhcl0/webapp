@@ -16,9 +16,9 @@ export const Departments: CollectionConfig = {
     // Mọi người đăng nhập đều đọc được (để chọn phòng ban)
     read: ({ req: { user } }) => !!user,
     // Chỉ Admin mới tạo/sửa/xoá
-    create: ({ req: { user } }) => user?.role === 'admin',
-    update: ({ req: { user } }) => user?.role === 'admin',
-    delete: ({ req: { user } }) => user?.role === 'admin',
+    create: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
+    update: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
+    delete: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
   },
   fields: [
     {
