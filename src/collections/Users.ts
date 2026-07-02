@@ -17,11 +17,15 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   access: {
-    admin: ({ req: { user } }) => user?.role && user.role !== 'user',
+    admin: ({ req: { user } }) => {
+      const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
+      return role && role !== 'user';
+    },
     // Chỉ Admin mới được xem và quản lý danh sách user, hoặc user tự xem chính mình
     read: ({ req: { user } }) => {
       if (!user) return false;
-      if (user.role === 'admin') return true;
+      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      if (role === 'admin') return true;
       return {
         id: {
           equals: user.id,
@@ -30,11 +34,13 @@ export const Users: CollectionConfig = {
     },
     create: ({ req: { user } }) => {
       if (!user) return true; // Cho phép tạo user đầu tiên khi hệ thống trống, Payload tự xử lý logic first user.
-      return user.role === 'admin';
+      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      return role === 'admin';
     },
     update: ({ req: { user } }) => {
       if (!user) return false;
-      if (user.role === 'admin') return true;
+      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      if (role === 'admin') return true;
       return {
         id: {
           equals: user.id,
@@ -43,7 +49,8 @@ export const Users: CollectionConfig = {
     },
     delete: ({ req: { user } }) => {
       if (!user) return false;
-      return user.role === 'admin';
+      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      return role === 'admin';
     },
   },
   fields: [
@@ -63,7 +70,8 @@ export const Users: CollectionConfig = {
       access: {
         // Chỉ admin mới được sửa quyền của người khác (và của chính mình)
         update: ({ req: { user } }) => {
-          return user?.role === 'admin';
+          const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
+          return role === 'admin';
         },
       },
       admin: {
