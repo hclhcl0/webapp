@@ -140,8 +140,7 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
         
         {/* Main Content Wrapper - relative for sidebar positioning */}
         <div className="relative">
-          {/* Reading Progress Bar */}
-          <ReadingProgressBar show={readerToolsConfig.showReadProgress ?? true} />
+          {/* Reading Progress Bar removed per user request */}
 
           <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 py-4 md:py-8 md:pl-16 overflow-visible min-w-0">
             

@@ -404,7 +404,7 @@ function LogoBlock({ logoUrl, siteName, logoConfig, styles }: any) {
           />
         </picture>
         {logoConfig.showSiteName && (
-          <div className={`${styles.logoTextBlock} ${showSiteNameClass}`}>
+          <div className={`${styles.logoTextBlock} ${showSiteNameClass} whitespace-nowrap`}>
             {logoConfig.line1 && <span className={styles.logoLine1}>{logoConfig.line1}</span>}
             {logoConfig.line2 && <span className={styles.logoLine2}>{logoConfig.line2}</span>}
             {logoConfig.tagline && <span className={styles.logoTagline}>{logoConfig.tagline}</span>}
