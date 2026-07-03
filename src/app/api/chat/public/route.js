@@ -9,7 +9,7 @@ export async function GET(request) {
     const { getPayload } = await import("payload");
     const config = await import("@payload-config");
     const payload = await getPayload({ config: config.default });
-    const payloadSettings = await payload.findGlobal({ slug: "settings", depth: 0 });
+    const payloadSettings = await payload.findGlobal({ slug: "site-settings", depth: 0 });
     const aiChat = payloadSettings?.aiChatSettings;
     
     return NextResponse.json({
