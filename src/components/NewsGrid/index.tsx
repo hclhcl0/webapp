@@ -80,6 +80,9 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
   return (
     <section className={styles.newsSection}>
       <div className="container">
+        {categoryId && (
+          <hr className="border-t-2 border-gray-200 mb-8 mt-2 shadow-sm" />
+        )}
         <div className="flex justify-between items-center mb-4">
           <h2 className={styles.sectionTitle} style={{ marginBottom: 0 }}>
             {title}
