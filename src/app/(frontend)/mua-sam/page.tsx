@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { FileText, Download, Clock, AlertCircle, CheckCircle2, ChevronRight, ShoppingCart } from 'lucide-react';
+import { FileText, Download, Clock, AlertCircle, CheckCircle2, ChevronRight, ShoppingCart, Search } from 'lucide-react';
 import styles from './Procurements.module.css';
 import { resolveFileUrl, isGoogleDriveUrl, driveLinkLabel } from '@/lib/driveUrl';
 import { Pagination } from '@/components/Pagination';
@@ -75,12 +75,13 @@ async function getProcurements() {
 }
 
 interface PageProps {
-  searchParams: Promise<{ status?: string; page?: string }>;
+  searchParams: Promise<{ status?: string; page?: string; q?: string }>;
 }
 
 export default async function ProcurementsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const activeStatus = params.status ?? '';
+  const q = params.q ?? '';
   const pageStr = params?.page;
   const page = typeof pageStr === 'string' ? parseInt(pageStr, 10) || 1 : 1;
   const limit = 15; // Items per page
@@ -98,8 +99,18 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
     };
   });
 
+  // Search filter
+  let searchedItems = processedItems;
+  if (q) {
+    const lowerQ = q.toLowerCase();
+    searchedItems = processedItems.filter((item: any) => 
+      (item.title && item.title.toLowerCase().includes(lowerQ)) ||
+      (item.documentNumber && item.documentNumber.toLowerCase().includes(lowerQ))
+    );
+  }
+
   // Filter based on active tab selection
-  const filteredItems = processedItems.filter((item: any) => {
+  const filteredItems = searchedItems.filter((item: any) => {
     if (activeStatus === 'open') {
       return item.effectiveStatus === 'open';
     }
@@ -109,11 +120,11 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
     return true; // Tất cả
   });
 
-  const openCount   = processedItems.filter((i: any) => i.effectiveStatus === 'open').length;
-  const closedCount = processedItems.filter((i: any) => i.effectiveStatus === 'closed').length;
+  const openCount   = searchedItems.filter((i: any) => i.effectiveStatus === 'open').length;
+  const closedCount = searchedItems.filter((i: any) => i.effectiveStatus === 'closed').length;
 
   const tabs = [
-    { label: 'Tất cả',  value: '',      count: processedItems.length },
+    { label: 'Tất cả',  value: '',      count: searchedItems.length },
     { label: 'Đang mở', value: 'open',   count: openCount },
     { label: 'Đã đóng', value: 'closed', count: closedCount },
   ];
@@ -132,7 +143,23 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
           <ShoppingCart size={24} className={styles.pageTitleIcon} />
           <h1 className={`${styles.pageTitle} !text-xl md:!text-2xl !mb-4`}>THÔNG TIN MUA SẮM</h1>
         </div>
-
+        
+        {/* Search form */}
+        <form className="flex w-full md:w-auto mt-4 md:mt-0 mb-4" method="GET" action="/mua-sam">
+          {activeStatus && <input type="hidden" name="status" value={activeStatus} />}
+          <div className="relative flex w-full md:w-80">
+            <input 
+              type="search" 
+              name="q" 
+              defaultValue={q}
+              placeholder="Tìm kiếm theo tiêu đề, số hiệu..." 
+              className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gov-primary focus:border-transparent text-sm"
+            />
+            <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gov-primary p-1">
+              <Search size={18} />
+            </button>
+          </div>
+        </form>
       </div>
 
       {/* Status filter tabs */}
@@ -140,7 +167,7 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
         {tabs.map((tab) => (
           <Link
             key={tab.value}
-            href={tab.value ? `/mua-sam?status=${tab.value}` : '/mua-sam'}
+            href={tab.value ? (q ? `/mua-sam?status=${tab.value}&q=${encodeURIComponent(q)}` : `/mua-sam?status=${tab.value}`) : (q ? `/mua-sam?q=${encodeURIComponent(q)}` : '/mua-sam')}
             className={`${styles.tab} ${activeStatus === tab.value ? styles.tabActive : ''}`}
           >
             {tab.label}
