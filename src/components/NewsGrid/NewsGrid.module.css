@@ -3,20 +3,18 @@
 }
 
 .sectionTitle {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary, var(--primary-dark)) 100%);
+  color: var(--primary-dark);
+  background: linear-gradient(90deg, rgba(var(--primary-rgb, 0, 122, 140), 0.15) 0%, transparent 100%);
+  border-left: 4px solid var(--primary);
   margin-bottom: 1rem;
   position: relative;
   display: inline-block;
   text-transform: uppercase;
-  padding: 0.55rem 1.25rem;
-  border-radius: 8px;
+  padding: 0.4rem 1.5rem 0.4rem 0.75rem;
   line-height: 1.25;
-  letter-spacing: 0.03em;
-  box-shadow: 0 4px 12px rgba(var(--primary-rgb, 0, 122, 140), 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.02em;
 }
 
 .grid {
