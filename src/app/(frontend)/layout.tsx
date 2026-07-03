@@ -16,6 +16,24 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: "TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG",
   description: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "CDC Đà Nẵng",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+import { Viewport } from 'next';
+export const viewport: Viewport = {
+  themeColor: '#007a8c',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 function hexToRgb(hex: string | undefined | null) {

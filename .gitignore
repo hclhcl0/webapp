@@ -53,3 +53,7 @@ media/
 *.backup.db
 .vercel
 media.zip
+# Serwist PWA
+public/sw*
+public/swe-worker*
+
