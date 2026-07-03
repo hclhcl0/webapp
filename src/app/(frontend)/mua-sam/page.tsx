@@ -138,14 +138,14 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
   return (
     <div className="container pt-2 md:pt-4 pb-8">
       {/* Page header */}
-      <div className={styles.pageHeader}>
-        <div className={styles.pageTitleRow}>
+      <div className={`${styles.pageHeader} flex flex-col md:flex-row md:items-center justify-between gap-4 !mb-6`}>
+        <div className={`${styles.pageTitleRow} !mb-0`}>
           <ShoppingCart size={24} className={styles.pageTitleIcon} />
-          <h1 className={`${styles.pageTitle} !text-xl md:!text-2xl !mb-4`}>THÔNG TIN MUA SẮM</h1>
+          <h1 className={`${styles.pageTitle} !text-xl md:!text-2xl !mb-0`}>THÔNG TIN MUA SẮM</h1>
         </div>
         
         {/* Search form */}
-        <form className="flex w-full md:w-auto mt-4 md:mt-0 mb-4" method="GET" action="/mua-sam">
+        <form className="flex w-full md:w-auto" method="GET" action="/mua-sam">
           {activeStatus && <input type="hidden" name="status" value={activeStatus} />}
           <div className="relative flex w-full md:w-96 shadow-sm">
             <input 
