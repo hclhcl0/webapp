@@ -389,7 +389,7 @@ function LogoBlock({ logoUrl, siteName, logoConfig, styles }: any) {
         logoConfig.hoverEffect === 'glow' ? styles.effectGlow :
         logoConfig.hoverEffect === 'bounce' ? styles.effectBounce : ''
       }>
-        <picture>
+        <picture className="flex-shrink-0">
           {logoConfig.mobileLogoUrl && (
             <source media="(max-width: 1024px)" srcSet={logoConfig.mobileLogoUrl} />
           )}
