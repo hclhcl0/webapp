@@ -7,6 +7,7 @@ import configPromise from '@payload-config';
 import { FileText, Download, Clock, AlertCircle, CheckCircle2, ChevronRight, ShoppingCart } from 'lucide-react';
 import styles from './Procurements.module.css';
 import { resolveFileUrl, isGoogleDriveUrl, driveLinkLabel } from '@/lib/driveUrl';
+import { Pagination } from '@/components/Pagination';
 
 export const metadata = {
   title: 'Thông tin mua sắm | CDC Đà Nẵng',
@@ -58,7 +59,7 @@ async function getProcurements() {
     const { docs } = await payload.find({
       collection: 'procurements',
       sort: '-publishedDate',
-      limit: 200,
+      limit: 2000,
       depth: 1,
       where: {
         status: {
@@ -74,12 +75,16 @@ async function getProcurements() {
 }
 
 interface PageProps {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }
 
 export default async function ProcurementsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const activeStatus = params.status ?? '';
+  const pageStr = params?.page;
+  const page = typeof pageStr === 'string' ? parseInt(pageStr, 10) || 1 : 1;
+  const limit = 15; // Items per page
+  
   const rawItems = await getProcurements();
 
   // Process items: compute expired and effectiveStatus
@@ -94,7 +99,7 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
   });
 
   // Filter based on active tab selection
-  const items = processedItems.filter((item: any) => {
+  const filteredItems = processedItems.filter((item: any) => {
     if (activeStatus === 'open') {
       return item.effectiveStatus === 'open';
     }
@@ -112,6 +117,12 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
     { label: 'Đang mở', value: 'open',   count: openCount },
     { label: 'Đã đóng', value: 'closed', count: closedCount },
   ];
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredItems.length / limit);
+  const hasPrevPage = page > 1;
+  const hasNextPage = page < totalPages;
+  const items = filteredItems.slice((page - 1) * limit, page * limit);
 
   return (
     <div className="container pt-2 md:pt-4 pb-8">
@@ -226,6 +237,15 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
             );
           })}
         </div>
+      )}
+      
+      {totalPages > 1 && (
+        <Pagination
+          totalPages={totalPages}
+          currentPage={page}
+          hasPrevPage={hasPrevPage}
+          hasNextPage={hasNextPage}
+        />
       )}
     </div>
   );
