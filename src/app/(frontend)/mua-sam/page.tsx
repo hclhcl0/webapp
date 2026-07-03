@@ -194,6 +194,7 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
               ?? (item.driveUrl ? driveLinkLabel(item.driveUrl) : null)
               ?? 'file';
             const isFromDrive = !item.file?.url && isGoogleDriveUrl(item.driveUrl);
+            const isNew = item.publishedDate && (Date.now() - new Date(item.publishedDate).getTime()) < 7 * 24 * 60 * 60 * 1000; // < 7 ngày
             const deadlineUrgent =
               item.deadline &&
               !item.expired &&
@@ -221,10 +222,16 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
                   {/* Title */}
                   {fileUrl ? (
                     <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="hover:text-gov-primary transition-colors cursor-pointer">
-                      <h2 className={styles.title}>{item.title}</h2>
+                      <h2 className={styles.title}>
+                        {isNew && <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-600 mr-2 align-middle uppercase tracking-wide relative -top-[1px]">Mới</span>}
+                        {item.title}
+                      </h2>
                     </a>
                   ) : (
-                    <h2 className={styles.title}>{item.title}</h2>
+                    <h2 className={styles.title}>
+                      {isNew && <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-600 mr-2 align-middle uppercase tracking-wide relative -top-[1px]">Mới</span>}
+                      {item.title}
+                    </h2>
                   )}
 
                   {/* Note */}
@@ -252,10 +259,9 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.downloadBtn}
+                        title={isFromDrive ? 'Mở Google Drive' : 'Tải file đính kèm'}
                       >
-                        <FileText size={15} />
-                        <span>{isFromDrive ? '📁 Google Drive' : 'Xem / Tải file'}</span>
-                        <Download size={13} />
+                        <Download size={16} />
                       </a>
                     )}
                   </div>
