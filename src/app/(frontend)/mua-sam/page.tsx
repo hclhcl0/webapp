@@ -147,16 +147,16 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
         {/* Search form */}
         <form className="flex w-full md:w-auto mt-4 md:mt-0 mb-4" method="GET" action="/mua-sam">
           {activeStatus && <input type="hidden" name="status" value={activeStatus} />}
-          <div className="relative flex w-full md:w-80">
+          <div className="relative flex w-full md:w-96 shadow-sm">
             <input 
               type="search" 
               name="q" 
               defaultValue={q}
               placeholder="Tìm kiếm theo tiêu đề, số hiệu..." 
-              className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gov-primary focus:border-transparent text-sm"
+              className="w-full pl-4 pr-12 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gov-primary focus:border-transparent text-sm transition-all"
             />
-            <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gov-primary p-1">
-              <Search size={18} />
+            <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 bg-gov-primary text-white hover:bg-gov-primary-dark p-1.5 rounded-lg transition-colors">
+              <Search size={16} />
             </button>
           </div>
         </form>

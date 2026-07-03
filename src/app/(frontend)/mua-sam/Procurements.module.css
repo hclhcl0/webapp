@@ -45,53 +45,52 @@
 /* ── Tab bar ── */
 .tabBar {
   display: flex;
-  gap: 6px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--border);
+  margin-bottom: 2rem;
   padding-bottom: 0;
 }
 .tab {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 8px 8px 0 0;
-  font-size: 0.85rem;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-muted);
+  background: var(--bg-light, #f8fafc);
+  border: 1px solid var(--border-light, #e2e8f0);
   text-decoration: none;
-  border: 1px solid transparent;
-  border-bottom: none;
-  transition: all 0.15s ease;
-  margin-bottom: -2px;
+  transition: all 0.2s ease;
 }
 .tab:hover {
   color: var(--primary);
   background: var(--primary-50);
+  border-color: var(--primary-200);
 }
 .tabActive {
-  color: var(--primary-dark) !important;
-  background: #fff !important;
-  border-color: var(--border);
-  border-bottom-color: #fff !important;
+  color: #fff !important;
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
   font-weight: 600;
+  box-shadow: 0 4px 10px rgba(var(--primary-rgb, 0,122,140), 0.25);
 }
 .tabCount {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 5px;
-  background: var(--primary-100);
-  color: var(--primary-dark);
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: rgba(0,0,0,0.06);
+  color: inherit;
   border-radius: 999px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 .tabActive .tabCount {
-  background: var(--primary);
+  background: rgba(255,255,255,0.25);
   color: #fff;
 }
 
@@ -121,15 +120,16 @@
   display: flex;
   flex-direction: row;
   background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-xs);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.3s ease;
 }
 .card:hover {
-  box-shadow: var(--shadow-sm);
-  border-color: var(--primary-100);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  border-color: var(--primary-200, #bae6fd);
+  transform: translateY(-3px);
 }
 .cardOpen {
   border-left: none;
@@ -137,7 +137,7 @@
 
 /* Left accent bar */
 .accent {
-  width: 4px;
+  width: 6px;
   flex-shrink: 0;
 }
 .accentOpen   { background: #16a34a; }
@@ -146,10 +146,10 @@
 /* Card body */
 .cardBody {
   flex: 1;
-  padding: 14px 18px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   min-width: 0;
 }
 
@@ -215,11 +215,12 @@
 
 /* Title */
 .title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-dark);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-dark);
   line-height: 1.5;
   margin: 0;
+  transition: color 0.2s ease;
 }
 
 /* Note */
@@ -277,20 +278,25 @@
 .downloadBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 8px;
+  padding: 8px 16px;
   border-radius: 8px;
+  background: var(--primary);
   border: 1px solid var(--primary);
-  color: var(--primary);
-  font-size: 0.8rem;
+  color: #fff;
+  font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   white-space: nowrap;
   flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(var(--primary-rgb, 0,122,140), 0.2);
 }
 .downloadBtn:hover {
-  background: var(--primary);
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow: 0 4px 8px rgba(var(--primary-rgb, 0,122,140), 0.3);
+  transform: translateY(-1px);
   color: #fff;
 }
 
