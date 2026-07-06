@@ -229,7 +229,7 @@ export const HeaderClient = ({ menuItems, menuPosition, navStyle = 'white', logo
       <div 
         className={styles.mainNav}
         style={{
-          backgroundImage: isColoredNav ? 'none' : `url('${logoConfig.bannerImageUrl || '/bg-building.svg'}')`,
+          backgroundImage: `url('${logoConfig.bannerImageUrl || '/bg-building.svg'}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
