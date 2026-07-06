@@ -17,6 +17,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: "TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG",
   description: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -119,6 +120,14 @@ export default async function RootLayout({
               e.preventDefault();
               window.deferredPrompt = e;
             });
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(
+                  function(registration) { console.log('SW registered:', registration.scope); },
+                  function(err) { console.log('SW registration failed:', err); }
+                );
+              });
+            }
           `
         }} />
       </head>
