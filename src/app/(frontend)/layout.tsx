@@ -10,8 +10,9 @@ import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { getPayload } from "payload";
 import configPromise from "@payload-config";
 
-// Tất cả các trang trong route group này sẽ render động (không render tĩnh khi build)
-// để tránh lỗi database chưa được khởi tạo trong quá trình build
+// Layout giữ force-dynamic để luôn có Header mới nhất
+// Tuy nhiên DB query trong Header đã được cache 60s bằng unstable_cache
+// Các page con dùng revalidate=60 (ISR) để cache ở tầng page
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {

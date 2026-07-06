@@ -4,8 +4,19 @@ import { Search, LogIn } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaYoutube, FaInstagram } from 'react-icons/fa';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
+import { unstable_cache } from 'next/cache';
 import { HeaderClient } from './HeaderClient';
 import styles from './Header.module.css';
+
+// Cache site-settings 60 giây — giảm DB query từ mỗi request → 1 lần/phút
+const getCachedSettings = unstable_cache(
+  async () => {
+    const payload = await getPayload({ config: configPromise });
+    return payload.findGlobal({ slug: 'site-settings', depth: 2 });
+  },
+  ['site-settings-header'],
+  { revalidate: 60, tags: ['site-settings'] }
+);
 
 export const Header = async () => {
   let menuItems: any[] = [];
@@ -26,8 +37,7 @@ export const Header = async () => {
   let navStyle: 'white' | 'primary' | 'gradient' = 'white';
 
   try {
-    const payload = await getPayload({ config: configPromise });
-    const s = await payload.findGlobal({ slug: 'site-settings', depth: 2 }) as any;
+    const s = await getCachedSettings() as any;
     const headerData = s?.header || {};
     const menuData = s?.menu || {};
     menuItems = menuData?.menuItems || [];
