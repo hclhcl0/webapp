@@ -10,10 +10,7 @@ import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { getPayload } from "payload";
 import configPromise from "@payload-config";
 
-// Layout giữ force-dynamic để luôn có Header mới nhất
-// Tuy nhiên DB query trong Header đã được cache 60s bằng unstable_cache
-// Các page con dùng revalidate=60 (ISR) để cache ở tầng page
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG",
