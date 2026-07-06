@@ -50,14 +50,20 @@ export default function PWAInstallPrompt() {
     }
 
     // Android / Desktop Chrome: listen for beforeinstallprompt
-    const handler = (e: Event) => {
+    const handlePrompt = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
       const t = setTimeout(() => setShow(true), 3000);
       return () => clearTimeout(t);
     };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+
+    if ((window as any).deferredPrompt) {
+      const clear = handlePrompt((window as any).deferredPrompt);
+      return clear;
+    } else {
+      window.addEventListener('beforeinstallprompt', handlePrompt);
+      return () => window.removeEventListener('beforeinstallprompt', handlePrompt);
+    }
   }, []);
 
   const handleDismiss = () => {

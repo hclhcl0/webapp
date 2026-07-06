@@ -17,7 +17,6 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: "TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG",
   description: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
-  manifest: "/manifest.json",
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -111,6 +110,15 @@ export default async function RootLayout({
               --primary-rgb: ${primaryRgb};
               --font-family: '${fontName}', system-ui, -apple-system, sans-serif;
             }
+          `
+        }} />
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            window.deferredPrompt = null;
+            window.addEventListener('beforeinstallprompt', (e) => {
+              e.preventDefault();
+              window.deferredPrompt = e;
+            });
           `
         }} />
       </head>
