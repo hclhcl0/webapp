@@ -273,8 +273,7 @@ export const Articles: CollectionConfig = {
       label: 'Tiêu đề bài viết',
     },
     {
-      name: 'publishedAt',
-      type: 'date',
+      name: 'publishedAt', type: 'date', index: true,
       label: 'Ngày đăng (từ NukeViet)',
       admin: {
         position: 'sidebar',
@@ -300,9 +299,7 @@ export const Articles: CollectionConfig = {
       },
     },
     {
-      name: 'category',
-      type: 'relationship',
-      relationTo: 'categories',
+      name: 'category', type: 'relationship', relationTo: 'categories', index: true,
       hasMany: false,
       required: true,
       label: 'Chuyên mục',

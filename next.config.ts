@@ -11,6 +11,7 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  compress: true, // Ép Next.js luôn nén nội dung (Gzip/Brotli)
   outputFileTracingRoot: path.resolve(__dirname),
   typescript: {
     ignoreBuildErrors: true,
