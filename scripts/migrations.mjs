@@ -2646,4 +2646,9 @@ export const MIGRATION_STATEMENTS = [
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_secondary_color" varchar`,
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "theme_config_font_family" varchar`,
 
+  // ====================================================
+  // BATCH: Add menu navStyle field
+  // ====================================================
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "menu_nav_style" varchar DEFAULT 'white'`,
+
 ];
