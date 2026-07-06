@@ -270,6 +270,20 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
+              name: 'navStyle',
+              type: 'select',
+              label: '🎨 Phong cách nền Menu',
+              defaultValue: 'white',
+              options: [
+                { label: '⬜ Trắng (Mặc định)', value: 'white' },
+                { label: '🟦 Màu chủ đạo (Solid Primary)', value: 'primary' },
+                { label: '🌊 Gradient tối (Gradient Dark)', value: 'gradient' },
+              ],
+              admin: {
+                description: 'Chọn màu nền cho thanh menu điều hướng. Áp dụng cho cả menu inline và menu bên dưới logo.',
+              },
+            },
+            {
               name: 'menuItems',
               type: 'array',
               label: 'Danh sách Menu',

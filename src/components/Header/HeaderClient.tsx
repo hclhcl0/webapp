@@ -29,6 +29,7 @@ interface SearchConfig {
 interface Props {
   menuItems: MenuItem[];
   menuPosition: string;
+  navStyle: 'white' | 'primary' | 'gradient';
   logoUrl: string;
   logoConfig: LogoConfig;
   searchConfig: SearchConfig;
@@ -39,7 +40,7 @@ interface Props {
   socials: { fb?: string; tw?: string; yt?: string; ig?: string; };
 }
 
-export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, searchConfig, hotlinePosition, siteName, phone, actionLink, socials }: Props) => {
+export const HeaderClient = ({ menuItems, menuPosition, navStyle = 'white', logoUrl, logoConfig, searchConfig, hotlinePosition, siteName, phone, actionLink, socials }: Props) => {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -49,6 +50,36 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Nav style config
+  const NAV_STYLES = {
+    white: {
+      background: '#ffffff',
+      borderBottom: '1px solid var(--border-light)',
+      linkColor: 'var(--text-dark)',
+      linkHoverBg: 'var(--primary-50)',
+      linkHoverColor: 'var(--primary)',
+      activeColor: 'var(--primary)',
+    },
+    primary: {
+      background: 'var(--primary)',
+      borderBottom: 'none',
+      linkColor: '#ffffff',
+      linkHoverBg: 'rgba(255,255,255,0.15)',
+      linkHoverColor: '#ffffff',
+      activeColor: '#ffffff',
+    },
+    gradient: {
+      background: 'linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%)',
+      borderBottom: 'none',
+      linkColor: '#ffffff',
+      linkHoverBg: 'rgba(255,255,255,0.15)',
+      linkHoverColor: '#ffffff',
+      activeColor: '#ffffff',
+    },
+  };
+  const navCfg = NAV_STYLES[navStyle] || NAV_STYLES.white;
+  const isColoredNav = navStyle === 'primary' || navStyle === 'gradient';
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 60);
@@ -198,7 +229,7 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
       <div 
         className={styles.mainNav}
         style={{
-          backgroundImage: `url('${logoConfig.bannerImageUrl || '/bg-building.svg'}')`,
+          backgroundImage: isColoredNav ? 'none' : `url('${logoConfig.bannerImageUrl || '/bg-building.svg'}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -272,7 +303,17 @@ export const HeaderClient = ({ menuItems, menuPosition, logoUrl, logoConfig, sea
 
         {/* Nav below (full width bar) */}
         {menuPosition === 'below' && (
-          <div className={styles.navBarBelow}>
+          <div 
+            className={styles.navBarBelow}
+            style={{
+              background: navCfg.background,
+              borderTop: isColoredNav ? 'none' : '1px solid var(--border-light)',
+              '--nav-link-color': navCfg.linkColor,
+              '--nav-link-hover-bg': navCfg.linkHoverBg,
+              '--nav-link-hover-color': navCfg.linkHoverColor,
+              '--nav-link-active-color': navCfg.activeColor,
+            } as React.CSSProperties}
+          >
             <div className="container">
               <NavMenu
                 menuItems={menuItems}

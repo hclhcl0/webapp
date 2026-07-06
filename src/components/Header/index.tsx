@@ -23,6 +23,7 @@ export const Header = async () => {
   let hotlinePosition = 'below-nav';
   let logoUrl = '/logo.png';
   let siteName = 'CDC Đà Nẵng';
+  let navStyle: 'white' | 'primary' | 'gradient' = 'white';
 
   try {
     const payload = await getPayload({ config: configPromise });
@@ -31,6 +32,7 @@ export const Header = async () => {
     const menuData = s?.menu || {};
     menuItems = menuData?.menuItems || [];
     menuPosition = menuData?.menuPosition || 'right';
+    navStyle = menuData?.navStyle || 'white';
     const lc = headerData.logoCustomization || {};
     logoConfig = {
       height: lc.logoHeight || 52,
@@ -64,6 +66,7 @@ export const Header = async () => {
     <HeaderClient
       menuItems={menuItems}
       menuPosition={menuPosition}
+      navStyle={navStyle}
       logoUrl={logoUrl}
       logoConfig={logoConfig}
       searchConfig={searchConfig}

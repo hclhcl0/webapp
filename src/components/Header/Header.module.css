@@ -151,18 +151,20 @@
   transition: background var(--transition-base), color var(--transition-base);
   cursor: pointer;
   white-space: nowrap;
+  color: var(--nav-link-color, var(--text-dark));
 }
 
 .navMenu > ul > li > a:hover,
 .navMenu > ul > li > span:hover {
-  color: var(--primary);
-  background: var(--primary-50);
+  color: var(--nav-link-hover-color, var(--primary));
+  background: var(--nav-link-hover-bg, var(--primary-50));
 }
 
 /* Active state */
 .activeItem > a,
 .navMenu > ul > li.activeItem > span {
-  color: var(--primary) !important;
+  color: var(--nav-link-active-color, var(--primary)) !important;
+  font-weight: 700;
 }
 
 .activeItem > a::after {
@@ -172,7 +174,7 @@
   left: 0.85rem;
   right: 0.85rem;
   height: 2px;
-  background: var(--primary);
+  background: var(--nav-link-active-color, var(--primary));
   border-radius: 2px 2px 0 0;
 }
 
