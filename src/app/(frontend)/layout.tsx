@@ -131,10 +131,13 @@ export default async function RootLayout({
           `
         }} />
       </head>
-      <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+      <body className="bg-gray-100/80 antialiased selection:bg-teal-600 selection:text-white">
+        <div className="max-w-[1400px] mx-auto bg-white min-h-screen shadow-2xl flex flex-col overflow-hidden relative border-x border-gray-200">
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
+        
         <BackToTop />
         <ChatWidget />
         {!isDraftMode && <SitePopup popupConfig={popupConfig} />}
