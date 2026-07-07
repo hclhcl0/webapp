@@ -2,7 +2,6 @@
 
 import React, { useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { Eye, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -30,7 +29,6 @@ export const NewsGridSliderClient = ({ articles, desktopCols, mobileCols }: News
 
   return (
     <div className={styles.sliderWrapper}>
-      {/* Embla Carousel Viewport */}
       <div 
         className={styles.embla} 
         ref={emblaRef}
@@ -43,30 +41,25 @@ export const NewsGridSliderClient = ({ articles, desktopCols, mobileCols }: News
           {articles.map((article: any) => {
             const mediaUrl = article.image?.url || '/logo.png';
             const catName = article.category?.name || 'Tin tức';
-            const isExternal = mediaUrl.startsWith('http');
 
             return (
               <div key={article.id} className={styles.emblaSlide}>
                 <article className={styles.card} style={{ height: '100%' }}>
                   <div className={styles.imageHolder}>
                     <Link href={`/bai-viet/${article.slug || article.id}`}>
-                      {/* Phase 2: Dùng next/image để mobile nhận ảnh nhỏ hơn + WebP tự động */}
-                      <div style={{ position: 'relative', width: '100%', aspectRatio: '5/3' }}>
-                        <Image
-                          src={mediaUrl}
-                          alt={article.title}
-                          fill
-                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          className="object-cover"
-                          loading="lazy"
-                          {...(isExternal ? {} : {})}
-                          unoptimized={isExternal && !mediaUrl.includes('img.youtube.com')}
-                        />
-                      </div>
+                      {/* Phase 2: lazy + width/height để tránh CLS */}
+                      <img
+                        src={mediaUrl}
+                        alt={article.title}
+                        width={400}
+                        height={240}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover"
+                      />
                     </Link>
                     <span className={styles.catBadge}>{catName}</span>
                   </div>
-
                   <div className={styles.body}>
                     <h3 className={styles.title}>
                       <Link href={`/bai-viet/${article.slug || article.id}`}>
