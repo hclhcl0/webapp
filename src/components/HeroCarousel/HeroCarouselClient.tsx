@@ -3,6 +3,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './HeroCarousel.module.css';
 
@@ -12,6 +13,11 @@ interface Props {
   globalCustomHeight: number;
   globalEffect: string;
   globalAutoplayDelay: number;
+}
+
+// Helper: kiểm tra URL nội bộ
+function isInternalUrl(url: string) {
+  return url.startsWith('/') || url.startsWith('./');
 }
 
 export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, globalEffect, globalAutoplayDelay }: Props) => {
@@ -94,19 +100,17 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
                     >
                       <picture className="w-full h-full block" style={heightStyle}>
                         {mobileUrl && <source media="(max-width: 768px)" srcSet={mobileUrl} />}
-                        {/* FIX #3: Slide đầu eager (hiển thị ngay), slide sau lazy (tải khi cần) */}
-                        {/* FIX #3: Thêm width/height để tránh CLS (layout shift) */}
-                        {/* FIX #6: Alt text dùng title banner thay vì index số */}
-                        <img
+                        {/* Phase 2 Fix: Sử dụng Image của Next.js để có WebP và sizes tối ưu */}
+                        <Image
                           src={imageUrl}
                           alt={banner.title || `Banner CDC Đà Nẵng số ${index + 1}`}
                           className="w-full h-full object-cover"
                           style={heightStyle}
                           width={1200}
                           height={500}
-                          loading={index === 0 ? 'eager' : 'lazy'}
-                          decoding={index === 0 ? 'sync' : 'async'}
-                          fetchPriority={index === 0 ? 'high' : 'low'}
+                          sizes="100vw"
+                          priority={index === 0}
+                          unoptimized={!isInternalUrl(imageUrl)}
                         />
                       </picture>
                     </a>

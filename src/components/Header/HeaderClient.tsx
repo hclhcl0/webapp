@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { Search, LogIn, Menu, X, ChevronDown } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaYoutube, FaInstagram } from 'react-icons/fa';
 import styles from './Header.module.css';
@@ -434,14 +435,18 @@ function LogoBlock({ logoUrl, siteName, logoConfig, styles }: any) {
           {logoConfig.mobileLogoUrl && (
             <source media="(max-width: 1024px)" srcSet={logoConfig.mobileLogoUrl} />
           )}
-          <img
+          <Image
             src={logoUrl}
             alt={siteName}
             className={styles.logoImg}
+            width={144}
+            height={136}
             style={{
               '--logo-height': `${logoConfig.height}px`,
               '--mobile-logo-height': `${logoConfig.mobileHeight || 52}px`
             } as any}
+            unoptimized={!(logoUrl.startsWith('/') || logoUrl.startsWith('./'))}
+            priority
           />
         </picture>
         {logoConfig.showSiteName && (
