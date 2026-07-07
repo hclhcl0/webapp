@@ -120,8 +120,6 @@ export default async function RootLayout({
     <html lang="vi">
       <head>
         {/* Tối ưu Google Font: Load không đồng bộ để tránh render-blocking */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link id="google-font-css" href={googleFontUrl} rel="stylesheet" media="print" />
         <Script
           id="google-font-async"
