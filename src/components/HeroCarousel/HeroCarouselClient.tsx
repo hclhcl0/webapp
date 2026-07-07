@@ -17,7 +17,8 @@ interface Props {
 
 // Helper: kiểm tra URL nội bộ
 function isInternalUrl(url: string) {
-  return url.startsWith('/') || url.startsWith('./');
+  if (!url) return false;
+  return url.startsWith('/') || url.startsWith('./') || url.includes('ecdc.vnos.org');
 }
 
 export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, globalEffect, globalAutoplayDelay }: Props) => {

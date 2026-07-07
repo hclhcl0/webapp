@@ -53,9 +53,10 @@ async function getNewsSettings() {
   }
 }
 
-// Helper: kiểm tra URL nội bộ (relative) hay bên ngoài
+// Helper: kiểm tra URL nội bộ
 function isInternalUrl(url: string) {
-  return url.startsWith('/') || url.startsWith('./');
+  if (!url) return false;
+  return url.startsWith('/') || url.startsWith('./') || url.includes('ecdc.vnos.org');
 }
 
 export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOverride, layoutOverride }: NewsGridProps) => {
