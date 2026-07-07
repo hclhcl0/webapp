@@ -23,7 +23,7 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
             const limitCat = widget.limit || 10;
             return (
               <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gov-primary inline-block">
+                <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
                   {widget.title}
                 </h3>
                 <ul className="space-y-3 list-none p-0 m-0">
@@ -44,7 +44,7 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
             const limitArt = widget.limit || 5;
             return (
               <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gov-primary inline-block">
+                <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
                   {widget.title}
                 </h3>
                 <ul className="space-y-4 list-none p-0 m-0">
@@ -71,7 +71,7 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
             return (
               <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 {widget.title && (
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gov-primary inline-block">
+                  <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
                     {widget.title}
                   </h3>
                 )}
@@ -92,7 +92,7 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
             return (
               <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 {widget.title && (
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gov-primary inline-block">
+                  <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
                     {widget.title}
                   </h3>
                 )}
@@ -116,7 +116,7 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
             return (
               <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
                 {widget.title && (
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gov-primary inline-block">
+                  <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
                     {widget.title}
                   </h3>
                 )}
@@ -139,7 +139,7 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
             return (
               <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 {widget.title && (
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gov-primary inline-block">
+                  <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
                     {widget.title}
                   </h3>
                 )}
