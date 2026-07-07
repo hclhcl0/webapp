@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizeCss: true, // Inlines critical CSS to avoid render-blocking
+    optimizePackageImports: ['lucide-react', 'react-icons'], // Loại bỏ JS thừa từ các thư viện icon
   },
   // FIX Phase 2: Cho phép next/image tối ưu ảnh từ domain nội bộ và YouTube
   images: {
