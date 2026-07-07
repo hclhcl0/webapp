@@ -1477,6 +1477,7 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "_pages_v_created_at_idx" ON "_pages_v" USING btree ("created_at")`,
   `CREATE INDEX IF NOT EXISTS "_pages_v_updated_at_idx" ON "_pages_v" USING btree ("updated_at")`,
   `CREATE INDEX IF NOT EXISTS "_pages_v_latest_idx" ON "_pages_v" USING btree ("latest")`,
+  `ALTER TABLE "_pages_v" ADD COLUMN IF NOT EXISTS "autosave" boolean`,
   `CREATE INDEX IF NOT EXISTS "_pages_v_autosave_idx" ON "_pages_v" USING btree ("autosave")`,
 
   `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_rich_text_block" (
@@ -2625,11 +2626,11 @@ export const MIGRATION_STATEMENTS = [
   // ====================================================
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "popup_type" varchar`,
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "popup_article_id" integer`,
-  `DO $ BEGIN
+  `DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'site_settings_popup_article_id_articles_id_fk') THEN
       ALTER TABLE "site_settings" ADD CONSTRAINT "site_settings_popup_article_id_articles_id_fk" FOREIGN KEY ("popup_article_id") REFERENCES "articles"("id") ON DELETE set null ON UPDATE no action;
     END IF;
-  END $;`,
+  END $$;`,
 
 
   // ====================================================
