@@ -76,7 +76,7 @@ export const NewsGridSliderClient = ({ articles, desktopCols, mobileCols }: News
                     <div className={styles.meta}>
                       <span className="flex items-center gap-2">
                         <Calendar size={12} /> 
-                        {new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}
+                        <span suppressHydrationWarning>{new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}</span>
                       </span>
                       <span className="flex items-center gap-2">
                         <Eye size={12} /> 

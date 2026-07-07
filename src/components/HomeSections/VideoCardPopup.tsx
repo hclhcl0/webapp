@@ -55,7 +55,7 @@ export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFe
             {video.title}
           </h4>
           {!isFeatured && video.publishedDate && (
-            <p className="text-xs text-gray-400 mt-auto pt-2">
+            <p suppressHydrationWarning className="text-xs text-gray-400 mt-auto pt-2">
               {new Date(video.publishedDate).toLocaleDateString('vi-VN')}
             </p>
           )}
