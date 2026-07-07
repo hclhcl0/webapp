@@ -23,7 +23,7 @@ function isInternalUrl(url: string) {
 export const NewsGridSliderClient = ({ articles, desktopCols, mobileCols }: NewsGridSliderClientProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: 'start' },
-    [Autoplay({ delay: 4000, stopOnInteraction: false })]
+    [Autoplay({ delay: 15000, stopOnInteraction: false })]
   );
 
   const scrollPrev = useCallback(() => {
