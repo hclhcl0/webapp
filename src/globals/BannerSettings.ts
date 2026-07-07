@@ -57,7 +57,17 @@ export const BannerSettings: GlobalConfig = {
       label: 'Thời gian dừng ở mỗi ảnh (mili-giây)',
       defaultValue: 5000,
       admin: {
+        condition: (data) => data.heroSliderAutoplay !== false,
         description: 'Nhập thời gian tính bằng mili-giây (1 giây = 1000). Mặc định là 5000 (5 giây).',
+      }
+    },
+    {
+      name: 'heroSliderAutoplay',
+      type: 'checkbox',
+      label: 'Bật tự động trượt ảnh Banner',
+      defaultValue: true,
+      admin: {
+        description: 'Tích chọn để băng chuyền ảnh tự động chuyển sang ảnh tiếp theo.',
       }
     },
   ],

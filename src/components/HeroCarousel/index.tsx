@@ -33,10 +33,11 @@ async function getSliderSettings() {
       size: settings?.heroSliderSize || 'medium',
       customHeight: settings?.heroSliderCustomHeight || 500,
       effect: (settings as any)?.heroSliderEffect || 'slide',
+      autoplay: (settings as any)?.heroSliderAutoplay !== false,
       autoplayDelay: (settings as any)?.heroSliderAutoplayDelay || 5000,
     };
   } catch(e) {
-    return { size: 'medium', customHeight: 500, effect: 'slide', autoplayDelay: 5000 };
+    return { size: 'medium', customHeight: 500, effect: 'slide', autoplay: true, autoplayDelay: 5000 };
   }
 }
 
@@ -58,5 +59,5 @@ export const HeroCarousel = async () => {
     );
   }
 
-  return <HeroCarouselClient banners={banners} globalSize={settings.size} globalCustomHeight={settings.customHeight} globalEffect={settings.effect} globalAutoplayDelay={settings.autoplayDelay} />;
+  return <HeroCarouselClient banners={banners} globalSize={settings.size} globalCustomHeight={settings.customHeight} globalEffect={settings.effect} globalAutoplay={settings.autoplay} globalAutoplayDelay={settings.autoplayDelay} />;
 };

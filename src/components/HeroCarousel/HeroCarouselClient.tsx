@@ -12,6 +12,7 @@ interface Props {
   globalSize: string;
   globalCustomHeight: number;
   globalEffect: string;
+  globalAutoplay: boolean;
   globalAutoplayDelay: number;
 }
 
@@ -21,10 +22,10 @@ function isInternalUrl(url: string) {
   return url.startsWith('/') || url.startsWith('./') || url.includes('ecdc.vnos.org');
 }
 
-export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, globalEffect, globalAutoplayDelay }: Props) => {
+export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, globalEffect, globalAutoplay, globalAutoplayDelay }: Props) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, duration: globalEffect === 'slide' ? 25 : 0 },
-    [Autoplay({ delay: globalAutoplayDelay, stopOnInteraction: false })]
+    globalAutoplay === false ? [] : [Autoplay({ delay: globalAutoplayDelay, stopOnInteraction: false })]
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
