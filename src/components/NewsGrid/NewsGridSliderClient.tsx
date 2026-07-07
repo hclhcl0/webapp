@@ -2,6 +2,7 @@
 
 import React, { useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { Eye, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -11,6 +12,11 @@ interface NewsGridSliderClientProps {
   articles: any[];
   desktopCols: number;
   mobileCols: number;
+}
+
+// Helper: kiểm tra URL nội bộ (relative) hay bên ngoài
+function isInternalUrl(url: string) {
+  return url.startsWith('/') || url.startsWith('./');
 }
 
 export const NewsGridSliderClient = ({ articles, desktopCols, mobileCols }: NewsGridSliderClientProps) => {
@@ -47,15 +53,16 @@ export const NewsGridSliderClient = ({ articles, desktopCols, mobileCols }: News
                 <article className={styles.card} style={{ height: '100%' }}>
                   <div className={styles.imageHolder}>
                     <Link href={`/bai-viet/${article.slug || article.id}`}>
-                      {/* Phase 2: lazy + width/height để tránh CLS */}
-                      <img
+                      {/* Phase 2: Dùng next/image với explicit width/height để an toàn SSG + WebP/resize */}
+                      <Image
                         src={mediaUrl}
                         alt={article.title}
                         width={400}
                         height={240}
-                        loading="lazy"
-                        decoding="async"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        unoptimized={!isInternalUrl(mediaUrl)}
                       />
                     </Link>
                     <span className={styles.catBadge}>{catName}</span>
