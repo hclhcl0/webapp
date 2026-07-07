@@ -119,11 +119,20 @@ export default async function RootLayout({
   return (
     <html lang="vi">
       <head>
-        {/* Fix: Chỉ dùng preconnect, KHÔNG thêm preload thủ công cho font
-           vì Next.js tự động inject preload khi gặp stylesheet → tránh duplicate */}
+        {/* Tối ưu Google Font: Load không đồng bộ để tránh render-blocking */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href={googleFontUrl} rel="stylesheet" />
+        <link id="google-font-css" href={googleFontUrl} rel="stylesheet" media="print" />
+        <Script
+          id="google-font-async"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `document.getElementById('google-font-css').media = 'all';`
+          }}
+        />
+        <noscript>
+          <link href={googleFontUrl} rel="stylesheet" />
+        </noscript>
 
         {/* Không preload ảnh nền header ở đây — Next.js sẽ tự thêm từ component Header
            Preload thủ công ở đây gây duplicate với tag Next.js inject sau */}

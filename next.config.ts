@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    optimizeCss: true, // Inlines critical CSS to avoid render-blocking
+  },
   // FIX Phase 2: Cho phép next/image tối ưu ảnh từ domain nội bộ và YouTube
   images: {
     remotePatterns: [
