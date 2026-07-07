@@ -9,7 +9,8 @@ export function ReadingProgressBar({ show = true }: { show?: boolean }) {
     if (!show) return;
     const updateProgress = () => {
       const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      // Dùng window.innerHeight thay vì document.documentElement.clientHeight để tránh Forced Reflow (Layout Thrashing)
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (docHeight <= 0) return;
       const pct = Math.min(100, Math.round((scrollTop / docHeight) * 100));
       setProgress(pct);

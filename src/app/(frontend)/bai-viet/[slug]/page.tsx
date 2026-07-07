@@ -12,7 +12,6 @@ import { headers } from 'next/headers';
 import { getJsxConverters } from '@/components/LexicalConverters';
 import { ArticleReaderTools } from '@/components/ArticleReaderTools';
 import type { ReaderToolsConfig } from '@/components/ArticleReaderTools';
-import { ReadingProgressBar } from '@/components/ReadingProgressBar';
 import { SidebarRenderer } from '@/components/SidebarRenderer';
 
 interface PageParams {
@@ -140,8 +139,6 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
         
         {/* Main Content Wrapper - relative for sidebar positioning */}
         <div className="relative">
-          {/* Reading Progress Bar removed per user request */}
-
           <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 py-4 md:py-8 md:pl-16 overflow-visible min-w-0">
             
             {/* Desktop Sticky Reader Tools - pinned to left edge inside article card */}
