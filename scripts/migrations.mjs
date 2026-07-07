@@ -2651,4 +2651,11 @@ export const MIGRATION_STATEMENTS = [
   // ====================================================
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "menu_nav_style" varchar DEFAULT 'white'`,
 
+  // ====================================================
+  // BATCH: Add missing popup fields
+  // ====================================================
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "popup_transparent_background" boolean`,
+  `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "popup_video_url" varchar`,
+
 ];
+
