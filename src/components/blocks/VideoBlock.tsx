@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { PlayCircle, X } from 'lucide-react';
+import Image from 'next/image';
 
 export default function VideoBlock({ data }: { data: any }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,10 +33,13 @@ export default function VideoBlock({ data }: { data: any }) {
             className="relative aspect-video cursor-pointer group bg-black"
             onClick={() => setIsOpen(true)}
           >
-            <img 
+            <Image 
               src={thumbnailUrl!} 
               alt="Video thumbnail" 
               className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+              width={640}
+              height={360}
+              loading="lazy"
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-white/90 text-gov-primary rounded-full p-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300">

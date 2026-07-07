@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+import Image from 'next/image';
 
 function getYoutubeId(url: string) {
   if (!url) return null;
@@ -29,14 +30,13 @@ export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFe
       >
         <div className="relative aspect-video overflow-hidden bg-gray-100 flex items-center justify-center shrink-0">
           {thumbUrl ? (
-            <img
+            <Image
               src={thumbUrl}
               alt={video.title || 'Video CDC Đà Nẵng'}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               width={480}
               height={270}
               loading="lazy"
-              decoding="async"
             />
           ) : (
             <span className="text-gray-400">Không có ảnh thu nhỏ</span>
