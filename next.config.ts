@@ -16,6 +16,28 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // FIX Phase 2: Cho phép next/image tối ưu ảnh từ domain nội bộ và YouTube
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        pathname: '/vi/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ecdc.vnos.org',
+        pathname: '/**',
+      },
+    ],
+    // Tự động convert sang WebP/AVIF khi browser hỗ trợ
+    formats: ['image/avif', 'image/webp'],
+    // Cache ảnh đã optimize trong 7 ngày
+    minimumCacheTTL: 604800,
+    // Các kích thước ảnh responsive
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
   async redirects() {
     return [
       {

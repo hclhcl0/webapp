@@ -128,7 +128,11 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
                   <img 
                     src={widget.image?.url} 
                     alt={widget.title || "Banner"} 
-                    className="rounded-lg max-w-full h-auto mx-auto shadow-sm" 
+                    className="rounded-lg max-w-full h-auto mx-auto shadow-sm"
+                    width={320}
+                    height={200}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </Link>
               </div>

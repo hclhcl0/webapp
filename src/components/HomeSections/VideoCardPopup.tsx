@@ -31,8 +31,12 @@ export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFe
           {thumbUrl ? (
             <img
               src={thumbUrl}
-              alt={video.title}
+              alt={video.title || 'Video CDC Đà Nẵng'}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              width={480}
+              height={270}
+              loading="lazy"
+              decoding="async"
             />
           ) : (
             <span className="text-gray-400">Không có ảnh thu nhỏ</span>

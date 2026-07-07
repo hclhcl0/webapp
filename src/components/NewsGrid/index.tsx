@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { Eye, Calendar } from 'lucide-react';
@@ -109,7 +110,17 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                 <article key={article.id} className={styles.listItem}>
                   <div className={styles.listImage}>
                     <Link href={`/bai-viet/${article.slug || article.id}`}>
-                      <img src={mediaUrl} alt={article.title} width={320} height={200} loading="lazy" decoding="async" />
+                      <div style={{ position: 'relative', width: '100%', aspectRatio: '8/5' }}>
+                        <Image
+                          src={mediaUrl}
+                          alt={article.title}
+                          fill
+                          sizes="(max-width: 640px) 40vw, 200px"
+                          className="object-cover"
+                          loading="lazy"
+                          unoptimized={mediaUrl.startsWith('http') && !mediaUrl.startsWith('/')}
+                        />
+                      </div>
                     </Link>
                   </div>
                   <div className={styles.listBody}>
@@ -168,8 +179,18 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                 <div className={styles.bigCard}>
                   <div className={styles.bigImageHolder}>
                     <Link href={`/bai-viet/${featuredArticle.slug || featuredArticle.id}`}>
-                      {/* FIX: Ảnh featured đầu tiên dùng eager vì nằm Above The Fold */}
-                      <img src={featuredMediaUrl} alt={featuredArticle.title} width={720} height={420} loading="eager" fetchPriority="high" decoding="sync" />
+                      {/* FIX Phase 2: Ảnh featured đầu tiên — eager + high priority + WebP tự động */}
+                      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
+                        <Image
+                          src={featuredMediaUrl}
+                          alt={featuredArticle.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 60vw"
+                          className="object-cover"
+                          priority
+                          unoptimized={featuredMediaUrl.startsWith('http') && !featuredMediaUrl.startsWith('/')}
+                        />
+                      </div>
                     </Link>
                     <span className={styles.catBadge}>{featuredCatName}</span>
                   </div>
@@ -205,7 +226,17 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                       <article key={article.id} className={styles.sideItem}>
                         <div className={styles.sideImage}>
                           <Link href={`/bai-viet/${article.slug || article.id}`}>
-                            <img src={sideMediaUrl} alt={article.title} width={160} height={100} loading="lazy" decoding="async" />
+                            <div style={{ position: 'relative', width: '100%', aspectRatio: '8/5' }}>
+                              <Image
+                                src={sideMediaUrl}
+                                alt={article.title}
+                                fill
+                                sizes="(max-width: 640px) 30vw, 160px"
+                                className="object-cover"
+                                loading="lazy"
+                                unoptimized={sideMediaUrl.startsWith('http') && !sideMediaUrl.startsWith('/')}
+                              />
+                            </div>
                           </Link>
                         </div>
                         <div className={styles.sideBody}>
@@ -243,7 +274,18 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                 <article key={article.id} className={styles.card}>
                   <div className={styles.imageHolder}>
                     <Link href={`/bai-viet/${article.slug || article.id}`}>
-                      <img src={mediaUrl} alt={article.title} width={400} height={240} loading="lazy" decoding="async" />
+                      {/* Phase 2: next/image tự serve mobile ảnh nhỏ hơn + WebP */}
+                      <div style={{ position: 'relative', width: '100%', aspectRatio: '5/3' }}>
+                        <Image
+                          src={mediaUrl}
+                          alt={article.title}
+                          fill
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                          className="object-cover"
+                          loading="lazy"
+                          unoptimized={mediaUrl.startsWith('http') && !mediaUrl.startsWith('/')}
+                        />
+                      </div>
                     </Link>
                     <span className={styles.catBadge}>{catName}</span>
                   </div>
