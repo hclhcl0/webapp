@@ -15,8 +15,31 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG",
-  description: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
+  description: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng - Thông tin y tế, phòng chống dịch bệnh, an toàn thực phẩm tại thành phố Đà Nẵng.",
   manifest: "/manifest.webmanifest",
+  // ── OG Tags (Fix #5) ─────────────────────────────────────────────
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    url: "https://ecdc.vnos.org",
+    siteName: "CDC Đà Nẵng",
+    title: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
+    description: "Thông tin y tế, phòng chống dịch bệnh, an toàn thực phẩm tại thành phố Đà Nẵng.",
+    images: [
+      {
+        url: "https://ecdc.vnos.org/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "CDC Đà Nẵng - Trung tâm Kiểm soát Bệnh tật",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
+    description: "Thông tin y tế, phòng chống dịch bệnh, an toàn thực phẩm tại thành phố Đà Nẵng.",
+    images: ["https://ecdc.vnos.org/og-image.png"],
+  },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -44,8 +67,8 @@ export const viewport: Viewport = {
   themeColor: '#007a8c',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // FIX #4: Bỏ maximumScale:1 và userScalable:false để không bị Lighthouse penalize
+  // và hỗ trợ người dùng khiếm thị có thể zoom màn hình
 };
 
 function hexToRgb(hex: string | undefined | null) {
@@ -90,15 +113,19 @@ export default async function RootLayout({
   // Font
   const fontValue = themeConfig?.fontFamily || 'Inter';
   const fontName = fontValueToName(fontValue);
+  // FIX #2: Chỉ dùng 1 thẻ stylesheet, KHÔNG preload thêm cùng URL (tránh load font 2 lần)
   const googleFontUrl = `https://fonts.googleapis.com/css2?family=${fontValue}:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap`;
 
   return (
     <html lang="vi">
       <head>
-        {/* Google Fonts - tải font được chọn từ admin */}
+        {/* FIX #2: Google Fonts — dùng preconnect + 1 stylesheet duy nhất */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href={googleFontUrl} rel="stylesheet" />
+
+        {/* FIX #3: Preload ảnh nền header — quan trọng vì hiển thị ngay màn hình đầu */}
+        <link rel="preload" href="/api/media/file/h%C3%ACnh-nen-logo.webp" as="image" />
 
         {/* CSS variables: màu sắc + font chữ */}
         <style dangerouslySetInnerHTML={{

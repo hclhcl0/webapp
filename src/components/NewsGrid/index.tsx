@@ -109,7 +109,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                 <article key={article.id} className={styles.listItem}>
                   <div className={styles.listImage}>
                     <Link href={`/bai-viet/${article.slug || article.id}`}>
-                      <img src={mediaUrl} alt={article.title} />
+                      <img src={mediaUrl} alt={article.title} width={320} height={200} loading="lazy" decoding="async" />
                     </Link>
                   </div>
                   <div className={styles.listBody}>
@@ -168,7 +168,8 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                 <div className={styles.bigCard}>
                   <div className={styles.bigImageHolder}>
                     <Link href={`/bai-viet/${featuredArticle.slug || featuredArticle.id}`}>
-                      <img src={featuredMediaUrl} alt={featuredArticle.title} />
+                      {/* FIX: Ảnh featured đầu tiên dùng eager vì nằm Above The Fold */}
+                      <img src={featuredMediaUrl} alt={featuredArticle.title} width={720} height={420} loading="eager" fetchPriority="high" decoding="sync" />
                     </Link>
                     <span className={styles.catBadge}>{featuredCatName}</span>
                   </div>
@@ -204,7 +205,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                       <article key={article.id} className={styles.sideItem}>
                         <div className={styles.sideImage}>
                           <Link href={`/bai-viet/${article.slug || article.id}`}>
-                            <img src={sideMediaUrl} alt={article.title} />
+                            <img src={sideMediaUrl} alt={article.title} width={160} height={100} loading="lazy" decoding="async" />
                           </Link>
                         </div>
                         <div className={styles.sideBody}>
@@ -242,7 +243,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                 <article key={article.id} className={styles.card}>
                   <div className={styles.imageHolder}>
                     <Link href={`/bai-viet/${article.slug || article.id}`}>
-                      <img src={mediaUrl} alt={article.title} />
+                      <img src={mediaUrl} alt={article.title} width={400} height={240} loading="lazy" decoding="async" />
                     </Link>
                     <span className={styles.catBadge}>{catName}</span>
                   </div>
