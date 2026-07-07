@@ -112,6 +112,7 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
                           priority={index === 0}
                           fetchPriority={index === 0 ? "high" : "auto"}
                           loading={index === 0 ? "eager" : "lazy"}
+                          decoding={index === 0 ? "sync" : "async"}
                           quality={60}
                           unoptimized={!isInternalUrl(imageUrl)}
                         />
