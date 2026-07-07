@@ -123,6 +123,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                         sizes="(max-width: 640px) 40vw, 200px"
                         className="w-full h-full object-cover"
                         loading="lazy"
+                        quality={60}
                         unoptimized={!isInternalUrl(mediaUrl)}
                       />
                     </Link>
@@ -192,6 +193,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                         sizes="(max-width: 768px) 100vw, 60vw"
                         className="w-full h-full object-cover"
                         priority
+                        quality={60}
                         unoptimized={!isInternalUrl(featuredMediaUrl)}
                       />
                     </Link>
@@ -237,6 +239,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                               sizes="(max-width: 640px) 30vw, 160px"
                               className="w-full h-full object-cover"
                               loading="lazy"
+                              quality={60}
                               unoptimized={!isInternalUrl(sideMediaUrl)}
                             />
                           </Link>
@@ -284,6 +287,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
                         className="w-full h-full object-cover"
                         loading="lazy"
+                        quality={60}
                         unoptimized={!isInternalUrl(mediaUrl)}
                       />
                     </Link>
