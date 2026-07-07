@@ -41,6 +41,7 @@ export default function VideoSliderClient({ children }: { children: React.ReactN
       <button
         onClick={scrollPrev}
         disabled={!prevBtnEnabled}
+        aria-label="Video trước"
         className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-5 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-[var(--primary)] transition-all z-10 ${
           !prevBtnEnabled ? 'opacity-0 cursor-default' : 'opacity-0 group-hover/vidslider:opacity-100 hover:scale-110 hover:bg-[var(--primary)] hover:text-white'
         }`}
@@ -54,6 +55,7 @@ export default function VideoSliderClient({ children }: { children: React.ReactN
       <button
         onClick={scrollNext}
         disabled={!nextBtnEnabled}
+        aria-label="Video sau"
         className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-5 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-[var(--primary)] transition-all z-10 ${
           !nextBtnEnabled ? 'opacity-0 cursor-default' : 'opacity-0 group-hover/vidslider:opacity-100 hover:scale-110 hover:bg-[var(--primary)] hover:text-white'
         }`}
