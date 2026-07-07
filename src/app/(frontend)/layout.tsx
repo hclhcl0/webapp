@@ -6,6 +6,7 @@ import { BackToTop } from "@/components/BackToTop";
 import ChatWidget from "@/components/ChatWidget/ChatWidget";
 import { SitePopup } from "@/components/SitePopup";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
+import Script from "next/script";
 
 import { getPayload } from "payload";
 import configPromise from "@payload-config";
@@ -111,7 +112,7 @@ export default async function RootLayout({
             }
           `
         }} />
-        <script dangerouslySetInnerHTML={{
+        <Script id="pwa-init" dangerouslySetInnerHTML={{
           __html: `
             window.deferredPrompt = null;
             window.addEventListener('beforeinstallprompt', (e) => {
