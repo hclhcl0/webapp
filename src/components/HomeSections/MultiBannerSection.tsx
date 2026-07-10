@@ -38,17 +38,17 @@ export function MultiBannerSection({ title, columns = 4, banners }: MultiBannerS
 
   return (
     <section className="py-8 bg-white w-full">
-      <div className="w-full">
+      <div className="container mx-auto px-4">
         {title && (
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800 relative inline-block">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-800 relative inline-block">
               {title}
-              <span className="absolute bottom-[-8px] left-0 w-1/2 h-1 bg-[var(--primary-color)]"></span>
+              <span className="absolute bottom-[-8px] left-0 w-1/2 h-1 bg-gov-primary"></span>
             </h2>
           </div>
         )}
 
-        <div className={`grid gap-2 md:gap-4 px-2 md:px-4 ${gridColsClass}`}>
+        <div className={`grid gap-2 md:gap-4 ${gridColsClass}`}>
           {banners.map((item, index) => {
             const imageUrl = item.image?.url;
             if (!imageUrl) return null;
