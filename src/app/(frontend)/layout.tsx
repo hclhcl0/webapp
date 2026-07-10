@@ -162,7 +162,7 @@ export default async function RootLayout({
         </Script>
       </head>
       <body className="bg-gray-100/80 antialiased selection:bg-teal-600 selection:text-white">
-        <div className="w-full bg-white min-h-screen shadow-2xl flex flex-col overflow-hidden relative">
+        <div className="w-full bg-white min-h-screen shadow-2xl flex flex-col overflow-clip relative">
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

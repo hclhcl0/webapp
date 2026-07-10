@@ -1244,6 +1244,9 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  .overflow-clip {
+    overflow: clip;
+  }
   .overflow-hidden {
     overflow: hidden;
   }
