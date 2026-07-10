@@ -2717,5 +2717,16 @@ export const MIGRATION_STATEMENTS = [
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "popup_transparent_background" boolean`,
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "popup_video_url" varchar`,
 
+  // ====================================================
+  // BATCH: Add missing fields for newsCategorySection
+  // ====================================================
+  `ALTER TABLE "settings_blocks_news_category_section" ADD COLUMN IF NOT EXISTS "title" varchar`,
+  `ALTER TABLE "settings_blocks_news_category_section" ADD COLUMN IF NOT EXISTS "show_date" boolean DEFAULT true`,
+  `ALTER TABLE "settings_blocks_news_category_section" ADD COLUMN IF NOT EXISTS "show_excerpt" boolean DEFAULT false`,
+  
+  `ALTER TABLE "site_settings_blocks_news_category_section" ADD COLUMN IF NOT EXISTS "title" varchar`,
+  `ALTER TABLE "site_settings_blocks_news_category_section" ADD COLUMN IF NOT EXISTS "show_date" boolean DEFAULT true`,
+  `ALTER TABLE "site_settings_blocks_news_category_section" ADD COLUMN IF NOT EXISTS "show_excerpt" boolean DEFAULT false`,
+
 ];
 
