@@ -18,7 +18,7 @@
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.2rem;
   border-bottom: 4px solid var(--primary);
   margin-bottom: -2px;
   display: flex;
@@ -40,7 +40,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--primary);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.2rem;
   transition: color var(--transition-base);
 }
 
