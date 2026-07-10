@@ -95,7 +95,7 @@ export function StatsSection({ title, backgroundColor = 'primary', stats }: Stat
   };
 
   return (
-    <section ref={ref} className={`w-full py-12 my-2 ${bgStyles[backgroundColor]}`}>
+    <section ref={ref} className={`w-full py-6 ${bgStyles[backgroundColor]}`}>
       <div className="container mx-auto px-4 max-w-7xl">
         {title && (
           <div className="global-section-header">

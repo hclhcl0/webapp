@@ -37,7 +37,7 @@ export async function VideoSection({ title = 'VIDEO NỔI BẬT', channel, limit
   const sectionTitle = title || 'VIDEO NỔI BẬT';
 
   return (
-    <section className="w-full py-6 my-2">
+    <section className="w-full py-2">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="global-section-header">
           <h2 className="global-section-title">

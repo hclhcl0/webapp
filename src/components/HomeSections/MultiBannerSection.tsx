@@ -37,7 +37,7 @@ export function MultiBannerSection({ title, columns = 4, banners }: MultiBannerS
   else if (columns === 6) gridColsClass = 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6';
 
   return (
-    <section className="py-8 bg-white w-full">
+    <section className="py-4 bg-white w-full">
       <div className="container mx-auto px-4">
         {title && (
           <div className="global-section-header">
