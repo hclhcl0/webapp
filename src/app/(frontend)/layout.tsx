@@ -121,13 +121,9 @@ export default async function RootLayout({
       <head>
         {/* Tối ưu Google Font: Load không đồng bộ để tránh render-blocking */}
         <link id="google-font-css" href={googleFontUrl} rel="stylesheet" media="print" />
-        <Script
-          id="google-font-async"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `document.getElementById('google-font-css').media = 'all';`
-          }}
-        />
+        <Script id="google-font-async" strategy="afterInteractive">
+          {`document.getElementById('google-font-css').media = 'all';`}
+        </Script>
         <noscript>
           <link href={googleFontUrl} rel="stylesheet" />
         </noscript>
@@ -147,8 +143,8 @@ export default async function RootLayout({
             }
           `
         }} />
-        <Script id="pwa-init" dangerouslySetInnerHTML={{
-          __html: `
+        <Script id="pwa-init" strategy="afterInteractive">
+          {`
             window.deferredPrompt = null;
             window.addEventListener('beforeinstallprompt', (e) => {
               e.preventDefault();
@@ -162,8 +158,8 @@ export default async function RootLayout({
                 );
               });
             }
-          `
-        }} />
+          `}
+        </Script>
       </head>
       <body className="bg-gray-100/80 antialiased selection:bg-teal-600 selection:text-white">
         <div className="max-w-[1400px] mx-auto bg-white min-h-screen shadow-2xl flex flex-col overflow-hidden relative border-x border-gray-200">
