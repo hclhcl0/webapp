@@ -363,6 +363,12 @@
   .top-28 {
     top: calc(var(--spacing) * 28);
   }
+  .top-32 {
+    top: calc(var(--spacing) * 32);
+  }
+  .top-\[76px\] {
+    top: 76px;
+  }
   .-right-1 {
     right: calc(var(--spacing) * -1);
   }

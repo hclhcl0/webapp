@@ -142,8 +142,8 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
           <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 py-4 md:py-8 md:pl-16 overflow-visible min-w-0">
             
             {/* Desktop Sticky Reader Tools - pinned to left edge inside article card */}
-            <div className="hidden md:block absolute top-8 left-3 w-10 h-full z-10">
-              <div className="sticky top-28">
+            <div className="hidden md:block absolute top-[76px] left-3 w-10 h-full z-10">
+              <div className="sticky top-32">
                 <ArticleReaderTools mode="tools" toolsConfig={readerToolsConfig} />
               </div>
             </div>
