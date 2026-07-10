@@ -30,9 +30,11 @@ export function QuickLinksSection({ title = 'DỊCH VỤ TRỰC TUYẾN', links 
     <section className="w-full py-8 my-2 bg-white border-y border-[var(--border)]">
       <div className="container mx-auto px-4 max-w-7xl">
         {title && (
-          <h2 className="text-center text-lg md:text-xl font-bold mb-6 text-[var(--primary)] tracking-widest uppercase">
-            {title}
-          </h2>
+          <div className="global-section-header">
+            <h2 className="global-section-title">
+              {title}
+            </h2>
+          </div>
         )}
         <div
           className="grid gap-3"

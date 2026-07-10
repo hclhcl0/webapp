@@ -98,9 +98,11 @@ export function StatsSection({ title, backgroundColor = 'primary', stats }: Stat
     <section ref={ref} className={`w-full py-12 my-2 ${bgStyles[backgroundColor]}`}>
       <div className="container mx-auto px-4 max-w-7xl">
         {title && (
-          <h2 className="text-center text-xl md:text-2xl font-bold mb-8 tracking-wide uppercase opacity-90">
-            {title}
-          </h2>
+          <div className="global-section-header">
+            <h2 className={`global-section-title ${backgroundColor === 'primary' ? 'global-section-title-white' : ''}`}>
+              {title}
+            </h2>
+          </div>
         )}
         <div
           className="grid gap-8"

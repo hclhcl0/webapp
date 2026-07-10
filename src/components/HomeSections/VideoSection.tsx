@@ -39,16 +39,13 @@ export async function VideoSection({ title = 'VIDEO NỔI BẬT', channel, limit
   return (
     <section className="w-full py-6 my-2">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg md:text-xl font-bold text-[var(--primary)] tracking-wide uppercase border-l-4 border-[var(--primary)] pl-3">
+        <div className="global-section-header">
+          <h2 className="global-section-title">
             {sectionTitle}
           </h2>
-          <a
-            href="/video"
-            className="text-sm font-semibold text-[var(--primary)] hover:underline"
-          >
+          <Link href="/video" className="text-sm font-semibold text-[var(--primary)] hover:underline">
             Xem thêm »
-          </a>
+          </Link>
         </div>
 
         {layout === 'featured' && videos.length > 1 ? (

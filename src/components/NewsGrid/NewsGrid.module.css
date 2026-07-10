@@ -2,40 +2,6 @@
   margin: 1.5rem 0 2rem;
 }
 
-.sectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 2px solid var(--primary-100);
-  margin-bottom: 1.5rem;
-  padding-bottom: 0;
-}
-
-.sectionTitle {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--primary-dark);
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  padding-bottom: 0.2rem;
-  border-bottom: 4px solid var(--primary);
-  margin-bottom: -2px;
-  display: flex;
-  align-items: center;
-}
-
-.sectionTitle::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 1.25rem;
-  background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
-  margin-right: 0.6rem;
-  transform: skewX(-15deg);
-  border-radius: 1px;
-}
-
 .viewMore {
   font-size: 0.875rem;
   font-weight: 600;

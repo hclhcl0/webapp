@@ -601,3 +601,47 @@
     text-align: justify !important;
   }
 }
+
+/* Shared Section Title Styles (Newspaper Style) */
+.global-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--primary-100);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0;
+}
+
+.global-section-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding-bottom: 0.2rem;
+  border-bottom: 4px solid var(--primary);
+  margin-bottom: -2px;
+  display: flex;
+  align-items: center;
+}
+
+.global-section-title-white {
+  color: var(--white);
+  border-bottom-color: var(--white);
+}
+
+.global-section-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 1.25rem;
+  background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+  margin-right: 0.6rem;
+  transform: skewX(-15deg);
+  border-radius: 1px;
+}
+
+.global-section-title-white::before {
+  background: var(--white);
+}

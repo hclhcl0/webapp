@@ -29,9 +29,9 @@ export async function TikTokSection({ title = 'KÊNH TIKTOK CDC ĐÀ NẴNG', ch
     return (
       <section className="w-full py-6 my-2">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg md:text-xl font-bold text-[var(--primary)] tracking-wide uppercase border-l-4 border-[var(--primary)] pl-3">
-              {title}
+          <div className="global-section-header">
+            <h2 className="global-section-title">
+              {title || 'Video TikTok'}
             </h2>
             <a
               href={doc.channelUrl || `https://www.tiktok.com/@${doc.tiktokHandle}`}
@@ -39,7 +39,7 @@ export async function TikTokSection({ title = 'KÊNH TIKTOK CDC ĐÀ NẴNG', ch
               rel="noopener noreferrer"
               className="text-sm font-semibold text-[var(--primary)] hover:underline"
             >
-              Xem thêm »
+              Xem thÃªm &raquo;
             </a>
           </div>
           <TikTokChannelEmbed channels={[mappedChannel]} />

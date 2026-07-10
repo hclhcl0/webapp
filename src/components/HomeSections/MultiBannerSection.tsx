@@ -40,10 +40,9 @@ export function MultiBannerSection({ title, columns = 4, banners }: MultiBannerS
     <section className="py-8 bg-white w-full">
       <div className="container mx-auto px-4">
         {title && (
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-800 relative inline-block">
+          <div className="global-section-header">
+            <h2 className="global-section-title">
               {title}
-              <span className="absolute bottom-[-8px] left-0 w-1/2 h-1 bg-gov-primary"></span>
             </h2>
           </div>
         )}
