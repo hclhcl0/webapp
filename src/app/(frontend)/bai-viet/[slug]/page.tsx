@@ -135,10 +135,10 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-[1400px]">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-4 lg:gap-8">
         
         {/* Main Content Wrapper - relative for sidebar positioning */}
-        <div className="relative">
+        <div className="relative lg:order-2">
           <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 py-4 md:py-8 md:pl-16 overflow-visible min-w-0">
             
             {/* Desktop Sticky Reader Tools - pinned to left edge inside article card */}
@@ -194,11 +194,13 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
         </div>
 
         {/* Sidebar */}
-        <SidebarRenderer
+        <div className="lg:order-1">
+          <SidebarRenderer
           widgets={sidebarWidgets}
           latestArticles={latestArticles}
           categories={categories}
         />
+        </div>
       </div>
     </div>
   );

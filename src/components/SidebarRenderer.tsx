@@ -22,16 +22,19 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
           case 'categoriesWidget':
             const limitCat = widget.limit || 10;
             return (
-              <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
+              <div key={key} className="bg-white rounded-2xl shadow-md border-t-4 border-t-gov-primary border border-gray-100 p-6">
+                <h3 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 uppercase tracking-wide">
                   {widget.title}
                 </h3>
                 <ul className="space-y-3 list-none p-0 m-0">
                   {categories.slice(0, limitCat).map((cat: any) => (
                     <li key={cat.id}>
-                      <Link href={`/chuyen-muc/${cat.slug || cat.id}`} className="flex items-center gap-2 text-gray-700 hover:text-gov-primary transition-colors group">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-gov-primary transition-colors"></span>
-                        {cat.name}
+                      <Link href={`/chuyen-muc/${cat.slug || cat.id}`} className="flex items-center justify-between px-4 py-3 bg-gray-50/80 hover:bg-gov-primary text-gray-700 hover:text-white rounded-lg transition-all font-medium border border-gray-100 hover:border-transparent group shadow-sm hover:shadow-md">
+                        <div className="flex items-center gap-3">
+                           <span className="w-1.5 h-1.5 rounded-full bg-gray-400 group-hover:bg-white transition-colors"></span>
+                           {cat.name}
+                        </div>
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                       </Link>
                     </li>
                   ))}
@@ -43,18 +46,18 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
           case 'recentArticlesWidget':
             const limitArt = widget.limit || 5;
             return (
-              <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
+              <div key={key} className="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                <h3 className="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 uppercase tracking-wide">
                   {widget.title}
                 </h3>
                 <ul className="space-y-4 list-none p-0 m-0">
                   {latestArticles.slice(0, limitArt).map((post: any) => (
-                    <li key={post.id} className="group">
+                    <li key={post.id} className="group border-b border-gray-50 last:border-0 pb-4 last:pb-0">
                       <Link href={`/bai-viet/${post.slug || post.id}`} className="block">
                         <h4 className="font-semibold text-gray-800 group-hover:text-gov-primary transition-colors line-clamp-3 text-sm leading-snug">
                           {post.title}
                         </h4>
-                        <span className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                        <span className="text-[11px] text-gray-500 mt-2 flex items-center gap-1.5 font-medium uppercase tracking-wider">
                           <Calendar size={12} />
                           {new Date(post.publishedAt || post.createdAt).toLocaleDateString('vi-VN')}
                         </span>
