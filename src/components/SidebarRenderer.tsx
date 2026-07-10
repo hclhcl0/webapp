@@ -22,14 +22,16 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
           case 'categoriesWidget':
             const limitCat = widget.limit || 10;
             return (
-              <div key={key} className="bg-white rounded-2xl shadow-md border-t-4 border-t-gov-primary border border-gray-100 p-6">
-                <h3 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 uppercase tracking-wide">
+              <div key={key} className="bg-slate-50 rounded-2xl shadow-lg border border-slate-200 p-5 md:p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gov-primary"></div>
+                <h3 className="text-[1.1rem] font-bold text-gov-primary border-b-2 border-gov-primary/20 pb-3 mb-5 uppercase tracking-wide flex items-center gap-2">
+                  <span className="w-2 h-6 bg-gov-primary rounded-sm inline-block"></span>
                   {widget.title}
                 </h3>
                 <ul className="space-y-3 list-none p-0 m-0">
                   {categories.slice(0, limitCat).map((cat: any) => (
                     <li key={cat.id}>
-                      <Link href={`/chuyen-muc/${cat.slug || cat.id}`} className="flex items-center justify-between px-4 py-3 bg-gray-50/80 hover:bg-gov-primary text-gray-700 hover:text-white rounded-lg transition-all font-medium border border-gray-100 hover:border-transparent group shadow-sm hover:shadow-md">
+                      <Link href={`/chuyen-muc/${cat.slug || cat.id}`} className="flex items-center justify-between px-4 py-3 bg-white hover:bg-gov-primary text-slate-700 hover:text-white rounded-xl transition-all font-medium border border-slate-100 hover:border-transparent group shadow-sm hover:shadow-md">
                         <div className="flex items-center gap-3">
                            <span className="w-1.5 h-1.5 rounded-full bg-gray-400 group-hover:bg-white transition-colors"></span>
                            {cat.name}
@@ -46,15 +48,17 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
           case 'recentArticlesWidget':
             const limitArt = widget.limit || 5;
             return (
-              <div key={key} className="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
-                <h3 className="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 uppercase tracking-wide">
+              <div key={key} className="bg-slate-50 rounded-2xl shadow-lg border border-slate-200 p-5 md:p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gov-primary"></div>
+                <h3 className="text-[1.1rem] font-bold text-gov-primary border-b-2 border-gov-primary/20 pb-3 mb-5 uppercase tracking-wide flex items-center gap-2">
+                  <span className="w-2 h-6 bg-gov-primary rounded-sm inline-block"></span>
                   {widget.title}
                 </h3>
                 <ul className="space-y-4 list-none p-0 m-0">
                   {latestArticles.slice(0, limitArt).map((post: any) => (
-                    <li key={post.id} className="group border-b border-gray-50 last:border-0 pb-4 last:pb-0">
+                    <li key={post.id} className="group border-b border-slate-200/60 last:border-0 pb-4 last:pb-0">
                       <Link href={`/bai-viet/${post.slug || post.id}`} className="block">
-                        <h4 className="font-semibold text-gray-800 group-hover:text-gov-primary transition-colors line-clamp-3 text-sm leading-snug">
+                        <h4 className="font-semibold text-slate-800 group-hover:text-gov-primary transition-colors line-clamp-3 text-sm leading-snug">
                           {post.title}
                         </h4>
                         <span className="text-[11px] text-gray-500 mt-2 flex items-center gap-1.5 font-medium uppercase tracking-wider">
@@ -72,9 +76,11 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
           case 'tiktokWidget':
             if (!widget.channel) return null;
             return (
-              <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div key={key} className="bg-slate-50 rounded-2xl shadow-lg border border-slate-200 p-5 md:p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gov-primary"></div>
                 {widget.title && (
-                  <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
+                  <h3 className="text-[1.1rem] font-bold text-gov-primary border-b-2 border-gov-primary/20 pb-3 mb-5 uppercase tracking-wide flex items-center gap-2">
+                    <span className="w-2 h-6 bg-gov-primary rounded-sm inline-block"></span>
                     {widget.title}
                   </h3>
                 )}
@@ -93,9 +99,11 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
             const fbHeight = widget.height || 350;
             const iframeSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(fbUrl)}&tabs=timeline&width=340&height=${fbHeight}&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true`;
             return (
-              <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div key={key} className="bg-slate-50 rounded-2xl shadow-lg border border-slate-200 p-5 md:p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gov-primary"></div>
                 {widget.title && (
-                  <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
+                  <h3 className="text-[1.1rem] font-bold text-gov-primary border-b-2 border-gov-primary/20 pb-3 mb-5 uppercase tracking-wide flex items-center gap-2">
+                    <span className="w-2 h-6 bg-gov-primary rounded-sm inline-block"></span>
                     {widget.title}
                   </h3>
                 )}
@@ -117,9 +125,11 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
           // 5. Render Banner Quảng cáo
           case 'bannerWidget':
             return (
-              <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
+              <div key={key} className="bg-slate-50 rounded-2xl shadow-lg border border-slate-200 p-5 md:p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gov-primary"></div>
                 {widget.title && (
-                  <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
+                  <h3 className="text-[1.1rem] font-bold text-gov-primary border-b-2 border-gov-primary/20 pb-3 mb-5 uppercase tracking-wide flex items-center gap-2">
+                    <span className="w-2 h-6 bg-gov-primary rounded-sm inline-block"></span>
                     {widget.title}
                   </h3>
                 )}
@@ -144,9 +154,11 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
           // 6. Render HTML Tùy chỉnh (Dành cho mã nhúng bên thứ 3)
           case 'customHtmlWidget':
             return (
-              <div key={key} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div key={key} className="bg-slate-50 rounded-2xl shadow-lg border border-slate-200 p-5 md:p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gov-primary"></div>
                 {widget.title && (
-                  <h3 className="text-[1.1rem] font-bold text-[var(--primary-dark)] bg-gradient-to-r from-[rgba(var(--primary-rgb,0,122,140),0.15)] to-transparent border-l-4 border-[var(--primary)] mb-4 inline-block uppercase py-[0.4rem] pr-[1.5rem] pl-[0.75rem] leading-tight tracking-[0.02em]">
+                  <h3 className="text-[1.1rem] font-bold text-gov-primary border-b-2 border-gov-primary/20 pb-3 mb-5 uppercase tracking-wide flex items-center gap-2">
+                    <span className="w-2 h-6 bg-gov-primary rounded-sm inline-block"></span>
                     {widget.title}
                   </h3>
                 )}
