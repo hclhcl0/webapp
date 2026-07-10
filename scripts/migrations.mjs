@@ -2393,6 +2393,34 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "site_settings_blocks_banner_section_parent_idx" ON "site_settings_blocks_banner_section" USING btree ("_parent_id")`,
   `CREATE INDEX IF NOT EXISTS "site_settings_blocks_banner_section_path_idx" ON "site_settings_blocks_banner_section" USING btree ("_path")`,
 
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_multi_banner_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar,
+    "columns" numeric DEFAULT 4,
+    CONSTRAINT "site_settings_blocks_multi_banner_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_multi_banner_section_order_idx" ON "site_settings_blocks_multi_banner_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_multi_banner_section_parent_idx" ON "site_settings_blocks_multi_banner_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_multi_banner_section_path_idx" ON "site_settings_blocks_multi_banner_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_multi_banner_section_banners" (
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "image_id" integer NOT NULL,
+    "link_url" varchar,
+    "open_in_new_tab" boolean DEFAULT false,
+    CONSTRAINT "site_settings_blocks_multi_banner_section_banners_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings_blocks_multi_banner_section" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_multi_banner_section_banners_order_idx" ON "site_settings_blocks_multi_banner_section_banners" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_multi_banner_section_banners_parent_idx" ON "site_settings_blocks_multi_banner_section_banners" USING btree ("_parent_id")`,
+
   `CREATE TABLE IF NOT EXISTS "site_settings_blocks_video_section" (
     "id" serial PRIMARY KEY NOT NULL,
     "_order" integer NOT NULL,
