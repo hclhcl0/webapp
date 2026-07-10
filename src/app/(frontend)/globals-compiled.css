@@ -399,6 +399,12 @@
   .bottom-\[-8px\] {
     bottom: -8px;
   }
+  .-left-13 {
+    left: calc(var(--spacing) * -13);
+  }
+  .-left-\[52px\] {
+    left: calc(52px * -1);
+  }
   .left-0 {
     left: calc(var(--spacing) * 0);
   }

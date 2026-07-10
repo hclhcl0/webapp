@@ -141,13 +141,6 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
         <div className="relative">
           <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 py-4 md:py-8 md:pl-16 overflow-visible min-w-0">
             
-            {/* Desktop Sticky Reader Tools - pinned to left edge inside article card */}
-            <div className="hidden md:block absolute top-[76px] left-3 w-10 h-full z-10">
-              <div className="sticky top-32">
-                <ArticleReaderTools mode="tools" toolsConfig={readerToolsConfig} />
-              </div>
-            </div>
-
             <div className="px-4 md:px-0 md:pr-6 lg:pr-8">
               <div className="flex items-center text-sm text-gray-500 mb-4 md:mb-6 overflow-x-auto whitespace-nowrap pb-2">
                  <Link href="/" className="hover:text-gov-primary transition-colors">Trang chủ</Link>
@@ -181,7 +174,14 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
             </div>
 
             {/* Main Prose Content */}
-            <div className="px-1 md:px-0 md:pr-4 lg:pr-6">
+            <div className="px-1 md:px-0 md:pr-4 lg:pr-6 relative">
+              {/* Desktop Sticky Reader Tools - pinned to the start of prose content */}
+              <div className="hidden md:block absolute top-0 -left-[52px] w-10 h-full z-10">
+                <div className="sticky top-32">
+                  <ArticleReaderTools mode="tools" toolsConfig={readerToolsConfig} />
+                </div>
+              </div>
+
               <div className="prose prose-base md:prose-lg max-w-none break-words prose-p:!my-1.5 md:prose-p:!my-2 prose-headings:!my-3 md:prose-headings:!my-4 prose-ul:!my-1 prose-li:!my-0.5 prose-img:!my-3 prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl w-full min-w-0 overflow-hidden">
                  {article.content ? (
                     <RichText data={article.content} converters={getJsxConverters(`Hình ảnh minh họa cho bài viết: ${article.title}`)} />
