@@ -37,16 +37,18 @@ export function MultiBannerSection({ title, columns = 4, banners }: MultiBannerS
   else if (columns === 6) gridColsClass = 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6';
 
   return (
-    <section className="py-8 bg-white">
-      <div className="container mx-auto">
+    <section className="py-8 bg-white w-full">
+      <div className="w-full">
         {title && (
-          <h2 className="text-2xl font-bold mb-6 text-gray-800 relative inline-block">
-            {title}
-            <span className="absolute bottom-[-8px] left-0 w-1/2 h-1 bg-[var(--primary-color)]"></span>
-          </h2>
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 relative inline-block">
+              {title}
+              <span className="absolute bottom-[-8px] left-0 w-1/2 h-1 bg-[var(--primary-color)]"></span>
+            </h2>
+          </div>
         )}
 
-        <div className={`grid gap-4 ${gridColsClass}`}>
+        <div className={`grid gap-2 md:gap-4 px-2 md:px-4 ${gridColsClass}`}>
           {banners.map((item, index) => {
             const imageUrl = item.image?.url;
             if (!imageUrl) return null;
