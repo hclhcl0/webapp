@@ -28,15 +28,17 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
                   <span className="w-2 h-6 bg-gov-primary rounded-sm inline-block"></span>
                   {widget.title}
                 </h3>
-                <ul className="space-y-3 list-none p-0 m-0">
+                <ul className="flex flex-col list-none p-0 m-0">
                   {categories.slice(0, limitCat).map((cat: any) => (
-                    <li key={cat.id}>
-                      <Link href={`/chuyen-muc/${cat.slug || cat.id}`} className="flex items-center justify-between px-4 py-3 bg-white hover:bg-gov-primary text-slate-700 hover:text-white rounded-xl transition-all font-medium border border-slate-100 hover:border-transparent group shadow-sm hover:shadow-md">
+                    <li key={cat.id} className="border-b border-slate-200/60 last:border-0">
+                      <Link href={`/chuyen-muc/${cat.slug || cat.id}`} className="flex items-center justify-between py-3 text-slate-700 hover:text-gov-primary transition-colors group">
                         <div className="flex items-center gap-3">
-                           <span className="w-1.5 h-1.5 rounded-full bg-gray-400 group-hover:bg-white transition-colors"></span>
-                           {cat.name}
+                           <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-gov-primary group-hover:scale-125 transition-all"></span>
+                           <span className="font-medium text-[15px]">{cat.name}</span>
                         </div>
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                        <span className="text-gov-primary opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        </span>
                       </Link>
                     </li>
                   ))}
