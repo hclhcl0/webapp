@@ -19,14 +19,19 @@ export const SiteSettings: GlobalConfig = {
   hooks: {
     beforeValidate: [
       ({ data, req }) => {
+        const visited = new Set();
         const convertMongoIDsToInteger = (obj: any) => {
+          if (obj === null || typeof obj !== 'object') return;
+          if (visited.has(obj)) return;
+          visited.add(obj);
+
           if (Array.isArray(obj)) {
             obj.forEach(convertMongoIDsToInteger);
-          } else if (obj !== null && typeof obj === 'object') {
+          } else {
             if (typeof obj.id === 'string' && obj.id.length === 24) {
               // Convert the first 8 characters of the Mongo ID to a positive integer
               const parsed = parseInt(obj.id.substring(0, 8), 16);
-              obj.id = isNaN(parsed) ? Math.floor(Math.random() * 2147483647) : parsed;
+              obj.id = String(isNaN(parsed) ? Math.floor(Math.random() * 2147483647) : parsed);
             }
             Object.values(obj).forEach(convertMongoIDsToInteger);
           }
