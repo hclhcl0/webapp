@@ -72,8 +72,8 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
     return (
       <section className={styles.newsSection}>
         <div className="container">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className={styles.sectionTitle} style={{ marginBottom: 0 }}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>
               {title}
             </h2>
           </div>
@@ -89,12 +89,12 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
         {categoryId && (
           <hr className="border-t-2 border-gray-200 mb-8 mt-2 shadow-sm" />
         )}
-        <div className="flex justify-between items-center mb-4">
-          <h2 className={styles.sectionTitle} style={{ marginBottom: 0 }}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>
             {title}
           </h2>
           {categorySlug && (
-            <Link href={`/chuyen-muc/${categorySlug}`} className="text-sm font-semibold text-[var(--primary)] hover:underline">
+            <Link href={`/chuyen-muc/${categorySlug}`} className={styles.viewMore}>
               Xem thêm &raquo;
             </Link>
           )}
