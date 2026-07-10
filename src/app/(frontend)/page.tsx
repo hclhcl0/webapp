@@ -28,7 +28,7 @@ export default async function HomePage() {
       <HeroCarousel />
       
       {!isHomeContentEmpty && (
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="w-full px-2 md:px-4 py-8">
            <div className="prose prose-lg max-w-none prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl text-gray-700">
              <RichText data={homeContent} converters={getJsxConverters('Hình ảnh minh họa trang chủ')} />
            </div>
