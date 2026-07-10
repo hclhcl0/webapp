@@ -4150,6 +4150,11 @@
       grid-template-columns: repeat(6, minmax(0, 1fr));
     }
   }
+  .lg\:grid-cols-\[1fr_280px\] {
+    @media (width >= 64rem) {
+      grid-template-columns: 1fr 280px;
+    }
+  }
   .lg\:grid-cols-\[1fr_320px\] {
     @media (width >= 64rem) {
       grid-template-columns: 1fr 320px;
@@ -4168,6 +4173,11 @@
   .lg\:flex-row {
     @media (width >= 64rem) {
       flex-direction: row;
+    }
+  }
+  .lg\:gap-5 {
+    @media (width >= 64rem) {
+      gap: calc(var(--spacing) * 5);
     }
   }
   .lg\:gap-8 {

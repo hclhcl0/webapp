@@ -135,7 +135,7 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-[1400px]">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 lg:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 lg:gap-5">
         
         {/* Main Content Wrapper - relative for sidebar positioning */}
         <div className="relative">
