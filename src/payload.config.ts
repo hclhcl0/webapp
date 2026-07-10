@@ -46,6 +46,7 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   sharp,
   cors: [
     'https://h5.zadn.vn',
@@ -65,6 +66,8 @@ export default buildConfig({
     'https://cms.zcdc.vnos.org',
     'https://ecdc.vnos.org',
     'https://cms.ecdc.vnos.org',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
   ],
   onInit: async (payload) => {
     // const { initCron } = await import('./lib/zalo-admin/cron.js');
