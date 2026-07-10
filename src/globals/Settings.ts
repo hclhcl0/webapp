@@ -311,6 +311,56 @@ export const Settings: GlobalConfig = {
           ],
         },
 
+        // ── Block 2.5: Danh sách Banner (Nhiều banner trên 1 hàng) ──
+        {
+          slug: 'multiBannerSection',
+          interfaceName: 'MultiBannerSection',
+          labels: { singular: '🖼️ Danh sách Banner', plural: 'Danh sách Banner' },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Tiêu đề khu vực (tùy chọn)',
+            },
+            {
+              name: 'columns',
+              type: 'number',
+              label: 'Số banner trên 1 hàng (Máy tính)',
+              defaultValue: 4,
+              min: 2,
+              max: 6,
+            },
+            {
+              name: 'banners',
+              type: 'array',
+              label: 'Danh sách Banner',
+              minRows: 1,
+              maxRows: 12,
+              labels: { singular: 'Banner', plural: 'Các banner' },
+              fields: [
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  required: true,
+                  label: 'Hình ảnh',
+                },
+                {
+                  name: 'linkUrl',
+                  type: 'text',
+                  label: 'Đường dẫn liên kết',
+                },
+                {
+                  name: 'openInNewTab',
+                  type: 'checkbox',
+                  label: 'Mở trong tab mới',
+                  defaultValue: true,
+                },
+              ],
+            },
+          ],
+        },
+
         // ── Block 3: Khu vực Video YouTube ──
         {
           slug: 'videoSection',

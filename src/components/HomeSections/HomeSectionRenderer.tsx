@@ -1,6 +1,7 @@
 import React from 'react';
 import { NewsGrid } from '@/components/NewsGrid';
 import { BannerSection } from './BannerSection';
+import { MultiBannerSection } from './MultiBannerSection';
 import { StatsSection } from './StatsSection';
 import { QuickLinksSection } from './QuickLinksSection';
 import { RichTextSection } from './RichTextSection';
@@ -47,6 +48,16 @@ export async function HomeSectionRenderer({ sections }: HomeSectionRendererProps
                 linkUrl={section.linkUrl}
                 openInNewTab={section.openInNewTab}
                 style={section.style}
+              />
+            );
+
+          case 'multiBannerSection':
+            return (
+              <MultiBannerSection
+                key={`${blockType}-${index}`}
+                title={section.title}
+                columns={section.columns}
+                banners={section.banners || []}
               />
             );
 
