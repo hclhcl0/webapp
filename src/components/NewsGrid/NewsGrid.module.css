@@ -12,15 +12,28 @@
 }
 
 .sectionTitle {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   color: var(--primary-dark);
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   padding-bottom: 0.5rem;
   border-bottom: 4px solid var(--primary);
   margin-bottom: -2px;
+  display: flex;
+  align-items: center;
+}
+
+.sectionTitle::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 1.25rem;
+  background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+  margin-right: 0.6rem;
+  transform: skewX(-15deg);
+  border-radius: 1px;
 }
 
 .viewMore {
