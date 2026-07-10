@@ -2656,6 +2656,7 @@ export const MIGRATION_STATEMENTS = [
   // ====================================================
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "popup_type" varchar`,
   `ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "popup_article_id" integer`,
+  `UPDATE "site_settings" SET "popup_article_id" = NULL WHERE "popup_article_id" NOT IN (SELECT "id" FROM "articles")`,
   `DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'site_settings_popup_article_id_articles_id_fk') THEN
       ALTER TABLE "site_settings" ADD CONSTRAINT "site_settings_popup_article_id_articles_id_fk" FOREIGN KEY ("popup_article_id") REFERENCES "articles"("id") ON DELETE set null ON UPDATE no action;
