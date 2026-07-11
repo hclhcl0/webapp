@@ -191,6 +191,37 @@ export default async function ServiceDetailPage({
                 </div>
               )}
             </div>
+
+            {/* Bảng giá chi tiết */}
+            {service.pricingTable && service.pricingTable.length > 0 && (
+              <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+                <h2 className="flex items-center gap-2 text-base font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100">
+                  <Tag className="w-5 h-5 text-gov-primary" />
+                  Bảng giá chi tiết
+                </h2>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-[var(--primary-50)] text-gov-primary">
+                        <th className="p-3 border-b-2 border-[var(--primary-100)] font-bold rounded-tl-lg">Hạng mục</th>
+                        <th className="p-3 border-b-2 border-[var(--primary-100)] font-bold whitespace-nowrap">Đơn giá</th>
+                        <th className="p-3 border-b-2 border-[var(--primary-100)] font-bold rounded-tr-lg">Ghi chú</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-sm">
+                      {service.pricingTable.map((row: any, i: number) => (
+                        <tr key={i} className="hover:bg-gray-50 border-b border-gray-100 last:border-0 transition-colors">
+                          <td className="p-3 text-gray-800 font-medium">{row.name}</td>
+                          <td className="p-3 text-rose-600 font-bold whitespace-nowrap">{row.price}</td>
+                          <td className="p-3 text-gray-500 italic">{row.note || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
           </div>
 
           {/* CỘT PHẢI — sidebar thông tin & CTA */}

@@ -80,6 +80,33 @@ export const Services: CollectionConfig = {
       },
     },
     {
+      name: 'pricingTable',
+      type: 'array',
+      label: 'Bảng giá chi tiết (Nhiều hạng mục)',
+      admin: {
+        description: 'Thêm các hạng mục để tự động tạo thành một bảng giá hoàn chỉnh ở trang chi tiết.',
+      },
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          label: 'Tên hạng mục / Tên xét nghiệm',
+          required: true,
+        },
+        {
+          name: 'price',
+          type: 'text',
+          label: 'Đơn giá',
+          required: true,
+        },
+        {
+          name: 'note',
+          type: 'text',
+          label: 'Ghi chú thêm',
+        },
+      ],
+    },
+    {
       name: 'shortDescription',
       type: 'textarea',
       label: 'Mô tả ngắn',

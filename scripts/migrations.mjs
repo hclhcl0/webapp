@@ -2735,5 +2735,24 @@ export const MIGRATION_STATEMENTS = [
   `ALTER TABLE "services_landing" ADD COLUMN IF NOT EXISTS "cta_description" varchar`,
   `ALTER TABLE "services_landing" ADD COLUMN IF NOT EXISTS "cta_phone_number" varchar`,
 
+  // ====================================================
+  // BATCH: Add pricing_table to Services
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "services_pricing_table" (
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "name" varchar NOT NULL,
+    "price" varchar NOT NULL,
+    "note" varchar
+  )`,
+  `DO $$ BEGIN
+    ALTER TABLE "services_pricing_table" ADD CONSTRAINT "services_pricing_table_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."services"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+    WHEN duplicate_object THEN null;
+  END $$;`,
+  `CREATE INDEX IF NOT EXISTS "services_pricing_table_order_idx" ON "services_pricing_table" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "services_pricing_table_parent_id_idx" ON "services_pricing_table" USING btree ("_parent_id")`,
+
 ];
 
