@@ -45,30 +45,57 @@ import { seedAccounts } from './lib/seedAccounts.ts';
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+/**
+ * Tự động sinh danh sách CORS/CSRF từ biến môi trường.
+ * Khi đổi domain, chỉ cần cập nhật NEXT_PUBLIC_SERVER_URL trên Coolify.
+ *
+ * Biến môi trường:
+ *   NEXT_PUBLIC_SERVER_URL  — domain chính (bắt buộc)
+ *   EXTRA_ALLOWED_ORIGINS   — các domain phụ, phân cách bằng dấu phẩy (tùy chọn)
+ *                             Ví dụ: https://zalo.me,https://h5.zadn.vn
+ */
+function buildAllowedOrigins(): string[] {
+  const origins = new Set<string>();
+
+  // Luôn cho phép localhost dev
+  origins.add('http://localhost:3000');
+  origins.add('http://127.0.0.1:3000');
+
+  // Tự động thêm domain chính từ NEXT_PUBLIC_SERVER_URL
+  const serverURL = process.env.NEXT_PUBLIC_SERVER_URL;
+  if (serverURL) {
+    origins.add(serverURL.replace(/\/$/, '')); // bỏ trailing slash
+    try {
+      const url = new URL(serverURL);
+      const { protocol, hostname } = url;
+      // Thêm cả subdomain cms. tương ứng
+      if (!hostname.startsWith('cms.')) {
+        origins.add(`${protocol}//cms.${hostname}`);
+      }
+      // Nếu có port thì thêm cả URL không có port
+      if (url.port) {
+        origins.add(`${protocol}//${hostname}`);
+      }
+    } catch {
+      // URL không hợp lệ → bỏ qua
+    }
+  }
+
+  // Thêm các domain phụ từ EXTRA_ALLOWED_ORIGINS
+  const extra = process.env.EXTRA_ALLOWED_ORIGINS || '';
+  extra.split(',')
+    .map((o) => o.trim())
+    .filter(Boolean)
+    .forEach((o) => origins.add(o));
+
+  return Array.from(origins);
+}
+
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   sharp,
-  cors: [
-    'https://h5.zadn.vn',
-    'https://h5.zdn.vn',
-    'https://zalo.me',
-    'https://zcdc.vnos.org',
-    'https://cms.zcdc.vnos.org',
-    'https://ecdc.vnos.org',
-    'https://cms.ecdc.vnos.org',
-    '*',
-  ],
-  csrf: [
-    'https://h5.zadn.vn',
-    'https://h5.zdn.vn',
-    'https://zalo.me',
-    'https://zcdc.vnos.org',
-    'https://cms.zcdc.vnos.org',
-    'https://ecdc.vnos.org',
-    'https://cms.ecdc.vnos.org',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-  ],
+  cors: buildAllowedOrigins(),
+  csrf: buildAllowedOrigins(),
   onInit: async (payload) => {
     // const { initCron } = await import('./lib/zalo-admin/cron.js');
     // initCron();
