@@ -2765,5 +2765,10 @@ export const MIGRATION_STATEMENTS = [
   END $$;`,
   `CREATE INDEX IF NOT EXISTS "services_pricing_file_idx" ON "services" USING btree ("pricing_file_id")`,
 
+  // ====================================================
+  // BATCH: Add pricing_effective_date to Services
+  // ====================================================
+  `ALTER TABLE "services" ADD COLUMN IF NOT EXISTS "pricing_effective_date" timestamp with time zone`,
+
 ];
 
