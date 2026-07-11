@@ -231,17 +231,17 @@ export default async function ServiceDetailPage({
                     <thead className="sticky top-0 z-20 shadow-sm">
                       <tr className="bg-gov-primary text-white">
                         {excelData[0].map((header, idx) => (
-                          <th key={idx} className="p-3.5 border-b border-r border-gov-primary-dark/30 font-bold whitespace-nowrap tracking-wide text-[13.5px] uppercase last:border-r-0">
+                          <th key={idx} className="px-3 py-2.5 border-b border-r border-gov-primary-dark/30 font-bold whitespace-nowrap tracking-wide text-[13px] uppercase last:border-r-0">
                             {header}
                           </th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="text-[14px]">
+                    <tbody className="text-[13px]">
                       {excelData.slice(1).map((row, i) => (
                         <tr key={i} className="hover:bg-blue-50/60 even:bg-gray-50/60 odd:bg-white transition-colors group">
                           {row.map((cell, j) => (
-                            <td key={j} className={`p-3 border-b border-r border-gray-200 group-last:border-b-0 last:border-r-0 ${j === 0 ? 'text-gray-900 font-semibold text-center' : 'text-gray-700'} ${String(cell).match(/^[0-9.,]+(\s)?(đ|VNĐ|VND)?$/i) ? 'text-rose-600 font-bold whitespace-nowrap text-right' : ''}`}>
+                            <td key={j} className={`px-3 py-2 border-b border-r border-gray-200 group-last:border-b-0 last:border-r-0 ${j === 0 ? 'text-gray-900 font-semibold text-center' : 'text-gray-700'} ${String(cell).match(/^[0-9.,]+(\s)?(đ|VNĐ|VND)?$/i) ? 'text-rose-600 font-bold whitespace-nowrap text-right' : ''}`}>
                               {cell}
                             </td>
                           ))}
@@ -263,17 +263,17 @@ export default async function ServiceDetailPage({
                     <table className="w-full text-left border-collapse min-w-[500px]">
                       <thead className="sticky top-0 z-20 shadow-sm">
                         <tr className="bg-gov-primary text-white">
-                          <th className="p-3.5 border-b border-r border-gov-primary-dark/30 font-bold uppercase text-[13.5px] tracking-wide">Hạng mục</th>
-                          <th className="p-3.5 border-b border-r border-gov-primary-dark/30 font-bold uppercase text-[13.5px] tracking-wide whitespace-nowrap">Đơn giá</th>
-                          <th className="p-3.5 border-b border-gov-primary-dark/30 font-bold uppercase text-[13.5px] tracking-wide">Ghi chú</th>
+                          <th className="px-3 py-2.5 border-b border-r border-gov-primary-dark/30 font-bold uppercase text-[13px] tracking-wide">Hạng mục</th>
+                          <th className="px-3 py-2.5 border-b border-r border-gov-primary-dark/30 font-bold uppercase text-[13px] tracking-wide whitespace-nowrap">Đơn giá</th>
+                          <th className="px-3 py-2.5 border-b border-gov-primary-dark/30 font-bold uppercase text-[13px] tracking-wide">Ghi chú</th>
                         </tr>
                       </thead>
-                      <tbody className="text-[14px]">
+                      <tbody className="text-[13px]">
                         {service.pricingTable.map((row: any, i: number) => (
                           <tr key={i} className="hover:bg-blue-50/60 even:bg-gray-50/60 odd:bg-white transition-colors group">
-                            <td className="p-3 border-b border-r border-gray-200 group-last:border-b-0 text-gray-800 font-medium">{row.name}</td>
-                            <td className="p-3 border-b border-r border-gray-200 group-last:border-b-0 text-rose-600 font-bold whitespace-nowrap text-right">{row.price}</td>
-                            <td className="p-3 border-b border-gray-200 group-last:border-b-0 text-gray-600">{row.note || '-'}</td>
+                            <td className="px-3 py-2 border-b border-r border-gray-200 group-last:border-b-0 text-gray-800 font-medium">{row.name}</td>
+                            <td className="px-3 py-2 border-b border-r border-gray-200 group-last:border-b-0 text-rose-600 font-bold whitespace-nowrap text-right">{row.price}</td>
+                            <td className="px-3 py-2 border-b border-gray-200 group-last:border-b-0 text-gray-600">{row.note || '-'}</td>
                           </tr>
                         ))}
                       </tbody>
