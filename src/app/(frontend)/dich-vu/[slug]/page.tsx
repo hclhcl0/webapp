@@ -226,22 +226,22 @@ export default async function ServiceDetailPage({
                   <Tag className="w-5 h-5 text-gov-primary" />
                   Bảng giá chi tiết
                 </h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse min-w-[500px]">
-                    <thead>
-                      <tr className="bg-[var(--primary-50)] text-gov-primary">
+                <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm max-h-[700px] overflow-y-auto">
+                  <table className="w-full text-left border-collapse min-w-max">
+                    <thead className="sticky top-0 z-20 shadow-sm">
+                      <tr className="bg-gov-primary text-white">
                         {excelData[0].map((header, idx) => (
-                          <th key={idx} className={`p-3 border-b-2 border-[var(--primary-100)] font-bold ${idx === 0 ? 'rounded-tl-lg' : ''} ${idx === excelData[0].length - 1 ? 'rounded-tr-lg' : ''}`}>
+                          <th key={idx} className="p-3.5 border-b border-r border-gov-primary-dark/30 font-bold whitespace-nowrap tracking-wide text-[13.5px] uppercase last:border-r-0">
                             {header}
                           </th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody className="text-sm">
+                    <tbody className="text-[14px]">
                       {excelData.slice(1).map((row, i) => (
-                        <tr key={i} className="hover:bg-gray-50 border-b border-gray-100 last:border-0 transition-colors">
+                        <tr key={i} className="hover:bg-blue-50/60 even:bg-gray-50/60 odd:bg-white transition-colors group">
                           {row.map((cell, j) => (
-                            <td key={j} className={`p-3 ${j === 0 ? 'text-gray-800 font-medium' : 'text-gray-600'} ${String(cell).match(/^[0-9.,]+(\s)?(đ|VNĐ|VND)?$/i) ? 'text-rose-600 font-bold whitespace-nowrap' : ''}`}>
+                            <td key={j} className={`p-3 border-b border-r border-gray-200 group-last:border-b-0 last:border-r-0 ${j === 0 ? 'text-gray-900 font-semibold text-center' : 'text-gray-700'} ${String(cell).match(/^[0-9.,]+(\s)?(đ|VNĐ|VND)?$/i) ? 'text-rose-600 font-bold whitespace-nowrap text-right' : ''}`}>
                               {cell}
                             </td>
                           ))}
@@ -259,21 +259,21 @@ export default async function ServiceDetailPage({
                     <Tag className="w-5 h-5 text-gov-primary" />
                     Bảng giá chi tiết
                   </h2>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="bg-[var(--primary-50)] text-gov-primary">
-                          <th className="p-3 border-b-2 border-[var(--primary-100)] font-bold rounded-tl-lg">Hạng mục</th>
-                          <th className="p-3 border-b-2 border-[var(--primary-100)] font-bold whitespace-nowrap">Đơn giá</th>
-                          <th className="p-3 border-b-2 border-[var(--primary-100)] font-bold rounded-tr-lg">Ghi chú</th>
+                  <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm max-h-[700px] overflow-y-auto">
+                    <table className="w-full text-left border-collapse min-w-[500px]">
+                      <thead className="sticky top-0 z-20 shadow-sm">
+                        <tr className="bg-gov-primary text-white">
+                          <th className="p-3.5 border-b border-r border-gov-primary-dark/30 font-bold uppercase text-[13.5px] tracking-wide">Hạng mục</th>
+                          <th className="p-3.5 border-b border-r border-gov-primary-dark/30 font-bold uppercase text-[13.5px] tracking-wide whitespace-nowrap">Đơn giá</th>
+                          <th className="p-3.5 border-b border-gov-primary-dark/30 font-bold uppercase text-[13.5px] tracking-wide">Ghi chú</th>
                         </tr>
                       </thead>
-                      <tbody className="text-sm">
+                      <tbody className="text-[14px]">
                         {service.pricingTable.map((row: any, i: number) => (
-                          <tr key={i} className="hover:bg-gray-50 border-b border-gray-100 last:border-0 transition-colors">
-                            <td className="p-3 text-gray-800 font-medium">{row.name}</td>
-                            <td className="p-3 text-rose-600 font-bold whitespace-nowrap">{row.price}</td>
-                            <td className="p-3 text-gray-500 italic">{row.note || '-'}</td>
+                          <tr key={i} className="hover:bg-blue-50/60 even:bg-gray-50/60 odd:bg-white transition-colors group">
+                            <td className="p-3 border-b border-r border-gray-200 group-last:border-b-0 text-gray-800 font-medium">{row.name}</td>
+                            <td className="p-3 border-b border-r border-gray-200 group-last:border-b-0 text-rose-600 font-bold whitespace-nowrap text-right">{row.price}</td>
+                            <td className="p-3 border-b border-gray-200 group-last:border-b-0 text-gray-600">{row.note || '-'}</td>
                           </tr>
                         ))}
                       </tbody>
