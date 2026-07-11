@@ -2728,5 +2728,12 @@ export const MIGRATION_STATEMENTS = [
   `ALTER TABLE "site_settings_blocks_news_category_section" ADD COLUMN IF NOT EXISTS "show_date" boolean DEFAULT true`,
   `ALTER TABLE "site_settings_blocks_news_category_section" ADD COLUMN IF NOT EXISTS "show_excerpt" boolean DEFAULT false`,
 
+  // ====================================================
+  // BATCH: Add missing fields for ServicesLanding CTA
+  // ====================================================
+  `ALTER TABLE "services_landing" ADD COLUMN IF NOT EXISTS "cta_title" varchar`,
+  `ALTER TABLE "services_landing" ADD COLUMN IF NOT EXISTS "cta_description" varchar`,
+  `ALTER TABLE "services_landing" ADD COLUMN IF NOT EXISTS "cta_phone_number" varchar`,
+
 ];
 
