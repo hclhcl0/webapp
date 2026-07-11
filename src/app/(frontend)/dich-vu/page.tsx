@@ -77,11 +77,7 @@ export default async function ServicesLandingPage() {
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-500 opacity-20 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
 
         <div className="container mx-auto px-4 max-w-7xl relative z-10 text-center">
-          <div className="inline-flex items-center bg-white/10 px-4 py-1.5 rounded-full backdrop-blur-md border border-white/20 mb-5">
-            <HeartPulse className="w-4 h-4 text-teal-300 mr-2" />
-            <span className="text-teal-50 font-medium tracking-wide text-sm">Trung Tâm Kiểm Soát Bệnh Tật</span>
-          </div>
-          
+
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 text-balance max-w-5xl mx-auto">
             {heroTitle}
           </h1>
