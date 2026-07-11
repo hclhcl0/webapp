@@ -100,5 +100,30 @@ export const ServicesLanding: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'cta',
+      type: 'group',
+      label: 'Cài đặt Khối Tư vấn cuối trang (CTA)',
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Tiêu đề',
+          defaultValue: 'Bạn cần tư vấn thêm?',
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Mô tả',
+          defaultValue: 'Đội ngũ chăm sóc khách hàng của chúng tôi luôn sẵn sàng hỗ trợ bạn lựa chọn dịch vụ phù hợp nhất.',
+        },
+        {
+          name: 'phoneNumber',
+          type: 'text',
+          label: 'Số điện thoại',
+          defaultValue: '1900 1234',
+        },
+      ],
+    },
   ],
 };

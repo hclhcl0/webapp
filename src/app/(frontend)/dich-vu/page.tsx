@@ -62,6 +62,11 @@ export default async function ServicesLandingPage() {
   ];
 
   const faq = config?.faq?.length ? config.faq : [];
+  
+  const ctaTitle = config?.cta?.title || 'Bạn cần tư vấn thêm?';
+  const ctaDesc = config?.cta?.description || 'Đội ngũ chăm sóc khách hàng của chúng tôi luôn sẵn sàng hỗ trợ bạn lựa chọn dịch vụ phù hợp nhất.';
+  const ctaPhone = config?.cta?.phoneNumber || '1900 1234';
+  const ctaPhoneUrl = ctaPhone.replace(/\D/g, '');
 
   return (
     <div className="bg-[#f8fafc] min-h-screen">
@@ -245,13 +250,13 @@ export default async function ServicesLandingPage() {
       <div id="contact" className="py-12 bg-gov-primary relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-4 max-w-4xl relative z-10 text-center">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">Bạn cần tư vấn thêm?</h2>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">{ctaTitle}</h2>
           <p className="text-teal-100 mb-6 max-w-2xl mx-auto text-sm">
-            Đội ngũ chăm sóc khách hàng của chúng tôi luôn sẵn sàng hỗ trợ bạn lựa chọn dịch vụ phù hợp nhất.
+            {ctaDesc}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a href="tel:19001234" className="px-8 py-3.5 bg-white text-gov-primary hover:bg-gray-50 rounded-full font-bold transition-all duration-300 shadow-lg flex items-center">
-              <Phone className="w-5 h-5 mr-2" /> Gọi ngay: 1900 1234
+            <a href={`tel:${ctaPhoneUrl}`} className="px-8 py-3.5 bg-white text-gov-primary hover:bg-gray-50 rounded-full font-bold transition-all duration-300 shadow-lg flex items-center">
+              <Phone className="w-5 h-5 mr-2" /> Gọi ngay: {ctaPhone}
             </a>
           </div>
         </div>
