@@ -4,11 +4,22 @@ import React from 'react'
 import { LogOut } from 'lucide-react'
 
 export const GlobalLogoutButton = ({ children }: { children: React.ReactNode }) => {
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await fetch('/api/users/logout', { method: 'POST' });
+      window.location.href = '/admin/login';
+    } catch (error) {
+      console.error('Logout failed:', error);
+      window.location.href = '/admin/logout'; // Fallback
+    }
+  };
+
   return (
     <>
       {children}
-      <a 
-        href="/admin/logout" 
+      <button 
+        onClick={handleLogout}
         style={{
           position: 'fixed',
           bottom: '24px',
@@ -18,7 +29,8 @@ export const GlobalLogoutButton = ({ children }: { children: React.ReactNode }) 
           gap: '8px',
           backgroundColor: '#ef4444',
           color: 'white',
-          textDecoration: 'none',
+          border: 'none',
+          cursor: 'pointer',
           fontWeight: 'bold',
           padding: '12px 20px',
           borderRadius: '50px',
@@ -39,7 +51,7 @@ export const GlobalLogoutButton = ({ children }: { children: React.ReactNode }) 
       >
         <LogOut size={20} />
         <span>ĐĂNG XUẤT</span>
-      </a>
+      </button>
     </>
   )
 }

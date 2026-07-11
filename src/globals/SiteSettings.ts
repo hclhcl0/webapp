@@ -16,30 +16,7 @@ export const SiteSettings: GlobalConfig = {
     read: () => true,
     update: ({ req: { user } }: any) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
   },
-  hooks: {
-    beforeValidate: [
-      ({ data }) => {
-        const visited = new Set();
-        const convertMongoIDsToInteger = (obj: any) => {
-          if (obj === null || typeof obj !== 'object') return;
-          if (visited.has(obj)) return;
-          visited.add(obj);
 
-          if (Array.isArray(obj)) {
-            obj.forEach(convertMongoIDsToInteger);
-          } else {
-            if (typeof obj.id === 'string' && obj.id.length === 24) {
-              const parsed = parseInt(obj.id.substring(0, 8), 16);
-              obj.id = String(isNaN(parsed) ? Math.floor(Math.random() * 2147483647) : parsed);
-            }
-            Object.values(obj).forEach(convertMongoIDsToInteger);
-          }
-        };
-        if (data) convertMongoIDsToInteger(data);
-        return data;
-      },
-    ],
-  },
   fields: [
     {
       type: 'tabs',
