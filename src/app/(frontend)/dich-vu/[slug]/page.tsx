@@ -165,10 +165,10 @@ export default async function ServiceDetailPage({
           Quay lại danh sách
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="w-full">
 
           {/* CỘT TRÁI — nội dung chính */}
-          <div className="lg:col-span-2 space-y-5">
+          <div className="space-y-5">
 
             {/* Ảnh + tiêu đề */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
@@ -285,72 +285,6 @@ export default async function ServiceDetailPage({
 
           </div>
 
-          {/* CỘT PHẢI — sidebar thông tin & CTA */}
-          <div className="space-y-4">
-
-            {/* Box giá + CTA */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 sticky top-4">
-              <div className="mb-4 pb-4 border-b border-gray-100">
-                <div className="flex items-center gap-1.5 text-gray-400 text-xs font-medium mb-1">
-                  <Tag className="w-3.5 h-3.5" />
-                  Mức phí / Giá niêm yết
-                </div>
-                <div className="text-2xl font-extrabold text-rose-600">
-                  {service.price || 'Liên hệ để biết giá'}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                {service.bookingUrl && (
-                  <a
-                    href={service.bookingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex justify-center items-center gap-2 py-3 px-5 bg-gov-primary hover:bg-gov-primary-dark text-white rounded-lg font-bold text-sm transition-colors shadow-sm"
-                  >
-                    <ShoppingCart className="w-4 h-4" />
-                    Đăng ký trực tuyến
-                  </a>
-                )}
-
-                {service.contactPhone && (
-                  <a
-                    href={`tel:${service.contactPhone.replace(/\D/g, '')}`}
-                    className={`w-full flex justify-center items-center gap-2 py-3 px-5 rounded-lg font-bold text-sm transition-colors ${
-                      service.bookingUrl
-                        ? 'bg-white border border-gov-primary text-gov-primary hover:bg-[var(--primary-50)]'
-                        : 'bg-gov-primary hover:bg-gov-primary-dark text-white shadow-sm'
-                    }`}
-                  >
-                    <Phone className="w-4 h-4" />
-                    {service.contactPhone}
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Box thông tin nhanh */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-              <h3 className="text-sm font-bold text-gray-700 mb-3">Thông tin nhanh</h3>
-              <ul className="space-y-2.5 text-sm text-gray-600">
-                <li className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-gov-primary shrink-0"></span>
-                  <span>
-                    Trạng thái: <strong className={isActive ? 'text-green-600' : 'text-rose-500'}>
-                      {isActive ? 'Đang hoạt động' : 'Tạm ngưng'}
-                    </strong>
-                  </span>
-                </li>
-                {service.category && typeof service.category === 'object' && (
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-gov-primary shrink-0"></span>
-                    <span>Danh mục: <strong>{service.category.name}</strong></span>
-                  </li>
-                )}
-              </ul>
-            </div>
-
-          </div>
         </div>
       </div>
     </div>
