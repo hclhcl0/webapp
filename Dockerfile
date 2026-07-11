@@ -46,6 +46,8 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/migrate.mjs ./
+COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
 
 # Media volume directory if Payload stores media locally
 RUN mkdir -p /app/media
@@ -58,4 +60,4 @@ ENV PORT=3000
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "node migrate.mjs && node server.js"]
