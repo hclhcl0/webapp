@@ -222,9 +222,14 @@ export default async function ServiceDetailPage({
             {/* Bảng giá từ Excel (Ưu tiên hiển thị nếu có) */}
             {excelData.length > 0 ? (
               <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                <h2 className="flex items-center gap-2 text-base font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100">
-                  <Tag className="w-5 h-5 text-gov-primary" />
-                  Bảng giá chi tiết
+                <h2 className="flex items-center gap-2 text-base font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100 flex-wrap">
+                  <Tag className="w-5 h-5 text-gov-primary shrink-0" />
+                  <span>Bảng giá chi tiết</span>
+                  {service.pricingEffectiveDate && (
+                    <span className="text-[13px] font-normal text-gray-500 italic ml-auto bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
+                      Hiệu lực từ: <strong className="text-gray-700">{new Date(service.pricingEffectiveDate).toLocaleDateString('vi-VN')}</strong>
+                    </span>
+                  )}
                 </h2>
                 <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm max-h-[700px] overflow-y-auto">
                   <table className="w-full text-left border-collapse min-w-max">
@@ -255,9 +260,14 @@ export default async function ServiceDetailPage({
               /* Bảng giá nhập tay (Dự phòng) */
               service.pricingTable && service.pricingTable.length > 0 && (
                 <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                  <h2 className="flex items-center gap-2 text-base font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100">
-                    <Tag className="w-5 h-5 text-gov-primary" />
-                    Bảng giá chi tiết
+                  <h2 className="flex items-center gap-2 text-base font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100 flex-wrap">
+                    <Tag className="w-5 h-5 text-gov-primary shrink-0" />
+                    <span>Bảng giá chi tiết</span>
+                    {service.pricingEffectiveDate && (
+                      <span className="text-[13px] font-normal text-gray-500 italic ml-auto bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
+                        Hiệu lực từ: <strong className="text-gray-700">{new Date(service.pricingEffectiveDate).toLocaleDateString('vi-VN')}</strong>
+                      </span>
+                    )}
                   </h2>
                   <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm max-h-[700px] overflow-y-auto">
                     <table className="w-full text-left border-collapse min-w-[500px]">

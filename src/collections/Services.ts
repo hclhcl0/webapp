@@ -116,6 +116,18 @@ export const Services: CollectionConfig = {
       },
     },
     {
+      name: 'pricingEffectiveDate',
+      type: 'date',
+      label: 'Thời gian có hiệu lực của Bảng giá',
+      admin: {
+        description: 'Chọn ngày bắt đầu áp dụng bảng giá này (nếu có).',
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'dd/MM/yyyy',
+        },
+      },
+    },
+    {
       name: 'shortDescription',
       type: 'textarea',
       label: 'Mô tả ngắn',
