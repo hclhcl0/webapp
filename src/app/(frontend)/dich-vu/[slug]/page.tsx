@@ -24,7 +24,7 @@ async function getService(slug: string) {
       limit: 1,
     });
 
-    return docs[0] || null;
+    return (docs[0] as any) || null;
   } catch (err) {
     console.error('Failed to fetch service:', err);
     return null;
@@ -37,7 +37,7 @@ export default async function ServiceDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params;
-  const service = await getService(slug);
+  const service = await getService(slug) as any;
 
   if (!service) {
     notFound();

@@ -13,15 +13,15 @@ async function getLandingData() {
   try {
     const payload = await getPayload({ config: configPromise });
 
-    const landingConfig = await payload.findGlobal({ slug: 'servicesLanding' });
+    const landingConfig = await payload.findGlobal({ slug: 'servicesLanding' as any });
 
-    const categoriesData = await payload.find({
+    const categoriesData = await (payload.find as any)({
       collection: 'serviceCategories',
       sort: 'order',
       limit: 100,
     });
 
-    const servicesData = await payload.find({
+    const servicesData = await (payload.find as any)({
       collection: 'services',
       where: { status: { equals: 'active' } },
       sort: '-createdAt',
