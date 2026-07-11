@@ -2754,5 +2754,16 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "services_pricing_table_order_idx" ON "services_pricing_table" USING btree ("_order")`,
   `CREATE INDEX IF NOT EXISTS "services_pricing_table_parent_id_idx" ON "services_pricing_table" USING btree ("_parent_id")`,
 
+  // ====================================================
+  // BATCH: Add pricing_file_id to Services
+  // ====================================================
+  `ALTER TABLE "services" ADD COLUMN IF NOT EXISTS "pricing_file_id" integer`,
+  `DO $$ BEGIN
+    ALTER TABLE "services" ADD CONSTRAINT "services_pricing_file_id_media_id_fk" FOREIGN KEY ("pricing_file_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION
+    WHEN duplicate_object THEN null;
+  END $$;`,
+  `CREATE INDEX IF NOT EXISTS "services_pricing_file_idx" ON "services" USING btree ("pricing_file_id")`,
+
 ];
 

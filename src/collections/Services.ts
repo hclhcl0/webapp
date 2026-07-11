@@ -107,6 +107,15 @@ export const Services: CollectionConfig = {
       ],
     },
     {
+      name: 'pricingFile',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Tải lên Bảng giá (File Excel/CSV)',
+      admin: {
+        description: 'Tải lên file Excel (.xlsx) hoặc CSV để website tự động vẽ thành bảng. Dòng đầu tiên của file phải là Tiêu đề các cột.',
+      },
+    },
+    {
       name: 'shortDescription',
       type: 'textarea',
       label: 'Mô tả ngắn',
