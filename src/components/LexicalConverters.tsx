@@ -51,9 +51,9 @@ export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }
 
       return (
         <div className={`columns-block-grid ${layoutClass}`}>
-          <div>{col1 ? <RichText data={col1} /> : null}</div>
-          <div>{col2 ? <RichText data={col2} /> : null}</div>
-          {layout === 'third' && col3 && <div><RichText data={col3} /></div>}
+          <div>{col1 ? <RichText data={col1} converters={getJsxConverters(fallbackAlt)} /> : null}</div>
+          <div>{col2 ? <RichText data={col2} converters={getJsxConverters(fallbackAlt)} /> : null}</div>
+          {layout === 'third' && col3 && <div><RichText data={col3} converters={getJsxConverters(fallbackAlt)} /></div>}
         </div>
       );
     },
