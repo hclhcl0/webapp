@@ -25,7 +25,6 @@ import { Banners } from './collections/Banners.ts';
 import { Documents } from './collections/Documents.ts';
 import { DocumentSigners } from './collections/DocumentSigners.ts';
 import { SiteSettings } from './globals/SiteSettings.ts';
-import { ServicesLanding } from './globals/ServicesLanding.ts';
 import { Settings } from './globals/Settings.ts';
 import { WorkSchedules } from './collections/WorkSchedules.ts';
 import { Videos } from './collections/Videos.ts';
@@ -35,9 +34,6 @@ import { OrgUnits } from './collections/OrgUnits.ts';
 import { AiKnowledge } from './collections/AiKnowledge.ts';
 import { ApiKeys } from './collections/ApiKeys.ts';
 import { Procurements } from './collections/Procurements.ts';
-
-import { Services } from './collections/Services.ts';
-import { ServiceCategories } from './collections/ServiceCategories.ts';
 
 
 import { seedAccounts } from './lib/seedAccounts.ts';
@@ -153,13 +149,9 @@ export default buildConfig({
     AiKnowledge,
     ApiKeys,
     Procurements,
-
-    ServiceCategories,
-    Services,
   ]),
   globals: globalsWithRBAC([
     SiteSettings,
-    ServicesLanding,
   ]),
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN
