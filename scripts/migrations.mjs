@@ -2789,5 +2789,6 @@ export const MIGRATION_STATEMENTS = [
   `DROP TABLE IF EXISTS "services_landing_features" CASCADE`,
   `DROP TABLE IF EXISTS "services_landing_process" CASCADE`,
   `DROP TABLE IF EXISTS "services_landing_faq" CASCADE`,
+  `ALTER TABLE "_articles_v" ADD COLUMN IF NOT EXISTS "version_is_pinned" boolean DEFAULT false`,
 ];
 
