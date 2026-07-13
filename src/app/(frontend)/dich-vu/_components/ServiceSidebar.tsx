@@ -8,6 +8,7 @@ interface CategoryItem {
   id: string | number;
   name: string;
   slug: string;
+  icon?: string;
 }
 
 interface Props {
@@ -21,6 +22,7 @@ export function ServiceSidebar({ categories, activeSlug }: Props) {
   return (
     <aside className="w-full lg:w-72 flex-shrink-0">
       <div className="bg-white rounded-xl border border-gray-100 shadow-lg overflow-hidden lg:sticky top-6">
+        {/* Nút bật/tắt menu trên di động */}
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="lg:hidden w-full px-4 py-3 bg-white flex items-center justify-between font-bold text-gray-700 focus:outline-none"
@@ -29,12 +31,22 @@ export function ServiceSidebar({ categories, activeSlug }: Props) {
             <List className="w-4 h-4 text-gov-primary" />
             Lọc nhóm dịch vụ
           </span>
-          {isMobileOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+          {isMobileOpen ? (
+            <ChevronDown className="w-4 h-4" />
+          ) : (
+            <ChevronRight className="w-4 h-4" />
+          )}
         </button>
 
-        <div className={`p-2 max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar ${isMobileOpen ? 'block border-t border-gray-100' : 'hidden lg:block'}`}>
+        {/* Nội dung Sidebar */}
+        <div
+          className={`p-2 max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar ${
+            isMobileOpen ? 'block border-t border-gray-100' : 'hidden lg:block'
+          }`}
+        >
+          {/* Tất cả dịch vụ */}
           <Link
-            href="/dich-vu/tat-ca"
+            href="/dich-vu"
             className={`flex items-center justify-between px-3 py-2.5 mb-1 rounded-md text-[13.5px] transition-all ${
               !activeSlug
                 ? 'bg-gov-primary text-white font-bold shadow-md'
@@ -45,27 +57,28 @@ export function ServiceSidebar({ categories, activeSlug }: Props) {
             {!activeSlug && <ChevronRight className="w-3.5 h-3.5 flex-shrink-0" />}
           </Link>
 
+          {/* Danh sách nhóm dịch vụ */}
           <div className="space-y-0.5 mt-2">
             {categories.map((cat) => {
               const isActive = activeSlug === cat.slug;
-
               return (
                 <div key={cat.id} className="flex flex-col">
                   <div
-                    className={`flex items-center rounded-md text-[13.5px] transition-all group ${
+                    className={`flex items-center rounded-md text-[13.5px] transition-all ${
                       isActive
                         ? 'bg-primary-50 text-gov-primary font-bold'
                         : 'text-gray-800 font-semibold hover:bg-gray-200 hover:text-gray-900'
                     }`}
                   >
                     <Link
-                      href={`/dich-vu/tat-ca?category=${cat.slug}`}
-                      className="flex-grow px-3 py-2 leading-tight relative"
+                      href={`/dich-vu?category=${cat.slug}`}
+                      className="flex-grow px-3 py-2 leading-tight relative flex items-center gap-2"
                     >
                       {isActive && (
                         <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-3/5 bg-gov-primary rounded-r-full" />
                       )}
-                      {cat.name}
+                      {cat.icon && <span className="text-base leading-none">{cat.icon}</span>}
+                      <span className="line-clamp-2">{cat.name}</span>
                     </Link>
                   </div>
                 </div>
