@@ -26,7 +26,7 @@ export default async function HealthSubTopicPage({ params, searchParams }: PageP
   const sp = await searchParams;
   const page = typeof sp.page === 'string' ? parseInt(sp.page) : 1;
 
-  const { topics, activeTopic, activeSubTopic, articles, totalPages, currentPage, hasPrevPage, hasNextPage } =
+  const { rootCat, topics, activeTopic, activeSubTopic, articles, totalPages, currentPage, hasPrevPage, hasNextPage } =
     await getHealthData({ topicSlug: topic, subtopicSlug: subtopic, page });
 
   if (!activeTopic || !activeSubTopic) return notFound();
