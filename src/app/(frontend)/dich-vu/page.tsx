@@ -93,7 +93,7 @@ export async function getServicePageData({
     }
   }
 
-  // 6. Lấy bài viết
+  // 6. Lấy bài viết (ghim lên trước, rồi mới theo ngày mới nhất)
   const {
     docs: articles,
     totalPages,
@@ -103,7 +103,7 @@ export async function getServicePageData({
   } = await payload.find({
     collection: 'articles',
     where: { ...articleFilter, _status: { equals: 'published' } },
-    sort: '-publishedAt',
+    sort: ['-isPinned', '-publishedAt'],
     limit: 12,
     page,
     depth: 1,
@@ -132,7 +132,7 @@ function ArticleCard({ article }: { article: any }) {
     <div className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col h-full">
       <Link
         href={`/bai-viet/${article.slug || article.id}`}
-        className="block aspect-video bg-gray-100 overflow-hidden"
+        className="block aspect-video bg-gray-100 overflow-hidden relative"
       >
         {imgUrl ? (
           <img
@@ -143,6 +143,11 @@ function ArticleCard({ article }: { article: any }) {
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-teal-50">
             <HeartPulse className="w-10 h-10 text-teal-200" />
+          </div>
+        )}
+        {article.isPinned && (
+          <div className="absolute top-2 left-2 px-2 py-0.5 bg-amber-400 text-white text-[11px] font-bold rounded-full shadow flex items-center gap-1">
+            📌 Ghim
           </div>
         )}
       </Link>

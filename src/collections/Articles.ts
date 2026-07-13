@@ -267,6 +267,16 @@ export const Articles: CollectionConfig = {
       },
     },
     {
+      name: 'isPinned',
+      type: 'checkbox',
+      label: '📌 Ghim bài viết lên đầu',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Bài được ghim sẽ luôn hiển thị trên cùng trong danh sách.',
+      },
+    },
+    {
       name: 'title',
       type: 'text',
       required: true,
