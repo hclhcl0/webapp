@@ -5,6 +5,7 @@ import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { NewsGrid } from '@/components/NewsGrid';
 import { CategoryCover } from '@/components/CategoryCover';
+import { SidebarBanners } from '@/components/SidebarBanners';
 
 interface CategoryTemplateProps {
   category: any;
@@ -15,8 +16,6 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
   const payload = await getPayload({ config: configPromise });
 
   // 1. Tìm các chuyên mục có liên quan (để làm Sidebar)
-  // Nếu category hiện tại CÓ parent, ta sẽ hiện danh sách các anh chị em (cùng parent).
-  // Nếu category KHÔNG CÓ parent (category gốc), ta sẽ hiện danh sách các con của nó.
   let sidebarParentId = category.parent ? (typeof category.parent === 'object' ? category.parent.id : category.parent) : category.id;
   
   const { docs: relatedCategories } = await payload.find({
@@ -99,9 +98,9 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
           </div>
 
           {/* Sidebar */}
-          {relatedCategories && relatedCategories.length > 0 && (
-            <div className="w-full lg:w-80 flex-shrink-0 order-first lg:order-last">
-              <div className="sticky top-24 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="w-full lg:w-80 flex-shrink-0 order-first lg:order-last lg:sticky top-6 self-start">
+            {relatedCategories && relatedCategories.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
                 <div className="p-5 border-b border-gray-100 bg-gray-50/50">
                   <h3 className="font-bold text-gray-900 uppercase tracking-wider text-sm">
                     {sidebarTitle}
@@ -148,8 +147,11 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
                   </ul>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+            
+            {/* Banner tùy chỉnh dưới menu dọc */}
+            <SidebarBanners />
+          </div>
 
         </div>
       </div>

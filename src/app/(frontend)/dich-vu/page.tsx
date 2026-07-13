@@ -8,6 +8,7 @@ import { HeartPulse, Calendar, Eye, ArrowRight, ChevronRight } from 'lucide-reac
 import { Pagination } from '@/components/Pagination';
 import { ServiceSidebar } from './_components/ServiceSidebar';
 import { CategoryCover } from '@/components/CategoryCover';
+import { SidebarBanners } from '@/components/SidebarBanners';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -195,7 +196,9 @@ export default async function DichVuPage({ searchParams }: PageProps) {
             topics={topics}
             activeSlug={topicSlug}
             activeSubSlug={subtopicSlug}
-          />
+          >
+            <SidebarBanners />
+          </ServiceSidebar>
 
           {/* Main Content */}
           <main className="flex-grow min-w-0">

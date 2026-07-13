@@ -15,9 +15,10 @@ interface Props {
   topics: TopicItem[];
   activeSlug?: string;
   activeSubSlug?: string;
+  children?: React.ReactNode;
 }
 
-export function ServiceSidebar({ topics, activeSlug, activeSubSlug }: Props) {
+export function ServiceSidebar({ topics, activeSlug, activeSubSlug, children }: Props) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const [expanded, setExpanded] = useState<Set<string>>(() => {
@@ -36,8 +37,8 @@ export function ServiceSidebar({ topics, activeSlug, activeSubSlug }: Props) {
   };
 
   return (
-    <aside className="w-full lg:w-72 flex-shrink-0">
-      <div className="bg-white rounded-xl border border-gray-100 shadow-lg overflow-hidden lg:sticky top-6">
+    <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6 lg:sticky top-6 self-start">
+      <div className="bg-white rounded-xl border border-gray-100 shadow-lg overflow-hidden">
         {/* Nút bật/tắt menu trên di động */}
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -158,6 +159,9 @@ export function ServiceSidebar({ topics, activeSlug, activeSubSlug }: Props) {
           </div>
         </div>
       </div>
+      
+      {/* Vị trí chèn Sidebar Banners */}
+      {children}
     </aside>
   );
 }

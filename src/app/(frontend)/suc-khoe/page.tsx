@@ -8,6 +8,7 @@ import { Calendar, Eye, ChevronRight, HeartPulse } from 'lucide-react';
 import { Pagination } from '@/components/Pagination';
 import { HealthSidebar } from './_components/HealthSidebar';
 import { CategoryCover } from '@/components/CategoryCover';
+import { SidebarBanners } from '@/components/SidebarBanners';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -214,7 +215,9 @@ export default async function SucKhoePage({ searchParams }: PageProps) {
       <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
-          <HealthSidebar topics={topics} />
+          <HealthSidebar topics={topics}>
+            <SidebarBanners />
+          </HealthSidebar>
 
           {/* Main Content */}
           <main className="flex-grow min-w-0">

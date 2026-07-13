@@ -608,6 +608,37 @@ export const SiteSettings: GlobalConfig = {
                 description: 'Nhập thời gian tính bằng mili-giây (1 giây = 1000). Mặc định là 5000 (5 giây).',
               },
             },
+            {
+              name: 'sidebarBanners',
+              type: 'array',
+              label: 'Danh sách Banner bên trái (Dưới Menu dọc)',
+              admin: {
+                description: 'Các banner quảng cáo hoặc thông báo sẽ hiển thị ở cột bên trái của các trang chuyên mục.',
+              },
+              fields: [
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Ảnh Banner',
+                  required: true,
+                },
+                {
+                  name: 'url',
+                  type: 'text',
+                  label: 'Đường dẫn liên kết (Link)',
+                  admin: {
+                    description: 'VD: https://google.com hoặc /bai-viet/abc',
+                  },
+                },
+                {
+                  name: 'openInNewTab',
+                  type: 'checkbox',
+                  label: 'Mở trong tab mới',
+                  defaultValue: true,
+                },
+              ],
+            },
           ],
         },
 

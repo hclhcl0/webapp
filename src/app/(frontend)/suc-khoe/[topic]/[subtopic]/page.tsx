@@ -8,6 +8,7 @@ import { getHealthData, ArticleCard } from '../../page';
 import { CategoryCover } from '@/components/CategoryCover';
 import { HealthSidebar } from '../../_components/HealthSidebar';
 import { Pagination } from '@/components/Pagination';
+import { SidebarBanners } from '@/components/SidebarBanners';
 
 interface PageProps {
   params: Promise<{ topic: string; subtopic: string }>;
@@ -40,7 +41,9 @@ export default async function HealthSubTopicPage({ params, searchParams }: PageP
       <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar – mở sẵn accordion chủ đề mẹ, highlight subtopic */}
-          <HealthSidebar topics={topics} activeSlug={topic} activeSubSlug={subtopic} />
+          <HealthSidebar topics={topics} activeSlug={topic} activeSubSlug={subtopic}>
+            <SidebarBanners />
+          </HealthSidebar>
 
           {/* Main Content */}
           <main className="flex-grow min-w-0">
