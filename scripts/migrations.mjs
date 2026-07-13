@@ -2770,5 +2770,9 @@ export const MIGRATION_STATEMENTS = [
   // ====================================================
   `ALTER TABLE "services" ADD COLUMN IF NOT EXISTS "pricing_effective_date" timestamp with time zone`,
 
+  // ====================================================
+  // BATCH: Add is_pinned to Articles
+  // ====================================================
+  `ALTER TABLE "articles" ADD COLUMN IF NOT EXISTS "is_pinned" boolean`,
 ];
 
