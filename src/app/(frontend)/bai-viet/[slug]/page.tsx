@@ -120,17 +120,27 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
     // Nếu không có chuyên mục con nào cùng nhóm, chỉ hiển thị chính chuyên mục cha đó
     // Tuyệt đối KHÔNG fallback lấy toàn bộ Root categories (Sức khỏe, Dịch vụ)
     if (categories.length === 0) {
-      try {
-        const selfDoc = await payload.findByID({ collection: 'categories', id: targetParentId });
-        categories = [selfDoc];
-      } catch (e) {}
+      // Tìm các chuyên mục con khác để hiển thị cho đa dạng
+      const fallback = await payload.find({
+        collection: 'categories',
+        limit: 15,
+        where: { parent: { exists: true } } // CHỈ lấy chuyên mục con
+      });
+      if (fallback.docs.length > 0) {
+        categories = fallback.docs;
+      } else {
+        try {
+          const selfDoc = await payload.findByID({ collection: 'categories', id: targetParentId });
+          categories = [selfDoc];
+        } catch (e) {}
+      }
     }
   } else {
-    // Nếu bài viết không có chuyên mục, fallback mặc định
+    // Nếu bài viết không có chuyên mục, fallback hiển thị các chuyên mục con ngẫu nhiên
     const { docs } = await payload.find({
       collection: 'categories',
-      limit: 10,
-      where: { parent: { exists: false } }
+      limit: 15,
+      where: { parent: { exists: true } }
     });
     categories = docs;
   }
