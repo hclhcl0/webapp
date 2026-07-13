@@ -278,7 +278,7 @@ export function ArticleReaderTools({
 
     if (viVoices.length > 0 && window.speechSynthesis) {
       // METHOD A: NATIVE SPEECH SYNTHESIS (Uses client-side voice package)
-      console.log("Using native browser SpeechSynthesis for sentence:", index);
+
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "vi-VN";
       utterance.rate = rateRef.current;
@@ -315,7 +315,7 @@ export function ArticleReaderTools({
       window.speechSynthesis.speak(utterance);
     } else {
       // METHOD B: GOOGLE TRANSLATE TTS VIA SERVER PROXY (Always reads in Vietnamese)
-      console.log("No native Vietnamese voice found. Falling back to /api/tts proxy for sentence:", index);
+
       
       const chunkText = text.substring(0, 180);
       const encodedText = encodeURIComponent(chunkText);

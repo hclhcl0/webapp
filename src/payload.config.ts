@@ -93,8 +93,6 @@ export default buildConfig({
   cors: buildAllowedOrigins(),
   csrf: buildAllowedOrigins(),
   onInit: async (payload) => {
-    // const { initCron } = await import('./lib/zalo-admin/cron.js');
-    // initCron();
     await seedAccounts(payload);
 
     
