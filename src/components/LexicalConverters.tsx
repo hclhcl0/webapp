@@ -51,13 +51,15 @@ export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }
 
       return (
         <div className={`columns-block-grid ${layoutClass}`}>
-          <div><RichText data={col1} converters={getJsxConverters(fallbackAlt)} /></div>
-          <div><RichText data={col2} converters={getJsxConverters(fallbackAlt)} /></div>
-          {layout === 'third' && col3 && <div><RichText data={col3} converters={getJsxConverters(fallbackAlt)} /></div>}
+          <div>{col1 ? <RichText data={col1} /> : null}</div>
+          <div>{col2 ? <RichText data={col2} /> : null}</div>
+          {layout === 'third' && col3 && <div><RichText data={col3} /></div>}
         </div>
       );
     },
     videoBlock: ({ node }: any) => <VideoBlock data={node.fields} />,
+    newsList: () => null,
+    externalLinks: () => null,
     pdfBlock: ({ node }: any) => {
       const { source, pdfFile, gdriveUrl, displayMode } = node.fields;
       const url = source === 'upload' ? pdfFile?.url : gdriveUrl;

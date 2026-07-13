@@ -3,6 +3,7 @@ import { lexicalEditor, FixedToolbarFeature, HeadingFeature, AlignFeature, HTMLC
 import { VideoBlock } from '../blocks/VideoBlock.ts';
 import { TikTokBlock } from '../blocks/TikTokBlock.ts';
 import { PDFBlock } from '../blocks/PDFBlock.ts';
+import { NewsListBlockStub, ExternalLinksBlockStub } from '../blocks/OrphanStubs.ts';
 import { GalleryBlock } from '../blocks/GalleryBlock.ts';
 import { CalloutBlock } from '../blocks/CalloutBlock.ts';
 import { ButtonBlock } from '../blocks/ButtonBlock.ts';
@@ -373,7 +374,8 @@ export const Articles: CollectionConfig = {
           BlocksFeature({ blocks: [
             VideoBlock, TikTokBlock, PDFBlock, GalleryBlock, CalloutBlock, ButtonBlock, RelatedArticlesBlock, ColumnsBlock,
             TableBlock, FaqBlock, EmbedBlock, QuoteBlock, AudioBlock,
-            FileDownloadsBlock, SliderBlock, InfographicBlock, ZaloWidgetBlock, LivestreamBlock
+            FileDownloadsBlock, SliderBlock, InfographicBlock, ZaloWidgetBlock, LivestreamBlock,
+            NewsListBlockStub, ExternalLinksBlockStub
           ] }),
         ]
       }),
