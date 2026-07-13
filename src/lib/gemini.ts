@@ -168,7 +168,7 @@ async function prepareAIContext(userId: string, question: string, providedHistor
   const payload = await getPayload({ config: configPromise });
   const [knowledgeChunks, settingsResult] = await Promise.all([
     loadKnowledgeBase(),
-    payload.findGlobal({ slug: "settings", depth: 0 })
+    payload.findGlobal({ slug: "site-settings", depth: 0 })
   ]);
 
   const settings = settingsResult as any;

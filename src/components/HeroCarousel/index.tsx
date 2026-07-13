@@ -26,19 +26,13 @@ async function getBanners() {
 }
 
 async function getSliderSettings() {
-  try {
-    const payload = await getPayload({ config: configPromise });
-    const settings = await payload.findGlobal({ slug: 'banner-settings' });
-    return {
-      size: settings?.heroSliderSize || 'medium',
-      customHeight: settings?.heroSliderCustomHeight || 500,
-      effect: (settings as any)?.heroSliderEffect || 'slide',
-      autoplay: (settings as any)?.heroSliderAutoplay !== false,
-      autoplayDelay: (settings as any)?.heroSliderAutoplayDelay || 5000,
-    };
-  } catch(e) {
-    return { size: 'medium', customHeight: 500, effect: 'slide', autoplay: true, autoplayDelay: 5000 };
-  }
+  return {
+    size: 'medium',
+    customHeight: 500,
+    effect: 'slide',
+    autoplay: true,
+    autoplaySpeed: 5000
+  };
 }
 
 export const HeroCarousel = async () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Search, LogIn } from 'lucide-react';
-import { FaFacebook, FaTwitter, FaYoutube, FaInstagram } from 'react-icons/fa';
+import { Menu, X } from 'lucide-react';
+
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { unstable_cache } from 'next/cache';
