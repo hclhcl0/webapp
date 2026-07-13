@@ -4,6 +4,8 @@ import { ChevronRight, Filter } from 'lucide-react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { NewsGrid } from '@/components/NewsGrid';
+import { SidebarRenderer } from '@/components/SidebarRenderer';
+import { CategoryCover } from '@/components/CategoryCover';
 
 interface CategoryTemplateProps {
   category: any;
@@ -44,37 +46,11 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
   const themeColor = category.color || '#0056b3';
 
   return (
-    <div className="bg-gray-50/50 min-h-screen pb-12">
-      {/* 1. Cover Image / Banner */}
-      {coverUrl ? (
-        <div className="w-full h-[250px] md:h-[400px] relative">
-          <img src={coverUrl} alt={category.name} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 right-0">
-            <div className="container mx-auto px-4 py-8 max-w-7xl">
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{category.name}</h1>
-              {category.description && (
-                <p className="text-gray-200 text-sm md:text-lg max-w-2xl">{category.description}</p>
-              )}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="bg-white border-b">
-          <div className="container mx-auto px-4 py-8 max-w-7xl">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900" style={{ color: themeColor }}>
-              {category.name}
-            </h1>
-            {category.description && (
-              <p className="text-gray-600 mt-2 max-w-3xl">{category.description}</p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* 2. Breadcrumbs */}
-      <div className="container mx-auto px-4 max-w-7xl">
-        <nav className="flex items-center space-x-2 text-sm text-gray-500 my-6 overflow-x-auto whitespace-nowrap pb-2">
+    <div className="bg-gray-50/50 min-h-screen pb-12 flex flex-col">
+      <div className="container mx-auto px-4 max-w-7xl pt-8 flex-grow">
+        
+        {/* Breadcrumbs */}
+        <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6 overflow-x-auto whitespace-nowrap">
           <Link href="/" className="hover:text-[#0056b3] transition-colors flex-shrink-0">Trang chủ</Link>
           <ChevronRight className="w-4 h-4 flex-shrink-0" />
           {category.parent && typeof category.parent === 'object' && (
@@ -87,14 +63,24 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
           )}
           <span className="text-gray-900 font-medium flex-shrink-0" style={{ color: themeColor }}>{category.name}</span>
         </nav>
-      </div>
 
-      {/* 3. Main Layout */}
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           
-          {/* Lưới bài viết (Cột chính) */}
-          <div className="flex-1 min-w-0">
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            <CategoryCover category={category} />
+            
+            {!coverUrl && (
+              <div className="mb-8">
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900" style={{ color: themeColor }}>
+                  {category.name}
+                </h1>
+                {category.description && (
+                  <p className="text-gray-600 mt-2 max-w-3xl">{category.description}</p>
+                )}
+              </div>
+            )}
+
             <div className="mb-6 flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">
               <h2 className="text-lg font-semibold flex items-center gap-2">
                 <Filter className="w-5 h-5 text-gray-400" />
@@ -111,8 +97,8 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
           </div>
 
           {/* Sidebar */}
-          {relatedCategories && relatedCategories.length > 0 && (
-            <div className="w-full lg:w-80 flex-shrink-0 order-first lg:order-last">
+          <div className="lg:col-span-1">
+            {relatedCategories && relatedCategories.length > 0 && (
               <div className="sticky top-24 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="p-5 border-b border-gray-100 bg-gray-50/50">
                   <h3 className="font-bold text-gray-900 uppercase tracking-wider text-sm">

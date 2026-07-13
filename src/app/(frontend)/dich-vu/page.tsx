@@ -188,7 +188,6 @@ export default async function DichVuPage({ searchParams }: PageProps) {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col">
-      <CategoryCover category={rootCat} />
       <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
@@ -200,6 +199,7 @@ export default async function DichVuPage({ searchParams }: PageProps) {
 
           {/* Main Content */}
           <main className="flex-grow min-w-0">
+            <CategoryCover category={rootCat} />
             {/* Tiêu đề chuyên mục đang xem */}
             {(activeTopic || activeSubTopic) && (
               <div className="mb-5">

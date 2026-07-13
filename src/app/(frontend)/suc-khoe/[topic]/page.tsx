@@ -37,7 +37,6 @@ export default async function HealthTopicPage({ params, searchParams }: PageProp
 
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col">
-      <CategoryCover category={coverTarget} />
       <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
@@ -45,6 +44,7 @@ export default async function HealthTopicPage({ params, searchParams }: PageProp
 
           {/* Main Content */}
           <main className="flex-grow min-w-0">
+            <CategoryCover category={coverTarget} />
             {articles.length === 0 ? (
               <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border border-gray-100">
                 <HeartPulse className="w-12 h-12 mx-auto text-gray-200 mb-4" />
