@@ -2830,5 +2830,16 @@ export const MIGRATION_STATEMENTS = [
   END $$;`,
   `CREATE INDEX IF NOT EXISTS "site_settings_banner_sidebar_banners_order_idx" ON "site_settings_banner_sidebar_banners" USING btree ("_order")`,
   `CREATE INDEX IF NOT EXISTS "site_settings_banner_sidebar_banners_parent_id_idx" ON "site_settings_banner_sidebar_banners" USING btree ("_parent_id")`,
+
+  // ====================================================
+  // BATCH: Add missing relationship column in Payload locked documents
+  // ====================================================
+  `ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "vaccines_id" integer`,
+  `DO $$ BEGIN
+    ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_vaccines_fk" FOREIGN KEY ("vaccines_id") REFERENCES "public"."vaccines"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+    WHEN duplicate_object THEN null;
+  END $$;`,
+  `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_vaccines_id_idx" ON "payload_locked_documents_rels" USING btree ("vaccines_id")`,
 ];
 
