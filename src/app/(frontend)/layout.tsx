@@ -7,6 +7,7 @@ import ChatWidget from "@/components/ChatWidget/ChatWidget";
 import { SitePopup } from "@/components/SitePopup";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import Script from "next/script";
+import { ScrollToTopHelper } from "@/components/ScrollToTopHelper";
 
 import { getPayload } from "payload";
 import configPromise from "@payload-config";
@@ -162,7 +163,8 @@ export default async function RootLayout({
         </Script>
       </head>
       <body className="bg-gray-100/80 antialiased selection:bg-teal-600 selection:text-white">
-        <div className="w-full bg-white min-h-screen shadow-2xl flex flex-col overflow-clip relative">
+        <ScrollToTopHelper />
+        <div className="w-full bg-white min-h-screen shadow-2xl flex flex-col overflow-x-hidden relative">
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
