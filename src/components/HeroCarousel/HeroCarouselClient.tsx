@@ -23,9 +23,13 @@ function isInternalUrl(url: string) {
 }
 
 export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, globalEffect, globalAutoplay, globalAutoplayDelay }: Props) => {
+  const plugins = React.useMemo(() => {
+    return globalAutoplay === false ? [] : [Autoplay({ delay: globalAutoplayDelay || 5000, stopOnInteraction: false })];
+  }, [globalAutoplay, globalAutoplayDelay]);
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, duration: globalEffect === 'slide' ? 25 : 0 },
-    globalAutoplay === false ? [] : [Autoplay({ delay: globalAutoplayDelay, stopOnInteraction: false })]
+    plugins
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);

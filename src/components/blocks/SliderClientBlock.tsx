@@ -5,7 +5,9 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 
 export function SliderClientBlock({ images, autoplay }: { images: any[]; autoplay: boolean }) {
-  const plugins = autoplay ? [Autoplay({ delay: 4000, stopOnInteraction: false })] : [];
+  const plugins = React.useMemo(() => {
+    return autoplay ? [Autoplay({ delay: 4000, stopOnInteraction: false })] : [];
+  }, [autoplay]);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, plugins);
 
   const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
