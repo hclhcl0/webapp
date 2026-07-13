@@ -2810,7 +2810,7 @@ export const MIGRATION_STATEMENTS = [
   )`,
   `CREATE INDEX IF NOT EXISTS "vaccines_created_at_idx" ON "vaccines" USING btree ("created_at")`,
 
-  `CREATE TABLE IF NOT EXISTS "site_settings_sidebar_banners" (
+  `CREATE TABLE IF NOT EXISTS "site_settings_banner_sidebar_banners" (
     "id" varchar PRIMARY KEY NOT NULL,
     "_order" integer NOT NULL,
     "_parent_id" integer NOT NULL,
@@ -2819,16 +2819,16 @@ export const MIGRATION_STATEMENTS = [
     "open_in_new_tab" boolean DEFAULT true
   )`,
   `DO $$ BEGIN
-    ALTER TABLE "site_settings_sidebar_banners" ADD CONSTRAINT "site_settings_sidebar_banners_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+    ALTER TABLE "site_settings_banner_sidebar_banners" ADD CONSTRAINT "site_settings_banner_sidebar_banners_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   EXCEPTION
     WHEN duplicate_object THEN null;
   END $$;`,
   `DO $$ BEGIN
-    ALTER TABLE "site_settings_sidebar_banners" ADD CONSTRAINT "site_settings_sidebar_banners_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action;
+    ALTER TABLE "site_settings_banner_sidebar_banners" ADD CONSTRAINT "site_settings_banner_sidebar_banners_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action;
   EXCEPTION
     WHEN duplicate_object THEN null;
   END $$;`,
-  `CREATE INDEX IF NOT EXISTS "site_settings_sidebar_banners_order_idx" ON "site_settings_sidebar_banners" USING btree ("_order")`,
-  `CREATE INDEX IF NOT EXISTS "site_settings_sidebar_banners_parent_id_idx" ON "site_settings_sidebar_banners" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_banner_sidebar_banners_order_idx" ON "site_settings_banner_sidebar_banners" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_banner_sidebar_banners_parent_id_idx" ON "site_settings_banner_sidebar_banners" USING btree ("_parent_id")`,
 ];
 
