@@ -7,6 +7,7 @@ import configPromise from '@payload-config';
 import { HeartPulse, Calendar, Eye, ArrowRight, ChevronRight } from 'lucide-react';
 import { Pagination } from '@/components/Pagination';
 import { ServiceSidebar } from './_components/ServiceSidebar';
+import { CategoryCover } from '@/components/CategoryCover';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -29,7 +30,7 @@ export async function getServicePageData({
     collection: 'categories',
     where: { slug: { equals: 'dich-vu' } },
     limit: 1,
-    depth: 0,
+    depth: 2,
   });
   const rootCat = rootCats[0] || null;
 
@@ -182,12 +183,13 @@ export default async function DichVuPage({ searchParams }: PageProps) {
   const topicSlug = typeof sp.topic === 'string' ? sp.topic : undefined;
   const subtopicSlug = typeof sp.subtopic === 'string' ? sp.subtopic : undefined;
 
-  const { topics, activeTopic, activeSubTopic, articles, totalPages, currentPage, hasPrevPage, hasNextPage } =
+  const { rootCat, topics, activeTopic, activeSubTopic, articles, totalPages, currentPage, hasPrevPage, hasNextPage } =
     await getServicePageData({ topicSlug, subtopicSlug, page });
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen">
-      <div className="container mx-auto px-4 max-w-7xl py-6">
+    <div className="bg-[#f8fafc] min-h-screen flex flex-col">
+      <CategoryCover category={rootCat} />
+      <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <ServiceSidebar

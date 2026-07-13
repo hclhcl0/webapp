@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRight, HeartPulse } from 'lucide-react';
 import { getHealthData, ArticleCard } from '../page';
+import { CategoryCover } from '@/components/CategoryCover';
 import { HealthSidebar } from '../_components/HealthSidebar';
 import { Pagination } from '@/components/Pagination';
 
@@ -31,9 +32,13 @@ export default async function HealthTopicPage({ params, searchParams }: PageProp
 
   if (!activeTopic) return notFound();
 
+  // Nếu topic cấp 2 có coverImage riêng thì ưu tiên dùng nó, ngược lại dùng của rootCat
+  const coverTarget = activeTopic?.coverImage ? activeTopic : rootCat;
+
   return (
-    <div className="bg-[#f8fafc] min-h-screen">
-      <div className="container mx-auto px-4 max-w-7xl py-6">
+    <div className="bg-[#f8fafc] min-h-screen flex flex-col">
+      <CategoryCover category={coverTarget} />
+      <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <HealthSidebar topics={topics} activeSlug={topic} />

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRight, HeartPulse } from 'lucide-react';
 import { getHealthData, ArticleCard } from '../../page';
+import { CategoryCover } from '@/components/CategoryCover';
 import { HealthSidebar } from '../../_components/HealthSidebar';
 import { Pagination } from '@/components/Pagination';
 
@@ -30,9 +31,14 @@ export default async function HealthSubTopicPage({ params, searchParams }: PageP
 
   if (!activeTopic || !activeSubTopic) return notFound();
 
+  const activeSubtopic = topics.find((t: any) => t.slug === topic)?.children?.find((c: any) => c.slug === subtopic);
+  // Nếu có activeSubtopic thì lấy cover của nó, ngược lại dùng của rootCat
+  const coverTarget = activeSubtopic?.coverImage ? activeSubtopic : rootCat;
+
   return (
-    <div className="bg-[#f8fafc] min-h-screen">
-      <div className="container mx-auto px-4 max-w-7xl py-6">
+    <div className="bg-[#f8fafc] min-h-screen flex flex-col">
+      <CategoryCover category={coverTarget} />
+      <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar – mở sẵn accordion chủ đề mẹ, highlight subtopic */}
           <HealthSidebar topics={topics} activeSlug={topic} activeSubSlug={subtopic} />

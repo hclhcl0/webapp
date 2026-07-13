@@ -7,6 +7,7 @@ import configPromise from '@payload-config';
 import { Calendar, Eye, ChevronRight, HeartPulse } from 'lucide-react';
 import { Pagination } from '@/components/Pagination';
 import { HealthSidebar } from './_components/HealthSidebar';
+import { CategoryCover } from '@/components/CategoryCover';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -29,7 +30,7 @@ export async function getHealthData({
     collection: 'categories',
     where: { slug: { equals: 'suc-khoe' } },
     limit: 1,
-    depth: 0,
+    depth: 2,
   });
   const rootCat = rootCats[0] || null;
 
@@ -209,8 +210,9 @@ export default async function SucKhoePage({ searchParams }: PageProps) {
     await getHealthData({ page });
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen">
-      <div className="container mx-auto px-4 max-w-7xl py-6">
+    <div className="bg-[#f8fafc] min-h-screen flex flex-col">
+      <CategoryCover category={rootCat} />
+      <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <HealthSidebar topics={topics} />
