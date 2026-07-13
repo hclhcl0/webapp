@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { HeartPulse, ChevronRight, ArrowRight } from 'lucide-react';
+import { HeartPulse, Calendar, Eye, ArrowRight, ChevronRight } from 'lucide-react';
 import { Pagination } from '@/components/Pagination';
 import { ServiceSidebar } from './_components/ServiceSidebar';
 
@@ -12,54 +12,109 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-async function getServiceData({
-  categorySlug,
+// ---- Lấy dữ liệu chuyên mục + bài viết theo cấu trúc giống trang Sức khỏe ----
+export async function getServicePageData({
+  topicSlug,
+  subtopicSlug,
   page = 1,
 }: {
-  categorySlug?: string;
+  topicSlug?: string;
+  subtopicSlug?: string;
   page?: number;
 }) {
   const payload = await getPayload({ config: configPromise });
 
-  // Lấy tất cả nhóm dịch vụ
-  const { docs: categories } = await payload.find({
-    collection: 'serviceCategories',
-    sort: 'order',
-    limit: 100,
+  // 1. Lấy chuyên mục gốc "dich-vu"
+  const { docs: rootCats } = await payload.find({
+    collection: 'categories',
+    where: { slug: { equals: 'dich-vu' } },
+    limit: 1,
     depth: 0,
   });
+  const rootCat = rootCats[0] || null;
 
-  // Xác định nhóm đang lọc
-  let activeCategory: any = null;
-  let serviceFilter: any = {};
+  // 2. Lấy chuyên mục cấp 1 (con trực tiếp của dich-vu)
+  const { docs: topics } = rootCat
+    ? await payload.find({
+        collection: 'categories',
+        where: { parent: { equals: rootCat.id } },
+        sort: 'orderNum',
+        limit: 100,
+        depth: 0,
+      })
+    : { docs: [] };
 
-  if (categorySlug) {
-    activeCategory = categories.find((c: any) => c.slug === categorySlug) || null;
-    if (activeCategory) {
-      serviceFilter = { category: { equals: activeCategory.id } };
+  // 3. Lấy tất cả chuyên mục cấp 2 (con của các topics)
+  const topicIds = topics.map((t: any) => t.id);
+  const { docs: allSubTopics } =
+    topicIds.length > 0
+      ? await payload.find({
+          collection: 'categories',
+          where: { parent: { in: topicIds } },
+          sort: 'orderNum',
+          limit: 500,
+          depth: 0,
+        })
+      : { docs: [] };
+
+  // 4. Gắn children vào mỗi topic
+  const topicsWithChildren = topics.map((t: any) => ({
+    ...t,
+    children: allSubTopics.filter(
+      (s: any) => (typeof s.parent === 'object' ? s.parent?.id : s.parent) === t.id,
+    ),
+  }));
+
+  // 5. Xác định topic/subtopic đang xem + bộ lọc bài viết
+  let activeTopic: any = null;
+  let activeSubTopic: any = null;
+  let articleFilter: any = {};
+
+  if (topicSlug) {
+    activeTopic = topicsWithChildren.find((t: any) => t.slug === topicSlug) || null;
+
+    if (subtopicSlug && activeTopic) {
+      activeSubTopic =
+        (activeTopic.children || []).find((c: any) => c.slug === subtopicSlug) || null;
+      if (activeSubTopic) {
+        articleFilter = { category: { equals: activeSubTopic.id } };
+      }
+    } else if (activeTopic) {
+      const childIds = (activeTopic.children || []).map((c: any) => c.id);
+      const allIds = [activeTopic.id, ...childIds];
+      articleFilter = { category: { in: allIds } };
+    }
+  } else if (rootCat) {
+    // Trang /dich-vu: lấy bài của tất cả topic + subtopic
+    const subIds = allSubTopics.map((s: any) => s.id);
+    const allIds = [...topicIds, ...subIds];
+    if (allIds.length > 0) {
+      articleFilter = { category: { in: allIds } };
     }
   }
 
-  // Lấy danh sách dịch vụ
+  // 6. Lấy bài viết
   const {
-    docs: services,
+    docs: articles,
     totalPages,
     page: currentPage,
     hasPrevPage,
     hasNextPage,
   } = await payload.find({
-    collection: 'services',
-    where: { ...serviceFilter, status: { equals: 'active' } },
-    sort: '-createdAt',
+    collection: 'articles',
+    where: { ...articleFilter, _status: { equals: 'published' } },
+    sort: '-publishedAt',
     limit: 12,
     page,
     depth: 1,
   });
 
   return {
-    categories,
-    activeCategory,
-    services,
+    rootCat,
+    topics: topicsWithChildren,
+    activeTopic,
+    activeSubTopic,
+    articles,
     totalPages,
     currentPage,
     hasPrevPage,
@@ -67,20 +122,22 @@ async function getServiceData({
   };
 }
 
-function ServiceCard({ service }: { service: any }) {
-  const thumbUrl = service.thumbnail?.url || null;
-  const catName = typeof service.category === 'object' ? service.category?.name : '';
+// ---- Thẻ bài viết ----
+function ArticleCard({ article }: { article: any }) {
+  const imgUrl = article.image?.url || null;
+  const date = new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN');
+  const catName = article.category?.name || '';
 
   return (
     <div className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col h-full">
       <Link
-        href={`/dich-vu/${service.slug || service.id}`}
-        className="block aspect-[4/3] bg-gray-100 overflow-hidden relative flex-shrink-0"
+        href={`/bai-viet/${article.slug || article.id}`}
+        className="block aspect-video bg-gray-100 overflow-hidden"
       >
-        {thumbUrl ? (
+        {imgUrl ? (
           <img
-            src={thumbUrl}
-            alt={service.title}
+            src={imgUrl}
+            alt={article.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
@@ -88,80 +145,73 @@ function ServiceCard({ service }: { service: any }) {
             <HeartPulse className="w-10 h-10 text-teal-200" />
           </div>
         )}
-        {service.price && (
-          <div className="absolute bottom-2 left-2 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-bold text-rose-600 border border-white shadow-sm">
-            {service.price}
-          </div>
-        )}
       </Link>
-
       <div className="p-4 flex flex-col flex-grow">
         {catName && (
           <span className="text-xs font-bold text-gov-primary mb-2 block">{catName}</span>
         )}
-        <Link href={`/dich-vu/${service.slug || service.id}`}>
-          <h3 className="font-bold text-gray-900 leading-snug group-hover:text-gov-primary transition-colors line-clamp-3 text-[15px] mb-3 flex-grow">
-            {service.title}
+        <Link href={`/bai-viet/${article.slug || article.id}`}>
+          <h3 className="font-bold text-gray-900 leading-snug group-hover:text-gov-primary transition-colors line-clamp-3 text-sm mb-3 flex-grow">
+            {article.title}
           </h3>
         </Link>
-        {service.shortDescription && (
-          <p className="text-[13px] text-gray-500 line-clamp-2 mb-3">{service.shortDescription}</p>
-        )}
-        <Link
-          href={`/dich-vu/${service.slug || service.id}`}
-          className="mt-auto inline-flex items-center gap-1.5 text-xs font-bold text-gov-primary hover:underline"
-        >
-          Xem chi tiết <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
+        <div className="flex items-center gap-3 text-xs text-gray-400 font-medium mt-auto">
+          <span className="flex items-center gap-1">
+            <Calendar className="w-3 h-3" />
+            {date}
+          </span>
+          <span className="flex items-center gap-1">
+            <Eye className="w-3 h-3" />
+            {article.views || 0}
+          </span>
+        </div>
       </div>
     </div>
   );
 }
 
-export default async function ServicePage({ searchParams }: PageProps) {
+// ---- Trang chính ----
+export default async function DichVuPage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const page = typeof sp.page === 'string' ? parseInt(sp.page) : 1;
-  const categorySlug = typeof sp.category === 'string' ? sp.category : undefined;
+  const topicSlug = typeof sp.topic === 'string' ? sp.topic : undefined;
+  const subtopicSlug = typeof sp.subtopic === 'string' ? sp.subtopic : undefined;
 
-  const {
-    categories,
-    activeCategory,
-    services,
-    totalPages,
-    currentPage,
-    hasPrevPage,
-    hasNextPage,
-  } = await getServiceData({ categorySlug, page });
+  const { topics, activeTopic, activeSubTopic, articles, totalPages, currentPage, hasPrevPage, hasNextPage } =
+    await getServicePageData({ topicSlug, subtopicSlug, page });
 
   return (
     <div className="bg-[#f8fafc] min-h-screen">
       <div className="container mx-auto px-4 max-w-7xl py-6">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
-          <ServiceSidebar categories={categories} activeSlug={categorySlug} />
+          <ServiceSidebar
+            topics={topics}
+            activeSlug={topicSlug}
+            activeSubSlug={subtopicSlug}
+          />
 
           {/* Main Content */}
           <main className="flex-grow min-w-0">
-            {/* Tiêu đề nhóm đang xem */}
-            <div className="mb-5">
-              <h1 className="text-xl font-extrabold text-gray-900">
-                {activeCategory ? activeCategory.name : 'Tất cả Dịch vụ'}
-              </h1>
-              {activeCategory?.description && (
-                <p className="text-sm text-gray-500 mt-1">{activeCategory.description}</p>
-              )}
-            </div>
+            {/* Tiêu đề chuyên mục đang xem */}
+            {(activeTopic || activeSubTopic) && (
+              <div className="mb-5">
+                <h1 className="text-xl font-extrabold text-gray-900">
+                  {activeSubTopic?.name || activeTopic?.name}
+                </h1>
+              </div>
+            )}
 
-            {services.length === 0 ? (
+            {articles.length === 0 ? (
               <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border border-gray-100">
                 <HeartPulse className="w-12 h-12 mx-auto text-gray-200 mb-4" />
-                <p>Chưa có dịch vụ nào trong nhóm này.</p>
+                <p>Chưa có bài viết nào trong chuyên mục này.</p>
               </div>
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {services.map((service: any) => (
-                    <ServiceCard key={service.id} service={service} />
+                  {articles.map((article: any) => (
+                    <ArticleCard key={article.id} article={article} />
                   ))}
                 </div>
 
