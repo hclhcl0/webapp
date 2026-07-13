@@ -34,6 +34,7 @@ import { OrgUnits } from './collections/OrgUnits.ts';
 import { AiKnowledge } from './collections/AiKnowledge.ts';
 import { ApiKeys } from './collections/ApiKeys.ts';
 import { Procurements } from './collections/Procurements.ts';
+import { Vaccines } from './collections/Vaccines.ts';
 
 
 import { seedAccounts } from './lib/seedAccounts.ts';
@@ -147,6 +148,7 @@ export default buildConfig({
     AiKnowledge,
     ApiKeys,
     Procurements,
+    Vaccines,
   ]),
   globals: globalsWithRBAC([
     SiteSettings,
