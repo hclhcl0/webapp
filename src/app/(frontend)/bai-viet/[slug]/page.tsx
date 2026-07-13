@@ -95,14 +95,29 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
     }
   });
 
-  // Fetch categories for sidebar
-  const { docs: categories } = await payload.find({
+  // Xác định ID của chuyên mục cha để lấy các chuyên mục cùng nhóm
+  let parentId = null;
+  if (typeof article.category === 'object' && article.category) {
+    const cat = article.category as any;
+    parentId = cat.parent ? (typeof cat.parent === 'object' ? cat.parent.id : cat.parent) : cat.id;
+  }
+
+  // Fetch categories cho sidebar (Chỉ lấy các chuyên mục con cùng nhóm)
+  let { docs: categories } = await payload.find({
     collection: 'categories',
-    limit: 20,
-    where: {
-      parent: { exists: false }
-    }
+    limit: 50,
+    where: parentId ? { parent: { equals: parentId } } : { parent: { exists: false } }
   });
+
+  // Nếu không có chuyên mục con nào, fallback về các chuyên mục gốc
+  if (categories.length === 0) {
+    const fallback = await payload.find({
+      collection: 'categories',
+      limit: 20,
+      where: { parent: { exists: false } }
+    });
+    categories = fallback.docs;
+  }
 
   // Fetch sidebar configurations from settings
   let sidebarWidgets: any[] = [];
