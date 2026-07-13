@@ -10,9 +10,28 @@ import { PageBlockRenderer } from '@/components/PageBlocks/PageBlockRenderer';
 import { SidebarRenderer } from '@/components/SidebarRenderer';
 import { ContactForm } from '@/components/ContactForm';
 import { OrgChartPageTemplate } from '@/components/OrgChartPageTemplate';
+import { CategoryTemplate } from '@/components/CategoryTemplate';
 
 // ─────────────────────────────────────────────
 // Data fetcher
+// ─────────────────────────────────────────────
+async function getCategoryBySlug(slug: string) {
+  try {
+    const payload = await getPayload({ config: configPromise });
+    const slugParts = slug.split('/');
+    const lastPart = slugParts[slugParts.length - 1];
+    const { docs } = await payload.find({
+      collection: 'categories',
+      where: { slug: { equals: lastPart } },
+      limit: 1,
+      depth: 2,
+    });
+    return docs.length > 0 ? docs[0] : null;
+  } catch (err) {
+    console.error('[DynamicPage] Failed to fetch category:', err);
+    return null;
+  }
+}
 // ─────────────────────────────────────────────
 async function getPageBySlug(slug: string) {
   try {
@@ -44,8 +63,18 @@ export async function generateMetadata({
   let orgSlug = 'gioi-thieu/co-cau-to-chuc';
 
   if (slug === orgSlug) return { title: 'Cơ cấu tổ chức — CDC Đà Nẵng' };
+  
   const page = await getPageBySlug(slug);
-  if (!page) return { title: 'Không tìm thấy trang | CDC Đà Nẵng' };
+  if (!page) {
+    const category = await getCategoryBySlug(slug);
+    if (category) {
+      return {
+        title: `${category.name} | CDC Đà Nẵng`,
+        description: category.description || '',
+      };
+    }
+    return { title: 'Không tìm thấy trang | CDC Đà Nẵng' };
+  }
 
   const seo = (page as any).seo || {};
   const seoTitle = seo.title || page.title;
@@ -152,7 +181,13 @@ export default async function DynamicPage({
   }
   const page = await getPageBySlug(slug);
 
-  if (!page) notFound();
+  if (!page) {
+    const category = await getCategoryBySlug(slug);
+    if (category) {
+      return <CategoryTemplate category={category} slugArray={slugArray} />;
+    }
+    notFound();
+  }
 
   const pageType = (page as any).pageType || 'standard';
   const layout = (page as any).layout || 'withSidebar';

@@ -27,10 +27,12 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
     return globalAutoplay === false ? [] : [Autoplay({ delay: globalAutoplayDelay || 5000, stopOnInteraction: false })];
   }, [globalAutoplay, globalAutoplayDelay]);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, duration: globalEffect === 'slide' ? 25 : 0 },
-    plugins
-  );
+  const emblaOptions = React.useMemo(() => ({
+    loop: true,
+    duration: globalEffect === 'slide' ? 25 : 0
+  }), [globalEffect]);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(emblaOptions, plugins);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 

@@ -47,6 +47,15 @@ export const Categories: CollectionConfig = {
       },
     },
     {
+      name: 'coverImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Ảnh bìa (Banner)',
+      admin: {
+        description: 'Ảnh ngang khổ lớn (VD: 1920x500) hiển thị phía trên cùng của trang chuyên mục.',
+      }
+    },
+    {
       name: 'description',
       type: 'textarea',
       label: 'Mô tả',
