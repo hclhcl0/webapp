@@ -4,7 +4,6 @@ import { ChevronRight, Filter } from 'lucide-react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { NewsGrid } from '@/components/NewsGrid';
-import { SidebarRenderer } from '@/components/SidebarRenderer';
 import { CategoryCover } from '@/components/CategoryCover';
 
 interface CategoryTemplateProps {
@@ -46,11 +45,10 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
   const themeColor = category.color || '#0056b3';
 
   return (
-    <div className="bg-gray-50/50 min-h-screen pb-12 flex flex-col">
-      <div className="container mx-auto px-4 max-w-7xl pt-8 flex-grow">
-        
-        {/* Breadcrumbs */}
-        <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-6 overflow-x-auto whitespace-nowrap">
+    <div className="bg-[#f8fafc] min-h-screen pb-12">
+      {/* 2. Breadcrumbs */}
+      <div className="container mx-auto px-4 max-w-7xl">
+        <nav className="flex items-center space-x-2 text-sm text-gray-500 my-6 overflow-x-auto whitespace-nowrap pb-2">
           <Link href="/" className="hover:text-[#0056b3] transition-colors flex-shrink-0">Trang chủ</Link>
           <ChevronRight className="w-4 h-4 flex-shrink-0" />
           {category.parent && typeof category.parent === 'object' && (
@@ -63,11 +61,15 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
           )}
           <span className="text-gray-900 font-medium flex-shrink-0" style={{ color: themeColor }}>{category.name}</span>
         </nav>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      {/* 3. Main Layout */}
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="flex flex-col lg:flex-row gap-8">
           
-          {/* Main Content */}
-          <div className="lg:col-span-3">
+          {/* Lưới bài viết (Cột chính) */}
+          <div className="flex-1 min-w-0">
+            {/* Ảnh bìa & Tiêu đề */}
             <CategoryCover category={category} />
             
             {!coverUrl && (
@@ -97,8 +99,8 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
-            {relatedCategories && relatedCategories.length > 0 && (
+          {relatedCategories && relatedCategories.length > 0 && (
+            <div className="w-full lg:w-80 flex-shrink-0 order-first lg:order-last">
               <div className="sticky top-24 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="p-5 border-b border-gray-100 bg-gray-50/50">
                   <h3 className="font-bold text-gray-900 uppercase tracking-wider text-sm">
