@@ -2774,5 +2774,20 @@ export const MIGRATION_STATEMENTS = [
   // BATCH: Add is_pinned to Articles
   // ====================================================
   `ALTER TABLE "articles" ADD COLUMN IF NOT EXISTS "is_pinned" boolean`,
+
+  // ====================================================
+  // BATCH: Drop Services, ServiceCategories, ServicesLanding
+  // Xóa hoàn toàn khỏi database vì đã chuyển sang dùng Articles + Categories
+  // ====================================================
+  `DROP TABLE IF EXISTS "services_pricing_table" CASCADE`,
+  `DROP TABLE IF EXISTS "services_rels" CASCADE`,
+  `DROP TABLE IF EXISTS "_services_v" CASCADE`,
+  `DROP TABLE IF EXISTS "_services_v_rels" CASCADE`,
+  `DROP TABLE IF EXISTS "services" CASCADE`,
+  `DROP TABLE IF EXISTS "service_categories" CASCADE`,
+  `DROP TABLE IF EXISTS "services_landing" CASCADE`,
+  `DROP TABLE IF EXISTS "services_landing_features" CASCADE`,
+  `DROP TABLE IF EXISTS "services_landing_process" CASCADE`,
+  `DROP TABLE IF EXISTS "services_landing_faq" CASCADE`,
 ];
 
