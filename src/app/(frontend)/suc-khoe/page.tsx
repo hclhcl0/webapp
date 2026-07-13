@@ -206,7 +206,7 @@ export default async function SucKhoePage({ searchParams }: PageProps) {
   const sp = await searchParams;
   const page = typeof sp.page === 'string' ? parseInt(sp.page) : 1;
 
-  const { topics, articles, totalPages, currentPage, hasPrevPage, hasNextPage } =
+  const { rootCat, topics, articles, totalPages, currentPage, hasPrevPage, hasNextPage } =
     await getHealthData({ page });
 
   return (
