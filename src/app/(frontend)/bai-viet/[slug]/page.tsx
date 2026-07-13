@@ -10,7 +10,6 @@ import { RichText } from '@payloadcms/richtext-lexical/react';
 import { headers } from 'next/headers';
 
 import { getJsxConverters } from '@/components/LexicalConverters';
-import { LexicalErrorBoundary } from '@/components/LexicalErrorBoundary';
 import { ArticleReaderTools } from '@/components/ArticleReaderTools';
 import type { ReaderToolsConfig } from '@/components/ArticleReaderTools';
 import { SidebarRenderer } from '@/components/SidebarRenderer';
@@ -226,9 +225,7 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
 
               <div className="prose prose-base md:prose-lg max-w-none break-words prose-p:!my-1.5 md:prose-p:!my-2 prose-headings:!my-3 md:prose-headings:!my-4 prose-ul:!my-1 prose-li:!my-0.5 prose-img:!my-3 prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl w-full min-w-0 overflow-hidden">
                  {article.content ? (
-                    <LexicalErrorBoundary>
-                      <RichText data={article.content} converters={getJsxConverters(`Hình ảnh minh họa cho bài viết: ${article.title}`)} />
-                    </LexicalErrorBoundary>
+                    <RichText data={article.content} converters={getJsxConverters(`Hình ảnh minh họa cho bài viết: ${article.title}`)} />
                  ) : (
                     <p>Nội dung đang cập nhật...</p>
                  )}
