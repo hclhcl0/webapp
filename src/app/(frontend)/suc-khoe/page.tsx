@@ -9,6 +9,7 @@ import { Pagination } from '@/components/Pagination';
 import { HealthSidebar } from './_components/HealthSidebar';
 import { CategoryCover } from '@/components/CategoryCover';
 import { SidebarBanners } from '@/components/SidebarBanners';
+import { ArticleCard } from '@/components/ArticleCard';
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -119,88 +120,7 @@ export async function getHealthData({
   };
 }
 
-// ---- Article Card ----
-export function ArticleCard({ article, featured = false }: { article: any; featured?: boolean }) {
-  const imgUrl = article.image?.url || null;
-  const date = new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN');
-  const catName = article.category?.name || '';
-
-  if (featured) {
-    return (
-      <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-shadow group mb-6">
-        <div className="flex flex-col md:flex-row">
-          <Link
-            href={`/bai-viet/${article.slug || article.id}`}
-            className="md:w-1/2 aspect-video md:aspect-auto block overflow-hidden bg-gray-100 flex-shrink-0"
-          >
-            {imgUrl ? (
-              <img
-                src={imgUrl}
-                alt={article.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            ) : (
-              <div className="w-full h-full min-h-[200px] flex items-center justify-center bg-teal-50">
-                <HeartPulse className="w-16 h-16 text-teal-200" />
-              </div>
-            )}
-          </Link>
-          <div className="p-6 flex flex-col justify-center flex-grow">
-            {catName && (
-              <span className="inline-block text-xs font-bold text-gov-primary bg-teal-50 px-3 py-1 rounded-full mb-3 w-fit">
-                {catName}
-              </span>
-            )}
-            <Link href={`/bai-viet/${article.slug || article.id}`}>
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 leading-snug group-hover:text-gov-primary transition-colors line-clamp-3 mb-3">
-                {article.title}
-              </h2>
-            </Link>
-            {article.description && (
-              <p className="text-gray-500 text-sm line-clamp-3 mb-4">{article.description}</p>
-            )}
-            <div className="flex items-center gap-4 text-xs text-gray-400 font-medium">
-              <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{date}</span>
-              <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{article.views || 0}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col">
-      <Link href={`/bai-viet/${article.slug || article.id}`} className="block aspect-video bg-gray-100 overflow-hidden">
-        {imgUrl ? (
-          <img
-            src={imgUrl}
-            alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-teal-50">
-            <HeartPulse className="w-10 h-10 text-teal-200" />
-          </div>
-        )}
-      </Link>
-      <div className="p-4 flex flex-col flex-grow">
-        {catName && (
-          <span className="text-xs font-bold text-gov-primary mb-2 block">{catName}</span>
-        )}
-        <Link href={`/bai-viet/${article.slug || article.id}`}>
-          <h3 className="font-bold text-gray-900 leading-snug group-hover:text-gov-primary transition-colors line-clamp-3 text-sm mb-3 flex-grow">
-            {article.title}
-          </h3>
-        </Link>
-        <div className="flex items-center gap-3 text-xs text-gray-400 font-medium mt-auto">
-          <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{date}</span>
-          <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{article.views || 0}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
+// Card component has been moved to @/components/ArticleCard
 
 // ---- Page ----
 export default async function SucKhoePage({ searchParams }: PageProps) {

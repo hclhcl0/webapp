@@ -168,10 +168,14 @@ function ContactPageTemplate({ page }: { page: any }) {
 // ─────────────────────────────────────────────
 export default async function DynamicPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string[] }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { slug: slugArray } = await params;
+  const sp = await searchParams;
+  const pageNumber = typeof sp.page === 'string' ? parseInt(sp.page) : 1;
   const slug = slugArray.join('/');
 
   let orgSlug = 'gioi-thieu/co-cau-to-chuc';
@@ -184,7 +188,7 @@ export default async function DynamicPage({
   if (!page) {
     const category = await getCategoryBySlug(slug);
     if (category) {
-      return <CategoryTemplate category={category} slugArray={slugArray} />;
+      return <CategoryTemplate category={category} slugArray={slugArray} page={pageNumber} />;
     }
     notFound();
   }

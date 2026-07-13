@@ -1,18 +1,20 @@
 import React from 'react';
 import Link from 'next/link';
-import { ChevronRight, Filter } from 'lucide-react';
+import { ChevronRight, Filter, FileText } from 'lucide-react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { NewsGrid } from '@/components/NewsGrid';
+import { ArticleCard } from '@/components/ArticleCard';
+import { Pagination } from '@/components/Pagination';
 import { CategoryCover } from '@/components/CategoryCover';
 import { SidebarBanners } from '@/components/SidebarBanners';
 
 interface CategoryTemplateProps {
   category: any;
   slugArray: string[];
+  page?: number;
 }
 
-export async function CategoryTemplate({ category, slugArray }: CategoryTemplateProps) {
+export async function CategoryTemplate({ category, slugArray, page = 1 }: CategoryTemplateProps) {
   const payload = await getPayload({ config: configPromise });
 
   // 1. Tìm các chuyên mục có liên quan (để làm Sidebar)
@@ -38,14 +40,35 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
     sidebarTitle = category.name;
   }
 
-  // Cover Image
+  // Cover Image & Theme Color
   const coverImage = category.coverImage;
   const coverUrl = coverImage ? (typeof coverImage === 'object' ? coverImage.url : null) : null;
   const themeColor = category.color || '#0056b3';
 
+  // 2. Lấy danh sách danh mục con (để lấy chung bài viết nếu click vào thư mục cha)
+  const { docs: allSubCategories } = await payload.find({
+    collection: 'categories',
+    where: { parent: { equals: category.id } },
+    depth: 0,
+    limit: 100,
+  });
+  
+  const childIds = allSubCategories.map(c => c.id);
+  const allIdsToFetch = [category.id, ...childIds];
+
+  // 3. Truy vấn bài viết thuộc danh mục hiện tại và các danh mục con
+  const { docs: articles, totalPages, page: currentPage, hasPrevPage, hasNextPage } = await payload.find({
+    collection: 'articles',
+    where: { category: { in: allIdsToFetch }, _status: { equals: 'published' } },
+    sort: ['-isPinned', '-publishedAt'],
+    limit: 12,
+    page,
+    depth: 1,
+  });
+
   return (
     <div className="bg-[#f8fafc] min-h-screen pb-12">
-      {/* 2. Breadcrumbs */}
+      {/* Breadcrumbs */}
       <div className="container mx-auto px-4 max-w-7xl">
         <nav className="flex items-center space-x-2 text-sm text-gray-500 my-6 overflow-x-auto whitespace-nowrap pb-2">
           <Link href="/" className="hover:text-[#0056b3] transition-colors flex-shrink-0">Trang chủ</Link>
@@ -62,7 +85,7 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
         </nav>
       </div>
 
-      {/* 3. Main Layout */}
+      {/* Main Layout */}
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex flex-col lg:flex-row gap-8">
           
@@ -89,12 +112,29 @@ export async function CategoryTemplate({ category, slugArray }: CategoryTemplate
               </h2>
             </div>
             
-            <NewsGrid 
-              categoryId={category.id} 
-              categoryName={category.name} 
-              categorySlug={category.slug}
-              layoutOverride="grid" 
-            />
+            {articles.length === 0 ? (
+              <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border border-gray-100">
+                <FileText className="w-12 h-12 mx-auto text-gray-200 mb-4" />
+                <p>Chưa có bài viết nào trong chuyên mục này.</p>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {articles.map((article: any) => (
+                    <ArticleCard key={article.id} article={article} />
+                  ))}
+                </div>
+
+                <div className="mt-8">
+                  <Pagination
+                    totalPages={totalPages}
+                    currentPage={currentPage || 1}
+                    hasPrevPage={hasPrevPage}
+                    hasNextPage={hasNextPage}
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           {/* Sidebar */}
