@@ -96,27 +96,43 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
   });
 
   // Xác định ID của chuyên mục cha để lấy các chuyên mục cùng nhóm
-  let parentId = null;
-  if (typeof article.category === 'object' && article.category) {
+  let targetParentId = null;
+
+  if (typeof article.category === 'object' && article.category !== null) {
     const cat = article.category as any;
-    parentId = cat.parent ? (typeof cat.parent === 'object' ? cat.parent.id : cat.parent) : cat.id;
+    targetParentId = cat.parent ? (typeof cat.parent === 'object' ? cat.parent.id : cat.parent) : cat.id;
+  } else if (article.category) {
+    try {
+      const catDoc = await payload.findByID({ collection: 'categories', id: article.category });
+      targetParentId = catDoc.parent ? (typeof catDoc.parent === 'object' ? catDoc.parent.id : catDoc.parent) : catDoc.id;
+    } catch (e) {}
   }
 
-  // Fetch categories cho sidebar (Chỉ lấy các chuyên mục con cùng nhóm)
-  let { docs: categories } = await payload.find({
-    collection: 'categories',
-    limit: 50,
-    where: parentId ? { parent: { equals: parentId } } : { parent: { exists: false } }
-  });
-
-  // Nếu không có chuyên mục con nào, fallback về các chuyên mục gốc
-  if (categories.length === 0) {
-    const fallback = await payload.find({
+  let categories = [];
+  if (targetParentId) {
+    const { docs } = await payload.find({
       collection: 'categories',
-      limit: 20,
+      limit: 50,
+      where: { parent: { equals: targetParentId } }
+    });
+    categories = docs;
+
+    // Nếu không có chuyên mục con nào cùng nhóm, chỉ hiển thị chính chuyên mục cha đó
+    // Tuyệt đối KHÔNG fallback lấy toàn bộ Root categories (Sức khỏe, Dịch vụ)
+    if (categories.length === 0) {
+      try {
+        const selfDoc = await payload.findByID({ collection: 'categories', id: targetParentId });
+        categories = [selfDoc];
+      } catch (e) {}
+    }
+  } else {
+    // Nếu bài viết không có chuyên mục, fallback mặc định
+    const { docs } = await payload.find({
+      collection: 'categories',
+      limit: 10,
       where: { parent: { exists: false } }
     });
-    categories = fallback.docs;
+    categories = docs;
   }
 
   // Fetch sidebar configurations from settings
