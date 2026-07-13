@@ -1,10 +1,10 @@
 import type { GlobalConfig } from 'payload';
-import { Settings } from './Settings.ts';
-import { CategoryNewsBlock } from '../blocks/CategoryNews.ts';
+import { Settings } from './Settings';
+import { CategoryNewsBlock } from '../blocks/CategoryNews';
 import { lexicalEditor, BlocksFeature } from '@payloadcms/richtext-lexical';
-import { VideoBlock } from '../blocks/VideoBlock.ts';
-import { EmbedBlock } from '../blocks/EmbedBlock.ts';
-import { TikTokBlock } from '../blocks/TikTokBlock.ts';
+import { VideoBlock } from '../blocks/VideoBlock';
+import { EmbedBlock } from '../blocks/EmbedBlock';
+import { TikTokBlock } from '../blocks/TikTokBlock';
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',

@@ -1,9 +1,9 @@
 import type { CollectionConfig } from 'payload';
 import { lexicalEditor, FixedToolbarFeature, HeadingFeature, AlignFeature, HTMLConverterFeature, BlocksFeature } from '@payloadcms/richtext-lexical';
-import { VideoBlock } from '../blocks/VideoBlock.ts';
-import { TikTokBlock } from '../blocks/TikTokBlock.ts';
-import { PDFBlock } from '../blocks/PDFBlock.ts';
-import { NewsListBlockStub, ExternalLinksBlockStub } from '../blocks/OrphanStubs.ts';
+import { VideoBlock } from '../blocks/VideoBlock';
+import { TikTokBlock } from '../blocks/TikTokBlock';
+import { PDFBlock } from '../blocks/PDFBlock';
+import { NewsListBlockStub, ExternalLinksBlockStub } from '../blocks/OrphanStubs';
 import { GalleryBlock } from '../blocks/GalleryBlock.ts';
 import { CalloutBlock } from '../blocks/CalloutBlock.ts';
 import { ButtonBlock } from '../blocks/ButtonBlock.ts';
