@@ -18,7 +18,7 @@ export async function SidebarBanners() {
     }
 
     return (
-      <div className="flex flex-col gap-4 mt-6">
+      <div className="hidden lg:flex flex-col gap-4 mt-6">
         {banners.map((item: any, idx: number) => {
           const imgUrl = typeof item.image === 'object' ? item.image?.url : null;
           const imgAlt = typeof item.image === 'object' ? item.image?.alt : '';
