@@ -307,10 +307,16 @@ export async function GET(request: Request) {
     let categoryId = null;
     if (catRes.totalDocs > 0) {
       categoryId = catRes.docs[0].id;
-    }
-
-    if (!categoryId) {
-      return NextResponse.json({ error: 'Category "Tin tức" (tin-tuc) không tồn tại. Vui lòng tạo trước.' }, { status: 400 });
+    } else {
+      const fallbackRes = await payload.find({
+        collection: 'categories',
+        limit: 1,
+      });
+      if (fallbackRes.totalDocs > 0) {
+        categoryId = fallbackRes.docs[0].id;
+      } else {
+        categoryId = 1;
+      }
     }
 
     // Chạy ngầm tiến trình crawl
