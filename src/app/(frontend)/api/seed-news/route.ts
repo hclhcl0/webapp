@@ -195,6 +195,7 @@ async function runBackgroundSync(payload: any, categoryId: string | number) {
         // Fetch HTML trang bài viết để lấy ảnh og:image và content
         let fullText = art.description;
         let imageUrl = null;
+        let rawHtml = '';
         try {
           const res = await fetch(art.link, { headers: { 'User-Agent': 'Mozilla/5.0' } });
           const html = await res.text();
@@ -215,13 +216,12 @@ async function runBackgroundSync(payload: any, categoryId: string | number) {
           }
           
           // Lấy nội dung
-        let rawHtml = '';
-        const contentMatch = html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<div[^>]*class="[^"]*other-news/i)
-                          || html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i);
-                          
-        if (contentMatch) {
-          rawHtml = contentMatch[1];
-        }
+          const contentMatch = html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<div[^>]*class="[^"]*other-news/i)
+                            || html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i);
+                            
+          if (contentMatch) {
+            rawHtml = contentMatch[1];
+          }
       } catch (err) {
         console.error("Lỗi crawl chi tiết:", art.link);
       }
