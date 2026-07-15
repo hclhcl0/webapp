@@ -19,25 +19,27 @@ function toSlug(str: string) {
 }
 
 function stripHtml(html: string) {
-  // 1. Xóa các \r\n thật trong source HTML để tránh ngắt câu ngẫu nhiên
-  let text = (html || '').replace(/\r?\n/g, ' ');
+  // 1. Xóa các \r và \n thật trong source HTML để tránh ngắt câu ngẫu nhiên
+  let text = (html || '').replace(/[\r\n]+/g, ' ');
   // 2. Chuyển các thẻ block và <br> thành \n
   text = text.replace(/<\/?(?:div|p|h[1-6]|ul|ol|li|table|tr|td|th|tbody|thead|tfoot|blockquote|article|section)[^>]*>/gi, '\n');
   text = text.replace(/<br\s*\/?>/gi, '\n');
   // 3. Xóa tất cả các thẻ còn lại (span, strong, a, v.v) nhưng không xuống dòng
   text = text.replace(/<[^>]*>/g, '');
-  // 4. Giải mã entities
-  text = text.replace(/&nbsp;/g, ' ')
-             .replace(/&amp;/g, '&')
-             .replace(/&lt;/g, '<')
-             .replace(/&gt;/g, '>')
-             .replace(/&quot;/g, '"')
-             .replace(/&#39;/g, "'")
-             .replace(/&#039;/g, "'")
-             .replace(/&#x2F;/gi, "/")
-             .replace(/&#x3A;/gi, ":");
-  // 5. Chuẩn hóa space
-  text = text.replace(/[ \t]+/g, ' ');
+  // 4. Giải mã một số entity cơ bản
+  text = text.replace(/&amp;/gi, '&')
+             .replace(/&lt;/gi, '<')
+             .replace(/&gt;/gi, '>')
+             .replace(/&quot;/gi, '"')
+             .replace(/&#39;/gi, "'")
+             .replace(/&#160;/gi, ' ')
+             .replace(/&nbsp;/gi, ' ')
+             .replace(/&ndash;/gi, '-')
+             .replace(/&mdash;/gi, '-')
+             .replace(/\\r/g, ' ') // Xóa luôn chữ \r nếu bị lưu dưới dạng text
+             .replace(/\\n/g, ' ');
+  // 5. Chuẩn hóa khoảng trắng
+  text = text.replace(/[ \t]+/g, ' ').replace(/\n\s+\n/g, '\n\n').trim();
   return text;
 }
 
