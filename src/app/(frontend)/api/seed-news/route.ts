@@ -40,24 +40,55 @@ function stripHtml(html: string) {
   return text;
 }
 
-function createLexicalJson(text: string) {
-  const paragraphs = text.split('\n').map(p => p.trim()).filter(p => p !== '');
+async function parseHtmlToLexical(html: string, payload: any, articleTitle: string) {
+  const parts = html.split(/(<img[^>]+>)/gi);
+  const children = [];
+
+  for (const part of parts) {
+    if (part.toLowerCase().startsWith('<img')) {
+      const srcMatch = part.match(/src="([^"]+)"/i);
+      if (srcMatch) {
+        let src = srcMatch[1];
+        if (src.startsWith('/')) src = 'https://ksbtdanang.vn' + src;
+        
+        const mediaId = await downloadMedia(payload, src, articleTitle);
+        if (mediaId) {
+          children.push({
+            type: "upload",
+            relationTo: "media",
+            value: mediaId,
+            version: 1
+          });
+        }
+      }
+    } else {
+      const textPart = stripHtml(part);
+      if (textPart.trim()) {
+        const paragraphs = textPart.split('\n').map(p => p.trim()).filter(p => p !== '');
+        for (const p of paragraphs) {
+          children.push({
+            type: "paragraph",
+            format: "justify",
+            indent: 0,
+            version: 1,
+            children: [{ mode: "normal", text: p.substring(0, 10000), type: "text", style: "", detail: 0, format: 0, version: 1 }]
+          });
+        }
+      }
+    }
+  }
   
-  if (paragraphs.length === 0) {
-    paragraphs.push(" ");
+  if (children.length === 0) {
+    children.push({
+      type: "paragraph", format: "justify", indent: 0, version: 1,
+      children: [{ mode: "normal", text: " ", type: "text", style: "", detail: 0, format: 0, version: 1 }]
+    });
   }
 
   return {
     root: {
-      type: "root", format: "", indent: 0, version: 1,
-      direction: "ltr",
-      children: paragraphs.map(p => ({
-        type: "paragraph", 
-        format: "justify", 
-        indent: 0, 
-        version: 1,
-        children: [{ mode: "normal", text: p.substring(0, 10000), type: "text", style: "", detail: 0, format: 0, version: 1 }]
-      }))
+      type: "root", format: "", indent: 0, version: 1, direction: "ltr",
+      children: children
     }
   };
 }
@@ -184,22 +215,23 @@ async function runBackgroundSync(payload: any, categoryId: string | number) {
           }
           
           // Lấy nội dung
-          const contentMatch = html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<div[^>]*class="[^"]*other-news/i)
-                            || html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i);
-                            
-          if (contentMatch) {
-            fullText = stripHtml(contentMatch[1]);
-          }
-        } catch (err) {
-          console.error("Lỗi crawl chi tiết:", art.link);
+        let rawHtml = '';
+        const contentMatch = html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<div[^>]*class="[^"]*other-news/i)
+                          || html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i);
+                          
+        if (contentMatch) {
+          rawHtml = contentMatch[1];
         }
+      } catch (err) {
+        console.error("Lỗi crawl chi tiết:", art.link);
+      }
 
-        let mediaId = null;
-        if (imageUrl) {
-          mediaId = await downloadMedia(payload, imageUrl, art.title);
-        }
+      let mediaId = null;
+      if (imageUrl) {
+        mediaId = await downloadMedia(payload, imageUrl, art.title);
+      }
 
-        const lexical = createLexicalJson(fullText);
+      const lexical = await parseHtmlToLexical(rawHtml || art.description, payload, art.title);
 
         const articleData = {
           title: art.title,
