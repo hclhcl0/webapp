@@ -18,18 +18,24 @@ function toSlug(str: string) {
 }
 
 function stripHtml(html: string) {
-  return (html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  return (html || '').replace(/<[^>]*>/g, '\n').replace(/\n+/g, '\n').trim();
 }
 
 function createLexicalJson(text: string) {
+  const paragraphs = text.split('\n').filter(p => p.trim() !== '').slice(0, 100);
+  
+  if (paragraphs.length === 0) {
+    paragraphs.push(" ");
+  }
+
   return {
     root: {
       type: "root", format: "", indent: 0, version: 1,
       direction: "ltr",
-      children: [{
+      children: paragraphs.map(p => ({
         type: "paragraph", format: "", indent: 0, version: 1,
-        children: [{ mode: "normal", text: text.substring(0, 8000), type: "text", style: "", detail: 0, format: 0, version: 1 }]
-      }]
+        children: [{ mode: "normal", text: p.substring(0, 5000), type: "text", style: "", detail: 0, format: 0, version: 1 }]
+      }))
     }
   };
 }
@@ -65,10 +71,9 @@ async function fetchRssFeed(start: number): Promise<ArticleItem[]> {
       .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
       .replace(/&#x[\w]+;/g, '').replace(/&#\d+;/g, '').trim();
     const link = linkMatch[1].trim();
-    const description = stripHtml(descMatch ? descMatch[1] : '').substring(0, 400);
+    const description = stripHtml(descMatch ? descMatch[1] : '');
     const pubDate = pubDateMatch ? new Date(pubDateMatch[1]).toISOString() : new Date().toISOString();
 
-    // Trích xuất slug từ URL: /news/{cat}/{slug}-{id}.html
     const slugMatch = link.match(/\/([^\/]+)-\d+\.html$/);
     const slug = slugMatch ? slugMatch[1] : toSlug(title);
 
@@ -78,6 +83,33 @@ async function fetchRssFeed(start: number): Promise<ArticleItem[]> {
   return articles;
 }
 
+async function downloadMedia(payload: any, url: string, altText: string) {
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+    if (!res.ok) return null;
+    
+    const contentType = res.headers.get('content-type') || 'image/jpeg';
+    const buffer = Buffer.from(await res.arrayBuffer());
+    const fileName = url.split('/').pop() || 'image.jpg';
+
+    const mediaDoc = await payload.create({
+      collection: 'media',
+      data: { alt: altText },
+      file: {
+        data: buffer,
+        mimetype: contentType,
+        name: fileName.replace(/[^a-zA-Z0-9.\-]/g, '_'),
+        size: buffer.byteLength,
+      }
+    });
+    
+    return mediaDoc.id;
+  } catch (err) {
+    console.error('Lỗi tải ảnh:', err);
+    return null;
+  }
+}
+
 async function runBackgroundSync(payload: any, categoryId: string | number) {
   let totalImported = 0;
   let totalSkipped = 0;
@@ -85,49 +117,100 @@ async function runBackgroundSync(payload: any, categoryId: string | number) {
   try {
     console.log('[Seed News] Bắt đầu crawl từ ksbtdanang.vn...');
 
-    for (let start = 0; start <= 700; start += 20) {
+    for (let start = 0; start <= 40; start += 20) {
       const articles = await fetchRssFeed(start);
       if (articles.length === 0) break;
 
       for (const art of articles) {
         if (!art.slug || !art.title) continue;
 
-        // Kiểm tra bài đã tồn tại chưa
         const existing = await payload.find({
           collection: 'articles',
           where: { slug: { equals: art.slug } },
           limit: 1,
         });
 
+        let existingArticle = null;
         if (existing.totalDocs > 0) {
-          totalSkipped++;
-          continue;
+          existingArticle = existing.docs[0];
+          if (existingArticle.image) {
+            totalSkipped++;
+            continue;
+          }
         }
 
-        const lexical = createLexicalJson(art.description);
+        // Fetch HTML trang bài viết để lấy ảnh og:image và content
+        let fullText = art.description;
+        let imageUrl = null;
+        try {
+          const res = await fetch(art.link, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+          const html = await res.text();
+          
+          // Lấy hình ảnh (ưu tiên og:image)
+          const ogImageMatch = html.match(/<meta property="og:image" content="([^"]+)"/);
+          if (ogImageMatch) {
+            imageUrl = ogImageMatch[1].replace(/&amp;/g, '&');
+          } else {
+            // Lấy <img> đầu tiên trong news-bodyhtml
+            const imgMatch = html.match(/id="news-bodyhtml"[^>]*>[\s\S]*?<img[^>]+src="([^"]+)"/i);
+            if (imgMatch) {
+              imageUrl = imgMatch[1];
+              if (imageUrl.startsWith('/')) {
+                imageUrl = 'https://ksbtdanang.vn' + imageUrl;
+              }
+            }
+          }
+          
+          // Lấy nội dung
+          const contentMatch = html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<div[^>]*class="[^"]*other-news/i)
+                            || html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i);
+                            
+          if (contentMatch) {
+            fullText = stripHtml(contentMatch[1]);
+          }
+        } catch (err) {
+          console.error("Lỗi crawl chi tiết:", art.link);
+        }
 
-        await payload.create({
-          collection: 'articles',
-          data: {
-            title: art.title,
-            publishedAt: art.pubDate,
-            slug: art.slug,
-            category: categoryId,
-            description: art.description,
-            content: lexical as any,
-            author_name: 'CDC Đà Nẵng',
-            views: 0,
-            _status: 'published',
-          },
-        });
+        let mediaId = null;
+        if (imageUrl) {
+          mediaId = await downloadMedia(payload, imageUrl, art.title);
+        }
+
+        const lexical = createLexicalJson(fullText);
+
+        const articleData = {
+          title: art.title,
+          publishedAt: art.pubDate,
+          slug: art.slug,
+          category: categoryId,
+          description: art.description.substring(0, 500).replace(/\n/g, ' '),
+          content: lexical as any,
+          author_name: 'CDC Đà Nẵng',
+          views: 0,
+          _status: 'published',
+          image: mediaId,
+        };
+
+        if (existingArticle) {
+          await payload.update({
+            collection: 'articles',
+            id: existingArticle.id,
+            data: articleData,
+          });
+          console.log(`Đã cập nhật: ${art.title} (Image: ${mediaId ? 'OK' : 'None'})`);
+        } else {
+          await payload.create({
+            collection: 'articles',
+            data: articleData,
+          });
+          console.log(`Đã import: ${art.title} (Image: ${mediaId ? 'OK' : 'None'})`);
+        }
 
         totalImported++;
       }
 
-      // Nếu ít hơn 20 thì là trang cuối
       if (articles.length < 20) break;
-
-      // Delay nhỏ để không làm quá tải server nguồn
       await new Promise(r => setTimeout(r, 500));
     }
 
@@ -147,22 +230,18 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Lấy category mặc định đầu tiên
     const categoriesResult = await payload.find({
       collection: 'categories',
       limit: 1,
     });
 
-    const defaultCatId = categoriesResult.docs.length > 0
-      ? categoriesResult.docs[0].id
-      : 1;
+    const defaultCatId = categoriesResult.docs.length > 0 ? categoriesResult.docs[0].id : 1;
 
-    // Chạy ngầm, không await
     runBackgroundSync(payload, defaultCatId).catch(console.error);
 
     return NextResponse.json({
       success: true,
-      message: 'Đã kích hoạt đồng bộ bài viết từ ksbtdanang.vn. Hệ thống đang crawl và import dần. Kiểm tra log server để theo dõi tiến trình.',
+      message: 'Đã kích hoạt crawl bài viết VÀ TẢI ẢNH ĐẠI DIỆN từ ksbtdanang.vn.',
     });
   } catch (error) {
     console.error('Seed Error:', error);
