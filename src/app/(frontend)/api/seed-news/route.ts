@@ -139,12 +139,24 @@ async function fetchRssFeed(start: number): Promise<ArticleItem[]> {
 
 async function downloadMedia(payload: any, url: string, altText: string) {
   try {
+    const fileName = (url.split('/').pop() || 'image.jpg').replace(/[^a-zA-Z0-9.\-]/g, '_');
+    
+    // Kiểm tra ảnh đã tồn tại chưa để tránh trùng lặp
+    const existingMedia = await payload.find({
+      collection: 'media',
+      where: { filename: { equals: fileName } },
+      limit: 1,
+    });
+    
+    if (existingMedia.totalDocs > 0) {
+      return existingMedia.docs[0].id;
+    }
+
     const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
     if (!res.ok) return null;
     
     const contentType = res.headers.get('content-type') || 'image/jpeg';
     const buffer = Buffer.from(await res.arrayBuffer());
-    const fileName = url.split('/').pop() || 'image.jpg';
 
     const mediaDoc = await payload.create({
       collection: 'media',
@@ -152,7 +164,7 @@ async function downloadMedia(payload: any, url: string, altText: string) {
       file: {
         data: buffer,
         mimetype: contentType,
-        name: fileName.replace(/[^a-zA-Z0-9.\-]/g, '_'),
+        name: fileName,
         size: buffer.byteLength,
       }
     });
@@ -164,7 +176,7 @@ async function downloadMedia(payload: any, url: string, altText: string) {
   }
 }
 
-async function runBackgroundSync(payload: any, categoryId: string | number) {
+async function runBackgroundSync(payload: any, categoryId: string | number, forceUpdate: boolean = false) {
   let totalImported = 0;
   let totalSkipped = 0;
 
@@ -187,7 +199,8 @@ async function runBackgroundSync(payload: any, categoryId: string | number) {
         let existingArticle = null;
         if (existing.totalDocs > 0) {
           existingArticle = existing.docs[0];
-          if (existingArticle.image) {
+          // Nếu không bật cờ ép buộc cập nhật, bỏ qua bài viết đã có ảnh
+          if (!forceUpdate && existingArticle.image) {
             totalSkipped++;
             continue;
           }
@@ -278,18 +291,30 @@ export async function GET(request: Request) {
 
     const url = new URL(request.url);
     const secret = url.searchParams.get('secret');
+    const forceUpdate = url.searchParams.get('forceUpdate') === 'true';
+
     if (secret !== 'vnos-cdc-seed') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const categoriesResult = await payload.find({
+    // Lấy ID của Category "Tin tức"
+    const catRes = await payload.find({
       collection: 'categories',
+      where: { slug: { equals: 'tin-tuc' } },
       limit: 1,
     });
 
-    const defaultCatId = categoriesResult.docs.length > 0 ? categoriesResult.docs[0].id : 1;
+    let categoryId = null;
+    if (catRes.totalDocs > 0) {
+      categoryId = catRes.docs[0].id;
+    }
 
-    runBackgroundSync(payload, defaultCatId).catch(console.error);
+    if (!categoryId) {
+      return NextResponse.json({ error: 'Category "Tin tức" (tin-tuc) không tồn tại. Vui lòng tạo trước.' }, { status: 400 });
+    }
+
+    // Chạy ngầm tiến trình crawl
+    runBackgroundSync(payload, categoryId, forceUpdate);
 
     return NextResponse.json({
       success: true,
