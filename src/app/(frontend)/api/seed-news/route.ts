@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
+import * as cheerio from 'cheerio';
 
 function toSlug(str: string) {
   if (!str) return '';
@@ -200,29 +201,26 @@ async function runBackgroundSync(payload: any, categoryId: string | number) {
           const res = await fetch(art.link, { headers: { 'User-Agent': 'Mozilla/5.0' } });
           const html = await res.text();
           
-          // Lấy hình ảnh (ưu tiên og:image)
-          const ogImageMatch = html.match(/<meta property="og:image" content="([^"]+)"/);
+          const $ = cheerio.load(html);
+          
+          const ogImageMatch = $('meta[property="og:image"]').attr('content');
           if (ogImageMatch) {
-            imageUrl = ogImageMatch[1].replace(/&amp;/g, '&');
+            imageUrl = ogImageMatch.replace(/&amp;/g, '&');
           } else {
-            // Lấy <img> đầu tiên trong news-bodyhtml
-            const imgMatch = html.match(/id="news-bodyhtml"[^>]*>[\s\S]*?<img[^>]+src="([^"]+)"/i);
+            const imgMatch = $('#news-bodyhtml img').first().attr('src');
             if (imgMatch) {
-              imageUrl = imgMatch[1];
+              imageUrl = imgMatch;
               if (imageUrl.startsWith('/')) {
                 imageUrl = 'https://ksbtdanang.vn' + imageUrl;
               }
             }
           }
           
-          // Lấy nội dung
-          const contentMatch = html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<div[^>]*class="[^"]*other-news/i)
-                            || html.match(/id="news-bodyhtml"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i);
-                            
-          if (contentMatch) {
-            rawHtml = contentMatch[1];
+          const rawHtmlContent = $('#news-bodyhtml').html();
+          if (rawHtmlContent) {
+            rawHtml = rawHtmlContent;
           }
-      } catch (err) {
+        } catch (err) {
         console.error("Lỗi crawl chi tiết:", art.link);
       }
 
