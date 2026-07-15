@@ -1,139 +1,168 @@
 import { NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import fs from 'fs';
-import path from 'path';
 
-function createLexicalJson(htmlContent: string) {
-  const text = (htmlContent || '').replace(/<[^>]*>?/gm, ' ').replace(/\s+/g, ' ').trim().substring(0, 5000);
+function toSlug(str: string) {
+  if (!str) return '';
+  str = str.toLowerCase();
+  str = str.replace(/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/g, 'a');
+  str = str.replace(/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/g, 'e');
+  str = str.replace(/(ì|í|ị|ỉ|ĩ)/g, 'i');
+  str = str.replace(/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/g, 'o');
+  str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, 'u');
+  str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, 'y');
+  str = str.replace(/(đ)/g, 'd');
+  str = str.replace(/([^0-9a-z-\s])/g, '');
+  str = str.replace(/(\s+)/g, '-');
+  return str.replace(/^-+/g, '').replace(/-+$/g, '');
+}
+
+function stripHtml(html: string) {
+  return (html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function createLexicalJson(text: string) {
   return {
     root: {
-      type: "root",
-      format: "",
-      indent: 0,
-      version: 1,
-      children: [
-        {
-          type: "paragraph",
-          format: "",
-          indent: 0,
-          version: 1,
-          children: [
-            {
-              mode: "normal",
-              text: text,
-              type: "text",
-              style: "",
-              detail: 0,
-              format: 0,
-              version: 1
-            }
-          ]
-        }
-      ],
-      direction: "ltr"
+      type: "root", format: "", indent: 0, version: 1,
+      direction: "ltr",
+      children: [{
+        type: "paragraph", format: "", indent: 0, version: 1,
+        children: [{ mode: "normal", text: text.substring(0, 8000), type: "text", style: "", detail: 0, format: 0, version: 1 }]
+      }]
     }
   };
 }
 
-// Hàm chạy ngầm
-async function runBackgroundSeed(payload: any, newsData: any[], pgCats: any[]) {
+interface ArticleItem {
+  id: number;
+  title: string;
+  link: string;
+  description: string;
+  pubDate: string;
+  slug: string;
+}
+
+async function fetchRssFeed(start: number): Promise<ArticleItem[]> {
+  const url = `https://ksbtdanang.vn/news/rss/?start=${start}`;
+  const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, next: { revalidate: 0 } });
+  const xml = await res.text();
+
+  const items = xml.split('<item>').slice(1);
+  const articles: ArticleItem[] = [];
+
+  for (const item of items) {
+    const titleMatch = item.match(/<title>(.*?)<\/title>/s);
+    const linkMatch = item.match(/<link>(https?:\/\/ksbtdanang\.vn[^<]*)<\/link>/);
+    const descMatch = item.match(/<description>\s*<!\[CDATA\[(.*?)\]\]>/s);
+    const pubDateMatch = item.match(/<pubDate>(.*?)<\/pubDate>/);
+    const guidMatch = item.match(/<!\[CDATA\[news_(\d+)\]\]>/);
+
+    if (!titleMatch || !linkMatch) continue;
+
+    const id = guidMatch ? parseInt(guidMatch[1]) : 0;
+    const title = titleMatch[1]
+      .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+      .replace(/&#x[\w]+;/g, '').replace(/&#\d+;/g, '').trim();
+    const link = linkMatch[1].trim();
+    const description = stripHtml(descMatch ? descMatch[1] : '').substring(0, 400);
+    const pubDate = pubDateMatch ? new Date(pubDateMatch[1]).toISOString() : new Date().toISOString();
+
+    // Trích xuất slug từ URL: /news/{cat}/{slug}-{id}.html
+    const slugMatch = link.match(/\/([^\/]+)-\d+\.html$/);
+    const slug = slugMatch ? slugMatch[1] : toSlug(title);
+
+    articles.push({ id, title, link, description, pubDate, slug });
+  }
+
+  return articles;
+}
+
+async function runBackgroundSync(payload: any, categoryId: string | number) {
+  let totalImported = 0;
+  let totalSkipped = 0;
+
   try {
-    let importedCount = 0;
-    console.log(`[Seed News] Start syncing ${newsData.length} articles...`);
+    console.log('[Seed News] Bắt đầu crawl từ ksbtdanang.vn...');
 
-    // Lưu danh mục id vào 1 map để tìm nhanh
-    const catMap = new Map();
-    for (const c of pgCats) {
-      catMap.set(c.id, c.id); // Payload ID
+    for (let start = 0; start <= 700; start += 20) {
+      const articles = await fetchRssFeed(start);
+      if (articles.length === 0) break;
+
+      for (const art of articles) {
+        if (!art.slug || !art.title) continue;
+
+        // Kiểm tra bài đã tồn tại chưa
+        const existing = await payload.find({
+          collection: 'articles',
+          where: { slug: { equals: art.slug } },
+          limit: 1,
+        });
+
+        if (existing.totalDocs > 0) {
+          totalSkipped++;
+          continue;
+        }
+
+        const lexical = createLexicalJson(art.description);
+
+        await payload.create({
+          collection: 'articles',
+          data: {
+            title: art.title,
+            publishedAt: art.pubDate,
+            slug: art.slug,
+            category: categoryId,
+            description: art.description,
+            content: lexical as any,
+            author_name: 'CDC Đà Nẵng',
+            views: 0,
+            _status: 'published',
+          },
+        });
+
+        totalImported++;
+      }
+
+      // Nếu ít hơn 20 thì là trang cuối
+      if (articles.length < 20) break;
+
+      // Delay nhỏ để không làm quá tải server nguồn
+      await new Promise(r => setTimeout(r, 500));
     }
 
-    for (const item of newsData) {
-      if (!item.slug) continue;
-
-      // Tìm xem bài viết đã tồn tại chưa
-      const existing = await payload.find({
-        collection: 'articles',
-        where: { slug: { equals: item.slug } },
-        limit: 1,
-      });
-
-      if (existing.totalDocs > 0) {
-        continue;
-      }
-
-      const lexicalContent = createLexicalJson(item.bodyhtml);
-      const publDate = item.publtime ? new Date(item.publtime * 1000).toISOString() : new Date().toISOString();
-      const desc = item.description || '';
-      
-      let catId = item.catid;
-      let mappedCatId = pgCats.length > 0 ? pgCats[0].id : 1;
-      
-      // Ở DB PostgreSQL cũ, catid Nukeviet có mapping không?
-      // Ta lấy luôn catId cũ nếu tồn tại trong PG, nếu không thì lấy mặc định.
-      if (catId && catMap.has(String(catId))) {
-        mappedCatId = String(catId);
-      } else if (catId && catMap.has(Number(catId))) {
-        mappedCatId = Number(catId);
-      }
-
-      await payload.create({
-        collection: 'articles',
-        data: {
-          title: item.title,
-          publishedAt: publDate,
-          slug: item.slug,
-          category: mappedCatId,
-          description: desc,
-          content: lexicalContent as any,
-          author_name: 'Quản trị viên',
-          views: item.hitstotal || 0,
-          _status: 'published'
-        },
-      });
-
-      importedCount++;
-      if (importedCount % 50 === 0) {
-        console.log(`[Seed News] Đã import ${importedCount} bài...`);
-      }
-    }
-    console.log(`[Seed News] Hoàn thành. Đã import thêm ${importedCount} bài mới.`);
+    console.log(`[Seed News] Hoàn tất. Import: ${totalImported}, Bỏ qua: ${totalSkipped}`);
   } catch (error) {
-    console.error("[Seed News] Lỗi chạy ngầm:", error);
+    console.error('[Seed News] Lỗi crawl:', error);
   }
 }
 
 export async function GET(request: Request) {
   try {
     const payload = await getPayload({ config: configPromise });
-    
+
     const url = new URL(request.url);
     const secret = url.searchParams.get('secret');
     if (secret !== 'vnos-cdc-seed') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const jsonPath = path.join(process.cwd(), 'src', 'app', '(frontend)', 'api', 'seed-news', 'news_data.json');
-    if (!fs.existsSync(jsonPath)) {
-      return NextResponse.json({ error: 'File news_data.json not found' }, { status: 404 });
-    }
-
-    const raw = fs.readFileSync(jsonPath, 'utf-8');
-    const newsData = JSON.parse(raw);
-
-    // Lấy trước toàn bộ Categories để map
+    // Lấy category mặc định đầu tiên
     const categoriesResult = await payload.find({
       collection: 'categories',
-      limit: 1000,
+      limit: 1,
     });
-    const pgCats = categoriesResult.docs;
 
-    // Chạy tiến trình ngầm (không await)
-    runBackgroundSeed(payload, newsData, pgCats).catch(console.error);
+    const defaultCatId = categoriesResult.docs.length > 0
+      ? categoriesResult.docs[0].id
+      : 1;
 
-    return NextResponse.json({ 
-      success: true, 
-      message: `Đã kích hoạt chạy ngầm (Background Task). Hệ thống đang kiểm tra và import ${newsData.length} bài viết. Dữ liệu sẽ xuất hiện dần trên website.` 
+    // Chạy ngầm, không await
+    runBackgroundSync(payload, defaultCatId).catch(console.error);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Đã kích hoạt đồng bộ bài viết từ ksbtdanang.vn. Hệ thống đang crawl và import dần. Kiểm tra log server để theo dõi tiến trình.',
     });
   } catch (error) {
     console.error('Seed Error:', error);
