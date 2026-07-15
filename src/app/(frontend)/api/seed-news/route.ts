@@ -244,20 +244,30 @@ async function runBackgroundSync(payload: any, categoryId: string | number, forc
         mediaId = await downloadMedia(payload, imageUrl, art.title);
       }
 
-      const lexical = await parseHtmlToLexical(rawHtml || art.description, payload, art.title);
+      let finalContent = null;
+      if (rawHtml) {
+        finalContent = await parseHtmlToLexical(rawHtml, payload, art.title);
+      } else if (!existingArticle) {
+        finalContent = await parseHtmlToLexical(art.description, payload, art.title);
+      }
 
-        const articleData = {
-          title: art.title,
-          publishedAt: art.pubDate,
-          slug: art.slug,
-          category: categoryId,
-          description: art.description.substring(0, 500).replace(/\n/g, ' '),
-          content: lexical as any,
-          author_name: 'CDC Đà Nẵng',
-          views: 0,
-          _status: 'published',
-          image: mediaId,
-        };
+      const articleData: any = {
+        title: art.title,
+        publishedAt: art.pubDate,
+        slug: art.slug,
+        category: categoryId,
+        description: art.description.substring(0, 500).replace(/\n/g, ' '),
+        author_name: 'CDC Đà Nẵng',
+        views: 0,
+        _status: 'published',
+      };
+      
+      if (finalContent) {
+        articleData.content = finalContent;
+      }
+      if (mediaId) {
+        articleData.image = mediaId;
+      }
 
         if (existingArticle) {
           await payload.update({
