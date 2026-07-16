@@ -60,7 +60,10 @@ async function parseHtmlToLexical(html: string, payload: any, articleTitle: stri
             type: "upload",
             relationTo: "media",
             value: mediaId,
-            version: 1
+            version: 1,
+            format: "",
+            id: String(Date.now() + Math.floor(Math.random() * 10000)),
+            fields: {}
           });
         }
       }
@@ -74,6 +77,7 @@ async function parseHtmlToLexical(html: string, payload: any, articleTitle: stri
             format: "justify",
             indent: 0,
             version: 1,
+            direction: "ltr",
             children: [{ mode: "normal", text: p.substring(0, 10000), type: "text", style: "", detail: 0, format: 0, version: 1 }]
           });
         }
