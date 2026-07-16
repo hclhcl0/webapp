@@ -313,10 +313,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Lấy ID của Category "Tin tức"
+    // Lấy ID của Category "Tin tức - Sự kiện"
     const catRes = await payload.find({
       collection: 'categories',
-      where: { slug: { equals: 'tin-tuc' } },
+      where: { slug: { equals: 'tin-tuc-su-kien' } },
       limit: 1,
     });
 
