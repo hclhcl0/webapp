@@ -32,18 +32,18 @@ export function GenericCategorySidebar({ basePath, rootName, topics, activeSlug,
   return (
     <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6 lg:sticky top-6 self-start">
       <div className="bg-white rounded-xl border border-gray-100 shadow-lg overflow-hidden">
-        {/* Header title sidebar */}
-        <div className="bg-gov-primary px-4 py-3 flex items-center justify-between">
-          <h2 className="text-white font-bold text-sm uppercase tracking-wide truncate">{rootName}</h2>
-          {/* Nút bật/tắt menu trên di động */}
-          <button
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="lg:hidden text-white/80 hover:text-white focus:outline-none ml-2"
-            aria-label="Toggle menu"
-          >
-            {isMobileOpen ? <ChevronDown className="w-4 h-4" /> : <List className="w-4 h-4" />}
-          </button>
-        </div>
+        {/* Nút bật/tắt menu trên di động */}
+        <button
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className="lg:hidden w-full px-4 py-3 bg-white flex items-center justify-between font-bold text-gray-700 focus:outline-none border-b border-gray-100"
+          aria-label="Toggle menu"
+        >
+          <span className="flex items-center gap-2 text-sm">
+            <List className="w-4 h-4 text-gov-primary" />
+            Danh mục chên đề
+          </span>
+          {isMobileOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+        </button>
 
         {/* Nội dung Sidebar */}
         <div className={`p-2 max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar ${isMobileOpen ? 'block' : 'hidden lg:block'}`}>
