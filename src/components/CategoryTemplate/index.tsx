@@ -172,17 +172,11 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
               </div>
             ) : (
               <>
-                {/* Bài viết nổi bật đầu tiên */}
-                <ArticleCard article={articles[0]} featured />
-
-                {/* Lưới bài viết còn lại */}
-                {articles.length > 1 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
-                    {articles.slice(1).map((article: any) => (
-                      <ArticleCard key={article.id} article={article} />
-                    ))}
-                  </div>
-                )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {articles.map((article: any) => (
+                    <ArticleCard key={article.id} article={article} />
+                  ))}
+                </div>
 
                 <div className="mt-8">
                   <Pagination
@@ -194,6 +188,7 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
                 </div>
               </>
             )}
+
           </main>
         </div>
       </div>
