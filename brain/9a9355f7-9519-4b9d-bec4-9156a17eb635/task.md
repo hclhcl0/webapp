@@ -1,0 +1,5 @@
+- `[x]` Extract `GenericCategorySidebar` component
+- `[x]` Delete `/chuyen-muc/[slug]` and create `/chuyen-muc/[...slug]/page.tsx`
+- `[x]` Implement data fetching and dynamic routing logic for generic category pages
+- `[x]` Test build and verify compilation
+- `[x]` Create `walkthrough.md`
