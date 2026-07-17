@@ -15,46 +15,34 @@ interface Props {
   topics: TopicItem[];
   activeSlug?: string;       // slug của chủ đề mẹ đang xem
   activeSubSlug?: string;    // slug của chủ đề con đang xem
-  children?: React.ReactNode; // Cho phép truyền Server Component (Banner) vào bên trong
+  children?: React.ReactNode;
 }
 
 export function HealthSidebar({ topics, activeSlug, activeSubSlug, children }: Props) {
-  // Trạng thái mở/đóng menu trên mobile
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [hovered, setHovered] = useState<string | null>(null);
 
-  // Auto-mở accordion của chủ đề mẹ đang active
-  const [expanded, setExpanded] = useState<Set<string>>(() => {
-    const s = new Set<string>();
-    if (activeSlug) s.add(activeSlug);
-    return s;
-  });
-
-  const toggle = (slug: string) => {
-    setExpanded(prev => {
-      const next = new Set(prev);
-      if (next.has(slug)) next.delete(slug);
-      else next.add(slug);
-      return next;
-    });
-  };
+  // Chủ đề nào sẽ hiện children: đang hover HOẶC đang active
+  const isOpen = (slug: string) => hovered === slug || activeSlug === slug;
 
   return (
     <aside className="w-full lg:w-72 flex-shrink-0 flex flex-col gap-6 lg:sticky top-6 self-start">
       <div className="bg-white rounded-xl border border-gray-100 shadow-lg overflow-hidden">
-        {/* Nút bật/tắt menu trên di động (chỉ hiện trên màn hình nhỏ) */}
-        <button
-          onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="lg:hidden w-full px-4 py-3 bg-white flex items-center justify-between font-bold text-gray-700 focus:outline-none"
-        >
-          <span className="flex items-center gap-2">
-            <List className="w-4 h-4 text-gov-primary" />
-            Lọc chủ đề
-          </span>
-          {isMobileOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-        </button>
+        {/* Header title sidebar */}
+        <div className="bg-gov-primary px-4 py-3 flex items-center justify-between">
+          <h2 className="text-white font-bold text-sm uppercase tracking-wide truncate">Sức khỏe</h2>
+          {/* Nút bật/tắt menu trên di động */}
+          <button
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
+            className="lg:hidden text-white/80 hover:text-white focus:outline-none ml-2"
+            aria-label="Toggle menu"
+          >
+            {isMobileOpen ? <ChevronDown className="w-4 h-4" /> : <List className="w-4 h-4" />}
+          </button>
+        </div>
 
         {/* Nội dung Sidebar */}
-        <div className={`p-2 max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar ${isMobileOpen ? 'block border-t border-gray-100' : 'hidden lg:block'}`}>
+        <div className={`p-2 max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar ${isMobileOpen ? 'block' : 'hidden lg:block'}`}>
           {/* Tất cả chủ đề */}
           <Link
             href="/suc-khoe"
@@ -73,13 +61,18 @@ export function HealthSidebar({ topics, activeSlug, activeSubSlug, children }: P
             {topics.map((topic) => {
               const isActive = activeSlug === topic.slug;
               const hasChildren = topic.children && topic.children.length > 0;
-              const isExpanded = expanded.has(topic.slug);
+              const open = isOpen(topic.slug);
 
               return (
-                <div key={topic.id} className="flex flex-col">
+                <div
+                  key={topic.id}
+                  className="flex flex-col"
+                  onMouseEnter={() => hasChildren && setHovered(topic.slug)}
+                  onMouseLeave={() => setHovered(null)}
+                >
                   {/* Chủ đề mẹ */}
                   <div
-                    className={`flex items-center rounded-md text-[13.5px] transition-all group ${
+                    className={`flex items-center rounded-md text-[13.5px] transition-all ${
                       isActive && !activeSubSlug
                         ? 'bg-primary-50 text-gov-primary font-bold'
                         : 'text-gray-800 font-semibold hover:bg-gray-200 hover:text-gray-900'
@@ -95,46 +88,49 @@ export function HealthSidebar({ topics, activeSlug, activeSubSlug, children }: P
                       {topic.name}
                     </Link>
 
-                    {/* Nút toggle accordion nếu có con */}
+                    {/* Mũi tên chỉ trạng thái */}
                     {hasChildren && (
-                      <button
-                        onClick={(e) => { e.preventDefault(); toggle(topic.slug); }}
-                        className={`px-2 py-2 flex-shrink-0 rounded-r-md transition-colors ${
-                           isActive && !activeSubSlug ? 'text-gov-primary hover:bg-primary-100/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-300'
+                      <span
+                        className={`px-2 py-2 flex-shrink-0 transition-colors ${
+                          isActive && !activeSubSlug ? 'text-gov-primary' : 'text-gray-400'
                         }`}
-                        aria-label="Mở rộng"
                       >
-                        {isExpanded
+                        {open
                           ? <ChevronDown className="w-3.5 h-3.5" />
                           : <ChevronRight className="w-3.5 h-3.5" />}
-                      </button>
+                      </span>
                     )}
                   </div>
 
-                  {/* Chủ đề con (accordion) */}
-                  {hasChildren && isExpanded && (
-                    <div className="mt-0.5 ml-4 pl-2 border-l border-gray-100/60 space-y-0.5 py-0.5">
-                      {topic.children!.map((child) => {
+                  {/* Chủ đề con — hiện khi hover hoặc active */}
+                  <div
+                    className={`overflow-hidden transition-all duration-200 ease-in-out ${
+                      open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                    }`}
+                  >
+                    <div className="mt-0.5 ml-4 pl-2 border-l border-gray-200 space-y-0.5 py-0.5">
+                      {(topic.children || []).map((child) => {
                         const isChildActive = activeSubSlug === child.slug;
                         return (
                           <Link
                             key={child.id}
                             href={`/suc-khoe/${topic.slug}/${child.slug}`}
-                            className={`flex items-center justify-between px-2.5 py-1.5 rounded-sm text-xs transition-all relative ${
+                            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm text-xs transition-all relative ${
                               isChildActive
                                 ? 'text-gov-primary font-bold bg-primary-50/50'
-                                : 'text-gray-700 font-medium hover:text-gray-900 hover:bg-gray-200'
+                                : 'text-gray-600 font-medium hover:text-gray-900 hover:bg-gray-100'
                             }`}
                           >
-                            <span className="line-clamp-2 leading-tight">{child.name}</span>
                             {isChildActive && (
                               <span className="absolute left-[-9px] top-1/2 -translate-y-1/2 w-[3px] h-[3px] rounded-full bg-gov-primary" />
                             )}
+                            <ChevronRight className="w-3 h-3 flex-shrink-0 text-gray-400" />
+                            <span className="line-clamp-2 leading-tight">{child.name}</span>
                           </Link>
                         );
                       })}
                     </div>
-                  )}
+                  </div>
                 </div>
               );
             })}
@@ -147,7 +143,7 @@ export function HealthSidebar({ topics, activeSlug, activeSubSlug, children }: P
           </div>
         </div>
       </div>
-      
+
       {/* Vị trí chèn Sidebar Banners */}
       {children}
     </aside>
