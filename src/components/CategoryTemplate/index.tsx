@@ -1,12 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
-import { ChevronRight, Filter, FileText } from 'lucide-react';
+import { ChevronRight, FileText } from 'lucide-react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { ArticleCard } from '@/components/ArticleCard';
 import { Pagination } from '@/components/Pagination';
 import { CategoryCover } from '@/components/CategoryCover';
 import { SidebarBanners } from '@/components/SidebarBanners';
+import { GenericCategorySidebar } from '@/components/GenericCategorySidebar';
 
 interface CategoryTemplateProps {
   category: any;
@@ -17,101 +18,146 @@ interface CategoryTemplateProps {
 export async function CategoryTemplate({ category, slugArray, page = 1 }: CategoryTemplateProps) {
   const payload = await getPayload({ config: configPromise });
 
-  // 1. Tìm các chuyên mục có liên quan (để làm Sidebar)
-  let sidebarParentId = category.parent ? (typeof category.parent === 'object' ? category.parent.id : category.parent) : category.id;
-  
-  const { docs: relatedCategories } = await payload.find({
-    collection: 'categories',
-    where: { parent: { equals: sidebarParentId } },
-    sort: 'orderNum',
-    limit: 50,
-  });
+  // Xác định chuyên mục gốc (root): nếu category có parent thì root là parent, ngược lại chính nó là root
+  let rootCat = category;
+  let activeTopic: any = null;
+  let activeSubTopic: any = null;
 
-  // Tên nhóm sidebar
-  let sidebarTitle = 'Chuyên mục';
   if (category.parent) {
     const parentObj = typeof category.parent === 'object' ? category.parent : null;
     if (parentObj) {
-      sidebarTitle = parentObj.name;
-    } else {
-      sidebarTitle = 'Chuyên mục liên quan';
+      // Category hiện tại là cấp 1 (topic), kiểm tra xem parent có parent không
+      if (parentObj.parent) {
+        // Category hiện tại là cấp 2 (subtopic)
+        const grandParentObj = typeof parentObj.parent === 'object' ? parentObj.parent : null;
+        if (grandParentObj) {
+          rootCat = grandParentObj;
+          activeTopic = parentObj;
+          activeSubTopic = category;
+        } else {
+          rootCat = parentObj;
+          activeSubTopic = category;
+        }
+      } else {
+        rootCat = parentObj;
+        activeTopic = category;
+      }
     }
-  } else {
-    sidebarTitle = category.name;
   }
 
-  // Cover Image & Theme Color
-  const coverImage = category.coverImage;
-  const coverUrl = coverImage ? (typeof coverImage === 'object' ? coverImage.url : null) : null;
-  const themeColor = category.color || '#0056b3';
-
-  // 2. Lấy danh sách danh mục con (để lấy chung bài viết nếu click vào thư mục cha)
-  const { docs: allSubCategories } = await payload.find({
+  // Lấy chuyên mục cấp 1 (con của rootCat)
+  const { docs: topics } = await payload.find({
     collection: 'categories',
-    where: { parent: { equals: category.id } },
-    depth: 0,
+    where: { parent: { equals: rootCat.id } },
+    sort: 'orderNum',
     limit: 100,
+    depth: 0,
   });
-  
-  const childIds = allSubCategories.map(c => c.id);
-  const allIdsToFetch = [category.id, ...childIds];
 
-  // 3. Truy vấn bài viết thuộc danh mục hiện tại và các danh mục con
+  // Lấy tất cả chuyên mục cấp 2 (con của các topics)
+  const topicIds = topics.map((t: any) => t.id);
+  const { docs: allSubTopics } = topicIds.length > 0
+    ? await payload.find({
+        collection: 'categories',
+        where: { parent: { in: topicIds } },
+        sort: 'orderNum',
+        limit: 500,
+        depth: 0,
+      })
+    : { docs: [] };
+
+  // Gắn children vào từng topic
+  const topicsWithChildren = topics.map((t: any) => ({
+    ...t,
+    children: allSubTopics.filter((s: any) =>
+      (typeof s.parent === 'object' ? s.parent?.id : s.parent) === t.id
+    ),
+  }));
+
+  // Xác định bộ lọc bài viết
+  let articleFilter: any = {};
+  if (activeSubTopic) {
+    articleFilter = { category: { equals: activeSubTopic.id } };
+  } else if (activeTopic) {
+    const childIds = (topicsWithChildren.find((t: any) => t.id === activeTopic.id)?.children || []).map((c: any) => c.id);
+    articleFilter = { category: { in: [activeTopic.id, ...childIds] } };
+  } else {
+    // Đang ở trang gốc: lấy tất cả bài của cây chuyên mục
+    const subIds = allSubTopics.map((s: any) => s.id);
+    const allIds = [rootCat.id, ...topicIds, ...subIds];
+    articleFilter = { category: { in: allIds } };
+  }
+
+  // Truy vấn bài viết
   const { docs: articles, totalPages, page: currentPage, hasPrevPage, hasNextPage } = await payload.find({
     collection: 'articles',
-    where: { category: { in: allIdsToFetch }, _status: { equals: 'published' } },
+    where: { ...articleFilter, _status: { equals: 'published' } },
     sort: ['-isPinned', '-publishedAt'],
     limit: 12,
     page,
     depth: 1,
   });
 
+  const currentCategory = activeSubTopic || activeTopic || rootCat;
+  const basePath = `/${rootCat.slug}`;
+
   return (
-    <div className="bg-[#f8fafc] min-h-screen pb-12">
+    <div className="bg-[#f8fafc] min-h-screen flex flex-col">
       {/* Breadcrumbs */}
-      <div className="container mx-auto px-4 max-w-7xl">
-        <nav className="flex items-center space-x-2 text-sm text-gray-500 my-6 overflow-x-auto whitespace-nowrap pb-2">
+      <div className="container mx-auto px-4 max-w-7xl pt-4">
+        <nav className="flex items-center space-x-2 text-sm text-gray-500 my-2 overflow-x-auto whitespace-nowrap pb-2">
           <Link href="/" className="hover:text-[#0056b3] transition-colors flex-shrink-0">Trang chủ</Link>
           <ChevronRight className="w-4 h-4 flex-shrink-0" />
-          {category.parent && typeof category.parent === 'object' && (
+          <Link href={`/${rootCat.slug}`} className="hover:text-[#0056b3] transition-colors flex-shrink-0">
+            {rootCat.name}
+          </Link>
+          {activeTopic && (
             <>
-              <Link href={`/${category.parent.slug}`} className="hover:text-[#0056b3] transition-colors flex-shrink-0">
-                {category.parent.name}
-              </Link>
               <ChevronRight className="w-4 h-4 flex-shrink-0" />
+              <Link href={`/${rootCat.slug}/${activeTopic.slug}`} className="hover:text-[#0056b3] transition-colors flex-shrink-0">
+                {activeTopic.name}
+              </Link>
             </>
           )}
-          <span className="text-gray-900 font-medium flex-shrink-0" style={{ color: themeColor }}>{category.name}</span>
+          {activeSubTopic && (
+            <>
+              <ChevronRight className="w-4 h-4 flex-shrink-0" />
+              <span className="text-gray-900 font-medium flex-shrink-0" style={{ color: rootCat.color || '#0056b3' }}>
+                {activeSubTopic.name}
+              </span>
+            </>
+          )}
         </nav>
       </div>
 
-      {/* Main Layout */}
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
         <div className="flex flex-col lg:flex-row gap-8">
-          
-          {/* Lưới bài viết (Cột chính) */}
-          <div className="flex-1 min-w-0">
-            {/* Ảnh bìa & Tiêu đề */}
-            <CategoryCover category={category} />
-            
-            {!coverUrl && (
+          {/* Sidebar trái (giống trang Sức khỏe) */}
+          <GenericCategorySidebar
+            basePath={basePath}
+            rootName={rootCat.name}
+            topics={topicsWithChildren}
+            activeSlug={activeTopic?.slug}
+            activeSubSlug={activeSubTopic?.slug}
+          >
+            <SidebarBanners />
+          </GenericCategorySidebar>
+
+          {/* Main Content */}
+          <main className="flex-grow min-w-0">
+            <CategoryCover category={currentCategory} />
+
+            {!currentCategory.coverImage && (
               <div className="mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900" style={{ color: themeColor }}>
-                  {category.name}
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900" style={{ color: currentCategory.color || rootCat.color || '#0056b3' }}>
+                  {currentCategory.name}
                 </h1>
-                {category.description && (
-                  <p className="text-gray-600 mt-2 max-w-3xl">{category.description}</p>
+                {currentCategory.description && (
+                  <p className="text-gray-600 mt-2 max-w-3xl">{currentCategory.description}</p>
                 )}
               </div>
             )}
 
-            <div className="mb-6 flex items-center justify-between bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-semibold flex items-center gap-2">
-                <Filter className="w-5 h-5 text-gray-400" />
-                <span>Danh sách bài viết</span>
-              </h2>
-            </div>
-            
             {articles.length === 0 ? (
               <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border border-gray-100">
                 <FileText className="w-12 h-12 mx-auto text-gray-200 mb-4" />
@@ -135,64 +181,7 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
                 </div>
               </>
             )}
-          </div>
-
-          {/* Sidebar */}
-          <div className="w-full lg:w-80 flex-shrink-0 order-first lg:order-last lg:sticky top-6 self-start">
-            {relatedCategories && relatedCategories.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-                <div className="p-5 border-b border-gray-100 bg-gray-50/50">
-                  <h3 className="font-bold text-gray-900 uppercase tracking-wider text-sm">
-                    {sidebarTitle}
-                  </h3>
-                </div>
-                <div className="p-3">
-                  <ul className="space-y-1">
-                    {category.parent && (
-                      <li>
-                        <Link 
-                          href={`/${typeof category.parent === 'object' ? category.parent.slug : ''}`}
-                          className="flex items-center justify-between px-4 py-3 rounded-xl text-sm transition-all text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        >
-                          <span className="font-medium">Tất cả {sidebarTitle}</span>
-                        </Link>
-                      </li>
-                    )}
-                    
-                    {relatedCategories.map((cat: any) => {
-                      const isActive = cat.id === category.id;
-                      const href = `/${cat.slug}`;
-                      
-                      return (
-                        <li key={cat.id}>
-                          <Link 
-                            href={href}
-                            className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm transition-all ${
-                              isActive 
-                                ? 'bg-blue-50 text-[#0056b3] font-semibold' 
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                            }`}
-                          >
-                            <span className="flex items-center gap-3">
-                              {cat.icon && <span>{cat.icon}</span>}
-                              {cat.name}
-                            </span>
-                            {isActive && (
-                              <div className="w-1.5 h-1.5 rounded-full bg-[#0056b3]" />
-                            )}
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </div>
-            )}
-            
-            {/* Banner tùy chỉnh dưới menu dọc */}
-            <SidebarBanners />
-          </div>
-
+          </main>
         </div>
       </div>
     </div>
