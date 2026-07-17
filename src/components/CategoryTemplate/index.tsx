@@ -152,12 +152,15 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
             <CategoryCover category={currentCategory} />
 
             {!currentCategory.coverImage && (
-              <div className="mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900" style={{ color: currentCategory.color || rootCat.color || '#0056b3' }}>
+              <div className="mb-6">
+                <h1
+                  className="text-2xl md:text-3xl font-bold pb-2 border-b-2 inline-block uppercase tracking-wide"
+                  style={{ color: currentCategory.color || rootCat.color || '#0056b3', borderColor: currentCategory.color || rootCat.color || '#0056b3' }}
+                >
                   {currentCategory.name}
                 </h1>
                 {currentCategory.description && (
-                  <p className="text-gray-600 mt-2 max-w-3xl">{currentCategory.description}</p>
+                  <p className="text-gray-500 mt-2 text-sm max-w-3xl">{currentCategory.description}</p>
                 )}
               </div>
             )}
@@ -169,11 +172,17 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {articles.map((article: any) => (
-                    <ArticleCard key={article.id} article={article} />
-                  ))}
-                </div>
+                {/* Bài viết nổi bật đầu tiên */}
+                <ArticleCard article={articles[0]} featured />
+
+                {/* Lưới bài viết còn lại */}
+                {articles.length > 1 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+                    {articles.slice(1).map((article: any) => (
+                      <ArticleCard key={article.id} article={article} />
+                    ))}
+                  </div>
+                )}
 
                 <div className="mt-8">
                   <Pagination
