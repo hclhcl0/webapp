@@ -7,6 +7,7 @@ import configPromise from '@payload-config';
 import { FileText } from 'lucide-react';
 import { Pagination } from '@/components/Pagination';
 import { GenericCategorySidebar } from '@/components/GenericCategorySidebar';
+import { sortTopicsByArticleCount } from '@/lib/sortTopicsByArticleCount';
 import { CategoryCover } from '@/components/CategoryCover';
 import { ArticleCard } from '@/components/ArticleCard';
 import { SidebarBanners } from '@/components/SidebarBanners';
@@ -82,12 +83,15 @@ export default async function GenericCategoryPage({ params, searchParams }: Page
     : { docs: [] };
 
   // 4. Gắn children vào mỗi topic
-  const topicsWithChildren = topics.map((t: any) => ({
+  const topicsRaw = topics.map((t: any) => ({
     ...t,
     children: allSubTopics.filter((s: any) =>
       (typeof s.parent === 'object' ? s.parent?.id : s.parent) === t.id
     ),
   }));
+
+  // 4b. Sắp xếp topic theo số bài viết (nhiều nhất lên trên)
+  const topicsWithChildren = await sortTopicsByArticleCount(topicsRaw);
 
   // 5. Xác định đối tượng đang được chọn
   let activeTopic: any = null;

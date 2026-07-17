@@ -8,6 +8,7 @@ import { Pagination } from '@/components/Pagination';
 import { CategoryCover } from '@/components/CategoryCover';
 import { SidebarBanners } from '@/components/SidebarBanners';
 import { GenericCategorySidebar } from '@/components/GenericCategorySidebar';
+import { sortTopicsByArticleCount } from '@/lib/sortTopicsByArticleCount';
 
 interface CategoryTemplateProps {
   category: any;
@@ -67,12 +68,15 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
     : { docs: [] };
 
   // Gắn children vào từng topic
-  const topicsWithChildren = topics.map((t: any) => ({
+  const topicsRaw = topics.map((t: any) => ({
     ...t,
     children: allSubTopics.filter((s: any) =>
       (typeof s.parent === 'object' ? s.parent?.id : s.parent) === t.id
     ),
   }));
+
+  // Sắp xếp topic theo số bài viết (nhiều nhất lên trên)
+  const topicsWithChildren = await sortTopicsByArticleCount(topicsRaw);
 
   // Xác định bộ lọc bài viết
   let articleFilter: any = {};
