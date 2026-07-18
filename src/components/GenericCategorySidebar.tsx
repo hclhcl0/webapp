@@ -106,35 +106,37 @@ export function GenericCategorySidebar({ basePath, rootName, topics, activeSlug,
                     )}
                   </div>
 
-                  {/* Chủ đề con — hiện khi hover hoặc active */}
-                  <div
-                    className={`overflow-hidden transition-all duration-200 ease-in-out ${
-                      open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                  >
-                    <div className="mt-0.5 ml-4 pl-2 border-l border-gray-200 space-y-0.5 py-0.5">
-                      {(topic.children || []).map((child) => {
-                        const isChildActive = activeSubSlug === child.slug;
-                        return (
-                          <Link
-                            key={child.id}
-                            href={`${basePath}/${topic.slug}/${child.slug}`}
-                            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm text-xs transition-all relative ${
-                              isChildActive
-                                ? 'text-gov-primary font-bold bg-primary-50/50'
-                                : 'text-gray-600 font-medium hover:text-gray-900 hover:bg-gray-100'
-                            }`}
-                          >
-                            {isChildActive && (
-                              <span className="absolute left-[-9px] top-1/2 -translate-y-1/2 w-[3px] h-[3px] rounded-full bg-gov-primary" />
-                            )}
-                            <ChevronRight className="w-3 h-3 flex-shrink-0 text-gray-400" />
-                            <span className="line-clamp-2 leading-tight">{child.name}</span>
-                          </Link>
-                        );
-                      })}
+                  {/* Chủ đề con — chỉ hiện khi có con VÀ (đang hover hoặc active) */}
+                  {hasChildren && (
+                    <div
+                      className={`overflow-hidden transition-all duration-200 ease-in-out ${
+                        open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      <div className="mt-0.5 ml-4 pl-2 border-l border-gray-200 space-y-0.5 py-0.5">
+                        {(topic.children || []).map((child) => {
+                          const isChildActive = activeSubSlug === child.slug;
+                          return (
+                            <Link
+                              key={child.id}
+                              href={`${basePath}/${topic.slug}/${child.slug}`}
+                              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm text-xs transition-all relative ${
+                                isChildActive
+                                  ? 'text-gov-primary font-bold bg-primary-50/50'
+                                  : 'text-gray-600 font-medium hover:text-gray-900 hover:bg-gray-100'
+                              }`}
+                            >
+                              {isChildActive && (
+                                <span className="absolute left-[-9px] top-1/2 -translate-y-1/2 w-[3px] h-[3px] rounded-full bg-gov-primary" />
+                              )}
+                              <ChevronRight className="w-3 h-3 flex-shrink-0 text-gray-400" />
+                              <span className="line-clamp-2 leading-tight">{child.name}</span>
+                            </Link>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               );
             })}
