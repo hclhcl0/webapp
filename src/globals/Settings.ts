@@ -685,9 +685,9 @@ export const Settings: GlobalConfig = {
           interfaceName: 'BannerWidget',
           labels: { singular: 'Widget Banner Quảng cáo', plural: 'Widget Banner Quảng cáo' },
           fields: [
-            { name: 'title', type: 'text', label: 'Tiêu đề (Không bắt buộc)' },
+            { name: 'title', type: 'text', label: 'Tiêu đề (Không bắt buộc)', defaultValue: '' },
             { name: 'image', type: 'upload', relationTo: 'media', label: 'Tải ảnh Banner lên', required: true },
-            { name: 'linkUrl', type: 'text', label: 'Đường dẫn liên kết khi nhấn vào banner' },
+            { name: 'linkUrl', type: 'text', label: 'Đường dẫn liên kết khi nhấn vào banner', defaultValue: '' },
             { name: 'openInNewTab', type: 'checkbox', label: 'Mở liên kết trong tab mới', defaultValue: true },
           ]
         },
