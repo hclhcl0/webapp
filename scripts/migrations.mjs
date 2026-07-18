@@ -2841,5 +2841,13 @@ export const MIGRATION_STATEMENTS = [
     WHEN duplicate_object THEN null;
   END $$;`,
   `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_vaccines_id_idx" ON "payload_locked_documents_rels" USING btree ("vaccines_id")`,
+
+  // ====================================================
+  // FIX: Drop NOT NULL on optional fields in banner_widget block
+  // title và link_url là optional nhưng DB có ràng buộc NOT NULL → lỗi khi thêm widget
+  // ====================================================
+  `ALTER TABLE "site_settings_blocks_banner_widget" ALTER COLUMN "title" DROP NOT NULL`,
+  `ALTER TABLE "site_settings_blocks_banner_widget" ALTER COLUMN "link_url" DROP NOT NULL`,
+  `ALTER TABLE "site_settings_blocks_banner_widget" ALTER COLUMN "block_name" DROP NOT NULL`,
 ];
 
