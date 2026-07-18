@@ -105,24 +105,74 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
   const currentCategory = activeSubTopic || activeTopic || rootCat;
   const basePath = `/${rootCat.slug}`;
 
+  const hasTopics = topicsWithChildren.length > 0;
+
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col">
       <div className="container mx-auto px-4 max-w-7xl py-6 flex-grow">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar trái (giống trang Sức khỏe) */}
-          <GenericCategorySidebar
-            basePath={basePath}
-            rootName={rootCat.name}
-            topics={topicsWithChildren}
-            activeSlug={activeTopic?.slug}
-            activeSubSlug={activeSubTopic?.slug}
-          >
-            <SidebarBanners />
-          </GenericCategorySidebar>
 
-          {/* Main Content */}
-          <main className="flex-grow min-w-0">
+        {hasTopics ? (
+          /* ── Layout có Sidebar (khi có chuyên mục con) ── */
+          <div className="flex flex-col lg:flex-row gap-8">
+            <GenericCategorySidebar
+              basePath={basePath}
+              rootName={rootCat.name}
+              topics={topicsWithChildren}
+              activeSlug={activeTopic?.slug}
+              activeSubSlug={activeSubTopic?.slug}
+            >
+              <SidebarBanners />
+            </GenericCategorySidebar>
+
+            <main className="flex-grow min-w-0">
+              <CategoryCover category={currentCategory} />
+
+              {articles.length === 0 ? (
+                <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border border-gray-100">
+                  <FileText className="w-12 h-12 mx-auto text-gray-200 mb-4" />
+                  <p>Chưa có bài viết nào trong chuyên mục này.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {articles.map((article: any) => (
+                      <ArticleCard key={article.id} article={article} />
+                    ))}
+                  </div>
+                  <div className="mt-8">
+                    <Pagination
+                      totalPages={totalPages}
+                      currentPage={currentPage || 1}
+                      hasPrevPage={hasPrevPage}
+                      hasNextPage={hasNextPage}
+                    />
+                  </div>
+                </>
+              )}
+            </main>
+          </div>
+        ) : (
+          /* ── Layout Full-Width (khi không có chuyên mục con) ── */
+          <main className="w-full">
             <CategoryCover category={currentCategory} />
+
+            {/* Tiêu đề chuyên mục */}
+            {!currentCategory.coverImage && (
+              <div className="mb-6">
+                <h1
+                  className="text-2xl md:text-3xl font-bold pb-2 border-b-2 inline-block uppercase tracking-wide"
+                  style={{
+                    color: currentCategory.color || rootCat.color || '#0056b3',
+                    borderColor: currentCategory.color || rootCat.color || '#0056b3',
+                  }}
+                >
+                  {currentCategory.name}
+                </h1>
+                {currentCategory.description && (
+                  <p className="text-gray-500 mt-2 text-sm max-w-3xl">{currentCategory.description}</p>
+                )}
+              </div>
+            )}
 
             {articles.length === 0 ? (
               <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border border-gray-100">
@@ -131,12 +181,11 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                   {articles.map((article: any) => (
                     <ArticleCard key={article.id} article={article} />
                   ))}
                 </div>
-
                 <div className="mt-8">
                   <Pagination
                     totalPages={totalPages}
@@ -147,9 +196,9 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
                 </div>
               </>
             )}
-
           </main>
-        </div>
+        )}
+
       </div>
     </div>
   );
