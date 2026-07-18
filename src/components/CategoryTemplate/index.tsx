@@ -105,7 +105,24 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
   const currentCategory = activeSubTopic || activeTopic || rootCat;
   const basePath = `/${rootCat.slug}`;
 
-  const hasTopics = topicsWithChildren.length > 0;
+  // Tìm số con của activeTopic (nếu đang xem một topic cụ thể)
+  const activeTopicChildren = activeTopic
+    ? (topicsWithChildren.find((t: any) => t.id === activeTopic.id)?.children?.length ?? 0)
+    : 0;
+
+  // Hiện sidebar khi:
+  // - Đang ở trang gốc (rootCat) VÀ có topics → sidebar
+  // - Đang xem một subtopic → sidebar (topic cha có children)
+  // - Đang xem một topic CÓ sub-topics → sidebar
+  // Full-width khi:
+  // - Không có topics ở trang gốc
+  // - Đang xem topic LÁ (không có children)
+  const hasTopics =
+    !activeTopic
+      ? topicsWithChildren.length > 0   // trang root: có topics thì show sidebar
+      : activeSubTopic
+        ? true                            // đang ở subtopic: luôn show sidebar
+        : activeTopicChildren > 0;        // đang ở topic: chỉ show sidebar nếu có children
 
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col">
