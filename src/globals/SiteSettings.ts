@@ -982,8 +982,25 @@ export const SiteSettings: GlobalConfig = {
             }
           ],
         },
+        // ─────────────────────────────────────────────
+        // TAB 12: CÁC THÀNH PHẦN TRANG CHỦ
+        // ─────────────────────────────────────────────
+        {
+          label: 'Bố cục Trang chủ',
+          fields: [
+            ...(Settings.fields as any[]).filter(f => ['homeContent', 'homeSections'].includes(f.name))
+          ]
+        },
+        // ─────────────────────────────────────────────
+        // TAB 13: GIAO DIỆN & THANH BÊN
+        // ─────────────────────────────────────────────
+        {
+          label: 'Cấu hình Nâng cao',
+          fields: [
+            ...(Settings.fields as any[]).filter(f => ['themeConfig', 'sidebarWidgets'].includes(f.name))
+          ]
+        }
       ],
     },
-    ...(Settings.fields as any[]).filter(f => ['homeContent', 'themeConfig', 'homeSections', 'sidebarWidgets'].includes(f.name))
   ],
 };
