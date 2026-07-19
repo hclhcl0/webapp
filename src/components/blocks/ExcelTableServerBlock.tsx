@@ -32,7 +32,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
   if (!tableData || tableData.length === 0) return null;
 
   return (
-    <div className="my-8 bg-white border border-gray-200 overflow-hidden shadow-sm w-full max-w-full min-w-0">
+    <div className="my-8 bg-white border border-gray-200 overflow-hidden shadow-sm w-full max-w-full min-w-0 not-prose">
       {(title || showDownload) && (
         <div className="flex flex-col sm:flex-row items-center justify-between p-4 bg-gray-50 border-b border-gray-200 gap-4">
           {title && <h3 className="font-bold text-lg text-gov-primary m-0">{title}</h3>}
@@ -70,7 +70,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                   
                   {/* Khoảng cách các hàng rút gọn tối đa */}
                   <div className="px-1 py-1 flex-1">
-                    <ul className="text-xs list-none p-0 m-0">
+                    <ul className="text-xs list-none !p-0 !m-0">
                       {properties.map((cell: any, cellIndex: number) => {
                         const headerStr = (hasHeader && tableData[0] && tableData[0][cellIndex + 1]) 
                           ? String(tableData[0][cellIndex + 1]) 
@@ -83,7 +83,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                         if (cell === undefined || cell === null || cell === '') return null;
                         
                         return (
-                          <li key={cellIndex} className="flex justify-between items-start py-0.5 px-0 m-0 border-b border-gray-100 border-dashed last:border-0 gap-1.5">
+                          <li key={cellIndex} className="flex justify-between items-start py-0.5 !px-0 !m-0 border-b border-gray-100 border-dashed last:border-0 gap-1.5">
                             <span className="text-gray-500 font-medium text-[11px] mt-0.5 shrink-0 capitalize">{headerLabel}</span>
                             <span className="text-gray-900 font-bold text-right">{cell}</span>
                           </li>
