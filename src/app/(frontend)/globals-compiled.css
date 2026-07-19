@@ -2134,6 +2134,9 @@
   .whitespace-pre-wrap {
     white-space: pre-wrap;
   }
+  .\!text-gov-primary {
+    color: var(--color-gov-primary) !important;
+  }
   .\!text-white {
     color: var(--color-white) !important;
   }
