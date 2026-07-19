@@ -43,10 +43,25 @@ export const ExcelTableBlock: Block = {
       ]
     },
     {
-      name: 'showDownload',
-      type: 'checkbox',
-      label: 'Hiển thị nút Tải về',
-      defaultValue: true,
+      type: 'row',
+      fields: [
+        {
+          name: 'displayStyle',
+          type: 'select',
+          label: 'Kiểu hiển thị',
+          defaultValue: 'table',
+          options: [
+            { label: 'Dạng Bảng (Table)', value: 'table' },
+            { label: 'Dạng Thẻ (Card)', value: 'card' },
+          ],
+        },
+        {
+          name: 'showDownload',
+          type: 'checkbox',
+          label: 'Hiển thị nút Tải về',
+          defaultValue: true,
+        }
+      ]
     }
   ],
 };

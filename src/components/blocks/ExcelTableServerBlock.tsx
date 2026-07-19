@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import * as XLSX from 'xlsx';
 
-export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader, showDownload }: any) {
+export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader, displayStyle = 'table', showDownload }: any) {
   if (!file || !file.filename) return null;
 
   let tableData: any[][] = [];
@@ -54,33 +54,66 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
         </div>
       )}
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left">
-          {hasHeader && tableData.length > 0 && (
-            <thead className="text-sm bg-blue-100 text-blue-900 shadow-sm">
-              <tr>
-                {tableData[0].map((cell: any, idx: number) => (
-                  <th key={idx} scope="col" className="px-4 py-3 font-bold border-b-2 border-blue-200">
-                    {cell}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-          )}
-          
-          <tbody className="divide-y divide-gray-200">
-            {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => (
-              <tr key={rowIndex} className="hover:bg-blue-50/50 transition-colors bg-white">
-                {row.map((cell: any, cellIndex: number) => (
-                  <td key={cellIndex} className="px-3 py-2 text-gray-700 break-words">
-                    {cell || ''}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {displayStyle === 'card' ? (
+        <div className="p-4 bg-gray-50/50">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => {
+              const cardTitle = row[0] || `Mục ${rowIndex + 1}`;
+              const properties = row.slice(1);
+              
+              return (
+                <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-blue-300 transition-all">
+                  <h4 className="font-bold text-lg text-gov-primary mb-3 pb-2 border-b border-gray-100">{cardTitle}</h4>
+                  <ul className="space-y-2 text-sm">
+                    {properties.map((cell: any, cellIndex: number) => {
+                      const headerLabel = (hasHeader && tableData[0] && tableData[0][cellIndex + 1]) 
+                        ? tableData[0][cellIndex + 1] 
+                        : `Thông tin ${cellIndex + 1}`;
+                      
+                      if (cell === undefined || cell === null || cell === '') return null;
+                      
+                      return (
+                        <li key={cellIndex} className="flex flex-col sm:flex-row sm:justify-between py-1 border-b border-gray-50 border-dashed last:border-0">
+                          <span className="text-gray-500 font-medium">{headerLabel}:</span>
+                          <span className="text-gray-900 font-semibold text-right">{cell}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            {hasHeader && tableData.length > 0 && (
+              <thead className="text-sm bg-blue-100 text-blue-900 shadow-sm">
+                <tr>
+                  {tableData[0].map((cell: any, idx: number) => (
+                    <th key={idx} scope="col" className="px-4 py-3 font-bold border-b-2 border-blue-200">
+                      {cell}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+            )}
+            
+            <tbody className="divide-y divide-gray-200">
+              {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => (
+                <tr key={rowIndex} className="hover:bg-blue-50/50 transition-colors bg-white">
+                  {row.map((cell: any, cellIndex: number) => (
+                    <td key={cellIndex} className="px-3 py-2 text-gray-700 break-words">
+                      {cell || ''}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
