@@ -58,14 +58,16 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
         <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => {
-              const cardTitle = row[0] || `Mục ${rowIndex + 1}`;
+              const rawCardTitle = String(row[0] || `Mục ${rowIndex + 1}`);
+              const isTitleAllCaps = rawCardTitle === rawCardTitle.toUpperCase() && rawCardTitle.match(/[A-Z]/i) !== null;
+              const cardTitle = isTitleAllCaps ? rawCardTitle.toLowerCase() : rawCardTitle;
               const properties = row.slice(1);
               
               return (
-                <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
+                <div key={rowIndex} className="bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-400 transition-all overflow-hidden flex flex-col">
                   {/* Tiêu đề có nền */}
-                  <div className="bg-blue-50 px-1 py-0.5 border-b border-blue-100 border-l-4 border-l-blue-600">
-                    <h4 className="font-bold text-blue-900 line-clamp-2 leading-none" style={{ fontSize: '11px' }}>{cardTitle}</h4>
+                  <div className="bg-blue-700 px-2 py-1.5 border-b border-blue-800">
+                    <h4 className="font-bold text-white line-clamp-2 leading-none capitalize" style={{ fontSize: '12px' }}>{cardTitle}</h4>
                   </div>
                   
                   {/* Khoảng cách các hàng rút gọn tối đa */}
@@ -84,8 +86,8 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                         
                         return (
                           <li key={cellIndex} className="flex justify-between items-start py-0.5 !px-0 !m-0 border-b border-gray-100 border-dashed last:border-0 gap-1.5">
-                            <span className="text-gray-500 font-medium text-[11px] mt-0.5 shrink-0 capitalize">{headerLabel}</span>
-                            <span className="text-gray-900 font-bold text-right">{cell}</span>
+                            <span className="text-gray-500 font-medium text-[10px] mt-0.5 shrink-0 capitalize">{headerLabel}</span>
+                            <span className="text-gray-900 font-bold text-[11px] text-right leading-tight">{cell}</span>
                           </li>
                         );
                       })}
