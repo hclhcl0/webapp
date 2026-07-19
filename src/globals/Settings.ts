@@ -1,4 +1,5 @@
 import type { GlobalConfig } from 'payload';
+import { ScheduleBlock } from '../blocks/ScheduleBlock.ts';
 import { lexicalEditor, BlocksFeature } from '@payloadcms/richtext-lexical';
 import { CalloutBlock } from '../blocks/CalloutBlock.ts';
 import { ButtonBlock } from '../blocks/ButtonBlock.ts';
@@ -223,6 +224,7 @@ export const Settings: GlobalConfig = {
         description: 'Kéo thả để sắp xếp thứ tự hiển thị. Mỗi thành phần là một khu vực riêng biệt trên trang chủ.',
       },
       blocks: [
+        ScheduleBlock,
         // ── Block 1: Khu vực tin tức theo chuyên mục ──
         {
           slug: 'newsCategorySection',

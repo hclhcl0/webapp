@@ -7,6 +7,7 @@ import { QuickLinksSection } from './QuickLinksSection';
 import { RichTextSection } from './RichTextSection';
 import { VideoSection } from './VideoSection';
 import { TikTokSection } from './TikTokSection';
+import { ScheduleBlock } from '../Blocks/ScheduleBlock';
 
 interface HomeSectionRendererProps {
   sections: any[];
@@ -89,6 +90,18 @@ export async function HomeSectionRenderer({ sections }: HomeSectionRendererProps
                 title={section.title}
                 backgroundColor={section.backgroundColor}
                 stats={section.stats || []}
+              />
+            );
+
+          case 'scheduleBlock':
+            return (
+              <ScheduleBlock
+                key={`${blockType}-${index}`}
+                title={section.title}
+                icon={section.icon}
+                scheduleGroups={section.scheduleGroups}
+                highlightBox={section.highlightBox}
+                bottomNote={section.bottomNote}
               />
             );
 

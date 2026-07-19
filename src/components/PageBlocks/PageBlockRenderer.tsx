@@ -14,6 +14,7 @@ import { CtaBannerBlock } from './CtaBannerBlock';
 import { EmbedBlock } from './EmbedBlock';
 import { DividerBlock } from './DividerBlock';
 import { TableBlock } from './TableBlock';
+import { ScheduleBlock } from '../Blocks/ScheduleBlock';
 
 // Existing block components
 import HeroBannerBlockComp from '@/components/blocks/HeroBannerBlock';
@@ -148,6 +149,18 @@ export function PageBlockRenderer({ blocks }: Props) {
                 caption={block.caption}
                 striped={block.striped}
                 bordered={block.bordered}
+              />
+            );
+
+          case 'scheduleBlock':
+            return (
+              <ScheduleBlock
+                key={key}
+                title={block.title}
+                icon={block.icon}
+                scheduleGroups={block.scheduleGroups}
+                highlightBox={block.highlightBox}
+                bottomNote={block.bottomNote}
               />
             );
 
