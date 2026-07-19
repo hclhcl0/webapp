@@ -3255,6 +3255,7 @@ export const MIGRATION_STATEMENTS = [
         "_parent_id" integer NOT NULL,
         "_path" text NOT NULL,
         "id" varchar PRIMARY KEY NOT NULL,
+        "block_name" varchar,
         "limit" integer,
         "layout" varchar
     );
@@ -3264,16 +3265,33 @@ export const MIGRATION_STATEMENTS = [
   `,
   `
   DO $$ BEGIN
+    ALTER TABLE "site_settings_blocks_latest_news_section" ADD COLUMN IF NOT EXISTS "block_name" varchar;
+  EXCEPTION
+    WHEN undefined_table THEN null;
+    WHEN duplicate_column THEN null;
+  END $$;
+  `,
+  `
+  DO $$ BEGIN
     CREATE TABLE IF NOT EXISTS "settings_blocks_latest_news_section" (
         "_order" integer NOT NULL,
         "_parent_id" integer NOT NULL,
         "_path" text NOT NULL,
         "id" varchar PRIMARY KEY NOT NULL,
+        "block_name" varchar,
         "limit" integer,
         "layout" varchar
     );
   EXCEPTION
     WHEN duplicate_table THEN null;
+  END $$;
+  `,
+  `
+  DO $$ BEGIN
+    ALTER TABLE "settings_blocks_latest_news_section" ADD COLUMN IF NOT EXISTS "block_name" varchar;
+  EXCEPTION
+    WHEN undefined_table THEN null;
+    WHEN duplicate_column THEN null;
   END $$;
   `,
 
