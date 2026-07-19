@@ -3294,5 +3294,14 @@ export const MIGRATION_STATEMENTS = [
     WHEN duplicate_column THEN null;
   END $$;
   `,
+  `
+  DO $$ BEGIN
+    ALTER TABLE "articles_rels" ADD COLUMN IF NOT EXISTS "categories_id" integer;
+    ALTER TABLE "_articles_v_rels" ADD COLUMN IF NOT EXISTS "categories_id" integer;
+  EXCEPTION
+    WHEN undefined_table THEN null;
+    WHEN duplicate_column THEN null;
+  END $$;
+  `,
 
 ];
