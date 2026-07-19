@@ -72,15 +72,19 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                   <div className="px-1.5 py-1.5 flex-1">
                     <ul className="text-xs">
                       {properties.map((cell: any, cellIndex: number) => {
-                        const headerLabel = (hasHeader && tableData[0] && tableData[0][cellIndex + 1]) 
-                          ? tableData[0][cellIndex + 1] 
+                        const headerStr = (hasHeader && tableData[0] && tableData[0][cellIndex + 1]) 
+                          ? String(tableData[0][cellIndex + 1]) 
                           : `Thông tin ${cellIndex + 1}`;
+                        
+                        // Nếu trong file Excel cố tình viết in hoa toàn bộ, ép nó về chữ thường
+                        const isAllCaps = headerStr === headerStr.toUpperCase() && headerStr.match(/[A-Z]/i) !== null;
+                        const headerLabel = isAllCaps ? headerStr.toLowerCase() : headerStr;
                         
                         if (cell === undefined || cell === null || cell === '') return null;
                         
                         return (
                           <li key={cellIndex} className="flex justify-between items-start py-0.5 border-b border-gray-100 border-dashed last:border-0 gap-1.5">
-                            <span className="text-gray-500 font-medium text-[11px] mt-0.5 shrink-0">{headerLabel}</span>
+                            <span className="text-gray-500 font-medium text-[11px] mt-0.5 shrink-0 capitalize">{headerLabel}</span>
                             <span className="text-gray-900 font-bold text-right">{cell}</span>
                           </li>
                         );
