@@ -32,9 +32,9 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
   if (!tableData || tableData.length === 0) return null;
 
   return (
-    <div className="mt-2 mb-6 w-full max-w-full min-w-0 not-prose">
+    <div className="mb-6 w-full max-w-full min-w-0 not-prose">
       {(title || showDownload) && (
-        <div className="flex items-center justify-between mb-4 gap-4">
+        <div className="flex items-center justify-between gap-4">
           {title ? <h3 className="font-bold text-lg text-gov-primary m-0">{title}</h3> : <div></div>}
           
           {showDownload && file.url && (
@@ -100,7 +100,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
         <div className="overflow-x-auto border border-gray-200 rounded-lg">
           <table className="w-full text-[11px] text-left">
             {hasHeader && tableData.length > 0 && (
-              <thead className="bg-blue-100 text-blue-900 shadow-sm text-[11px]">
+              <thead className="bg-blue-700 text-white shadow-sm text-[11px]">
                 <tr>
                   {tableData[0].map((cell: any, idx: number) => {
                     const headerStr = String(cell || '');
@@ -108,7 +108,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                     const headerLabel = isAllCaps ? headerStr.toLowerCase() : headerStr;
                     
                     return (
-                      <th key={idx} scope="col" className="px-1.5 py-0.5 font-bold border-b-2 border-blue-200 border-r border-blue-200/50 last:border-r-0 whitespace-nowrap capitalize leading-none">
+                      <th key={idx} scope="col" className="px-1.5 py-0.5 font-bold border-b-2 border-blue-800 border-r border-blue-600 last:border-r-0 whitespace-nowrap capitalize leading-none">
                         {headerLabel}
                       </th>
                     );
