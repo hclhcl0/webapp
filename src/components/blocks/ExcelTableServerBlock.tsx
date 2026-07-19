@@ -32,7 +32,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
   if (!tableData || tableData.length === 0) return null;
 
   return (
-    <div className="my-8 bg-white border border-gray-200 overflow-hidden shadow-sm w-full max-w-full min-w-0 not-prose">
+    <div className="my-8 overflow-hidden w-full max-w-full min-w-0 not-prose">
       {(title || showDownload) && (
         <div className="flex flex-col sm:flex-row items-center justify-between p-4 bg-gray-50 border-b border-gray-200 gap-4">
           {title && <h3 className="font-bold text-lg text-gov-primary m-0">{title}</h3>}
@@ -62,10 +62,10 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
               const properties = row.slice(1);
               
               return (
-                <div key={rowIndex} className="bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
+                <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
                   {/* Tiêu đề có nền */}
-                  <div className="bg-blue-50 px-1 py-1 border-b border-blue-100 border-l-4 border-l-blue-600">
-                    <h4 className="font-bold text-xs text-blue-900 line-clamp-2 leading-tight">{cardTitle}</h4>
+                  <div className="bg-blue-50 px-1 py-0.5 border-b border-blue-100 border-l-4 border-l-blue-600">
+                    <h4 className="font-bold text-[11px] text-blue-900 line-clamp-2 leading-none">{cardTitle}</h4>
                   </div>
                   
                   {/* Khoảng cách các hàng rút gọn tối đa */}
