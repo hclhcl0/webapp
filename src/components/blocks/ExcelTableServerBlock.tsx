@@ -32,7 +32,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
   if (!tableData || tableData.length === 0) return null;
 
   return (
-    <div className="my-8 bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+    <div className="my-8 bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm w-full max-w-full min-w-0">
       {(title || showDownload) && (
         <div className="flex flex-col sm:flex-row items-center justify-between p-4 bg-gray-50 border-b border-gray-200 gap-4">
           {title && <h3 className="font-bold text-lg text-gov-primary m-0">{title}</h3>}
@@ -72,7 +72,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
             {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => (
               <tr key={rowIndex} className="hover:bg-blue-50/50 transition-colors bg-white">
                 {row.map((cell: any, cellIndex: number) => (
-                  <td key={cellIndex} className="px-4 py-3 text-gray-700 break-words min-w-[120px]">
+                  <td key={cellIndex} className="px-3 py-2 text-gray-700 break-words">
                     {cell || ''}
                   </td>
                 ))}
