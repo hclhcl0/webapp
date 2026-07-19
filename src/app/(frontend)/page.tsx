@@ -27,6 +27,9 @@ export default async function HomePage() {
     <>
       <HeroCarousel />
       
+      {/* Các thành phần tùy chỉnh từ CMS (như Danh sách Banner) được dời lên trên */}
+      <HomeSectionRenderer sections={homeSections} />
+      
       {!isHomeContentEmpty && (
         <div className="container mx-auto px-4 py-8 max-w-7xl">
            <div className="prose prose-lg max-w-none prose-headings:text-gov-primary prose-a:text-gov-secondary hover:prose-a:text-gov-primary prose-img:rounded-xl text-gray-700">
@@ -37,9 +40,6 @@ export default async function HomePage() {
 
       {/* Tin mới nhất luôn hiển thị */}
       <NewsGrid limitOverride={6} />
-
-      {/* Các thành phần tùy chỉnh từ CMS */}
-      <HomeSectionRenderer sections={homeSections} />
     </>
   )
 }
