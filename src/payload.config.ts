@@ -12,7 +12,7 @@ import { withRBAC, globalsWithRBAC } from './lib/rbac.ts';
 
 // DATABASE_URI = custom Postgres URL
 // POSTGRES_URL = auto-injected by Vercel Postgres addon
-const dbUrl = process.env.DATABASE_URI || process.env.POSTGRES_URL;
+const dbUrl = process.env.DATABASE_URI || process.env.POSTGRES_URL || process.env.DATABASE_URL;
 
 import { Users } from './collections/Users.ts';
 import { Departments } from './collections/Departments.ts';
