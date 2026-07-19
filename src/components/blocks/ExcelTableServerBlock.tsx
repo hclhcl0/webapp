@@ -62,7 +62,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
               const properties = row.slice(1);
               
               return (
-                <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
+                <div key={rowIndex} className="bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
                   {/* Tiêu đề có nền */}
                   <div className="bg-blue-50 px-1.5 py-1 border-b border-blue-100 border-l-4 border-l-blue-600">
                     <h4 className="font-bold text-[13px] text-blue-900 line-clamp-2 leading-tight">{cardTitle}</h4>
