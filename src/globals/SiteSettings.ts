@@ -43,22 +43,27 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
-              name: 'homeNewsColumnsDesktop',
-              type: 'number',
-              label: 'Số bài viết trên 1 hàng (Máy tính)',
-              defaultValue: 5,
-              min: 1,
-              max: 6,
-              required: true,
-            },
-            {
-              name: 'homeNewsColumnsMobile',
-              type: 'number',
-              label: 'Số bài viết trên 1 hàng (Điện thoại)',
-              defaultValue: 2,
-              min: 1,
-              max: 4,
-              required: true,
+              type: 'row',
+              fields: [
+                {
+                  name: 'homeNewsColumnsDesktop',
+                  type: 'number',
+                  label: 'Số bài viết trên 1 hàng (Máy tính)',
+                  defaultValue: 5,
+                  min: 1,
+                  max: 6,
+                  required: true,
+                },
+                {
+                  name: 'homeNewsColumnsMobile',
+                  type: 'number',
+                  label: 'Số bài viết trên 1 hàng (Điện thoại)',
+                  defaultValue: 2,
+                  min: 1,
+                  max: 4,
+                  required: true,
+                },
+              ]
             },
             {
               name: 'homeNewsLayout',
@@ -716,46 +721,56 @@ export const SiteSettings: GlobalConfig = {
           name: 'articleReaderTools',
           fields: [
             {
-              name: 'showFontSize',
-              type: 'checkbox',
-              label: 'Cỡ chữ (A / A+ / A++)',
-              defaultValue: true,
+              type: 'row',
+              fields: [
+                {
+                  name: 'showFontSize',
+                  type: 'checkbox',
+                  label: 'Cỡ chữ (A / A+ / A++)',
+                  defaultValue: true,
+                },
+                {
+                  name: 'showTTS',
+                  type: 'checkbox',
+                  label: 'Đọc bài viết (Text-to-Speech)',
+                  defaultValue: true,
+                },
+                {
+                  name: 'showReadProgress',
+                  type: 'checkbox',
+                  label: 'Thanh tiến trình đọc bài',
+                  defaultValue: true,
+                },
+              ]
             },
             {
-              name: 'showTTS',
-              type: 'checkbox',
-              label: 'Đọc bài viết (Text-to-Speech)',
-              defaultValue: true,
-            },
-            {
-              name: 'showShareFB',
-              type: 'checkbox',
-              label: 'Chia sẻ Facebook',
-              defaultValue: true,
-            },
-            {
-              name: 'showShareZalo',
-              type: 'checkbox',
-              label: 'Chia sẻ Zalo',
-              defaultValue: true,
-            },
-            {
-              name: 'showCopyLink',
-              type: 'checkbox',
-              label: 'Chép link bài viết',
-              defaultValue: true,
-            },
-            {
-              name: 'showPrint',
-              type: 'checkbox',
-              label: 'In trang',
-              defaultValue: true,
-            },
-            {
-              name: 'showReadProgress',
-              type: 'checkbox',
-              label: 'Thanh tiến trình đọc bài',
-              defaultValue: true,
+              type: 'row',
+              fields: [
+                {
+                  name: 'showShareFB',
+                  type: 'checkbox',
+                  label: 'Chia sẻ Facebook',
+                  defaultValue: true,
+                },
+                {
+                  name: 'showShareZalo',
+                  type: 'checkbox',
+                  label: 'Chia sẻ Zalo',
+                  defaultValue: true,
+                },
+                {
+                  name: 'showCopyLink',
+                  type: 'checkbox',
+                  label: 'Chép link bài viết',
+                  defaultValue: true,
+                },
+                {
+                  name: 'showPrint',
+                  type: 'checkbox',
+                  label: 'In trang',
+                  defaultValue: true,
+                },
+              ]
             },
           ],
         },
@@ -802,27 +817,32 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
-              name: 'aiHotline',
-              type: 'text',
-              label: 'Số Hotline liên hệ',
-              defaultValue: '1900988975',
+              type: 'row',
+              fields: [
+                {
+                  name: 'aiHotline',
+                  type: 'text',
+                  label: 'Số Hotline liên hệ',
+                  defaultValue: '1900988975',
+                },
+                {
+                  name: 'aiModel',
+                  type: 'select',
+                  label: 'Mô hình AI sử dụng',
+                  defaultValue: 'gemini-2.5-flash',
+                  options: [
+                    { label: 'Gemini 2.5 Flash (Tốc độ cao, Khuyên dùng)', value: 'gemini-2.5-flash' },
+                    { label: 'Gemini 2.5 Pro (Thông minh, Phức tạp)', value: 'gemini-2.5-pro' },
+                    { label: 'Llama 3.3 70B (Groq - Miễn phí)', value: 'llama-3.3-70b-versatile' },
+                  ],
+                },
+              ]
             },
             {
               name: 'aiAddress',
               type: 'text',
               label: 'Địa chỉ cơ quan',
               defaultValue: '118 Lê Đình Lý, Phường Thanh Khê Đông, Quận Thanh Khê, Thành phố Đà Nẵng',
-            },
-            {
-              name: 'aiModel',
-              type: 'select',
-              label: 'Mô hình AI sử dụng',
-              defaultValue: 'gemini-2.5-flash',
-              options: [
-                { label: 'Gemini 2.5 Flash (Tốc độ cao, Khuyên dùng)', value: 'gemini-2.5-flash' },
-                { label: 'Gemini 2.5 Pro (Thông minh, Phức tạp)', value: 'gemini-2.5-pro' },
-                { label: 'Llama 3.3 70B (Groq - Miễn phí)', value: 'llama-3.3-70b-versatile' },
-              ],
             },
           ],
         },
@@ -934,26 +954,31 @@ export const SiteSettings: GlobalConfig = {
               },
             },
             {
-              name: 'delaySeconds',
-              type: 'number',
-              label: 'Thời gian trễ (giây)',
-              defaultValue: 1,
-              min: 0,
-              max: 30,
-              admin: {
-                condition: (data) => data?.popup?.enabled,
-                description: 'Chờ bao nhiêu giây sau khi trang tải xong mới hiện popup.',
-              },
-            },
-            {
-              name: 'showOnce',
-              type: 'checkbox',
-              label: 'Chỉ hiển thị 1 lần cho mỗi người dùng',
-              defaultValue: true,
-              admin: {
-                condition: (data) => data?.popup?.enabled,
-                description: 'Khi bật, nếu người dùng đã đóng popup, lần sau truy cập sẽ không hiện lại để tránh phiền hà (lưu qua localStorage).',
-              },
+              type: 'row',
+              fields: [
+                {
+                  name: 'delaySeconds',
+                  type: 'number',
+                  label: 'Thời gian trễ (giây)',
+                  defaultValue: 1,
+                  min: 0,
+                  max: 30,
+                  admin: {
+                    condition: (data) => data?.popup?.enabled,
+                    description: 'Chờ bao nhiêu giây sau khi trang tải xong mới hiện popup.',
+                  },
+                },
+                {
+                  name: 'showOnce',
+                  type: 'checkbox',
+                  label: 'Chỉ hiển thị 1 lần cho mỗi người dùng',
+                  defaultValue: true,
+                  admin: {
+                    condition: (data) => data?.popup?.enabled,
+                    description: 'Khi bật, nếu người dùng đã đóng popup, lần sau truy cập sẽ không hiện lại để tránh phiền hà (lưu qua localStorage).',
+                  },
+                },
+              ]
             },
           ],
         },
@@ -984,16 +1009,21 @@ export const SiteSettings: GlobalConfig = {
               label: 'Bật/Tắt Tính năng',
               fields: [
                 {
-                  name: 'enableAppointments',
-                  type: 'checkbox',
-                  label: 'Cho phép Đặt lịch khám',
-                  defaultValue: true,
-                },
-                {
-                  name: 'enableTestResults',
-                  type: 'checkbox',
-                  label: 'Cho phép Tra cứu kết quả xét nghiệm',
-                  defaultValue: true,
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'enableAppointments',
+                      type: 'checkbox',
+                      label: 'Cho phép Đặt lịch khám',
+                      defaultValue: true,
+                    },
+                    {
+                      name: 'enableTestResults',
+                      type: 'checkbox',
+                      label: 'Cho phép Tra cứu kết quả xét nghiệm',
+                      defaultValue: true,
+                    },
+                  ]
                 },
               ]
             },
