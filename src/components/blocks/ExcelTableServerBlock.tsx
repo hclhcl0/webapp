@@ -43,7 +43,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
               download 
               target="_blank" 
               rel="noreferrer" 
-              className="shrink-0 bg-gov-secondary text-white hover:bg-gov-secondary/90 px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2"
+              className="shrink-0 bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 shadow-sm"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -57,10 +57,10 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
           {hasHeader && tableData.length > 0 && (
-            <thead className="text-xs uppercase bg-gov-primary text-white">
+            <thead className="text-sm bg-blue-100 text-blue-900 shadow-sm">
               <tr>
                 {tableData[0].map((cell: any, idx: number) => (
-                  <th key={idx} scope="col" className="px-6 py-3 font-semibold border-b border-gray-300">
+                  <th key={idx} scope="col" className="px-4 py-3 font-bold border-b-2 border-blue-200">
                     {cell}
                   </th>
                 ))}
@@ -72,7 +72,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
             {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => (
               <tr key={rowIndex} className="hover:bg-blue-50/50 transition-colors bg-white">
                 {row.map((cell: any, cellIndex: number) => (
-                  <td key={cellIndex} className="px-6 py-4 whitespace-nowrap text-gray-700">
+                  <td key={cellIndex} className="px-4 py-3 text-gray-700 break-words min-w-[120px]">
                     {cell || ''}
                   </td>
                 ))}
