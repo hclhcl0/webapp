@@ -40,7 +40,7 @@ export function GenericCategorySidebar({ basePath, rootName, topics, activeSlug,
         >
           <span className="flex items-center gap-2 text-sm">
             <List className="w-4 h-4 text-gov-primary" />
-            Danh mục chên đề
+            Danh mục chuyên đề
           </span>
           {isMobileOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </button>
