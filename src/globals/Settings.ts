@@ -335,6 +335,14 @@ export const Settings: GlobalConfig = {
               max: 6,
             },
             {
+              name: 'bannerHeight',
+              type: 'number',
+              label: 'Chiều cao banner (px) - Tùy chọn',
+              admin: {
+                description: 'Bỏ trống nếu muốn ảnh tự động vừa theo tỷ lệ gốc.',
+              },
+            },
+            {
               name: 'banners',
               type: 'array',
               label: 'Danh sách Banner',

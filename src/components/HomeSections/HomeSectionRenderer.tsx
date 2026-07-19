@@ -58,6 +58,7 @@ export async function HomeSectionRenderer({ sections }: HomeSectionRendererProps
                 key={`${blockType}-${index}`}
                 title={section.title}
                 columns={section.columns}
+                bannerHeight={section.bannerHeight}
                 banners={section.banners || []}
               />
             );

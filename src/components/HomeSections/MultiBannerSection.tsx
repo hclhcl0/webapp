@@ -15,6 +15,7 @@ interface BannerItem {
 interface MultiBannerSectionProps {
   title?: string;
   columns?: number;
+  bannerHeight?: number;
   banners: BannerItem[];
 }
 
@@ -24,7 +25,7 @@ function isInternalUrl(url: string) {
   return url.startsWith('/') || url.startsWith('./') || url.includes('ecdc.vnos.org');
 }
 
-export function MultiBannerSection({ title, columns = 4, banners }: MultiBannerSectionProps) {
+export function MultiBannerSection({ title, columns = 4, bannerHeight, banners }: MultiBannerSectionProps) {
   if (!banners || banners.length === 0) return null;
 
   // Grid styling based on columns prop
@@ -54,8 +55,12 @@ export function MultiBannerSection({ title, columns = 4, banners }: MultiBannerS
 
             const target = item.openInNewTab ? '_blank' : '_self';
             
+            const containerStyle: React.CSSProperties = bannerHeight 
+              ? { height: `${bannerHeight}px` } 
+              : { aspectRatio: '16/9' };
+            
             const content = (
-              <div className="relative w-full overflow-hidden rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 group" style={{ aspectRatio: '16/9' }}>
+              <div className="relative w-full overflow-hidden rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 group" style={containerStyle}>
                 <Image
                   src={imageUrl}
                   alt={item.image?.alt || `Banner ${index + 1}`}
