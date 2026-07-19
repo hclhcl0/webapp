@@ -102,11 +102,17 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
             {hasHeader && tableData.length > 0 && (
               <thead className="bg-blue-100 text-blue-900 shadow-sm text-[11px]">
                 <tr>
-                  {tableData[0].map((cell: any, idx: number) => (
-                    <th key={idx} scope="col" className="px-1.5 py-1 font-bold border-b-2 border-blue-200 border-r border-blue-200/50 last:border-r-0 whitespace-nowrap">
-                      {cell}
-                    </th>
-                  ))}
+                  {tableData[0].map((cell: any, idx: number) => {
+                    const headerStr = String(cell || '');
+                    const isAllCaps = headerStr === headerStr.toUpperCase() && headerStr.match(/[A-Z]/i) !== null;
+                    const headerLabel = isAllCaps ? headerStr.toLowerCase() : headerStr;
+                    
+                    return (
+                      <th key={idx} scope="col" className="px-1.5 py-1 font-bold border-b-2 border-blue-200 border-r border-blue-200/50 last:border-r-0 whitespace-nowrap capitalize">
+                        {headerLabel}
+                      </th>
+                    );
+                  })}
                 </tr>
               </thead>
             )}
