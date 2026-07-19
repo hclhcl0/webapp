@@ -32,10 +32,10 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
   if (!tableData || tableData.length === 0) return null;
 
   return (
-    <div className="my-8 overflow-hidden w-full max-w-full min-w-0 not-prose">
+    <div className="my-6 w-full max-w-full min-w-0 not-prose">
       {(title || showDownload) && (
-        <div className="flex flex-col sm:flex-row items-center justify-between p-4 bg-gray-50 border-b border-gray-200 gap-4">
-          {title && <h3 className="font-bold text-lg text-gov-primary m-0">{title}</h3>}
+        <div className="flex items-center justify-between mb-4 gap-4">
+          {title ? <h3 className="font-bold text-lg text-gov-primary m-0">{title}</h3> : <div></div>}
           
           {showDownload && file.url && (
             <a 
@@ -43,19 +43,19 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
               download 
               target="_blank" 
               rel="noreferrer" 
-              className="shrink-0 bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 shadow-sm"
+              title={`Tải file (${file.filename.split('.').pop()?.toUpperCase()})`}
+              className="shrink-0 text-gray-400 hover:text-blue-600 transition-colors p-1"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              Tải file ({file.filename.split('.').pop()?.toUpperCase()})
             </a>
           )}
         </div>
       )}
 
       {displayStyle === 'card' ? (
-        <div className="p-4 bg-gray-50/50">
+        <div className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => {
               const cardTitle = row[0] || `Mục ${rowIndex + 1}`;
@@ -65,7 +65,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                 <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
                   {/* Tiêu đề có nền */}
                   <div className="bg-blue-50 px-1 py-0.5 border-b border-blue-100 border-l-4 border-l-blue-600">
-                    <h4 className="font-bold text-[11px] text-blue-900 line-clamp-2 leading-none">{cardTitle}</h4>
+                    <h4 className="font-bold text-blue-900 line-clamp-2 leading-none" style={{ fontSize: '11px' }}>{cardTitle}</h4>
                   </div>
                   
                   {/* Khoảng cách các hàng rút gọn tối đa */}
