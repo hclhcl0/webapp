@@ -268,6 +268,37 @@ export const Settings: GlobalConfig = {
           ],
         },
 
+        // ── Block 1.5: Khu vực Tin mới nhất (Kéo thả tự do) ──
+        {
+          slug: 'latestNewsSection',
+          interfaceName: 'LatestNewsSection',
+          labels: { singular: '📰 Khu vực Tin mới nhất', plural: 'Khu vực Tin mới nhất' },
+          fields: [
+            {
+              name: 'limit',
+              type: 'number',
+              label: 'Số lượng bài hiển thị',
+              defaultValue: 8,
+              min: 2,
+              max: 40,
+              required: true,
+            },
+            {
+              name: 'layout',
+              type: 'select',
+              label: 'Bố cục hiển thị',
+              defaultValue: 'grid',
+              options: [
+                { label: 'Lưới tin tức (Grid)', value: 'grid' },
+                { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
+                { label: 'Danh sách chi tiết (List)', value: 'list' },
+                { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
+                { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
+              ],
+            },
+          ],
+        },
+
         // ── Block 2: Banner hình ảnh ──
         {
           slug: 'bannerSection',

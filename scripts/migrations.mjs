@@ -3244,5 +3244,37 @@ export const MIGRATION_STATEMENTS = [
       DROP TABLE IF EXISTS temp_fk_defs_dynamic;
   END $$;`,
 
-];
 
+  // ====================================================
+  // BATCH: Add latestNewsSection table
+  // ====================================================
+  `
+  DO $ BEGIN
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_latest_news_section" (
+        "_order" integer NOT NULL,
+        "_parent_id" integer NOT NULL,
+        "_path" text NOT NULL,
+        "id" varchar PRIMARY KEY NOT NULL,
+        "limit" integer,
+        "layout" varchar
+    );
+  EXCEPTION
+    WHEN duplicate_table THEN null;
+  END $;
+  `,
+  `
+  DO $ BEGIN
+    CREATE TABLE IF NOT EXISTS "settings_blocks_latest_news_section" (
+        "_order" integer NOT NULL,
+        "_parent_id" integer NOT NULL,
+        "_path" text NOT NULL,
+        "id" varchar PRIMARY KEY NOT NULL,
+        "limit" integer,
+        "layout" varchar
+    );
+  EXCEPTION
+    WHEN duplicate_table THEN null;
+  END $;
+  `,
+
+];

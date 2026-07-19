@@ -4,7 +4,6 @@ import React from 'react'
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { HeroCarousel } from '@/components/HeroCarousel'
-import { NewsGrid } from '@/components/NewsGrid'
 import { RichText } from '@payloadcms/richtext-lexical/react';
 import { getJsxConverters } from '@/components/LexicalConverters';
 import { HomeSectionRenderer } from '@/components/HomeSections/HomeSectionRenderer';
@@ -35,8 +34,6 @@ export default async function HomePage() {
         </div>
       )}
 
-      {/* Tin mới nhất luôn hiển thị */}
-      <NewsGrid limitOverride={6} />
 
       {/* Các thành phần tùy chỉnh từ CMS */}
       <HomeSectionRenderer sections={homeSections} />

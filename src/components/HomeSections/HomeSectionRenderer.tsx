@@ -22,6 +22,15 @@ export async function HomeSectionRenderer({ sections }: HomeSectionRendererProps
         const blockType = section.blockType;
 
         switch (blockType) {
+          case 'latestNewsSection':
+            return (
+              <NewsGrid
+                key={`${blockType}-${index}`}
+                limitOverride={section.limit}
+                layoutOverride={section.layout}
+              />
+            );
+
           case 'newsCategorySection': {
             const catObj = typeof section.category === 'object' ? section.category : null;
             const catId = catObj ? catObj.id : section.category;
