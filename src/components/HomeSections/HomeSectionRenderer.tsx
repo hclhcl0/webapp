@@ -7,7 +7,7 @@ import { QuickLinksSection } from './QuickLinksSection';
 import { RichTextSection } from './RichTextSection';
 import { VideoSection } from './VideoSection';
 import { TikTokSection } from './TikTokSection';
-import { ScheduleBlock } from '../Blocks/ScheduleBlock';
+import { ScheduleBlock } from '../blocks/ScheduleBlock';
 
 interface HomeSectionRendererProps {
   sections: any[];

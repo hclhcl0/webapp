@@ -14,7 +14,7 @@ import { CtaBannerBlock } from './CtaBannerBlock';
 import { EmbedBlock } from './EmbedBlock';
 import { DividerBlock } from './DividerBlock';
 import { TableBlock } from './TableBlock';
-import { ScheduleBlock } from '../Blocks/ScheduleBlock';
+import { ScheduleBlock } from '../blocks/ScheduleBlock';
 
 // Existing block components
 import HeroBannerBlockComp from '@/components/blocks/HeroBannerBlock';
