@@ -65,12 +65,12 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                 <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
                   {/* Tiêu đề có nền */}
                   <div className="bg-blue-50 px-3 py-2 border-b border-blue-100 border-l-4 border-l-blue-600">
-                    <h4 className="font-bold text-base text-blue-900 line-clamp-2 leading-tight">{cardTitle}</h4>
+                    <h4 className="font-bold text-sm text-blue-900 line-clamp-2 leading-tight">{cardTitle}</h4>
                   </div>
                   
                   {/* Khoảng cách các hàng rút gọn tối đa */}
                   <div className="p-3 flex-1">
-                    <ul className="text-sm">
+                    <ul className="text-[13px]">
                       {properties.map((cell: any, cellIndex: number) => {
                         const headerLabel = (hasHeader && tableData[0] && tableData[0][cellIndex + 1]) 
                           ? tableData[0][cellIndex + 1] 
@@ -80,7 +80,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                         
                         return (
                           <li key={cellIndex} className="flex justify-between items-start py-1 border-b border-gray-100 border-dashed last:border-0 gap-2">
-                            <span className="text-gray-500 font-medium text-xs uppercase tracking-wide mt-0.5 shrink-0">{headerLabel}</span>
+                            <span className="text-gray-500 font-medium mt-0.5 shrink-0">{headerLabel}</span>
                             <span className="text-gray-900 font-bold text-right">{cell}</span>
                           </li>
                         );
