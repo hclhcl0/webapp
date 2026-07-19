@@ -79,18 +79,24 @@ export async function CategoryTemplate({ category, slugArray, page = 1 }: Catego
   const topicsWithChildren = await sortTopicsByArticleCount(topicsRaw);
 
   // Xác định bộ lọc bài viết
-  let articleFilter: any = {};
+  let filterIds: string[] = [];
   if (activeSubTopic) {
-    articleFilter = { category: { equals: activeSubTopic.id } };
+    filterIds = [activeSubTopic.id];
   } else if (activeTopic) {
     const childIds = (topicsWithChildren.find((t: any) => t.id === activeTopic.id)?.children || []).map((c: any) => c.id);
-    articleFilter = { category: { in: [activeTopic.id, ...childIds] } };
+    filterIds = [activeTopic.id, ...childIds];
   } else {
     // Đang ở trang gốc: lấy tất cả bài của cây chuyên mục
     const subIds = allSubTopics.map((s: any) => s.id);
-    const allIds = [rootCat.id, ...topicIds, ...subIds];
-    articleFilter = { category: { in: allIds } };
+    filterIds = [rootCat.id, ...topicIds, ...subIds];
   }
+
+  const articleFilter = {
+    or: [
+      { category: { in: filterIds } },
+      { additionalCategories: { in: filterIds } }
+    ]
+  };
 
   // Truy vấn bài viết
   const { docs: articles, totalPages, page: currentPage, hasPrevPage, hasNextPage } = await payload.find({

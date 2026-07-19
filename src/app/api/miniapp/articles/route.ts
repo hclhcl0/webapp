@@ -38,7 +38,10 @@ export async function GET(request: Request) {
       whereQuery.title = { like: search };
     }
     if (category) {
-      whereQuery['category.slug'] = { equals: category };
+      whereQuery.or = [
+        { 'category.slug': { equals: category } },
+        { 'additionalCategories.slug': { equals: category } }
+      ];
     }
 
     const data = await payload.find({

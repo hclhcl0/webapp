@@ -37,12 +37,18 @@ function getAllowedCategoryIds(user: any): string[] | null {
  * Dùng cho các vai trò cần lọc theo chuyên mục (Editor, Moderator, Author).
  */
 function buildCategoryFilter(allowedIds: string[], userId: string | number, includeOwn: boolean) {
-  const categoryCondition = { category: { in: allowedIds } };
+  const categoryCondition = { 
+    or: [
+      { category: { in: allowedIds } },
+      { additionalCategories: { in: allowedIds } }
+    ] 
+  };
   if (!includeOwn) return categoryCondition; // Moderator/Editor: chỉ lọc category
   // Author: xem bài trong chuyên mục OR bài nháp của chính mình
   return {
     or: [
-      categoryCondition,
+      { category: { in: allowedIds } },
+      { additionalCategories: { in: allowedIds } },
       { author: { equals: userId } },
     ],
   };
@@ -121,7 +127,7 @@ export const Articles: CollectionConfig = {
       if (['editor', 'moderator'].includes(role as string)) {
         const allowedIds = getAllowedCategoryIds(user);
         if (!allowedIds) return true; // Không giới hạn
-        return { category: { in: allowedIds } };
+        return { or: [{ category: { in: allowedIds } }, { additionalCategories: { in: allowedIds } }] };
       }
 
       // Author: chỉ sửa bài của chính mình
@@ -140,7 +146,7 @@ export const Articles: CollectionConfig = {
       if (role === 'editor') {
         const allowedIds = getAllowedCategoryIds(user);
         if (!allowedIds) return true; // Không giới hạn
-        return { category: { in: allowedIds } };
+        return { or: [{ category: { in: allowedIds } }, { additionalCategories: { in: allowedIds } }] };
       }
 
       // Moderator: KHÔNG được xóa bài (dù có phân chuyên mục hay không)
@@ -172,13 +178,25 @@ export const Articles: CollectionConfig = {
       async ({ req, data, operation }) => {
         if (req.user?.role === 'author') {
           const allowedCategories = (req.user as any)?.allowedCategories;
-          if (allowedCategories && allowedCategories.length > 0 && data.category) {
-            const categoryId = typeof data.category === 'string' ? data.category : (data.category as any)?.id;
+          if (allowedCategories && allowedCategories.length > 0) {
             const allowedIds = allowedCategories.map((c: any) =>
               typeof c === 'string' ? c : c?.id
             );
-            if (categoryId && !allowedIds.includes(categoryId)) {
-              throw new Error('Bạn chỉ được phép viết bài trong các chuyên mục đã được phân công. Vui lòng chọn đúng chuyên mục.');
+            
+            if (data.category) {
+              const categoryId = typeof data.category === 'string' ? data.category : (data.category as any)?.id;
+              if (categoryId && !allowedIds.includes(categoryId)) {
+                throw new Error('Bạn chỉ được phép viết bài trong các chuyên mục đã được phân công. Vui lòng chọn đúng chuyên mục.');
+              }
+            }
+            if (data.additionalCategories) {
+              const addCats = Array.isArray(data.additionalCategories) ? data.additionalCategories : [];
+              for (const ac of addCats) {
+                const acId = typeof ac === 'string' ? ac : ac?.id;
+                if (acId && !allowedIds.includes(acId)) {
+                  throw new Error('Bạn chọn chuyên mục phụ không nằm trong quyền hạn.');
+                }
+              }
             }
           }
         }
@@ -315,6 +333,16 @@ export const Articles: CollectionConfig = {
       hasMany: false,
       required: true,
       label: 'Chuyên mục',
+    },
+    {
+      name: 'additionalCategories',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: true,
+      label: 'Các chuyên mục phụ',
+      admin: {
+        description: 'Bài viết sẽ được hiển thị thêm ở các chuyên mục phụ này.',
+      },
     },
     {
       name: 'description',

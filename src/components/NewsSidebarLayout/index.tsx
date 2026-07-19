@@ -23,7 +23,12 @@ async function getArticles(limit: number, categoryId?: string | number) {
       limit,
       depth: 1,
     };
-    if (categoryId) query.where = { category: { equals: categoryId } };
+    if (categoryId) query.where = { 
+      or: [
+        { category: { equals: categoryId } },
+        { additionalCategories: { equals: categoryId } }
+      ]
+    };
     const { docs } = await payload.find(query);
     return docs;
   } catch {
