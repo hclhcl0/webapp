@@ -64,12 +64,12 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
               return (
                 <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
                   {/* Tiêu đề có nền */}
-                  <div className="bg-blue-50 px-3 py-2 border-b border-blue-100 border-l-4 border-l-blue-600">
+                  <div className="bg-blue-50 px-2.5 py-1.5 border-b border-blue-100 border-l-4 border-l-blue-600">
                     <h4 className="font-bold text-sm text-blue-900 line-clamp-2 leading-tight">{cardTitle}</h4>
                   </div>
                   
                   {/* Khoảng cách các hàng rút gọn tối đa */}
-                  <div className="p-3 flex-1">
+                  <div className="px-2.5 py-2 flex-1">
                     <ul className="text-[13px]">
                       {properties.map((cell: any, cellIndex: number) => {
                         const headerLabel = (hasHeader && tableData[0] && tableData[0][cellIndex + 1]) 
