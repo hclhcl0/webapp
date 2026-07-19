@@ -455,6 +455,9 @@
       max-width: 96rem;
     }
   }
+  .\!m-0 {
+    margin: calc(var(--spacing) * 0) !important;
+  }
   .m-0 {
     margin: calc(var(--spacing) * 0);
   }
@@ -1411,6 +1414,9 @@
   .border-yellow-200 {
     border-color: var(--color-yellow-200);
   }
+  .border-l-blue-600 {
+    border-left-color: var(--color-blue-600);
+  }
   .bg-\[\#f8fafc\] {
     background-color: #f8fafc;
   }
@@ -1739,6 +1745,9 @@
   .object-top {
     object-position: top;
   }
+  .\!p-0 {
+    padding: calc(var(--spacing) * 0) !important;
+  }
   .p-0 {
     padding: calc(var(--spacing) * 0);
   }
@@ -1765,6 +1774,9 @@
   }
   .p-8 {
     padding: calc(var(--spacing) * 8);
+  }
+  .\!px-0 {
+    padding-inline: calc(var(--spacing) * 0) !important;
   }
   .px-1 {
     padding-inline: calc(var(--spacing) * 1);
@@ -1975,6 +1987,10 @@
   }
   .text-\[15px\] {
     font-size: 15px;
+  }
+  .leading-none {
+    --tw-leading: 1;
+    line-height: 1;
   }
   .leading-relaxed {
     --tw-leading: var(--leading-relaxed);
@@ -2220,6 +2236,9 @@
   }
   .text-yellow-900 {
     color: var(--color-yellow-900);
+  }
+  .capitalize {
+    text-transform: capitalize;
   }
   .lowercase {
     text-transform: lowercase;
@@ -2986,6 +3005,13 @@
       }
     }
   }
+  .hover\:text-blue-600 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-blue-600);
+      }
+    }
+  }
   .hover\:text-gov-primary {
     &:hover {
       @media (hover: hover) {
@@ -3214,11 +3240,6 @@
   .sm\:flex-row {
     @media (width >= 40rem) {
       flex-direction: row;
-    }
-  }
-  .sm\:justify-between {
-    @media (width >= 40rem) {
-      justify-content: space-between;
     }
   }
   .sm\:p-6 {

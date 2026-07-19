@@ -32,7 +32,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
   if (!tableData || tableData.length === 0) return null;
 
   return (
-    <div className="my-6 w-full max-w-full min-w-0 not-prose">
+    <div className="mt-2 mb-6 w-full max-w-full min-w-0 not-prose">
       {(title || showDownload) && (
         <div className="flex items-center justify-between mb-4 gap-4">
           {title ? <h3 className="font-bold text-lg text-gov-primary m-0">{title}</h3> : <div></div>}
