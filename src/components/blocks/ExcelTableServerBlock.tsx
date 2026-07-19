@@ -120,11 +120,14 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
             <tbody className="divide-y divide-gray-200">
               {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => (
                 <tr key={rowIndex} className="hover:bg-blue-50/50 transition-colors bg-white">
-                  {row.map((cell: any, cellIndex: number) => (
-                    <td key={cellIndex} className="px-1.5 py-0 text-gray-700 break-words border-r border-gray-100 last:border-r-0 leading-tight">
-                      {cell || ''}
-                    </td>
-                  ))}
+                  {tableData[0].map((_, cellIndex: number) => {
+                    const cell = row[cellIndex];
+                    return (
+                      <td key={cellIndex} className="px-1.5 py-0 text-gray-700 break-words border-r border-gray-100 last:border-r-0 leading-tight">
+                        {cell !== undefined && cell !== null ? String(cell) : ''}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
