@@ -9,8 +9,10 @@ export const Categories: CollectionConfig = {
   admin: {
     description: '👉 Đường dẫn xem trên website: /[slug]',
     useAsTitle: 'name',
+    defaultColumns: ['name', 'orderNum'],
     group: 'Nội dung',
   },
+  defaultSort: '-orderNum',
   access: {
     read: () => true,
     create: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
