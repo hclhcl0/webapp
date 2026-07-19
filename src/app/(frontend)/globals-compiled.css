@@ -1318,6 +1318,12 @@
   .border-blue-200 {
     border-color: var(--color-blue-200);
   }
+  .border-blue-200\/50 {
+    border-color: color-mix(in srgb, oklch(88.2% 0.059 254.128) 50%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-blue-200) 50%, transparent);
+    }
+  }
   .border-gov-primary {
     border-color: var(--color-gov-primary);
   }
