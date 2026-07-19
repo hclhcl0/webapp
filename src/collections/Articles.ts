@@ -10,6 +10,7 @@ import { ButtonBlock } from '../blocks/ButtonBlock.ts';
 import { RelatedArticlesBlock } from '../blocks/RelatedArticlesBlock.ts';
 import { ColumnsBlock } from '../blocks/ColumnsBlock.ts';
 import { TableBlock } from '../blocks/TableBlock.ts';
+import { ExcelTableBlock } from '../blocks/ExcelTableBlock.ts';
 import { FaqBlock } from '../blocks/FaqBlock.ts';
 import { EmbedBlock } from '../blocks/EmbedBlock.ts';
 import { QuoteBlock } from '../blocks/QuoteBlock.ts';
@@ -373,7 +374,7 @@ export const Articles: CollectionConfig = {
           HTMLConverterFeature({}),
           BlocksFeature({ blocks: [
             VideoBlock, TikTokBlock, PDFBlock, GalleryBlock, CalloutBlock, ButtonBlock, RelatedArticlesBlock, ColumnsBlock,
-            TableBlock, FaqBlock, EmbedBlock, QuoteBlock, AudioBlock,
+            TableBlock, ExcelTableBlock, FaqBlock, EmbedBlock, QuoteBlock, AudioBlock,
             FileDownloadsBlock, SliderBlock, InfographicBlock, ZaloWidgetBlock, LivestreamBlock,
             NewsListBlockStub, ExternalLinksBlockStub
           ] }),

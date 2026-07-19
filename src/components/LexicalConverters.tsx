@@ -8,6 +8,7 @@ import { FaqBlock } from './PageBlocks/FaqBlock';
 import { EmbedBlock } from './PageBlocks/EmbedBlock';
 import { SliderClientBlock } from './blocks/SliderClientBlock';
 import { InfographicClientBlock } from './blocks/InfographicClientBlock';
+import { ExcelTableServerBlock } from './blocks/ExcelTableServerBlock';
 
 function getGDriveEmbedUrl(url: string): { embedUrl: string; directUrl: string } {
   if (url && url.includes('drive.google.com')) {
@@ -309,6 +310,9 @@ export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }
           </ul>
         </div>
       );
+    },
+    excelTableBlock: ({ node }: any) => {
+      return <ExcelTableServerBlock {...node.fields} />;
     },
     sliderBlock: ({ node }: any) => {
       return <SliderClientBlock images={node.fields.images} autoplay={node.fields.autoplay} />;
