@@ -34,22 +34,24 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
   return (
     <div className="mb-6 w-full max-w-full min-w-0 not-prose">
       {(title || showDownload) && (
-        <div className="flex items-center justify-between gap-4">
-          {title ? <h3 className="font-bold text-lg text-gov-primary m-0">{title}</h3> : <div></div>}
+        <div className="relative flex items-center justify-center mb-3 min-h-[32px]">
+          {title && <h3 className="font-bold text-lg text-slate-800 m-0 text-center">{title}</h3>}
           
           {showDownload && file.url && (
-            <a 
-              href={file.url} 
-              download 
-              target="_blank" 
-              rel="noreferrer" 
-              title={`Tải file (${file.filename.split('.').pop()?.toUpperCase()})`}
-              className="shrink-0 text-gray-400 hover:text-blue-600 transition-colors p-1"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-            </a>
+            <div className="absolute right-0 top-0 bottom-0 flex items-center">
+              <a 
+                href={file.url} 
+                download 
+                target="_blank" 
+                rel="noreferrer" 
+                title={`Tải file (${file.filename.split('.').pop()?.toUpperCase()})`}
+                className="shrink-0 text-gray-400 hover:text-blue-600 transition-colors p-1"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </a>
+            </div>
           )}
         </div>
       )}
@@ -110,7 +112,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                     const headerLabel = isAllCaps ? headerStr.toLowerCase() : headerStr;
                     
                     return (
-                      <th key={idx} scope="col" className="px-1.5 py-0.5 font-bold border-b-2 border-blue-800 border-r border-blue-600 last:border-r-0 whitespace-nowrap capitalize leading-none !text-[11px]" style={{ fontSize: '11px' }}>
+                      <th key={idx} scope="col" className="px-1.5 py-1.5 font-bold border-b-2 border-blue-800 border-r border-blue-600 last:border-r-0 whitespace-nowrap capitalize leading-tight !text-[13px]" style={{ fontSize: '13px' }}>
                         {headerLabel}
                       </th>
                     );
