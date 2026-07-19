@@ -56,45 +56,20 @@
   filter: brightness(1.06);
 }
 
-/* Banner Sizes */
-.sizeSmall,
-.sizeSmall .banner picture,
-.sizeSmall .banner img {
-  height: 300px;
-}
-
-.sizeMedium,
-.sizeMedium .banner picture,
-.sizeMedium .banner img {
-  height: 450px;
-}
-
-.sizeLarge,
-.sizeLarge .banner picture,
-.sizeLarge .banner img {
-  height: 600px;
+/* Dynamic aspect ratio based on first image */
+.embla,
+.banner picture,
+.banner img {
+  aspect-ratio: var(--desktop-ratio, 21/9);
+  height: auto !important; /* Force override any previous heights */
 }
 
 @media (max-width: 768px) {
-  .sizeSmall, .sizeMedium, .sizeLarge,
-  .sizeSmall .banner picture, .sizeSmall .banner img,
-  .sizeMedium .banner picture, .sizeMedium .banner img,
-  .sizeLarge .banner picture, .sizeLarge .banner img {
-    height: auto;
-    aspect-ratio: 4/3;
-  }
-}
-
-@media (max-height: 800px) and (min-width: 1025px) {
-  .sizeMedium,
-  .sizeMedium .banner picture,
-  .sizeMedium .banner img {
-    height: 380px;
-  }
-  .sizeLarge,
-  .sizeLarge .banner picture,
-  .sizeLarge .banner img {
-    height: 480px;
+  .embla,
+  .banner picture,
+  .banner img {
+    aspect-ratio: var(--mobile-ratio, 4/3);
+    height: auto !important;
   }
 }
 

@@ -56,15 +56,21 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
     return () => { emblaApi.off('select', onSelect); };
   }, [emblaApi, onSelect]);
 
-  let sizeClass = '';
-  let heightStyle: React.CSSProperties = {};
+  // Tính toán tỷ lệ khung hình từ ảnh đầu tiên để không bị cắt ảnh
+  const firstBanner = banners?.[0];
+  const firstImg = firstBanner?.image;
+  const firstMobileImg = firstBanner?.mobileImage || firstImg;
+  
+  const desktopRatio = firstImg?.width && firstImg?.height ? `${firstImg.width}/${firstImg.height}` : '21/9';
+  const mobileRatio = firstMobileImg?.width && firstMobileImg?.height ? `${firstMobileImg.width}/${firstMobileImg.height}` : '4/3';
 
-  if (globalSize === 'small') sizeClass = styles.sizeSmall;
-  else if (globalSize === 'medium') sizeClass = styles.sizeMedium;
-  else if (globalSize === 'large') sizeClass = styles.sizeLarge;
-  else if (globalSize === 'custom' && globalCustomHeight) {
-    heightStyle = { height: `${globalCustomHeight}px` };
-  }
+  // Override fixed heights, use auto height with dynamic aspect ratio
+  const sizeClass = '';
+  const heightStyle = { 
+    height: 'auto',
+    '--desktop-ratio': desktopRatio,
+    '--mobile-ratio': mobileRatio,
+  } as React.CSSProperties;
 
   const isFade = globalEffect === 'fade';
   const isZoom = globalEffect === 'zoom';
