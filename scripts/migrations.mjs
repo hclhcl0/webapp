@@ -23,6 +23,61 @@ export const MIGRATION_STATEMENTS = [
 
   
   
+  
+  // ====================================================
+  // BATCH: ScheduleBlock tables for site_settings
+  // ====================================================
+
+  `
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_schedule_block" (
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "_path" text NOT NULL,
+      "id" varchar PRIMARY KEY NOT NULL,
+      "title" varchar,
+      "icon" varchar,
+      "highlight_box_show_highlight" boolean,
+      "highlight_box_title" varchar,
+      "bottom_note" varchar,
+      "block_name" varchar
+    );
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_order_idx" ON "site_settings_blocks_schedule_block" ("_order");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_parent_id_idx" ON "site_settings_blocks_schedule_block" ("_parent_id");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_path_idx" ON "site_settings_blocks_schedule_block" ("_path");
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_schedule_block" ADD CONSTRAINT "site_settings_blocks_schedule_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_schedule_block_schedule_groups" (
+      "_order" integer NOT NULL,
+      "_parent_id" varchar NOT NULL,
+      "id" varchar PRIMARY KEY NOT NULL,
+      "group_title" varchar NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_schedule_groups_order_idx" ON "site_settings_blocks_schedule_block_schedule_groups" ("_order");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_schedule_groups_parent_id_idx" ON "site_settings_blocks_schedule_block_schedule_groups" ("_parent_id");
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_schedule_block_schedule_groups" ADD CONSTRAINT "site_settings_blocks_schedule_block_schedule_groups_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings_blocks_schedule_block"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_schedule_block_schedule_groups_time_slots" (
+      "_order" integer NOT NULL,
+      "_parent_id" varchar NOT NULL,
+      "id" varchar PRIMARY KEY NOT NULL,
+      "label" varchar NOT NULL,
+      "time" varchar NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_schedule_groups_time_slots_order_idx" ON "site_settings_blocks_schedule_block_schedule_groups_time_slots" ("_order");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_schedule_groups_time_slots_parent_id_idx" ON "site_settings_blocks_schedule_block_schedule_groups_time_slots" ("_parent_id");
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_schedule_block_schedule_groups_time_slots" ADD CONSTRAINT "site_settings_blocks_schedule_block_schedule_groups_time_slots_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings_blocks_schedule_block_schedule_groups"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_schedule_block_highlight_box_content" (
+      "_order" integer NOT NULL,
+      "_parent_id" varchar NOT NULL,
+      "id" varchar PRIMARY KEY NOT NULL,
+      "text" varchar
+    );
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_highlight_box_content_order_idx" ON "site_settings_blocks_schedule_block_highlight_box_content" ("_order");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_schedule_block_highlight_box_content_parent_id_idx" ON "site_settings_blocks_schedule_block_highlight_box_content" ("_parent_id");
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_schedule_block_highlight_box_content" ADD CONSTRAINT "site_settings_blocks_schedule_block_highlight_box_content_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings_blocks_schedule_block"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+  `,
+
   // ====================================================
   // BATCH: MagazineBlock tables
   // ====================================================
@@ -92,7 +147,7 @@ export const MIGRATION_STATEMENTS = [
     DO $$ BEGIN ALTER TABLE "_pages_v_blocks_magazine_block_magazine_pages" ADD CONSTRAINT "_pages_v_blocks_magazine_block_magazine_pages_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_magazine_block"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
   `,
   `
-    CREATE TABLE IF NOT EXISTS "settings_blocks_magazine_block" (
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_magazine_block" (
       "_order" integer NOT NULL,
       "_parent_id" integer NOT NULL,
       "_path" text NOT NULL,
@@ -104,23 +159,23 @@ export const MIGRATION_STATEMENTS = [
       "pdf_file_id" integer,
       "block_name" varchar
     );
-    CREATE INDEX IF NOT EXISTS "settings_blocks_magazine_block_order_idx" ON "settings_blocks_magazine_block" ("_order");
-    CREATE INDEX IF NOT EXISTS "settings_blocks_magazine_block_parent_id_idx" ON "settings_blocks_magazine_block" ("_parent_id");
-    CREATE INDEX IF NOT EXISTS "settings_blocks_magazine_block_path_idx" ON "settings_blocks_magazine_block" ("_path");
-    DO $$ BEGIN ALTER TABLE "settings_blocks_magazine_block" ADD CONSTRAINT "settings_blocks_magazine_block_cover_image_id_media_id_fk" FOREIGN KEY ("cover_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
-    DO $$ BEGIN ALTER TABLE "settings_blocks_magazine_block" ADD CONSTRAINT "settings_blocks_magazine_block_pdf_file_id_media_id_fk" FOREIGN KEY ("pdf_file_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
-    DO $$ BEGIN ALTER TABLE "settings_blocks_magazine_block" ADD CONSTRAINT "settings_blocks_magazine_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."settings"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_magazine_block_order_idx" ON "site_settings_blocks_magazine_block" ("_order");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_magazine_block_parent_id_idx" ON "site_settings_blocks_magazine_block" ("_parent_id");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_magazine_block_path_idx" ON "site_settings_blocks_magazine_block" ("_path");
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_magazine_block" ADD CONSTRAINT "site_settings_blocks_magazine_block_cover_image_id_media_id_fk" FOREIGN KEY ("cover_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_magazine_block" ADD CONSTRAINT "site_settings_blocks_magazine_block_pdf_file_id_media_id_fk" FOREIGN KEY ("pdf_file_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_magazine_block" ADD CONSTRAINT "site_settings_blocks_magazine_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."settings"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
 
-    CREATE TABLE IF NOT EXISTS "settings_blocks_magazine_block_magazine_pages" (
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_magazine_block_magazine_pages" (
       "_order" integer NOT NULL,
       "_parent_id" varchar NOT NULL,
       "id" varchar PRIMARY KEY NOT NULL,
       "page_image_id" integer NOT NULL
     );
-    CREATE INDEX IF NOT EXISTS "settings_blocks_magazine_block_magazine_pages_order_idx" ON "settings_blocks_magazine_block_magazine_pages" ("_order");
-    CREATE INDEX IF NOT EXISTS "settings_blocks_magazine_block_magazine_pages_parent_id_idx" ON "settings_blocks_magazine_block_magazine_pages" ("_parent_id");
-    DO $$ BEGIN ALTER TABLE "settings_blocks_magazine_block_magazine_pages" ADD CONSTRAINT "settings_blocks_magazine_block_magazine_pages_page_image_id_media_id_fk" FOREIGN KEY ("page_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
-    DO $$ BEGIN ALTER TABLE "settings_blocks_magazine_block_magazine_pages" ADD CONSTRAINT "settings_blocks_magazine_block_magazine_pages_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."settings_blocks_magazine_block"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_magazine_block_magazine_pages_order_idx" ON "site_settings_blocks_magazine_block_magazine_pages" ("_order");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_magazine_block_magazine_pages_parent_id_idx" ON "site_settings_blocks_magazine_block_magazine_pages" ("_parent_id");
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_magazine_block_magazine_pages" ADD CONSTRAINT "site_settings_blocks_magazine_block_magazine_pages_page_image_id_media_id_fk" FOREIGN KEY ("page_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+    DO $$ BEGIN ALTER TABLE "site_settings_blocks_magazine_block_magazine_pages" ADD CONSTRAINT "site_settings_blocks_magazine_block_magazine_pages_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings_blocks_magazine_block"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
   `,
 
   // ====================================================
