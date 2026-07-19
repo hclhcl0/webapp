@@ -207,26 +207,31 @@ export const SiteSettings: GlobalConfig = {
               label: 'Tùy chỉnh Logo',
               fields: [
                 {
-                  name: 'logoHeight',
-                  type: 'number',
-                  label: 'Chiều cao Logo (px)',
-                  defaultValue: 80,
-                  min: 20,
-                  max: 200,
-                  admin: {
-                    description: 'Điều chỉnh chiều cao logo. Chiều rộng sẽ tự động co giãn theo tỷ lệ.',
-                  },
-                },
-                {
-                  name: 'logoPosition',
-                  type: 'select',
-                  label: 'Căn chỉnh Logo',
-                  defaultValue: 'left',
-                  options: [
-                    { label: '⬅ Căn trái', value: 'left' },
-                    { label: '⬛ Căn giữa', value: 'center' },
-                    { label: '➡ Căn phải', value: 'right' },
-                  ],
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'logoHeight',
+                      type: 'number',
+                      label: 'Chiều cao Logo (px)',
+                      defaultValue: 80,
+                      min: 20,
+                      max: 200,
+                      admin: {
+                        description: 'Điều chỉnh chiều cao logo. Chiều rộng sẽ tự động co giãn theo tỷ lệ.',
+                      },
+                    },
+                    {
+                      name: 'logoPosition',
+                      type: 'select',
+                      label: 'Căn chỉnh Logo',
+                      defaultValue: 'left',
+                      options: [
+                        { label: '⬅ Căn trái', value: 'left' },
+                        { label: '⬛ Căn giữa', value: 'center' },
+                        { label: '➡ Căn phải', value: 'right' },
+                      ],
+                    },
+                  ]
                 },
                 {
                   name: 'showSiteName',
@@ -235,22 +240,27 @@ export const SiteSettings: GlobalConfig = {
                   defaultValue: true,
                 },
                 {
-                  name: 'siteNameLine1',
-                  type: 'text',
-                  label: 'Dòng chữ thứ nhất bên cạnh Logo',
-                  defaultValue: 'TRUNG TÂM KIỂM SOÁT BỆNH TẬT',
-                  admin: {
-                    condition: (data) => data?.header?.logoCustomization?.showSiteName !== false,
-                  },
-                },
-                {
-                  name: 'siteNameLine2',
-                  type: 'text',
-                  label: 'Dòng chữ thứ hai bên cạnh Logo',
-                  defaultValue: 'THÀNH PHỐ ĐÀ NẴNG',
-                  admin: {
-                    condition: (data) => data?.header?.logoCustomization?.showSiteName !== false,
-                  },
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'siteNameLine1',
+                      type: 'text',
+                      label: 'Dòng chữ thứ nhất bên cạnh Logo',
+                      defaultValue: 'TRUNG TÂM KIỂM SOÁT BỆNH TẬT',
+                      admin: {
+                        condition: (data) => data?.header?.logoCustomization?.showSiteName !== false,
+                      },
+                    },
+                    {
+                      name: 'siteNameLine2',
+                      type: 'text',
+                      label: 'Dòng chữ thứ hai bên cạnh Logo',
+                      defaultValue: 'THÀNH PHỐ ĐÀ NẴNG',
+                      admin: {
+                        condition: (data) => data?.header?.logoCustomization?.showSiteName !== false,
+                      },
+                    },
+                  ]
                 },
                 {
                   name: 'siteTagline',
@@ -311,27 +321,32 @@ export const SiteSettings: GlobalConfig = {
               label: 'Tùy chỉnh Ô Tìm Kiếm',
               fields: [
                 {
-                  name: 'position',
-                  type: 'select',
-                  label: 'Vị trí đặt ô Tìm kiếm',
-                  defaultValue: 'navbar',
-                  options: [
-                    { label: '⬇ Trong thanh Hotline (Mặc định)', value: 'hotline' },
-                    { label: '➡ Trên thanh điều hướng chính (MainMenu)', value: 'navbar' },
-                    { label: '➡ Bên phải thanh Menu điều hướng', value: 'menu' },
-                    { label: '➡ Bên phải Đăng nhập/Đăng ký (TopBar)', value: 'topbar' },
-                    { label: '❌ Ẩn nút tìm kiếm', value: 'hidden' },
-                  ],
-                },
-                {
-                  name: 'style',
-                  type: 'select',
-                  label: 'Cách hiển thị',
-                  defaultValue: 'popup',
-                  options: [
-                    { label: '🔍 Ô nhập trực tiếp (Inline Input)', value: 'inline' },
-                    { label: '📱 Nút icon kích hoạt Popup (Search Popup)', value: 'popup' },
-                  ],
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'position',
+                      type: 'select',
+                      label: 'Vị trí đặt ô Tìm kiếm',
+                      defaultValue: 'navbar',
+                      options: [
+                        { label: '⬇ Trong thanh Hotline (Mặc định)', value: 'hotline' },
+                        { label: '➡ Trên thanh điều hướng chính (MainMenu)', value: 'navbar' },
+                        { label: '➡ Bên phải thanh Menu điều hướng', value: 'menu' },
+                        { label: '➡ Bên phải Đăng nhập/Đăng ký (TopBar)', value: 'topbar' },
+                        { label: '❌ Ẩn nút tìm kiếm', value: 'hidden' },
+                      ],
+                    },
+                    {
+                      name: 'style',
+                      type: 'select',
+                      label: 'Cách hiển thị',
+                      defaultValue: 'popup',
+                      options: [
+                        { label: '🔍 Ô nhập trực tiếp (Inline Input)', value: 'inline' },
+                        { label: '📱 Nút icon kích hoạt Popup (Search Popup)', value: 'popup' },
+                      ],
+                    },
+                  ]
                 },
                 {
                   name: 'width',
@@ -349,16 +364,21 @@ export const SiteSettings: GlobalConfig = {
               label: 'Đường dây nóng (Hotline Bar)',
               fields: [
                 {
-                  name: 'phone',
-                  type: 'text',
-                  label: 'Số điện thoại',
-                  defaultValue: '0236 3890 407',
-                },
-                {
-                  name: 'actionLink',
-                  type: 'text',
-                  label: 'Link Nút "Đặt câu hỏi"',
-                  defaultValue: '#',
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'phone',
+                      type: 'text',
+                      label: 'Số điện thoại',
+                      defaultValue: '0236 3890 407',
+                    },
+                    {
+                      name: 'actionLink',
+                      type: 'text',
+                      label: 'Link Nút "Đặt câu hỏi"',
+                      defaultValue: '#',
+                    },
+                  ]
                 },
                 {
                   name: 'position',
@@ -405,32 +425,37 @@ export const SiteSettings: GlobalConfig = {
           name: 'menu',
           fields: [
             {
-              name: 'menuPosition',
-              type: 'select',
-              label: 'Vị trí Menu điều hướng',
-              defaultValue: 'below',
-              options: [
-                { label: '➡ Bên phải Logo (cùng hàng)', value: 'right' },
-                { label: '⬇ Thanh riêng bên dưới Logo', value: 'below' },
-                { label: '⬅ Bên trái Logo (cùng hàng)', value: 'left' },
-              ],
-              admin: {
-                description: 'Chọn nơi hiển thị thanh menu điều hướng chính.',
-              },
-            },
-            {
-              name: 'navStyle',
-              type: 'select',
-              label: '🎨 Phong cách nền Menu',
-              defaultValue: 'white',
-              options: [
-                { label: '⬜ Trắng (Mặc định)', value: 'white' },
-                { label: '🟦 Màu chủ đạo (Solid Primary)', value: 'primary' },
-                { label: '🌊 Gradient tối (Gradient Dark)', value: 'gradient' },
-              ],
-              admin: {
-                description: 'Chọn màu nền cho thanh menu điều hướng. Áp dụng cho cả menu inline và menu bên dưới logo.',
-              },
+              type: 'row',
+              fields: [
+                {
+                  name: 'menuPosition',
+                  type: 'select',
+                  label: 'Vị trí Menu điều hướng',
+                  defaultValue: 'below',
+                  options: [
+                    { label: '➡ Bên phải Logo (cùng hàng)', value: 'right' },
+                    { label: '⬇ Thanh riêng bên dưới Logo', value: 'below' },
+                    { label: '⬅ Bên trái Logo (cùng hàng)', value: 'left' },
+                  ],
+                  admin: {
+                    description: 'Chọn nơi hiển thị thanh menu điều hướng chính.',
+                  },
+                },
+                {
+                  name: 'navStyle',
+                  type: 'select',
+                  label: '🎨 Phong cách nền Menu',
+                  defaultValue: 'white',
+                  options: [
+                    { label: '⬜ Trắng (Mặc định)', value: 'white' },
+                    { label: '🟦 Màu chủ đạo (Solid Primary)', value: 'primary' },
+                    { label: '🌊 Gradient tối (Gradient Dark)', value: 'gradient' },
+                  ],
+                  admin: {
+                    description: 'Chọn màu nền cho thanh menu điều hướng. Áp dụng cho cả menu inline và menu bên dưới logo.',
+                  },
+                },
+              ]
             },
             {
               name: 'menuItems',
@@ -444,33 +469,38 @@ export const SiteSettings: GlobalConfig = {
                   label: 'Tên Menu',
                 },
                 {
-                  name: 'presetUrl',
-                  type: 'select',
-                  label: '📌 Chọn trang có sẵn (tùy chọn)',
-                  options: [
-                    { label: '🏠 Trang chủ', value: '/' },
-                    { label: '📰 Tất cả Bài viết', value: '/bai-viet' },
-                    { label: '🩺 Sức khỏe cộng đồng', value: '/suc-khoe' },
-                    { label: '📄 Văn bản điều hành', value: '/documents' },
-                    { label: '📋 Thủ tục hành chính', value: '/procedures' },
-                    { label: '🛒 Mua sắm & Đấu thầu', value: '/mua-sam' },
-                    { label: '🏥 Dịch vụ y tế', value: '/dich-vu' },
-                    { label: '🎬 Video truyền thông', value: '/video' },
-                    { label: '📅 Lịch công tác', value: '/lich-cong-tac' },
-                    { label: '📞 Liên hệ', value: '/contact' },
-                    { label: '🔍 Tìm kiếm', value: '/search' },
-                  ],
-                  admin: {
-                    description: 'Chọn một trang nội bộ có sẵn để tự điền đường dẫn. Nếu cần URL khác, điền thủ công bên dưới.',
-                  },
-                },
-                {
-                  name: 'url',
-                  type: 'text',
-                  label: 'Đường dẫn tùy chỉnh (để trống nếu đã chọn trang có sẵn bên trên)',
-                  admin: {
-                    description: 'Dùng khi URL không có trong danh sách: /chuyen-muc/phong-chong-dich hoặc https://...',
-                  },
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'presetUrl',
+                      type: 'select',
+                      label: '📌 Chọn trang có sẵn (tùy chọn)',
+                      options: [
+                        { label: '🏠 Trang chủ', value: '/' },
+                        { label: '📰 Tất cả Bài viết', value: '/bai-viet' },
+                        { label: '🩺 Sức khỏe cộng đồng', value: '/suc-khoe' },
+                        { label: '📄 Văn bản điều hành', value: '/documents' },
+                        { label: '📋 Thủ tục hành chính', value: '/procedures' },
+                        { label: '🛒 Mua sắm & Đấu thầu', value: '/mua-sam' },
+                        { label: '🏥 Dịch vụ y tế', value: '/dich-vu' },
+                        { label: '🎬 Video truyền thông', value: '/video' },
+                        { label: '📅 Lịch công tác', value: '/lich-cong-tac' },
+                        { label: '📞 Liên hệ', value: '/contact' },
+                        { label: '🔍 Tìm kiếm', value: '/search' },
+                      ],
+                      admin: {
+                        description: 'Chọn trang nội bộ. Nếu cần URL khác, điền bên dưới.',
+                      },
+                    },
+                    {
+                      name: 'url',
+                      type: 'text',
+                      label: 'Đường dẫn tùy chỉnh',
+                      admin: {
+                        description: 'Ví dụ: /chuyen-muc/phong-chong-dich hoặc https://...',
+                      },
+                    },
+                  ]
                 },
                 {
                   name: 'openInNewTab',
@@ -526,30 +556,40 @@ export const SiteSettings: GlobalConfig = {
               label: 'Đoạn giới thiệu ngắn (Hiển thị ở Footer)',
               defaultValue: '',
             },
-            {
-              name: 'addressMain',
-              type: 'text',
-              label: 'Trụ sở chính',
-              defaultValue: '',
-            },
-            {
-              name: 'addressSub',
-              type: 'text',
-              label: 'Cơ sở 2',
-              defaultValue: '',
-            },
-            {
-              name: 'phone',
-              type: 'text',
-              label: 'Số điện thoại',
-              defaultValue: '',
-            },
-            {
-              name: 'email',
-              type: 'text',
-              label: 'Email',
-              defaultValue: '',
-            },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'addressMain',
+                      type: 'text',
+                      label: 'Trụ sở chính',
+                      defaultValue: '',
+                    },
+                    {
+                      name: 'addressSub',
+                      type: 'text',
+                      label: 'Cơ sở 2',
+                      defaultValue: '',
+                    },
+                  ]
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'phone',
+                      type: 'text',
+                      label: 'Số điện thoại',
+                      defaultValue: '',
+                    },
+                    {
+                      name: 'email',
+                      type: 'text',
+                      label: 'Email',
+                      defaultValue: '',
+                    },
+                  ]
+                },
             {
               name: 'quickLinks',
               type: 'array',
@@ -565,23 +605,28 @@ export const SiteSettings: GlobalConfig = {
               label: 'Mạng xã hội (Các kênh truyền thông)',
               fields: [
                 {
-                  name: 'platform',
-                  type: 'select',
-                  label: 'Nền tảng',
-                  required: true,
-                  options: [
-                    { label: 'Facebook', value: 'facebook' },
-                    { label: 'YouTube', value: 'youtube' },
-                    { label: 'TikTok', value: 'tiktok' },
-                    { label: 'Zalo', value: 'zalo' },
-                    { label: 'Website khác', value: 'website' },
-                  ],
-                },
-                {
-                  name: 'label',
-                  type: 'text',
-                  label: 'Tên kênh',
-                  required: true,
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'platform',
+                      type: 'select',
+                      label: 'Nền tảng',
+                      required: true,
+                      options: [
+                        { label: 'Facebook', value: 'facebook' },
+                        { label: 'YouTube', value: 'youtube' },
+                        { label: 'TikTok', value: 'tiktok' },
+                        { label: 'Zalo', value: 'zalo' },
+                        { label: 'Website khác', value: 'website' },
+                      ],
+                    },
+                    {
+                      name: 'label',
+                      type: 'text',
+                      label: 'Tên kênh',
+                      required: true,
+                    },
+                  ]
                 },
                 {
                   name: 'url',
@@ -591,21 +636,26 @@ export const SiteSettings: GlobalConfig = {
                 },
               ],
             },
-            {
-              name: 'copyrightText',
-              type: 'text',
-              label: 'Dòng bản quyền (Copyright)',
-              defaultValue: '© Bản quyền thuộc về TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG',
-              admin: {
-                description: 'Sử dụng {year} để tự động hiển thị năm hiện tại.',
-              },
-            },
-            {
-              name: 'designerCredit',
-              type: 'text',
-              label: 'Thông tin thiết kế',
-              defaultValue: 'thiết kế bởi CNTT CDC Đà Nẵng',
-            },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'copyrightText',
+                      type: 'text',
+                      label: 'Dòng bản quyền (Copyright)',
+                      defaultValue: '© Bản quyền thuộc về TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG',
+                      admin: {
+                        description: 'Sử dụng {year} để tự động hiển thị năm hiện tại.',
+                      },
+                    },
+                    {
+                      name: 'designerCredit',
+                      type: 'text',
+                      label: 'Thông tin thiết kế',
+                      defaultValue: 'thiết kế bởi CNTT CDC Đà Nẵng',
+                    },
+                  ]
+                },
           ],
         },
 
