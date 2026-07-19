@@ -22,9 +22,164 @@ export const SiteSettings: GlobalConfig = {
       type: 'tabs',
       tabs: [
         // ─────────────────────────────────────────────
-        // TAB 1: HEADER
-        // ─────────────────────────────────────────────
+
         {
+          label: 'Bố cục Trang chủ',
+          fields: [
+            {
+          type: 'group',
+          label: 'Trang chủ',
+          fields: [
+            {
+              name: 'homeNewsLimit',
+              type: 'number',
+              label: 'Số hàng hiển thị (Tin mới nhất)',
+              defaultValue: 2,
+              min: 1,
+              max: 20,
+              required: true,
+              admin: {
+                description: 'Số lượng bài viết = Số hàng × Số cột.',
+              },
+            },
+            {
+              name: 'homeNewsColumnsDesktop',
+              type: 'number',
+              label: 'Số bài viết trên 1 hàng (Máy tính)',
+              defaultValue: 5,
+              min: 1,
+              max: 6,
+              required: true,
+            },
+            {
+              name: 'homeNewsColumnsMobile',
+              type: 'number',
+              label: 'Số bài viết trên 1 hàng (Điện thoại)',
+              defaultValue: 2,
+              min: 1,
+              max: 4,
+              required: true,
+            },
+            {
+              name: 'homeNewsLayout',
+              type: 'select',
+              label: 'Bố cục hiển thị (Tin mới nhất)',
+              defaultValue: 'grid',
+              options: [
+                { label: 'Lưới tin tức (Grid)', value: 'grid' },
+                { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
+                { label: 'Danh sách chi tiết (List)', value: 'list' },
+                { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
+                { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
+              ],
+            },
+          ],
+        },
+
+        // ─────────────────────────────────────────────,
+            {
+          type: 'group',
+          label: 'Banner',
+          name: 'banner',
+          fields: [
+            {
+              name: 'heroSliderSize',
+              type: 'select',
+              label: 'Kích thước Slider Banner trang chủ',
+              options: [
+                { label: 'Nhỏ', value: 'small' },
+                { label: 'Vừa', value: 'medium' },
+                { label: 'Lớn', value: 'large' },
+                { label: 'Tùy chỉnh', value: 'custom' },
+              ],
+              defaultValue: 'medium',
+              admin: {
+                description: 'Định dạng chiều cao áp dụng chung cho toàn bộ khối Slider Banner.',
+              },
+            },
+            {
+              name: 'heroSliderCustomHeight',
+              type: 'number',
+              label: 'Chiều cao tự gõ (px)',
+              admin: {
+                condition: (data) => data?.banner?.heroSliderSize === 'custom',
+                description: 'Nhập chiều cao bằng pixel (ví dụ: 500). Áp dụng chung cho toàn bộ Slider.',
+              },
+            },
+            {
+              name: 'heroSliderEffect',
+              type: 'select',
+              label: 'Hiệu ứng chuyển ảnh Banner',
+              options: [
+                { label: '🔄 Trượt ngang (Slide)', value: 'slide' },
+                { label: '✨ Mờ dần (Fade)', value: 'fade' },
+                { label: '🔳 Thu phóng (Zoom)', value: 'zoom' },
+                { label: '📦 Lật (Flip)', value: 'flip' },
+              ],
+              defaultValue: 'slide',
+              admin: {
+                description: 'Chọn hiệu ứng hoạt hình khi chuyển từ ảnh này sang ảnh khác trong Slider.',
+              },
+            },
+            {
+              name: 'heroSliderAutoplayDelay',
+              type: 'number',
+              label: 'Thời gian dừng ở mỗi ảnh (mili-giây)',
+              defaultValue: 5000,
+              admin: {
+                description: 'Nhập thời gian tính bằng mili-giây (1 giây = 1000). Mặc định là 5000 (5 giây).',
+              },
+            },
+            {
+              name: 'sidebarBanners',
+              type: 'array',
+              label: 'Danh sách Banner bên trái (Dưới Menu dọc)',
+              admin: {
+                description: 'Các banner quảng cáo hoặc thông báo sẽ hiển thị ở cột bên trái của các trang chuyên mục.',
+              },
+              fields: [
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Ảnh Banner',
+                  required: true,
+                },
+                {
+                  name: 'url',
+                  type: 'text',
+                  label: 'Đường dẫn liên kết (Link)',
+                  admin: {
+                    description: 'VD: https://google.com hoặc /bai-viet/abc',
+                  },
+                },
+                {
+                  name: 'openInNewTab',
+                  type: 'checkbox',
+                  label: 'Mở trong tab mới',
+                  defaultValue: true,
+                },
+              ],
+            },
+          ],
+        },
+
+        // ─────────────────────────────────────────────,
+            {
+          type: 'collapsible',
+          label: 'Bố cục Trang chủ',
+          fields: [
+            ...(Settings.fields as any[]).filter(f => ['homeContent', 'homeSections'].includes(f.name))
+          ]
+        },
+        // ─────────────────────────────────────────────
+          ]
+        },
+        {
+          label: 'Thành phần dùng chung',
+          fields: [
+            {
+          type: 'group',
           label: 'Header',
           name: 'header',
           fields: [
@@ -228,10 +383,9 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
 
-        // ─────────────────────────────────────────────
-        // TAB 2: MENU ĐIỀU HƯỚNG
-        // ─────────────────────────────────────────────
-        {
+        // ─────────────────────────────────────────────,
+            {
+          type: 'group',
           label: 'Menu Điều Hướng',
           name: 'menu',
           fields: [
@@ -345,51 +499,9 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
 
-        // ─────────────────────────────────────────────
-        // TAB 3: SIDEBAR
-        // ─────────────────────────────────────────────
-        {
-          label: 'Sidebar',
-          name: 'sidebar',
-          fields: [
+        // ─────────────────────────────────────────────,
             {
-              name: 'widthRatio',
-              type: 'select',
-              required: true,
-              defaultValue: 'Sidebar 33% - Main 67%',
-              options: [
-                { label: 'Sidebar 25% - Main 75%', value: 'Sidebar 25% - Main 75%' },
-                { label: 'Sidebar 33% - Main 67%', value: 'Sidebar 33% - Main 67%' },
-                { label: 'Sidebar 50% - Main 50%', value: 'Sidebar 50% - Main 50%' },
-              ],
-              label: 'Tỷ lệ chiều rộng',
-            },
-            {
-              name: 'gapSize',
-              type: 'select',
-              required: true,
-              defaultValue: 'Vừa',
-              options: [
-                { label: 'Không khoảng cách', value: 'Không khoảng cách' },
-                { label: 'Nhỏ', value: 'Nhỏ' },
-                { label: 'Vừa', value: 'Vừa' },
-                { label: 'Lớn', value: 'Lớn' },
-              ],
-              label: 'Khoảng cách (Gap)',
-            },
-            {
-              name: 'blocks',
-              type: 'blocks',
-              blocks: [CategoryNewsBlock],
-              label: 'Các khối nội dung Sidebar',
-            },
-          ],
-        },
-
-        // ─────────────────────────────────────────────
-        // TAB 4: CHÂN TRANG
-        // ─────────────────────────────────────────────
-        {
+          type: 'group',
           label: 'Chân trang',
           name: 'footer',
           fields: [
@@ -483,9 +595,13 @@ export const SiteSettings: GlobalConfig = {
         },
 
         // ─────────────────────────────────────────────
-        // TAB 5: GIAO DIỆN
-        // ─────────────────────────────────────────────
+          ]
+        },
         {
+          label: 'Giao diện & Thanh bên',
+          fields: [
+            {
+          type: 'group',
           label: 'Giao diện',
           name: 'theme',
           fields: [
@@ -553,151 +669,111 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
 
-        // ─────────────────────────────────────────────
-        // TAB 6: BANNER
-        // ─────────────────────────────────────────────
-        {
-          label: 'Banner',
-          name: 'banner',
+        // ─────────────────────────────────────────────,
+            {
+          type: 'group',
+          label: 'Sidebar',
+          name: 'sidebar',
           fields: [
             {
-              name: 'heroSliderSize',
+              name: 'widthRatio',
               type: 'select',
-              label: 'Kích thước Slider Banner trang chủ',
+              required: true,
+              defaultValue: 'Sidebar 33% - Main 67%',
               options: [
-                { label: 'Nhỏ', value: 'small' },
-                { label: 'Vừa', value: 'medium' },
-                { label: 'Lớn', value: 'large' },
-                { label: 'Tùy chỉnh', value: 'custom' },
+                { label: 'Sidebar 25% - Main 75%', value: 'Sidebar 25% - Main 75%' },
+                { label: 'Sidebar 33% - Main 67%', value: 'Sidebar 33% - Main 67%' },
+                { label: 'Sidebar 50% - Main 50%', value: 'Sidebar 50% - Main 50%' },
               ],
-              defaultValue: 'medium',
-              admin: {
-                description: 'Định dạng chiều cao áp dụng chung cho toàn bộ khối Slider Banner.',
-              },
+              label: 'Tỷ lệ chiều rộng',
             },
             {
-              name: 'heroSliderCustomHeight',
-              type: 'number',
-              label: 'Chiều cao tự gõ (px)',
-              admin: {
-                condition: (data) => data?.banner?.heroSliderSize === 'custom',
-                description: 'Nhập chiều cao bằng pixel (ví dụ: 500). Áp dụng chung cho toàn bộ Slider.',
-              },
-            },
-            {
-              name: 'heroSliderEffect',
+              name: 'gapSize',
               type: 'select',
-              label: 'Hiệu ứng chuyển ảnh Banner',
+              required: true,
+              defaultValue: 'Vừa',
               options: [
-                { label: '🔄 Trượt ngang (Slide)', value: 'slide' },
-                { label: '✨ Mờ dần (Fade)', value: 'fade' },
-                { label: '🔳 Thu phóng (Zoom)', value: 'zoom' },
-                { label: '📦 Lật (Flip)', value: 'flip' },
+                { label: 'Không khoảng cách', value: 'Không khoảng cách' },
+                { label: 'Nhỏ', value: 'Nhỏ' },
+                { label: 'Vừa', value: 'Vừa' },
+                { label: 'Lớn', value: 'Lớn' },
               ],
-              defaultValue: 'slide',
-              admin: {
-                description: 'Chọn hiệu ứng hoạt hình khi chuyển từ ảnh này sang ảnh khác trong Slider.',
-              },
+              label: 'Khoảng cách (Gap)',
             },
             {
-              name: 'heroSliderAutoplayDelay',
-              type: 'number',
-              label: 'Thời gian dừng ở mỗi ảnh (mili-giây)',
-              defaultValue: 5000,
-              admin: {
-                description: 'Nhập thời gian tính bằng mili-giây (1 giây = 1000). Mặc định là 5000 (5 giây).',
-              },
-            },
-            {
-              name: 'sidebarBanners',
-              type: 'array',
-              label: 'Danh sách Banner bên trái (Dưới Menu dọc)',
-              admin: {
-                description: 'Các banner quảng cáo hoặc thông báo sẽ hiển thị ở cột bên trái của các trang chuyên mục.',
-              },
-              fields: [
-                {
-                  name: 'image',
-                  type: 'upload',
-                  relationTo: 'media',
-                  label: 'Ảnh Banner',
-                  required: true,
-                },
-                {
-                  name: 'url',
-                  type: 'text',
-                  label: 'Đường dẫn liên kết (Link)',
-                  admin: {
-                    description: 'VD: https://google.com hoặc /bai-viet/abc',
-                  },
-                },
-                {
-                  name: 'openInNewTab',
-                  type: 'checkbox',
-                  label: 'Mở trong tab mới',
-                  defaultValue: true,
-                },
-              ],
+              name: 'blocks',
+              type: 'blocks',
+              blocks: [CategoryNewsBlock],
+              label: 'Các khối nội dung Sidebar',
             },
           ],
         },
 
-        // ─────────────────────────────────────────────
-        // TAB 7: TRANG CHỦ
-        // ─────────────────────────────────────────────
-        {
-          label: 'Trang chủ',
+        // ─────────────────────────────────────────────,
+            {
+          type: 'group',
+          label: 'Tiện ích Đọc bài',
+          name: 'articleReaderTools',
           fields: [
             {
-              name: 'homeNewsLimit',
-              type: 'number',
-              label: 'Số hàng hiển thị (Tin mới nhất)',
-              defaultValue: 2,
-              min: 1,
-              max: 20,
-              required: true,
-              admin: {
-                description: 'Số lượng bài viết = Số hàng × Số cột.',
-              },
+              name: 'showFontSize',
+              type: 'checkbox',
+              label: 'Cỡ chữ (A / A+ / A++)',
+              defaultValue: true,
             },
             {
-              name: 'homeNewsColumnsDesktop',
-              type: 'number',
-              label: 'Số bài viết trên 1 hàng (Máy tính)',
-              defaultValue: 5,
-              min: 1,
-              max: 6,
-              required: true,
+              name: 'showTTS',
+              type: 'checkbox',
+              label: 'Đọc bài viết (Text-to-Speech)',
+              defaultValue: true,
             },
             {
-              name: 'homeNewsColumnsMobile',
-              type: 'number',
-              label: 'Số bài viết trên 1 hàng (Điện thoại)',
-              defaultValue: 2,
-              min: 1,
-              max: 4,
-              required: true,
+              name: 'showShareFB',
+              type: 'checkbox',
+              label: 'Chia sẻ Facebook',
+              defaultValue: true,
             },
             {
-              name: 'homeNewsLayout',
-              type: 'select',
-              label: 'Bố cục hiển thị (Tin mới nhất)',
-              defaultValue: 'grid',
-              options: [
-                { label: 'Lưới tin tức (Grid)', value: 'grid' },
-                { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
-                { label: 'Danh sách chi tiết (List)', value: 'list' },
-                { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
-                { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
-              ],
+              name: 'showShareZalo',
+              type: 'checkbox',
+              label: 'Chia sẻ Zalo',
+              defaultValue: true,
+            },
+            {
+              name: 'showCopyLink',
+              type: 'checkbox',
+              label: 'Chép link bài viết',
+              defaultValue: true,
+            },
+            {
+              name: 'showPrint',
+              type: 'checkbox',
+              label: 'In trang',
+              defaultValue: true,
+            },
+            {
+              name: 'showReadProgress',
+              type: 'checkbox',
+              label: 'Thanh tiến trình đọc bài',
+              defaultValue: true,
             },
           ],
         },
-
-        // ─────────────────────────────────────────────
-        // TAB 8: AI CHAT
-        // ─────────────────────────────────────────────
+        // ─────────────────────────────────────────────,
+            {
+          type: 'collapsible',
+          label: 'Cấu hình Nâng cao',
+          fields: [
+            ...(Settings.fields as any[]).filter(f => ['themeConfig', 'sidebarWidgets'].includes(f.name))
+          ]
+        }
+          ]
+        },
         {
+          label: 'Tính năng mở rộng',
+          fields: [
+            {
+          type: 'group',
           label: 'AI Chat',
           name: 'aiChatSettings',
           fields: [
@@ -751,61 +827,9 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
 
-        // ─────────────────────────────────────────────
-        // TAB 9: TIỆN ÍCH ĐỌC BÀI
-        // ─────────────────────────────────────────────
-        {
-          label: 'Tiện ích Đọc bài',
-          name: 'articleReaderTools',
-          fields: [
+        // ─────────────────────────────────────────────,
             {
-              name: 'showFontSize',
-              type: 'checkbox',
-              label: 'Cỡ chữ (A / A+ / A++)',
-              defaultValue: true,
-            },
-            {
-              name: 'showTTS',
-              type: 'checkbox',
-              label: 'Đọc bài viết (Text-to-Speech)',
-              defaultValue: true,
-            },
-            {
-              name: 'showShareFB',
-              type: 'checkbox',
-              label: 'Chia sẻ Facebook',
-              defaultValue: true,
-            },
-            {
-              name: 'showShareZalo',
-              type: 'checkbox',
-              label: 'Chia sẻ Zalo',
-              defaultValue: true,
-            },
-            {
-              name: 'showCopyLink',
-              type: 'checkbox',
-              label: 'Chép link bài viết',
-              defaultValue: true,
-            },
-            {
-              name: 'showPrint',
-              type: 'checkbox',
-              label: 'In trang',
-              defaultValue: true,
-            },
-            {
-              name: 'showReadProgress',
-              type: 'checkbox',
-              label: 'Thanh tiến trình đọc bài',
-              defaultValue: true,
-            },
-          ],
-        },
-        // ─────────────────────────────────────────────
-        // TAB 10: THÔNG BÁO (POPUP)
-        // ─────────────────────────────────────────────
-        {
+          type: 'group',
           label: 'Thông báo (Popup)',
           name: 'popup',
           fields: [
@@ -933,10 +957,9 @@ export const SiteSettings: GlobalConfig = {
             },
           ],
         },
-        // ─────────────────────────────────────────────
-        // TAB 11: ZALO MINI APP
-        // ─────────────────────────────────────────────
-        {
+        // ─────────────────────────────────────────────,
+            {
+          type: 'group',
           label: 'Zalo Mini App',
           name: 'zaloMiniApp',
           fields: [
@@ -983,23 +1006,9 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         // ─────────────────────────────────────────────
-        // TAB 12: CÁC THÀNH PHẦN TRANG CHỦ
-        // ─────────────────────────────────────────────
-        {
-          label: 'Bố cục Trang chủ',
-          fields: [
-            ...(Settings.fields as any[]).filter(f => ['homeContent', 'homeSections'].includes(f.name))
-          ]
-        },
-        // ─────────────────────────────────────────────
-        // TAB 13: GIAO DIỆN & THANH BÊN
-        // ─────────────────────────────────────────────
-        {
-          label: 'Cấu hình Nâng cao',
-          fields: [
-            ...(Settings.fields as any[]).filter(f => ['themeConfig', 'sidebarWidgets'].includes(f.name))
           ]
         }
+
       ],
     },
   ],
