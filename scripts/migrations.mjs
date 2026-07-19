@@ -3249,7 +3249,7 @@ export const MIGRATION_STATEMENTS = [
   // BATCH: Add latestNewsSection table
   // ====================================================
   `
-  DO $ BEGIN
+  DO $$ BEGIN
     CREATE TABLE IF NOT EXISTS "site_settings_blocks_latest_news_section" (
         "_order" integer NOT NULL,
         "_parent_id" integer NOT NULL,
@@ -3260,10 +3260,10 @@ export const MIGRATION_STATEMENTS = [
     );
   EXCEPTION
     WHEN duplicate_table THEN null;
-  END $;
+  END $$;
   `,
   `
-  DO $ BEGIN
+  DO $$ BEGIN
     CREATE TABLE IF NOT EXISTS "settings_blocks_latest_news_section" (
         "_order" integer NOT NULL,
         "_parent_id" integer NOT NULL,
@@ -3274,7 +3274,7 @@ export const MIGRATION_STATEMENTS = [
     );
   EXCEPTION
     WHEN duplicate_table THEN null;
-  END $;
+  END $$;
   `,
 
 ];
