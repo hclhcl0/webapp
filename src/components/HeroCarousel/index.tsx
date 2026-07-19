@@ -26,13 +26,26 @@ async function getBanners() {
 }
 
 async function getSliderSettings() {
-  return {
-    size: 'medium',
-    customHeight: 500,
-    effect: 'slide',
-    autoplay: true,
-    autoplaySpeed: 5000
-  };
+  try {
+    const payload = await getPayload({ config: configPromise });
+    const settings = await payload.findGlobal({ slug: 'site-settings' });
+    const bannerConfig = (settings as any)?.banner || {};
+    return {
+      size: bannerConfig.heroSliderSize || 'medium',
+      customHeight: bannerConfig.heroSliderCustomHeight || 500,
+      effect: bannerConfig.heroSliderEffect || 'slide',
+      autoplay: bannerConfig.heroSliderAutoplay !== false, // default true
+      autoplayDelay: bannerConfig.heroSliderAutoplayDelay || 5000
+    };
+  } catch (error) {
+    return {
+      size: 'medium',
+      customHeight: 500,
+      effect: 'slide',
+      autoplay: true,
+      autoplayDelay: 5000
+    };
+  }
 }
 
 export const HeroCarousel = async () => {
