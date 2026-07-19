@@ -241,29 +241,34 @@ export const Settings: GlobalConfig = {
               label: 'Chọn chuyên mục',
             },
             {
-              name: 'limit',
-              type: 'number',
-              label: 'Số hàng hiển thị',
-              defaultValue: 2,
-              min: 1,
-              max: 20,
-              required: true,
-              admin: {
-                description: 'Số bài viết = Số hàng × Số cột (cấu hình ở trên).',
-              },
-            },
-            {
-              name: 'layout',
-              type: 'select',
-              label: 'Bố cục hiển thị',
-              defaultValue: 'grid',
-              options: [
-                { label: 'Lưới tin tức (Grid)', value: 'grid' },
-                { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
-                { label: 'Danh sách chi tiết (List)', value: 'list' },
-                { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
-                { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
-              ],
+              type: 'row',
+              fields: [
+                {
+                  name: 'limit',
+                  type: 'number',
+                  label: 'Số hàng hiển thị',
+                  defaultValue: 2,
+                  min: 1,
+                  max: 20,
+                  required: true,
+                  admin: {
+                    description: 'Số bài viết = Số hàng × Số cột (cấu hình ở trên).',
+                  },
+                },
+                {
+                  name: 'layout',
+                  type: 'select',
+                  label: 'Bố cục hiển thị',
+                  defaultValue: 'grid',
+                  options: [
+                    { label: 'Lưới tin tức (Grid)', value: 'grid' },
+                    { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
+                    { label: 'Danh sách chi tiết (List)', value: 'list' },
+                    { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
+                    { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
+                  ],
+                },
+              ]
             },
           ],
         },
@@ -275,26 +280,31 @@ export const Settings: GlobalConfig = {
           labels: { singular: '📰 Khu vực Tin mới nhất', plural: 'Khu vực Tin mới nhất' },
           fields: [
             {
-              name: 'limit',
-              type: 'number',
-              label: 'Số lượng bài hiển thị',
-              defaultValue: 8,
-              min: 2,
-              max: 40,
-              required: true,
-            },
-            {
-              name: 'layout',
-              type: 'select',
-              label: 'Bố cục hiển thị',
-              defaultValue: 'grid',
-              options: [
-                { label: 'Lưới tin tức (Grid)', value: 'grid' },
-                { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
-                { label: 'Danh sách chi tiết (List)', value: 'list' },
-                { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
-                { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
-              ],
+              type: 'row',
+              fields: [
+                {
+                  name: 'limit',
+                  type: 'number',
+                  label: 'Số lượng bài hiển thị',
+                  defaultValue: 8,
+                  min: 2,
+                  max: 40,
+                  required: true,
+                },
+                {
+                  name: 'layout',
+                  type: 'select',
+                  label: 'Bố cục hiển thị',
+                  defaultValue: 'grid',
+                  options: [
+                    { label: 'Lưới tin tức (Grid)', value: 'grid' },
+                    { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
+                    { label: 'Danh sách chi tiết (List)', value: 'list' },
+                    { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
+                    { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
+                  ],
+                },
+              ]
             },
           ],
         },
@@ -313,14 +323,19 @@ export const Settings: GlobalConfig = {
               label: 'Hình ảnh banner',
             },
             {
-              name: 'title',
-              type: 'text',
-              label: 'Tiêu đề (tùy chọn)',
-            },
-            {
-              name: 'subtitle',
-              type: 'text',
-              label: 'Mô tả ngắn (tùy chọn)',
+              type: 'row',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'Tiêu đề (tùy chọn)',
+                },
+                {
+                  name: 'subtitle',
+                  type: 'text',
+                  label: 'Mô tả ngắn (tùy chọn)',
+                },
+              ]
             },
             {
               name: 'linkUrl',
@@ -358,20 +373,25 @@ export const Settings: GlobalConfig = {
               label: 'Tiêu đề khu vực (tùy chọn)',
             },
             {
-              name: 'columns',
-              type: 'number',
-              label: 'Số banner trên 1 hàng (Máy tính)',
-              defaultValue: 4,
-              min: 2,
-              max: 6,
-            },
-            {
-              name: 'bannerHeight',
-              type: 'number',
-              label: 'Chiều cao banner (px) - Tùy chọn',
-              admin: {
-                description: 'Bỏ trống nếu muốn ảnh tự động vừa theo tỷ lệ gốc.',
-              },
+              type: 'row',
+              fields: [
+                {
+                  name: 'columns',
+                  type: 'number',
+                  label: 'Số banner trên 1 hàng (Máy tính)',
+                  defaultValue: 4,
+                  min: 2,
+                  max: 6,
+                },
+                {
+                  name: 'bannerHeight',
+                  type: 'number',
+                  label: 'Chiều cao banner (px) - Tùy chọn',
+                  admin: {
+                    description: 'Bỏ trống nếu muốn ảnh tự động vừa theo tỷ lệ gốc.',
+                  },
+                },
+              ]
             },
             {
               name: 'banners',
@@ -425,22 +445,27 @@ export const Settings: GlobalConfig = {
               maxDepth: 0,
             },
             {
-              name: 'limit',
-              type: 'number',
-              label: 'Số video hiển thị',
-              defaultValue: 4,
-              min: 1,
-              max: 12,
-            },
-            {
-              name: 'layout',
-              type: 'select',
-              label: 'Bố cục video',
-              defaultValue: 'grid',
-              options: [
-                { label: 'Lưới (Grid)', value: 'grid' },
-                { label: 'Video chính + Danh sách phụ', value: 'featured' },
-              ],
+              type: 'row',
+              fields: [
+                {
+                  name: 'limit',
+                  type: 'number',
+                  label: 'Số video hiển thị',
+                  defaultValue: 4,
+                  min: 1,
+                  max: 12,
+                },
+                {
+                  name: 'layout',
+                  type: 'select',
+                  label: 'Bố cục video',
+                  defaultValue: 'grid',
+                  options: [
+                    { label: 'Lưới (Grid)', value: 'grid' },
+                    { label: 'Video chính + Danh sách phụ', value: 'featured' },
+                  ],
+                },
+              ]
             },
           ],
         },

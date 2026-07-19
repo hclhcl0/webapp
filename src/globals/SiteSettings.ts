@@ -31,52 +31,34 @@ export const SiteSettings: GlobalConfig = {
           label: 'Trang chủ',
           fields: [
             {
-              name: 'homeNewsLimit',
-              type: 'number',
-              label: 'Số hàng hiển thị (Tin mới nhất)',
-              defaultValue: 2,
-              min: 1,
-              max: 20,
-              required: true,
-              admin: {
-                description: 'Số lượng bài viết = Số hàng × Số cột.',
-              },
-            },
-            {
               type: 'row',
               fields: [
                 {
-                  name: 'homeNewsColumnsDesktop',
+                  name: 'homeNewsLimit',
                   type: 'number',
-                  label: 'Số bài viết trên 1 hàng (Máy tính)',
-                  defaultValue: 5,
-                  min: 1,
-                  max: 6,
-                  required: true,
-                },
-                {
-                  name: 'homeNewsColumnsMobile',
-                  type: 'number',
-                  label: 'Số bài viết trên 1 hàng (Điện thoại)',
+                  label: 'Số hàng hiển thị (Tin mới nhất)',
                   defaultValue: 2,
                   min: 1,
-                  max: 4,
+                  max: 20,
                   required: true,
+                  admin: {
+                    description: 'Số lượng bài viết = Số hàng × Số cột.',
+                  },
+                },
+                {
+                  name: 'homeNewsLayout',
+                  type: 'select',
+                  label: 'Bố cục hiển thị (Tin mới nhất)',
+                  defaultValue: 'grid',
+                  options: [
+                    { label: 'Lưới tin tức (Grid)', value: 'grid' },
+                    { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
+                    { label: 'Danh sách chi tiết (List)', value: 'list' },
+                    { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
+                    { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
+                  ],
                 },
               ]
-            },
-            {
-              name: 'homeNewsLayout',
-              type: 'select',
-              label: 'Bố cục hiển thị (Tin mới nhất)',
-              defaultValue: 'grid',
-              options: [
-                { label: 'Lưới tin tức (Grid)', value: 'grid' },
-                { label: 'Slider trượt tự động (Carousel)', value: 'slider' },
-                { label: 'Danh sách chi tiết (List)', value: 'list' },
-                { label: 'Danh sách rút gọn / Tin vắn (Compact)', value: 'compact' },
-                { label: 'Tin tiêu điểm + Danh sách phụ (Featured)', value: 'featured' },
-              ],
             },
           ],
         },
@@ -88,52 +70,62 @@ export const SiteSettings: GlobalConfig = {
           name: 'banner',
           fields: [
             {
-              name: 'heroSliderSize',
-              type: 'select',
-              label: 'Kích thước Slider Banner trang chủ',
-              options: [
-                { label: 'Nhỏ', value: 'small' },
-                { label: 'Vừa', value: 'medium' },
-                { label: 'Lớn', value: 'large' },
-                { label: 'Tùy chỉnh', value: 'custom' },
-              ],
-              defaultValue: 'medium',
-              admin: {
-                description: 'Định dạng chiều cao áp dụng chung cho toàn bộ khối Slider Banner.',
-              },
+              type: 'row',
+              fields: [
+                {
+                  name: 'heroSliderSize',
+                  type: 'select',
+                  label: 'Kích thước Slider Banner trang chủ',
+                  options: [
+                    { label: 'Nhỏ', value: 'small' },
+                    { label: 'Vừa', value: 'medium' },
+                    { label: 'Lớn', value: 'large' },
+                    { label: 'Tùy chỉnh', value: 'custom' },
+                  ],
+                  defaultValue: 'medium',
+                  admin: {
+                    description: 'Định dạng chiều cao áp dụng chung cho toàn bộ khối Slider Banner.',
+                  },
+                },
+                {
+                  name: 'heroSliderCustomHeight',
+                  type: 'number',
+                  label: 'Chiều cao tự gõ (px)',
+                  admin: {
+                    condition: (data) => data?.banner?.heroSliderSize === 'custom',
+                    description: 'Nhập chiều cao bằng pixel (ví dụ: 500). Áp dụng chung cho toàn bộ Slider.',
+                  },
+                },
+              ]
             },
             {
-              name: 'heroSliderCustomHeight',
-              type: 'number',
-              label: 'Chiều cao tự gõ (px)',
-              admin: {
-                condition: (data) => data?.banner?.heroSliderSize === 'custom',
-                description: 'Nhập chiều cao bằng pixel (ví dụ: 500). Áp dụng chung cho toàn bộ Slider.',
-              },
-            },
-            {
-              name: 'heroSliderEffect',
-              type: 'select',
-              label: 'Hiệu ứng chuyển ảnh Banner',
-              options: [
-                { label: '🔄 Trượt ngang (Slide)', value: 'slide' },
-                { label: '✨ Mờ dần (Fade)', value: 'fade' },
-                { label: '🔳 Thu phóng (Zoom)', value: 'zoom' },
-                { label: '📦 Lật (Flip)', value: 'flip' },
-              ],
-              defaultValue: 'slide',
-              admin: {
-                description: 'Chọn hiệu ứng hoạt hình khi chuyển từ ảnh này sang ảnh khác trong Slider.',
-              },
-            },
-            {
-              name: 'heroSliderAutoplayDelay',
-              type: 'number',
-              label: 'Thời gian dừng ở mỗi ảnh (mili-giây)',
-              defaultValue: 5000,
-              admin: {
-                description: 'Nhập thời gian tính bằng mili-giây (1 giây = 1000). Mặc định là 5000 (5 giây).',
-              },
+              type: 'row',
+              fields: [
+                {
+                  name: 'heroSliderEffect',
+                  type: 'select',
+                  label: 'Hiệu ứng chuyển ảnh Banner',
+                  options: [
+                    { label: '🔄 Trượt ngang (Slide)', value: 'slide' },
+                    { label: '✨ Mờ dần (Fade)', value: 'fade' },
+                    { label: '🔳 Thu phóng (Zoom)', value: 'zoom' },
+                    { label: '📦 Lật (Flip)', value: 'flip' },
+                  ],
+                  defaultValue: 'slide',
+                  admin: {
+                    description: 'Chọn hiệu ứng hoạt hình khi chuyển từ ảnh này sang ảnh.',
+                  },
+                },
+                {
+                  name: 'heroSliderAutoplayDelay',
+                  type: 'number',
+                  label: 'Thời gian dừng ở mỗi ảnh (mili-giây)',
+                  defaultValue: 5000,
+                  admin: {
+                    description: 'Nhập thời gian tính bằng mili-giây (1 giây = 1000).',
+                  },
+                },
+              ]
             },
             {
               name: 'sidebarBanners',
