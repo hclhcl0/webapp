@@ -21,6 +21,15 @@
 
 export const MIGRATION_STATEMENTS = [
 
+  // ====================================================
+  // BATCH: Add bannerHeight to multiBannerSection
+  // ====================================================
+  `
+    DO \$\$ BEGIN ALTER TABLE "site_settings_blocks_multi_banner_section" ADD COLUMN "banner_height" integer; EXCEPTION WHEN duplicate_column THEN null; END \$\$;
+    DO \$\$ BEGIN ALTER TABLE "settings_blocks_multi_banner_section" ADD COLUMN "banner_height" integer; EXCEPTION WHEN duplicate_column THEN null; END \$\$;
+  `,
+
+
   
   
   
