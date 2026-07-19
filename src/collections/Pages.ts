@@ -39,6 +39,12 @@ export const Pages: CollectionConfig = {
     group: 'Nội dung',
     defaultColumns: ['title', 'slug', 'pageType', 'updatedAt'],
     description: 'Tạo và quản lý các trang nội dung như Giới thiệu, Liên hệ, FAQ, v.v.',
+    preview: (doc) => {
+      if (doc?.slug) {
+        return `/${doc.slug}?preview=true`;
+      }
+      return null;
+    },
   },
   access: {
     read: () => true,
