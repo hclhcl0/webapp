@@ -379,10 +379,20 @@ export const SiteSettings: GlobalConfig = {
               type: 'group',
               label: 'Mạng xã hội (Top Bar)',
               fields: [
-                { name: 'facebook', type: 'text', label: 'Facebook URL' },
-                { name: 'youtube', type: 'text', label: 'Youtube URL' },
-                { name: 'twitter', type: 'text', label: 'Twitter URL' },
-                { name: 'instagram', type: 'text', label: 'Instagram URL' },
+                {
+                  type: 'row',
+                  fields: [
+                    { name: 'facebook', type: 'text', label: 'Facebook URL' },
+                    { name: 'youtube', type: 'text', label: 'Youtube URL' },
+                  ]
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    { name: 'twitter', type: 'text', label: 'Twitter URL' },
+                    { name: 'instagram', type: 'text', label: 'Instagram URL' },
+                  ]
+                },
               ],
             },
           ],
