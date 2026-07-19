@@ -97,13 +97,13 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
           </div>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
+        <div className="overflow-x-auto border border-gray-200 rounded-lg">
+          <table className="w-full text-[13px] text-left">
             {hasHeader && tableData.length > 0 && (
-              <thead className="text-sm bg-blue-100 text-blue-900 shadow-sm">
+              <thead className="bg-blue-100 text-blue-900 shadow-sm text-xs">
                 <tr>
                   {tableData[0].map((cell: any, idx: number) => (
-                    <th key={idx} scope="col" className="px-4 py-3 font-bold border-b-2 border-blue-200">
+                    <th key={idx} scope="col" className="px-2 py-1.5 font-bold border-b-2 border-blue-200 border-r border-blue-200/50 last:border-r-0 whitespace-nowrap">
                       {cell}
                     </th>
                   ))}
@@ -115,7 +115,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
               {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => (
                 <tr key={rowIndex} className="hover:bg-blue-50/50 transition-colors bg-white">
                   {row.map((cell: any, cellIndex: number) => (
-                    <td key={cellIndex} className="px-3 py-2 text-gray-700 break-words">
+                    <td key={cellIndex} className="px-2 py-1 text-gray-700 break-words border-r border-gray-100 last:border-r-0">
                       {cell || ''}
                     </td>
                   ))}
