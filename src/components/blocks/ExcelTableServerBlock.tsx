@@ -110,7 +110,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                     const headerLabel = isAllCaps ? headerStr.toLowerCase() : headerStr;
                     
                     return (
-                      <th key={idx} scope="col" className="px-1.5 py-0.5 font-bold border-b-2 border-blue-800 border-r border-blue-600 last:border-r-0 whitespace-nowrap capitalize leading-none">
+                      <th key={idx} scope="col" className="px-1.5 py-0.5 font-bold border-b-2 border-blue-800 border-r border-blue-600 last:border-r-0 whitespace-nowrap capitalize leading-none !text-[11px]" style={{ fontSize: '11px' }}>
                         {headerLabel}
                       </th>
                     );
@@ -125,7 +125,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                   {tableData[0].map((_, cellIndex: number) => {
                     const cell = row[cellIndex];
                     return (
-                      <td key={cellIndex} className="px-1.5 py-0 text-gray-700 break-words border-r border-gray-100 last:border-r-0 leading-tight">
+                      <td key={cellIndex} className="px-1.5 py-0 break-words border-r border-gray-100 last:border-r-0 leading-tight !text-[11px] text-gray-700" style={{ fontSize: '11px' }}>
                         {cell !== undefined && cell !== null ? String(cell) : ''}
                       </td>
                     );
