@@ -156,22 +156,26 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
     console.error("Failed to fetch sidebar settings:", err);
   }
 
-  // Fallback default widgets if none are configured in CMS
-  if (sidebarWidgets.length === 0) {
-    sidebarWidgets = [
-      {
-        id: 'default-categories',
-        blockType: 'categoriesWidget',
-        title: 'Chuyên mục',
-        limit: 10
-      },
-      {
-        id: 'default-recent',
-        blockType: 'recentArticlesWidget',
-        title: 'Tin mới cập nhật',
-        limit: 5
-      }
-    ];
+  // Thông minh bổ sung các tiện ích mặc định (Chuyên mục, Tin mới) nếu admin chưa thêm
+  const hasCategories = sidebarWidgets.some(w => w.blockType === 'categoriesWidget');
+  const hasRecent = sidebarWidgets.some(w => w.blockType === 'recentArticlesWidget');
+  
+  if (!hasCategories) {
+    sidebarWidgets.push({
+      id: 'default-categories',
+      blockType: 'categoriesWidget',
+      title: 'Chuyên mục',
+      limit: 10
+    });
+  }
+  
+  if (!hasRecent) {
+    sidebarWidgets.push({
+      id: 'default-recent',
+      blockType: 'recentArticlesWidget',
+      title: 'Tin mới cập nhật',
+      limit: 5
+    });
   }
 
   return (

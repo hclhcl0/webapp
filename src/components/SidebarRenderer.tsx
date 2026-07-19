@@ -116,6 +116,7 @@ export function SidebarRenderer({ widgets, latestArticles, categories }: Sidebar
 
           // 5. Render Banner Quảng cáo
           case 'bannerWidget':
+            if (!widget.image?.url) return null;
             return (
               <div key={key} className="bg-slate-50 rounded-2xl shadow-lg border border-slate-200 p-5 overflow-hidden">
                 <WidgetTitle title={widget.title} />

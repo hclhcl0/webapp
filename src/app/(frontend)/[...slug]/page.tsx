@@ -258,11 +258,14 @@ export default async function DynamicPage({
     sidebarWidgets = (globalSettings as any).sidebarWidgets || [];
   } catch {}
 
-  if (sidebarWidgets.length === 0) {
-    sidebarWidgets = [
-      { id: 'default-categories', blockType: 'categoriesWidget', title: 'Chuyên mục', limit: 10 },
-      { id: 'default-recent', blockType: 'recentArticlesWidget', title: 'Tin mới cập nhật', limit: 5 },
-    ];
+  const hasCategories = sidebarWidgets.some(w => w.blockType === 'categoriesWidget');
+  const hasRecent = sidebarWidgets.some(w => w.blockType === 'recentArticlesWidget');
+  
+  if (!hasCategories) {
+    sidebarWidgets.push({ id: 'default-categories', blockType: 'categoriesWidget', title: 'Chuyên mục', limit: 10 });
+  }
+  if (!hasRecent) {
+    sidebarWidgets.push({ id: 'default-recent', blockType: 'recentArticlesWidget', title: 'Tin mới cập nhật', limit: 5 });
   }
 
   return (
