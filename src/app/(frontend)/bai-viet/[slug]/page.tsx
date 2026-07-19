@@ -13,6 +13,7 @@ import { getJsxConverters } from '@/components/LexicalConverters';
 import { ArticleReaderTools } from '@/components/ArticleReaderTools';
 import type { ReaderToolsConfig } from '@/components/ArticleReaderTools';
 import { SidebarRenderer } from '@/components/SidebarRenderer';
+import { NewsGrid } from '@/components/NewsGrid';
 
 interface PageParams {
   params: Promise<{
@@ -236,6 +237,16 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
               </div>
             </div>
           </article>
+          
+          <div className="mt-8">
+            <NewsGrid 
+              categoryId={targetParentId} 
+              categoryName="Bài viết liên quan" 
+              limitOverride={6} 
+              layoutOverride="grid" 
+              excludeId={article.id} 
+            />
+          </div>
         </div>
 
         {/* Sidebar */}

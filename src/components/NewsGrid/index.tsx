@@ -14,9 +14,10 @@ interface NewsGridProps {
   categorySlug?: string;
   limitOverride?: number;
   layoutOverride?: string;
+  excludeId?: string | number;
 }
 
-async function getLatestArticles(limit: number, categoryId?: string | number) {
+async function getLatestArticles(limit: number, categoryId?: string | number, excludeId?: string | number) {
   try {
     const payload = await getPayload({ config: configPromise });
     const query: any = {
@@ -24,10 +25,22 @@ async function getLatestArticles(limit: number, categoryId?: string | number) {
       sort: '-createdAt',
       limit: limit,
       depth: 1,
+      where: {
+        and: []
+      }
     };
     
     if (categoryId) {
-        query.where = { category: { equals: categoryId } };
+        query.where.and.push({ category: { equals: categoryId } });
+    }
+    
+    if (excludeId) {
+        query.where.and.push({ id: { not_equals: excludeId } });
+    }
+    
+    // Nếu mảng rỗng thì xoá điều kiện where đi
+    if (query.where.and.length === 0) {
+        delete query.where;
     }
     
     const { docs } = await payload.find(query);
@@ -59,10 +72,10 @@ function isInternalUrl(url: string) {
   return url.startsWith('/') || url.startsWith('./') || url.includes('ecdc.vnos.org');
 }
 
-export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOverride, layoutOverride }: NewsGridProps) => {
+export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOverride, layoutOverride, excludeId }: NewsGridProps) => {
   const { limit: defaultRows, desktopCols, mobileCols, homeNewsLayout } = await getNewsSettings();
   const actualLimit = limitOverride || defaultRows || 8;
-  const articles = await getLatestArticles(actualLimit, categoryId);
+  const articles = await getLatestArticles(actualLimit, categoryId, excludeId);
   
   const title = categoryName ? categoryName.toUpperCase() : 'THÔNG TIN MỚI NHẤT';
 
