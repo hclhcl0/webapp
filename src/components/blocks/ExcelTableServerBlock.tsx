@@ -58,8 +58,16 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
         <div className="p-4 bg-gray-50/50">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {tableData.slice(hasHeader ? 1 : 0).map((row: any[], rowIndex: number) => {
-              const cardTitle = row[0] || `Mục ${rowIndex + 1}`;
-              const properties = row.slice(1);
+              let titleIndex = 0;
+              // Nếu cột đầu tiên là STT (số), dùng cột thứ 2 làm tiêu đề
+              if (row[0] && String(row[0]).trim().match(/^[\d\.]+$/)) {
+                titleIndex = 1;
+                // Nếu cột 2 cũng quá ngắn hoặc là mã số, dùng cột 3
+                if (row[1] && String(row[1]).trim().length < 3) {
+                  titleIndex = 2;
+                }
+              }
+              const cardTitle = row[titleIndex] || `Mục ${rowIndex + 1}`;
               
               return (
                 <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
@@ -71,16 +79,21 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                   {/* Khoảng cách các hàng rút gọn tối đa */}
                   <div className="px-2.5 py-2 flex-1">
                     <ul className="text-[13px]">
-                      {properties.map((cell: any, cellIndex: number) => {
-                        const headerLabel = (hasHeader && tableData[0] && tableData[0][cellIndex + 1]) 
-                          ? tableData[0][cellIndex + 1] 
-                          : `Thông tin ${cellIndex + 1}`;
-                        
+                      {row.map((cell: any, cellIndex: number) => {
+                        if (cellIndex === titleIndex) return null;
                         if (cell === undefined || cell === null || cell === '') return null;
+
+                        const headerStr = (hasHeader && tableData[0] && tableData[0][cellIndex]) 
+                          ? String(tableData[0][cellIndex]) 
+                          : `Thông tin ${cellIndex + 1}`;
+                          
+                        // Nếu header toàn chữ in hoa, chuyển về chữ thường để CSS capitalize hoạt động đẹp hơn
+                        const isAllCaps = headerStr === headerStr.toUpperCase() && headerStr.match(/[A-Z]/);
+                        const headerLabel = isAllCaps ? headerStr.toLowerCase() : headerStr;
                         
                         return (
                           <li key={cellIndex} className="flex justify-between items-start py-1 border-b border-gray-100 border-dashed last:border-0 gap-2">
-                            <span className="text-gray-500 font-medium mt-0.5 shrink-0">{headerLabel}</span>
+                            <span className="text-gray-500 font-medium mt-0.5 shrink-0 capitalize">{headerLabel}</span>
                             <span className="text-gray-900 font-bold text-right">{cell}</span>
                           </li>
                         );
