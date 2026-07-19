@@ -62,7 +62,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
               const properties = row.slice(1);
               
               return (
-                <div key={rowIndex} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
+                <div key={rowIndex} className="bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all overflow-hidden flex flex-col">
                   {/* Tiêu đề có nền */}
                   <div className="bg-blue-50 px-1 py-1 border-b border-blue-100 border-l-4 border-l-blue-600">
                     <h4 className="font-bold text-xs text-blue-900 line-clamp-2 leading-tight">{cardTitle}</h4>
@@ -70,7 +70,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                   
                   {/* Khoảng cách các hàng rút gọn tối đa */}
                   <div className="px-1 py-1 flex-1">
-                    <ul className="text-xs">
+                    <ul className="text-xs list-none p-0 m-0">
                       {properties.map((cell: any, cellIndex: number) => {
                         const headerStr = (hasHeader && tableData[0] && tableData[0][cellIndex + 1]) 
                           ? String(tableData[0][cellIndex + 1]) 
@@ -83,7 +83,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                         if (cell === undefined || cell === null || cell === '') return null;
                         
                         return (
-                          <li key={cellIndex} className="flex justify-between items-start py-0.5 border-b border-gray-100 border-dashed last:border-0 gap-1.5">
+                          <li key={cellIndex} className="flex justify-between items-start py-0.5 px-0 m-0 border-b border-gray-100 border-dashed last:border-0 gap-1.5">
                             <span className="text-gray-500 font-medium text-[11px] mt-0.5 shrink-0 capitalize">{headerLabel}</span>
                             <span className="text-gray-900 font-bold text-right">{cell}</span>
                           </li>
