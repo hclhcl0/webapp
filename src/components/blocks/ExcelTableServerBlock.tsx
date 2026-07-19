@@ -127,7 +127,7 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
                   {tableData[0].map((_, cellIndex: number) => {
                     const cell = row[cellIndex];
                     return (
-                      <td key={cellIndex} className="px-1.5 py-0 break-words border-r border-gray-100 last:border-r-0 leading-tight !text-[11px] text-gray-700" style={{ fontSize: '11px' }}>
+                      <td key={cellIndex} className="px-1.5 py-0 break-words border-r border-gray-100 last:border-r-0 leading-tight !text-[12px] text-gray-700" style={{ fontSize: '12px' }}>
                         {cell !== undefined && cell !== null ? String(cell) : ''}
                       </td>
                     );
