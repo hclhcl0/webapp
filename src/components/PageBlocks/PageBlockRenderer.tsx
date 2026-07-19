@@ -14,13 +14,14 @@ import { CtaBannerBlock } from './CtaBannerBlock';
 import { EmbedBlock } from './EmbedBlock';
 import { DividerBlock } from './DividerBlock';
 import { TableBlock } from './TableBlock';
-import { ScheduleBlock } from '../blocks/ScheduleBlock';
+import { MagazineBlock } from '../../blocks/MagazineBlock/Component';
 
 // Existing block components
 import HeroBannerBlockComp from '@/components/blocks/HeroBannerBlock';
 import CategoryNewsBlockComp from '@/components/blocks/CategoryNewsBlock';
 import VideoBlockComp from '@/components/blocks/VideoBlock';
 import GalleryBlockComp from '@/components/blocks/GalleryBlock';
+import { ScheduleBlock } from '@/components/blocks/ScheduleBlock';
 
 interface Props {
   blocks: any[];
@@ -198,9 +199,14 @@ export function PageBlockRenderer({ blocks }: Props) {
               />
             );
 
-          // ── Phương tiện ──
           case 'videoBlock':
             return <VideoBlockComp key={key} data={block} />;
+
+          case 'scheduleBlock':
+            return <ScheduleBlock key={key} {...block} />;
+            
+          case 'magazineBlock':
+            return <MagazineBlock key={key} {...block} />;
 
           case 'tiktokBlock': {
             if (!block.videoId) return null;

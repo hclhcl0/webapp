@@ -10,6 +10,7 @@ import { VideoBlock } from '../blocks/VideoBlock.ts';
 import { TikTokBlock } from '../blocks/TikTokBlock.ts';
 import { PDFBlock } from '../blocks/PDFBlock.ts';
 import { GalleryBlock } from '../blocks/GalleryBlock.ts';
+import { MagazineBlock } from '../blocks/MagazineBlock.ts';
 
 
 export const Settings: GlobalConfig = {
@@ -132,7 +133,8 @@ export const Settings: GlobalConfig = {
               CalloutBlock,
               ButtonBlock,
               RelatedArticlesBlock,
-              CardBlock
+              CardBlock,
+              MagazineBlock
             ],
           }),
         ],

@@ -27,6 +27,7 @@ import { InfographicBlock } from '../blocks/InfographicBlock.ts';
 import { ZaloWidgetBlock } from '../blocks/ZaloWidgetBlock.ts';
 import { LivestreamBlock } from '../blocks/LivestreamBlock.ts';
 import { ScheduleBlock } from '../blocks/ScheduleBlock.ts';
+import { MagazineBlock } from '../blocks/MagazineBlock.ts';
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -188,6 +189,7 @@ export const Pages: CollectionConfig = {
         ZaloWidgetBlock,
         LivestreamBlock,
         ScheduleBlock,
+        MagazineBlock,
         // Legacy
         HeroBannerBlock,
       ],
