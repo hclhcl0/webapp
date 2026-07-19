@@ -66,10 +66,10 @@ export async function ExcelTableServerBlock({ title, file, sheetName, hasHeader,
               const properties = row.slice(1);
               
               return (
-                <div key={rowIndex} className="bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-400 transition-all overflow-hidden flex flex-col">
+                <div key={rowIndex} className="bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-400 transition-all overflow-hidden flex flex-col rounded-lg">
                   {/* Tiêu đề có nền */}
                   <div className="bg-blue-700 px-2 py-1.5 border-b border-blue-800">
-                    <h4 className="font-bold text-white line-clamp-2 leading-none capitalize" style={{ fontSize: '12px' }}>{cardTitle}</h4>
+                    <h4 className="font-bold !text-white line-clamp-2 leading-none capitalize m-0" style={{ fontSize: '12px', color: 'white' }}>{cardTitle}</h4>
                   </div>
                   
                   {/* Khoảng cách các hàng rút gọn tối đa */}

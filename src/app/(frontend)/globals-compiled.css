@@ -2134,6 +2134,9 @@
   .whitespace-pre-wrap {
     white-space: pre-wrap;
   }
+  .\!text-white {
+    color: var(--color-white) !important;
+  }
   .text-\[\#0180c7\] {
     color: #0180c7;
   }
