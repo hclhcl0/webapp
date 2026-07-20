@@ -11,6 +11,13 @@ function getYoutubeId(url: string) {
   return match ? match[1] : null;
 }
 
+function getTiktokId(url: string) {
+  if (!url) return null;
+  const match = url.match(/tiktok\.com\/.*video\/(\d+)/);
+  if (match) return match[1];
+  return null;
+}
+
 export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFeatured?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -20,6 +27,7 @@ export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFe
   }, []);
 
   const yId = getYoutubeId(video.videoUrl);
+  const tId = getTiktokId(video.videoUrl);
   const thumbUrl = video.thumbnail?.url || (yId ? `https://img.youtube.com/vi/${yId}/${isFeatured ? 'maxresdefault' : 'hqdefault'}.jpg` : '');
 
   return (
@@ -86,8 +94,31 @@ export function VideoCardPopup({ video, isFeatured = false }: { video: any, isFe
         </div>,
         document.body
       )}
+
+      {mounted && isOpen && tId && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4">
+          <div className="absolute inset-0 cursor-pointer" onClick={() => setIsOpen(false)}></div>
+          <div className="relative w-full max-w-[400px] bg-black rounded-lg overflow-hidden shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-200" style={{ aspectRatio: '9/16' }}>
+            <button 
+              onClick={() => setIsOpen(false)}
+              className="absolute top-3 right-3 z-20 bg-black/60 hover:bg-black text-white rounded-full p-2 transition-colors cursor-pointer"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <iframe
+              className="w-full h-full absolute inset-0"
+              src={`https://www.tiktok.com/embed/v2/${tId}`}
+              title="TikTok video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>,
+        document.body
+      )}
       
-      {mounted && isOpen && !yId && createPortal(
+      {mounted && isOpen && !yId && !tId && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4">
           <div className="absolute inset-0 cursor-pointer" onClick={() => setIsOpen(false)}></div>
           <div className="relative bg-white p-6 rounded-lg z-10 max-w-md w-full text-center">
