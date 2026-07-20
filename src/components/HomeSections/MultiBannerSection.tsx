@@ -7,6 +7,8 @@ interface BannerItem {
   image: {
     url: string;
     alt?: string;
+    width?: number;
+    height?: number;
   };
   linkUrl?: string;
   openInNewTab?: boolean;
@@ -37,6 +39,12 @@ export function MultiBannerSection({ title, columns = 4, bannerHeight, banners }
   else if (columns === 5) gridColsClass = 'grid-cols-2 md:grid-cols-3 lg:grid-cols-5';
   else if (columns === 6) gridColsClass = 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6';
 
+  // Calculate dynamic aspect ratio from the first banner image
+  const firstImage = banners[0]?.image;
+  const dynamicAspectRatio = (firstImage?.width && firstImage?.height)
+    ? `${firstImage.width}/${firstImage.height}`
+    : '16/9';
+
   return (
     <section className="py-4 bg-white w-full">
       <div className="container mx-auto px-4">
@@ -57,7 +65,7 @@ export function MultiBannerSection({ title, columns = 4, bannerHeight, banners }
             
             const containerStyle: React.CSSProperties = bannerHeight 
               ? { height: `${bannerHeight}px` } 
-              : { aspectRatio: '16/9' };
+              : { aspectRatio: dynamicAspectRatio };
             
             const content = (
               <div className="relative w-full overflow-hidden rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 group" style={containerStyle}>
