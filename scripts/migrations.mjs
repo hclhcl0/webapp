@@ -3370,5 +3370,55 @@ export const MIGRATION_STATEMENTS = [
   `DO $$ BEGIN ALTER TABLE "settings_blocks_video_section" ADD COLUMN IF NOT EXISTS "source_type" varchar DEFAULT 'auto'; EXCEPTION WHEN duplicate_column THEN null; END $$`,
 
   `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "warning_section_icon" varchar; EXCEPTION WHEN duplicate_column THEN null; END $$`,
-  `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "warning_section_title" varchar; EXCEPTION WHEN duplicate_column THEN null; END $$`
+  `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "warning_section_title" varchar; EXCEPTION WHEN duplicate_column THEN null; END $$`,
+
+  // ====================================================
+  // BATCH: Add vaccine_packages collection
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "vaccine_packages" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "name" varchar NOT NULL,
+    "target_group" varchar NOT NULL,
+    "package_type" varchar DEFAULT 'by_age' NOT NULL,
+    "image_id" integer,
+    "description" varchar,
+    "original_price" numeric,
+    "discount_price" numeric NOT NULL,
+    "discount_label" varchar,
+    "order" numeric DEFAULT 0,
+    "is_active" boolean DEFAULT true,
+    "is_featured" boolean DEFAULT false,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  )`,
+  `CREATE TABLE IF NOT EXISTS "vaccine_packages_items" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "vaccine_id" integer,
+    "disease_name" varchar,
+    "doses" numeric NOT NULL,
+    "protocol" varchar,
+    "unit_price" numeric,
+    "original_unit_price" numeric
+  )`,
+  `CREATE INDEX IF NOT EXISTS "vaccine_packages_created_at_idx" ON "vaccine_packages" USING btree ("created_at")`,
+  `CREATE INDEX IF NOT EXISTS "vaccine_packages_items_order_idx" ON "vaccine_packages_items" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "vaccine_packages_items_parent_idx" ON "vaccine_packages_items" USING btree ("_parent_id")`,
+  `DO $$ BEGIN
+    ALTER TABLE "vaccine_packages" ADD CONSTRAINT "vaccine_packages_image_id_media_id_fk"
+    FOREIGN KEY ("image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null;
+  END $$`,
+  `DO $$ BEGIN
+    ALTER TABLE "vaccine_packages_items" ADD CONSTRAINT "vaccine_packages_items_vaccine_id_vaccines_id_fk"
+    FOREIGN KEY ("vaccine_id") REFERENCES "vaccines"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null;
+  END $$`,
+  `DO $$ BEGIN
+    ALTER TABLE "vaccine_packages_items" ADD CONSTRAINT "vaccine_packages_items_parent_id_fk"
+    FOREIGN KEY ("_parent_id") REFERENCES "vaccine_packages"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null;
+  END $$`
+
 ];
