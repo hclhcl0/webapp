@@ -82,7 +82,7 @@ export function VideoCardPopup({
     <>
       <div
         onClick={openModal}
-        className={`group cursor-pointer overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col relative ${variant === 'vertical' ? 'rounded-xl border-none aspect-[9/16] bg-transparent' : 'bg-white rounded-xl border border-gray-100'}`}
+        className={`group cursor-pointer overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 w-full h-full flex flex-col relative ${variant === 'vertical' ? 'rounded-xl border-none bg-transparent' : 'bg-white rounded-xl border border-gray-100'}`}
       >
         <div className={`relative flex items-center justify-center shrink-0 w-full ${variant === 'vertical' ? 'h-full absolute inset-0' : 'aspect-video overflow-hidden bg-gray-100'}`}>
           {thumbUrl ? (
