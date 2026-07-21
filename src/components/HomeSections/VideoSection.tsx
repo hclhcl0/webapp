@@ -106,7 +106,7 @@ export async function VideoSection({
                     key={video.id} 
                     className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-0.5rem)] md:flex-[0_0_calc(33.333%-0.75rem)] lg:flex-[0_0_calc(25%-0.75rem)] min-w-0"
                   >
-                    <VideoCardPopup video={video} videoList={videos} initialIndex={index} variant="vertical" />
+                    <VideoCardPopup video={video} videoList={videos} initialIndex={index} />
                   </div>
                 ))}
               </VideoSliderClient>
