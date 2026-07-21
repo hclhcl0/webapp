@@ -2324,7 +2324,7 @@ export const MIGRATION_STATEMENTS = [
       FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
   )`,
   `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_order_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_order")`,
-  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_parent_idx" ON "_pages_v_blocks_file_downloads_block_parent_idx" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_parent_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_parent_id")`,
   `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_path_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_path")`,
 
   `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_file_downloads_block_files" (
