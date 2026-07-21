@@ -38,6 +38,15 @@ export function BannerSection({ image, title, subtitle, linkUrl, openInNewTab, s
     ? 'w-full my-2'
     : 'container mx-auto px-4 max-w-7xl my-6';
 
+  let finalContent = content;
+  if (style === 'card') {
+    finalContent = (
+      <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+        {content}
+      </div>
+    );
+  }
+
   if (linkUrl) {
     return (
       <div className={wrapperClass}>
@@ -47,11 +56,11 @@ export function BannerSection({ image, title, subtitle, linkUrl, openInNewTab, s
           rel="noopener noreferrer"
           className="block hover:opacity-95 transition-opacity"
         >
-          {content}
+          {finalContent}
         </a>
       </div>
     );
   }
 
-  return <div className={wrapperClass}>{content}</div>;
+  return <div className={wrapperClass}>{finalContent}</div>;
 }

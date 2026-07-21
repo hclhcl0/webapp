@@ -29,38 +29,40 @@ export function QuickLinksSection({ title = 'DỊCH VỤ TRỰC TUYẾN', links 
   return (
     <section className="w-full py-4 bg-white border-y border-[var(--border)]">
       <div className="container mx-auto px-4 max-w-7xl">
-        {title && (
-          <div className="global-section-header">
-            <h2 className="global-section-title">
-              {title}
-            </h2>
+        <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+          {title && (
+            <div className="global-section-header">
+              <h2 className="global-section-title">
+                {title}
+              </h2>
+            </div>
+          )}
+          <div
+            className="grid gap-3"
+            style={{
+              gridTemplateColumns: `repeat(${Math.min(links.length, 6)}, 1fr)`,
+            }}
+          >
+            {links.map((link, i) => {
+              const colors = colorMap[link.color || 'primary'];
+              return (
+                <a
+                  key={i}
+                  href={link.url}
+                  target={link.openInNewTab !== false ? '_blank' : '_self'}
+                  rel="noopener noreferrer"
+                  className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all duration-200 text-center group ${colors.bg} ${colors.text} ${colors.hover} ${colors.border}`}
+                >
+                  <span className="text-3xl group-hover:scale-110 transition-transform duration-200">
+                    {link.icon}
+                  </span>
+                  <span className="text-xs md:text-sm font-semibold leading-tight">
+                    {link.label}
+                  </span>
+                </a>
+              );
+            })}
           </div>
-        )}
-        <div
-          className="grid gap-3"
-          style={{
-            gridTemplateColumns: `repeat(${Math.min(links.length, 6)}, 1fr)`,
-          }}
-        >
-          {links.map((link, i) => {
-            const colors = colorMap[link.color || 'primary'];
-            return (
-              <a
-                key={i}
-                href={link.url}
-                target={link.openInNewTab !== false ? '_blank' : '_self'}
-                rel="noopener noreferrer"
-                className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all duration-200 text-center group ${colors.bg} ${colors.text} ${colors.hover} ${colors.border}`}
-              >
-                <span className="text-3xl group-hover:scale-110 transition-transform duration-200">
-                  {link.icon}
-                </span>
-                <span className="text-xs md:text-sm font-semibold leading-tight">
-                  {link.label}
-                </span>
-              </a>
-            );
-          })}
         </div>
       </div>
     </section>

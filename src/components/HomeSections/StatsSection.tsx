@@ -97,13 +97,14 @@ export function StatsSection({ title, backgroundColor = 'primary', stats }: Stat
   return (
     <section ref={ref} className={`w-full py-6 ${bgStyles[backgroundColor]}`}>
       <div className="container mx-auto px-4 max-w-7xl">
-        {title && (
-          <div className="global-section-header">
-            <h2 className={`global-section-title ${backgroundColor === 'primary' ? 'global-section-title-white' : ''}`}>
-              {title}
-            </h2>
-          </div>
-        )}
+        <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+          {title && (
+            <div className="global-section-header">
+              <h2 className={`global-section-title ${backgroundColor === 'primary' ? 'global-section-title-white' : ''}`}>
+                {title}
+              </h2>
+            </div>
+          )}
         <div
           className="grid gap-8"
           style={{
@@ -113,6 +114,7 @@ export function StatsSection({ title, backgroundColor = 'primary', stats }: Stat
           {stats.map((stat, i) => (
             <StatCard key={i} stat={stat} isVisible={isVisible} />
           ))}
+          </div>
         </div>
       </div>
     </section>

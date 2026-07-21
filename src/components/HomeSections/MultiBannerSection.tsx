@@ -48,15 +48,16 @@ export function MultiBannerSection({ title, columns = 4, bannerHeight, banners }
   return (
     <section className="py-4 bg-white w-full">
       <div className="container mx-auto px-4">
-        {title && (
-          <div className="global-section-header">
-            <h2 className="global-section-title">
-              {title}
-            </h2>
-          </div>
-        )}
+        <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+          {title && (
+            <div className="global-section-header">
+              <h2 className="global-section-title">
+                {title}
+              </h2>
+            </div>
+          )}
 
-        <div className={`grid gap-2 md:gap-4 ${gridColsClass}`}>
+          <div className={`grid gap-2 md:gap-4 ${gridColsClass}`}>
           {banners.map((item, index) => {
             const imageUrl = item.image?.url;
             if (!imageUrl) return null;
@@ -98,11 +99,12 @@ export function MultiBannerSection({ title, columns = 4, bannerHeight, banners }
             }
 
             return (
-              <div key={item.id || index} className="block w-full h-full">
+              <div key={item.id || index} className="w-full h-full">
                 {content}
               </div>
             );
           })}
+          </div>
         </div>
       </div>
     </section>

@@ -90,12 +90,14 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
     return (
       <section className={styles.newsSection}>
         <div className="container">
-        <div className="global-section-header">
-          <h2 className="global-section-title">
-            {title}
-          </h2>
-        </div>
-          <p>Chưa có bài viết nào.</p>
+          <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+            <div className="global-section-header">
+              <h2 className="global-section-title">
+                {title}
+              </h2>
+            </div>
+            <p>Chưa có bài viết nào.</p>
+          </div>
         </div>
       </section>
     );
@@ -104,10 +106,11 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
   return (
     <section className={styles.newsSection}>
       <div className="container">
-        {categoryId && (
-          <hr className="border-t-2 border-gray-200 mb-8 mt-2 shadow-sm" />
-        )}
-        <div className="global-section-header">
+        <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+          {categoryId && (
+            <hr className="border-t-2 border-gray-200 mb-8 mt-2 shadow-sm" />
+          )}
+          <div className="global-section-header">
           <h2 className="global-section-title">
             {title}
           </h2>
@@ -328,6 +331,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
             })}
           </div>
         )}
+        </div>
       </div>
     </section>
   );
