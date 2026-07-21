@@ -2,7 +2,9 @@ import React from 'react';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { HeroCarouselClient } from './HeroCarouselClient';
+import { WarningVideosClient } from './WarningVideosClient';
 import styles from './HeroCarousel.module.css';
+import { VideoCardPopup } from '../HomeSections/VideoCardPopup';
 
 async function getBanners() {
   try {
@@ -21,6 +23,22 @@ async function getBanners() {
     return docs;
   } catch (error) {
     console.error("Error fetching banners:", error);
+    return [];
+  }
+}
+
+async function getWarningVideos() {
+  try {
+    const payload = await getPayload({ config: configPromise });
+    const { docs } = await payload.find({
+      collection: 'videos',
+      sort: '-publishedDate',
+      limit: 6,
+      depth: 1,
+    });
+    return docs;
+  } catch (error) {
+    console.error("Error fetching warning videos:", error);
     return [];
   }
 }
@@ -51,6 +69,7 @@ async function getSliderSettings() {
 export const HeroCarousel = async () => {
   const banners = await getBanners();
   const settings = await getSliderSettings();
+  const warningVideos = await getWarningVideos();
 
   if (!banners || banners.length === 0) {
     return (
@@ -66,5 +85,39 @@ export const HeroCarousel = async () => {
     );
   }
 
-  return <HeroCarouselClient banners={banners} globalSize={settings.size} globalCustomHeight={settings.customHeight} globalEffect={settings.effect} globalAutoplay={settings.autoplay} globalAutoplayDelay={settings.autoplayDelay} />;
+  return (
+    <section className="w-full py-4 bg-gray-50/50">
+      <div className="container mx-auto px-4">
+        {/* Khung tổng bao quanh cả banner và cảnh báo */}
+        <div className="p-1 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-3">
+            {/* Cột trái: Slider Banner chính */}
+            <div className="lg:col-span-7 xl:col-span-7 aspect-[2/1] md:aspect-[2.5/1] h-auto w-full rounded-xl overflow-hidden">
+              <HeroCarouselClient 
+                banners={banners} 
+                globalSize={settings.size} 
+                globalCustomHeight={settings.customHeight} 
+                globalEffect={settings.effect} 
+                globalAutoplay={settings.autoplay} 
+                globalAutoplayDelay={settings.autoplayDelay} 
+              />
+            </div>
+
+            {/* Cột phải: Cảnh báo quan trọng */}
+            {warningVideos && warningVideos.length > 0 && (
+              <div className="lg:col-span-3 xl:col-span-3 flex flex-col bg-transparent overflow-hidden h-auto">
+                <div className="px-0 py-1.5 flex items-center gap-1.5 mb-1 flex-shrink-0">
+                  <span className="text-lg">🔥</span>
+                  <h3 className="font-bold text-orange-600 uppercase tracking-tight text-[13px]">Cảnh báo quan trọng</h3>
+                </div>
+                <div className="p-0 flex-1 h-auto lg:h-full w-full flex flex-col min-h-0">
+                  <WarningVideosClient videos={warningVideos} />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
