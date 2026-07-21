@@ -3366,4 +3366,9 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "settings_rels_path_idx" ON "settings_rels" USING btree ("path")`,
   `CREATE INDEX IF NOT EXISTS "settings_rels_videos_id_idx" ON "settings_rels" USING btree ("videos_id")`
 
+,
+
+  `DO $ BEGIN ALTER TABLE "site_settings_blocks_video_section" ADD COLUMN IF NOT EXISTS "source_type" varchar DEFAULT 'auto'; EXCEPTION WHEN duplicate_column THEN null; END $`,
+  `DO $ BEGIN ALTER TABLE "settings_blocks_video_section" ADD COLUMN IF NOT EXISTS "source_type" varchar DEFAULT 'auto'; EXCEPTION WHEN duplicate_column THEN null; END $`
+
 ];
