@@ -86,11 +86,6 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
   }, []);
 
   const openModal = useCallback((video: any) => {
-    // TikTok: open in new tab instead of modal
-    if (video.platform === 'tiktok') {
-      window.open(video.videoUrl, '_blank', 'noopener,noreferrer');
-      return;
-    }
     setModalVideo(video);
     document.body.style.overflow = 'hidden';
   }, []);
@@ -105,6 +100,11 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
     if (video.platform === 'youtube') {
       const ytId = extractYoutubeId(video.videoUrl);
       return ytId ? `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0` : null;
+    }
+    if (video.platform === 'tiktok') {
+      const match = video.videoUrl.match(/tiktok\.com\/.*video\/(\d+)/);
+      const tId = match ? match[1] : null;
+      return tId ? `https://www.tiktok.com/embed/v2/${tId}` : null;
     }
     if (video.platform === 'facebook') {
       return extractFacebookEmbedUrl(video.videoUrl);
@@ -288,7 +288,11 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
       {/* Modal */}
       {modalVideo && (
         <div className={styles.modalBackdrop} onClick={closeModal}>
-          <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
+          <div 
+            className={styles.modalBox} 
+            onClick={e => e.stopPropagation()}
+            style={modalVideo.platform === 'tiktok' ? { maxWidth: '400px', margin: '0 auto' } : {}}
+          >
             <button className={styles.modalClose} onClick={closeModal} aria-label="Đóng">
               <X size={22} />
             </button>
@@ -299,7 +303,10 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
               </div>
               <h2>{modalVideo.title}</h2>
             </div>
-            <div className={styles.iframeWrapper}>
+            <div 
+              className={styles.iframeWrapper}
+              style={modalVideo.platform === 'tiktok' ? { aspectRatio: '9/16' } : {}}
+            >
               {buildEmbedUrl(modalVideo) ? (
                 <iframe
                   src={buildEmbedUrl(modalVideo)!}

@@ -77,7 +77,9 @@ export async function HomeSectionRenderer({ sections }: HomeSectionRendererProps
               <VideoSection
                 key={`${blockType}-${index}`}
                 title={section.title}
+                sourceType={section.sourceType}
                 channels={section.channels}
+                manualVideos={section.manualVideos}
                 limit={section.limit}
                 layout={section.layout}
               />
