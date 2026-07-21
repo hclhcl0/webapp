@@ -3332,8 +3332,6 @@ export const MIGRATION_STATEMENTS = [
   END $$;
   `,
 
-,
-
   `CREATE TABLE IF NOT EXISTS "site_settings_rels" (
     "id" serial PRIMARY KEY NOT NULL,
     "order" integer,
