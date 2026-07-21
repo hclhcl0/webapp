@@ -17,9 +17,19 @@ interface Vaccine {
   status: 'in_stock' | 'out_of_stock';
 }
 
+interface Banner {
+  id: string;
+  title: string;
+  image: { url: string; alt?: string };
+  mobileImage?: { url: string; alt?: string };
+  link?: string;
+  openInNewTab?: boolean;
+}
+
 interface Props {
   packages: any[];
   vaccines: Vaccine[];
+  banners?: Banner[];
   phoneNumber: string;
 }
 
@@ -50,7 +60,7 @@ function getIconForDisease(disease: string) {
   return match ? DISEASE_ICONS[match] : '💉';
 }
 
-export function VaccineMainUI({ packages, vaccines, phoneNumber }: Props) {
+export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Props) {
   const [activeTab, setActiveTab] = useState<'disease' | 'package'>('disease');
   const [selectedDisease, setSelectedDisease] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -91,28 +101,76 @@ export function VaccineMainUI({ packages, vaccines, phoneNumber }: Props) {
   return (
     <div className="w-full">
       {/* ── Banners ── */}
-      <div className="w-full bg-white relative overflow-hidden" ref={emblaRef}>
-        <div className="flex touch-pan-y">
-          {[1, 2].map((_, idx) => (
-            <div key={idx} className="relative flex-[0_0_100%] min-w-0">
-              <div className="w-full h-[200px] md:h-[350px] bg-gradient-to-r from-blue-600 to-cyan-500 relative flex items-center px-8 md:px-20">
-                <div className="text-white z-10 max-w-xl">
-                  <h2 className="text-2xl md:text-5xl font-black mb-2 uppercase text-yellow-300 drop-shadow-md">
-                    GÓI VẮC XIN NGỪA HPV
-                  </h2>
-                  <p className="text-lg md:text-2xl font-semibold mb-4">Tư vấn cùng Bác sĩ 24/7</p>
-                  <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-4 py-2 border border-white/40">
-                    <span className="font-medium">Đặt lịch ngay</span>
-                    <span className="font-bold text-yellow-300">{phoneNumber}</span>
+      {banners && banners.length > 0 ? (
+        <div className="w-full bg-white relative overflow-hidden" ref={emblaRef}>
+          <div className="flex touch-pan-y">
+            {banners.map((banner) => {
+              const slideContent = (
+                <div key={banner.id} className="relative flex-[0_0_100%] min-w-0">
+                  <div className="w-full relative aspect-[21/9] md:aspect-[3/1] bg-gray-100">
+                    {/* Desktop Image */}
+                    <Image
+                      src={banner.image?.url || ''}
+                      alt={banner.title || ''}
+                      fill
+                      className={`object-cover ${banner.mobileImage?.url ? 'hidden md:block' : ''}`}
+                      priority
+                    />
+                    {/* Mobile Image */}
+                    {banner.mobileImage?.url && (
+                      <Image
+                        src={banner.mobileImage.url}
+                        alt={banner.title || ''}
+                        fill
+                        className="object-cover md:hidden"
+                        priority
+                      />
+                    )}
                   </div>
                 </div>
-                {/* Decorative background elements */}
-                <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-[url('https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
-              </div>
-            </div>
-          ))}
+              );
+
+              if (banner.link) {
+                return (
+                  <a
+                    key={banner.id}
+                    href={banner.link}
+                    target={banner.openInNewTab ? '_blank' : undefined}
+                    rel={banner.openInNewTab ? 'noopener noreferrer' : undefined}
+                    className="flex-[0_0_100%] min-w-0"
+                  >
+                    {slideContent}
+                  </a>
+                );
+              }
+              return slideContent;
+            })}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="w-full bg-white relative overflow-hidden" ref={emblaRef}>
+          <div className="flex touch-pan-y">
+            {[1, 2].map((_, idx) => (
+              <div key={idx} className="relative flex-[0_0_100%] min-w-0">
+                <div className="w-full h-[200px] md:h-[350px] bg-gradient-to-r from-blue-600 to-cyan-500 relative flex items-center px-8 md:px-20">
+                  <div className="text-white z-10 max-w-xl">
+                    <h2 className="text-2xl md:text-5xl font-black mb-2 uppercase text-yellow-300 drop-shadow-md">
+                      GÓI VẮC XIN NGỪA HPV
+                    </h2>
+                    <p className="text-lg md:text-2xl font-semibold mb-4">Tư vấn cùng Bác sĩ 24/7</p>
+                    <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-4 py-2 border border-white/40">
+                      <span className="font-medium">Đặt lịch ngay</span>
+                      <span className="font-bold text-yellow-300">{phoneNumber}</span>
+                    </div>
+                  </div>
+                  {/* Decorative background elements */}
+                  <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-[url('https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 max-w-7xl py-8">
         

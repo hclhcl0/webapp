@@ -29,6 +29,18 @@ export default async function GoiVacXinPage() {
     limit: 1000,
   });
 
+  // Fetch banners for vaccine page
+  const { docs: banners } = await payload.find({
+    collection: 'banners',
+    where: {
+      and: [
+        { isActive: { equals: true } },
+        { position: { equals: 'vaccine_slider' } }
+      ]
+    },
+    sort: 'order',
+  });
+
   // Fetch phone number from site settings
   let phoneNumber = '0236 3890 407';
   try {
@@ -45,6 +57,7 @@ export default async function GoiVacXinPage() {
       <VaccineMainUI
         packages={packages as any}
         vaccines={vaccines as any}
+        banners={banners as any}
         phoneNumber={phoneNumber}
       />
     </main>

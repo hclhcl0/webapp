@@ -55,6 +55,7 @@ export const Banners: CollectionConfig = {
       defaultValue: 'home_slider',
       options: [
         { label: 'Slider Trang chủ (Trên cùng)', value: 'home_slider' },
+        { label: 'Slider Trang Gói Vắc xin', value: 'vaccine_slider' },
         { label: 'Cột bên phải (Sidebar)', value: 'sidebar' },
         { label: 'Dưới cùng trang (Footer)', value: 'footer' },
       ],
