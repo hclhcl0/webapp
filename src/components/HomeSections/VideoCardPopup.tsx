@@ -82,14 +82,14 @@ export function VideoCardPopup({
     <>
       <div
         onClick={openModal}
-        className={`group cursor-pointer overflow-hidden border shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col relative ${variant === 'vertical' ? 'rounded-2xl border-transparent aspect-[9/16] bg-gray-900' : 'bg-white rounded-xl border-gray-100'}`}
+        className={`group cursor-pointer overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col relative ${variant === 'vertical' ? 'rounded-2xl border-none aspect-[9/16] bg-gray-900' : 'bg-white rounded-xl border border-gray-100'}`}
       >
         <div className={`relative flex items-center justify-center shrink-0 w-full ${variant === 'vertical' ? 'h-full absolute inset-0' : 'aspect-video overflow-hidden bg-gray-100'}`}>
           {thumbUrl ? (
             <Image
               src={thumbUrl}
               alt={video.title || 'Video CDC Đà Nẵng'}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover scale-[1.05] group-hover:scale-110 transition-transform duration-300"
               width={variant === 'vertical' ? 300 : 480}
               height={variant === 'vertical' ? 533 : 270}
               loading="lazy"
