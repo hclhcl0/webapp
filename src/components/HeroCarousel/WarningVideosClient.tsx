@@ -50,12 +50,12 @@ export const WarningVideosClient = ({ videos }: Props) => {
     <div className="relative group w-full h-full flex flex-col">
       <div className="flex-1 relative min-h-0">
         <div className="overflow-hidden lg:absolute lg:inset-0" ref={emblaRef}>
-          <div className="flex lg:h-full" style={{ marginLeft: '-4px' }}>
+          <div className="flex lg:h-full" style={{ marginLeft: '-2px' }}>
             {videos.map((video, index) => (
               <div 
                 key={video.id || index} 
                 className="relative flex-shrink-0 w-[45%] sm:w-[35%] md:w-[30%] lg:w-auto lg:h-full"
-                style={{ paddingLeft: '4px' }}
+                style={{ paddingLeft: '2px' }}
               >
                 <div 
                   className="w-full h-auto aspect-[3/4] lg:h-full lg:w-auto lg:aspect-[9/16]" 
