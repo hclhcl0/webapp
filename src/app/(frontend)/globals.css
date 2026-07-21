@@ -613,8 +613,8 @@
 }
 
 .global-section-title {
-  font-size: 1.25rem;
-  font-weight: 800;
+  font-size: 1.125rem;
+  font-weight: 700;
   color: var(--primary-dark);
   margin: 0;
   text-transform: uppercase;
@@ -634,8 +634,8 @@
 .global-section-title::before {
   content: '';
   display: inline-block;
-  width: 8px;
-  height: 1.25rem;
+  width: 7px;
+  height: 1.125rem;
   background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
   margin-right: 0.6rem;
   transform: skewX(-15deg);

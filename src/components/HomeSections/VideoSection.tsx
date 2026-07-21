@@ -4,6 +4,7 @@ import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { VideoCardPopup } from './VideoCardPopup';
 import VideoSliderClient from './VideoSliderClient';
+import { PlayCircle } from 'lucide-react';
 
 interface VideoSectionProps {
   title?: string;
@@ -35,7 +36,7 @@ export async function VideoSection({
   sourceType = 'auto',
   channels, 
   manualVideos,
-  limit = 4, 
+  limit = 10, 
   layout = 'grid' 
 }: VideoSectionProps) {
   let videos: any[] = [];
@@ -66,7 +67,7 @@ export async function VideoSection({
 
     if (channelIds.length === 0) return null;
 
-    videos = await getVideos(channelIds, limit);
+    videos = await getVideos(channelIds, Math.max(limit, 10));
   }
 
   if (!videos.length) return null;
@@ -74,20 +75,35 @@ export async function VideoSection({
   const sectionTitle = title || 'VIDEO NỔI BẬT';
 
   return (
-    <section className="w-full py-4">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary-light)] rounded-[1.5rem] p-3 lg:p-4 relative overflow-hidden shadow-xl border border-white/20">
+    <section className="w-full py-2">
+      <div className="container">
+        <div className="bg-gradient-to-t from-[#001a22] via-[var(--primary-dark)] to-[#00b4d8] rounded-xl p-1.5 md:p-2 relative overflow-hidden shadow-lg border-0">
+          {/* Subtle dotted pattern overlay */}
+          <div className="absolute inset-0 opacity-[0.07] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1.5px, transparent 0)', backgroundSize: '20px 20px' }}></div>
+          
+          {/* Concentric circles decoration */}
+          <div className="absolute -bottom-16 -left-16 opacity-10 pointer-events-none z-0 rotate-45">
+            <svg width="180" height="180" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="100" cy="100" r="99" stroke="white" strokeWidth="1"/>
+              <circle cx="100" cy="100" r="79" stroke="white" strokeWidth="1" strokeDasharray="4 6"/>
+              <circle cx="100" cy="100" r="59" stroke="white" strokeWidth="1"/>
+            </svg>
+          </div>
+
+          {/* Glowing background orbs for depth */}
+          <div className="absolute -top-20 -right-10 w-64 h-64 bg-white/20 blur-[50px] rounded-full pointer-events-none z-0"></div>
+          <div className="absolute -bottom-20 -left-10 w-64 h-64 bg-[var(--secondary)]/40 blur-[50px] rounded-full pointer-events-none"></div>
+
           {/* Sparkle decoration */}
-          <div className="absolute top-6 right-8 opacity-60 pointer-events-none scale-75 lg:scale-100 hidden sm:block">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 0C20 11.0457 28.9543 20 40 20C28.9543 20 20 28.9543 20 40C20 28.9543 11.0457 20 0 20C11.0457 20 20 11.0457 20 0Z" fill="white" fillOpacity="0.8"/>
-              <path d="M35 10C35 12.7614 37.2386 15 40 15C37.2386 15 35 17.2386 35 20C35 17.2386 32.7614 15 30 15C32.7614 15 35 12.7614 35 10Z" fill="white" fillOpacity="0.6"/>
+          <div className="absolute top-2 right-6 opacity-80 pointer-events-none scale-75 lg:scale-100 hidden sm:block animate-pulse">
+            <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 0L22.6517 14.502L34.1421 5.85786L25.498 17.3483L40 20L25.498 22.6517L34.1421 34.1421L22.6517 25.498L20 40L17.3483 25.498L5.85786 34.1421L14.502 22.6517L0 20L14.502 17.3483L5.85786 5.85786L17.3483 14.502L20 0Z" fill="white" fillOpacity="0.9"/>
             </svg>
           </div>
           
-          <div className="flex items-center gap-3 mb-4 relative z-10">
-            <h2 className="text-xl lg:text-2xl font-black text-white uppercase tracking-wide flex items-center gap-2">
-              <span className="text-2xl">🔥</span> {sectionTitle}
+          <div className="flex items-center gap-3 mb-1 px-1 relative z-10">
+            <h2 className="text-base lg:text-lg font-bold text-white uppercase tracking-wide flex items-center gap-2">
+              <PlayCircle className="w-5 h-5 text-white" /> {sectionTitle}
             </h2>
             <span className="text-gray-500 font-light text-2xl mb-1">|</span>
             <Link href="/video" className="text-sm font-medium text-gray-300 hover:text-white hover:underline transition-colors mt-0.5">
@@ -113,7 +129,7 @@ export async function VideoSection({
                 {videos.map((video: any, index: number) => (
                   <div 
                     key={video.id} 
-                    className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-0.5rem)] md:flex-[0_0_calc(33.333%-0.75rem)] lg:flex-[0_0_calc(25%-0.75rem)] min-w-0"
+                    className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-0.25rem)] md:flex-[0_0_calc(33.333%-0.375rem)] lg:flex-[0_0_calc(20%-0.4rem)] min-w-0"
                   >
                     <VideoCardPopup video={video} videoList={videos} initialIndex={index} variant="vertical" />
                   </div>

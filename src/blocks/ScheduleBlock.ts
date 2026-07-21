@@ -38,9 +38,6 @@ export const ScheduleBlock: Block = {
       minRows: 1,
       admin: {
         description: 'Thêm các nhóm ngày (Ví dụ: Từ Thứ 2 đến Thứ 6).',
-        components: {
-          RowLabel: ({ data, index }) => data?.groupTitle || `Nhóm ${index + 1}`
-        }
       },
       fields: [
         {

@@ -22,8 +22,8 @@ export const Videos: CollectionConfig = {
     {
       name: 'title',
       type: 'text',
-      required: true,
-      label: 'Tiêu đề video',
+      required: false,
+      label: 'Tiêu đề video (Tự động lấy từ YouTube nếu để trống)',
     },
     {
       type: 'row',
@@ -105,4 +105,36 @@ export const Videos: CollectionConfig = {
       ],
     },
   ],
+  hooks: {
+    beforeChange: [
+      async ({ data }) => {
+        if (data.videoUrl && data.platform === 'youtube') {
+          if (!data.title || !data.description) {
+            try {
+              const res = await fetch(data.videoUrl);
+              const text = await res.text();
+              const titleMatch = text.match(/<meta name="title" content="([^"]+)">/) || text.match(/<meta property="og:title" content="([^"]+)">/);
+              const descMatch = text.match(/<meta name="description" content="([^"]+)">/) || text.match(/<meta property="og:description" content="([^"]+)">/);
+              
+              if (!data.title && titleMatch) {
+                data.title = titleMatch[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#39;/g, "'");
+              }
+              if (!data.description && descMatch) {
+                data.description = descMatch[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#39;/g, "'");
+              }
+            } catch (error) {
+              console.error("Error fetching YouTube metadata", error);
+            }
+          }
+        }
+        
+        // Ensure title has a fallback if still empty
+        if (!data.title) {
+          data.title = "Video không có tiêu đề";
+        }
+        
+        return data;
+      },
+    ],
+  },
 };
