@@ -1039,6 +1039,40 @@ export const SiteSettings: GlobalConfig = {
             },
           ],
         },
+
+        // ─────────────────────────────────────────────
+        {
+          type: 'group',
+          label: 'Phân cảnh báo quan trọng',
+          name: 'warningSection',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'icon',
+                  type: 'text',
+                  label: 'Biểu tượng (Icon)',
+                  defaultValue: '🔥',
+                },
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'Tiêu đề cảnh báo',
+                  defaultValue: 'Cảnh báo quan trọng',
+                },
+              ]
+            },
+            {
+              name: 'videos',
+              type: 'relationship',
+              relationTo: 'videos',
+              hasMany: true,
+              label: 'Danh sách Video cảnh báo',
+            }
+          ]
+        },
+
         // ─────────────────────────────────────────────,
             {
           type: 'group',

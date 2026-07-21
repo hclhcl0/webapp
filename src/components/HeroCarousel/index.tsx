@@ -69,7 +69,10 @@ async function getSliderSettings() {
 export const HeroCarousel = async () => {
   const banners = await getBanners();
   const settings = await getSliderSettings();
-  const warningVideos = await getWarningVideos();
+  let warningVideos = (settings as any)?.warningSection?.videos;
+  if (!warningVideos || warningVideos.length === 0) {
+    warningVideos = await getWarningVideos();
+  }
 
   if (!banners || banners.length === 0) {
     return (
@@ -107,8 +110,22 @@ export const HeroCarousel = async () => {
             {warningVideos && warningVideos.length > 0 && (
               <div className="lg:col-span-3 xl:col-span-3 flex flex-col bg-transparent overflow-hidden h-auto">
                 <div className="px-0 py-1.5 flex items-center gap-1.5 mb-1 flex-shrink-0">
-                  <span className="text-lg">🔥</span>
-                  <h3 className="font-bold text-orange-600 uppercase tracking-tight text-[13px]">Cảnh báo quan trọng</h3>
+                  <span className="text-lg">
+                    {/* Nếu settings có icon thì dùng, nếu không thì dùng mặc định 🔥 */}
+                    {settings?.warningSection?.icon ? (
+                      // Check nếu icon là chuỗi emoji (độ dài ngắn) thì hiển thị text, nếu là link ảnh thì dùng thẻ img
+                      settings.warningSection.icon.startsWith('http') || settings.warningSection.icon.startsWith('/') ? (
+                        <img src={settings.warningSection.icon} alt="Warning Icon" className="w-5 h-5 object-contain" />
+                      ) : (
+                        settings.warningSection.icon
+                      )
+                    ) : (
+                      '🔥'
+                    )}
+                  </span>
+                  <h3 className="font-bold text-orange-600 uppercase tracking-tight text-[13px]">
+                    {settings?.warningSection?.title || 'Cảnh báo quan trọng'}
+                  </h3>
                 </div>
                 <div className="p-0 flex-1 h-auto lg:h-full w-full flex flex-col min-h-0">
                   <WarningVideosClient videos={warningVideos} />
