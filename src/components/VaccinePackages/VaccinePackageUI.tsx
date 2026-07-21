@@ -87,41 +87,6 @@ export function VaccinePackageUI({ packages, phoneNumber }: Props) {
 
   return (
     <div className="w-full">
-      {/* ─── Header ─────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-br from-[#003049] via-[#00567a] to-[#0096c7] py-10 px-4 text-center rounded-2xl mb-6 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 opacity-10" style={{
-          backgroundImage: `radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
-                            radial-gradient(circle at 80% 20%, white 1px, transparent 1px)`,
-          backgroundSize: "40px 40px"
-        }} />
-        <div className="relative z-10">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <span className="text-3xl">✨</span>
-            <h1 className="text-3xl md:text-4xl font-black text-white">
-              <em className="not-italic text-[#48cae4]">Gói vắc xin</em>{" "}
-              bảo vệ toàn diện
-            </h1>
-          </div>
-          <div className="w-24 h-1 bg-gradient-to-r from-[#48cae4] to-transparent rounded-full mx-auto mb-8" />
-
-          {/* Benefits */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {benefits.map((b, i) => (
-              <div key={i} className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-xl p-4 text-left border border-white/20">
-                <div className="w-10 h-10 rounded-full bg-[#48cae4]/30 flex items-center justify-center flex-shrink-0">
-                  <b.icon size={20} className="text-[#90e0ef]" />
-                </div>
-                <div>
-                  <p className="font-bold text-white text-sm">{b.title}</p>
-                  <p className="text-white/70 text-xs mt-0.5">{b.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* ─── Main Content ─────────────────────────────────────────── */}
       {packages.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-16 text-center">

@@ -1,6 +1,6 @@
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { VaccinePackageUI } from '@/components/VaccinePackages/VaccinePackageUI';
+import { VaccineMainUI } from '@/components/VaccinePackages/VaccineMainUI';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -22,6 +22,13 @@ export default async function GoiVacXinPage() {
     limit: 50,
   });
 
+  // Fetch all active vaccines for the disease tab
+  const { docs: vaccines } = await payload.find({
+    collection: 'vaccines',
+    where: { status: { equals: 'in_stock' } },
+    limit: 1000,
+  });
+
   // Fetch phone number from site settings
   let phoneNumber = '0236 3890 407';
   try {
@@ -34,13 +41,12 @@ export default async function GoiVacXinPage() {
   }
 
   return (
-    <main className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto px-4 max-w-7xl py-6">
-        <VaccinePackageUI
-          packages={packages as any}
-          phoneNumber={phoneNumber}
-        />
-      </div>
+    <main className="bg-gray-50 min-h-screen pb-12">
+      <VaccineMainUI
+        packages={packages as any}
+        vaccines={vaccines as any}
+        phoneNumber={phoneNumber}
+      />
     </main>
   );
 }
