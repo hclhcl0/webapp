@@ -645,3 +645,12 @@
 .global-section-title-white::before {
   background: var(--white);
 }
+
+/* Ẩn thanh cuộn nhưng vẫn cuộn được */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

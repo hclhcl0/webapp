@@ -57,8 +57,8 @@ export function VaccinePackageUI({ packages, phoneNumber }: Props) {
         onClick={() => setSelected(pkg)}
         className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 text-left transition-all duration-200 cursor-pointer
           ${isActive
-            ? "border-[#00b4d8] bg-[#e0f7fa] shadow-sm"
-            : "border-gray-100 bg-white hover:border-[#00b4d8]/40 hover:bg-blue-50/30"
+            ? "border-[#1250dc] bg-[#eff6ff] shadow-sm"
+            : "border-gray-100 bg-white hover:border-[#1250dc]/40 hover:bg-blue-50/30"
           }`}
       >
         {/* Thumbnail */}
@@ -71,7 +71,7 @@ export function VaccinePackageUI({ packages, phoneNumber }: Props) {
         </div>
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <p className={`font-bold text-[13px] leading-tight ${isActive ? "text-[#007b9a]" : "text-gray-800"}`}>
+          <p className={`font-bold text-[13px] leading-tight ${isActive ? "text-[#1250dc]" : "text-gray-800"}`}>
             {pkg.name}
           </p>
           {pkg.discountLabel && (
@@ -80,7 +80,7 @@ export function VaccinePackageUI({ packages, phoneNumber }: Props) {
             </span>
           )}
         </div>
-        {isActive && <ChevronRight size={18} className="text-[#00b4d8] flex-shrink-0" />}
+        {isActive && <ChevronRight size={18} className="text-[#1250dc] flex-shrink-0" />}
       </button>
     );
   };
@@ -94,7 +94,7 @@ export function VaccinePackageUI({ packages, phoneNumber }: Props) {
           <h2 className="text-xl font-bold text-gray-700 mb-2">Chưa có gói vắc xin nào</h2>
           <p className="text-gray-500 text-sm mb-6">Vui lòng thêm gói vắc xin trong trang quản trị CMS.</p>
           <a href={`tel:${phoneNumber}`}
-            className="inline-flex items-center gap-2 bg-[#00b4d8] text-white font-bold px-6 py-3 rounded-xl">
+            className="inline-flex items-center gap-2 bg-[#1250dc] text-white font-bold px-6 py-3 rounded-xl">
             <Phone size={17} />
             Gọi tư vấn: {phoneNumber}
           </a>
@@ -145,7 +145,7 @@ export function VaccinePackageUI({ packages, phoneNumber }: Props) {
           {selected?.items && selected.items.length > 0 && (
             <div className="px-6 py-3 grid grid-cols-[1fr_auto_auto] md:grid-cols-[1fr_120px_160px] gap-4 border-b border-gray-100 bg-gray-50/60">
               <div className="flex items-center gap-2">
-                <CheckCircle size={14} className="text-[#00b4d8]" />
+                <CheckCircle size={14} className="text-[#1250dc]" />
                 <span className="text-xs font-bold text-gray-600">Vắc xin</span>
               </div>
               <span className="text-xs font-bold text-gray-600 hidden md:block">Phác đồ</span>
@@ -160,7 +160,7 @@ export function VaccinePackageUI({ packages, phoneNumber }: Props) {
                 {/* Disease group title */}
                 {item.diseaseName && (
                   <p className="text-xs font-bold text-gray-700 mb-2 flex items-center gap-1.5">
-                    <CheckCircle size={13} className="text-[#00b4d8]" />
+                    <CheckCircle size={13} className="text-[#1250dc]" />
                     {item.diseaseName}
                   </p>
                 )}
@@ -210,14 +210,14 @@ export function VaccinePackageUI({ packages, phoneNumber }: Props) {
               <div className="flex items-center gap-3 flex-wrap">
                 <a
                   href={`tel:${phoneNumber}`}
-                  className="inline-flex items-center gap-2 bg-[#00b4d8] hover:bg-[#0096c7] text-white font-bold px-5 py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-2 bg-[#1250dc] hover:bg-[#1e3a8a] text-white font-bold px-5 py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5"
                 >
                   <Phone size={17} />
                   Đặt hẹn ngay
                 </a>
                 <a
                   href={`tel:${phoneNumber}`}
-                  className="inline-flex items-center gap-2 border-2 border-[#00b4d8] text-[#00b4d8] hover:bg-[#00b4d8] hover:text-white font-bold px-5 py-3 rounded-xl transition-all duration-200"
+                  className="inline-flex items-center gap-2 border-2 border-[#1250dc] text-[#1250dc] hover:bg-[#1250dc] hover:text-white font-bold px-5 py-3 rounded-xl transition-all duration-200"
                 >
                   {phoneNumber}
                 </a>
