@@ -18,6 +18,42 @@ const PLATFORMS = [
   { value: 'tiktok', label: 'TikTok', color: '#010101' },
 ];
 
+const TikTokVideoEmbed = ({ videoUrl }: { videoUrl: string }) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const match = videoUrl.match(/tiktok\.com\/.*video\/(\d+)/);
+  const tId = match ? match[1] : null;
+
+  React.useEffect(() => {
+    if (!containerRef.current || !tId) return;
+
+    // Remove existing script if any
+    const existingScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (existingScript) existingScript.remove();
+
+    // Insert blockquote
+    containerRef.current.innerHTML = `
+      <blockquote 
+        class="tiktok-embed" 
+        cite="${videoUrl}" 
+        data-video-id="${tId}" 
+        style="max-width: 400px; min-width: 325px; margin: 0 auto;"
+      >
+        <section></section>
+      </blockquote>
+    `;
+
+    // Inject script
+    const script = document.createElement('script');
+    script.src = 'https://www.tiktok.com/embed.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => { script.remove(); };
+  }, [tId, videoUrl]);
+
+  return <div ref={containerRef} style={{ width: '100%', display: 'flex', justifyContent: 'center' }} />;
+};
+
 function extractYoutubeId(url: string) {
   if (!url) return null;
   if (url.length === 11 && !url.includes('/') && !url.includes('http')) return url;
@@ -305,9 +341,11 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
             </div>
             <div 
               className={styles.iframeWrapper}
-              style={modalVideo.platform === 'tiktok' ? { aspectRatio: '9/16' } : {}}
+              style={modalVideo.platform === 'tiktok' ? { aspectRatio: 'auto', background: 'transparent' } : {}}
             >
-              {buildEmbedUrl(modalVideo) ? (
+              {modalVideo.platform === 'tiktok' ? (
+                <TikTokVideoEmbed videoUrl={modalVideo.videoUrl} />
+              ) : buildEmbedUrl(modalVideo) ? (
                 <iframe
                   src={buildEmbedUrl(modalVideo)!}
                   title={modalVideo.title}
