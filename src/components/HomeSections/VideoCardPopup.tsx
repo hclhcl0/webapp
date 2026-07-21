@@ -11,6 +11,40 @@ function getYoutubeId(url: string) {
   return match ? match[1] : null;
 }
 
+const TikTokVideoEmbed = ({ videoUrl, tId }: { videoUrl: string, tId: string }) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!containerRef.current || !tId) return;
+
+    // Remove existing script if any
+    const existingScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
+    if (existingScript) existingScript.remove();
+
+    // Insert blockquote
+    containerRef.current.innerHTML = `
+      <blockquote 
+        class="tiktok-embed" 
+        cite="${videoUrl}" 
+        data-video-id="${tId}" 
+        style="max-width: 400px; min-width: 325px; margin: 0 auto;"
+      >
+        <section></section>
+      </blockquote>
+    `;
+
+    // Inject script
+    const script = document.createElement('script');
+    script.src = 'https://www.tiktok.com/embed.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => { script.remove(); };
+  }, [tId, videoUrl]);
+
+  return <div ref={containerRef} style={{ width: '100%', display: 'flex', justifyContent: 'center' }} />;
+};
+
 function getTiktokId(url: string) {
   if (!url) return null;
   const match = url.match(/tiktok\.com\/.*video\/(\d+)/);
@@ -117,22 +151,14 @@ export function VideoCardPopup({ video, isFeatured = false, variant = 'horizonta
       {mounted && isOpen && tId && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4">
           <div className="absolute inset-0 cursor-pointer" onClick={() => setIsOpen(false)}></div>
-          <div className="relative w-full max-w-[400px] bg-black rounded-lg overflow-hidden shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-200" style={{ aspectRatio: '9/16' }}>
+          <div className="relative w-full max-w-[400px] rounded-lg overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200">
             <button 
               onClick={() => setIsOpen(false)}
-              className="absolute top-3 right-3 z-20 bg-black/60 hover:bg-black text-white rounded-full p-2 transition-colors cursor-pointer"
+              className="absolute top-0 right-0 z-20 bg-black/60 hover:bg-black text-white rounded-full p-2 transition-colors cursor-pointer m-2"
             >
               <X className="w-6 h-6" />
             </button>
-            <iframe
-              className="w-full h-full absolute inset-0"
-              src={`https://www.tiktok.com/embed/v2/${tId}`}
-              title="TikTok video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
+            <TikTokVideoEmbed videoUrl={video.videoUrl} tId={tId} />
           </div>
         </div>,
         document.body
