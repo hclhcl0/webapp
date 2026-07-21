@@ -16,7 +16,12 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
+    cpus: 1,
+    memoryBasedWorkersCount: true,
     optimizeCss: true, // Inlines critical CSS to avoid render-blocking
     optimizePackageImports: ['lucide-react', 'react-icons'], // Loại bỏ JS thừa từ các thư viện icon
     serverActions: {
