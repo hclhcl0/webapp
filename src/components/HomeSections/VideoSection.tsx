@@ -76,7 +76,7 @@ export async function VideoSection({
   return (
     <section className="w-full py-4">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="bg-[var(--primary-dark)] rounded-[1.5rem] p-4 lg:p-6 relative overflow-hidden shadow-xl border border-white/10">
+        <div className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary-light)] rounded-[1.5rem] p-4 lg:p-6 relative overflow-hidden shadow-xl border border-white/20">
           {/* Sparkle decoration */}
           <div className="absolute top-6 right-8 opacity-60 pointer-events-none scale-75 lg:scale-100 hidden sm:block">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
