@@ -155,7 +155,7 @@ export function VideoCardPopup({
               </button>
             </>
           )}
-          <div className="relative w-full max-w-5xl rounded-lg overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200 shadow-2xl">
+          <div className="relative w-full max-w-5xl bg-black rounded-lg overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200 shadow-2xl">
             <div className="bg-black text-white p-3 flex justify-between items-center">
               <h3 className="font-medium truncate pr-8">{activeVideo.title || 'YouTube Video'}</h3>
             </div>
@@ -165,7 +165,7 @@ export function VideoCardPopup({
             >
               <X className="w-6 h-6" />
             </button>
-            <div className={`relative w-full ${variant === 'vertical' ? 'h-full absolute inset-0' : 'aspect-video'}`}>
+            <div className="relative w-full aspect-video">
               <iframe
                 className="w-full h-full absolute inset-0"
                 src={`https://www.youtube.com/embed/${modalYId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3`}
