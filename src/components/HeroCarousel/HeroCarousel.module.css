@@ -60,8 +60,8 @@
 .embla,
 .banner picture,
 .banner img {
-  aspect-ratio: var(--desktop-ratio, 21/9);
-  height: auto !important; /* Force override any previous heights */
+  height: 100% !important;
+  object-fit: cover;
 }
 
 @media (max-width: 768px) {

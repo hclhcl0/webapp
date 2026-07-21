@@ -67,7 +67,7 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
   // Override fixed heights, use auto height with dynamic aspect ratio
   const sizeClass = '';
   const heightStyle = { 
-    height: 'auto',
+    height: '100%',
     '--desktop-ratio': desktopRatio,
     '--mobile-ratio': mobileRatio,
   } as React.CSSProperties;
@@ -77,17 +77,17 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
   const isFlip = globalEffect === 'flip';
 
   return (
-    <section className={styles.heroSection}>
-      <div className="container">
+    <section className={`${styles.heroSection} h-full`}>
+      <div className="w-full h-full">
         {/* Wrapper ngoài cùng có position:relative để các nút absolute định vị theo */}
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative', height: '100%' }}>
           {/* Khung carousel — overflow:hidden để ảnh không bị tràn */}
           <div
-            className={`${styles.embla} ${sizeClass} ${isFade || isZoom || isFlip ? styles.effectWrapper : ''}`}
+            className={`${styles.embla} ${sizeClass} ${isFade || isZoom || isFlip ? styles.effectWrapper : ''} h-full`}
             ref={emblaRef}
             style={heightStyle}
           >
-            <div className={`${styles.embla__container} ${isFade || isZoom || isFlip ? styles.effectContainer : ''}`}>
+            <div className={`${styles.embla__container} ${isFade || isZoom || isFlip ? styles.effectContainer : ''} h-full`}>
               {banners.map((banner, index) => {
                 const imageUrl = banner.image?.url || 'https://via.placeholder.com/1200x500?text=Banner';
                 const mobileUrl = banner.mobileImage?.url;
@@ -101,7 +101,7 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
 
                 return (
                   <div
-                    className={`${styles.embla__slide} ${slideEffectClass}`}
+                    className={`${styles.embla__slide} ${slideEffectClass} h-full`}
                     key={banner.id}
                     style={isFade || isZoom || isFlip ? { position: 'absolute', inset: 0, width: '100%' } : {}}
                   >
@@ -139,7 +139,7 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
             </div>
           </div>
 
-          {/* Nút Prev — absolute so với wrapper, đè lên trên ảnh bên TRÁI */}
+          {/* Nút Prev — style giống thiết kế Long Châu (tròn trắng, icon tối) */}
           <button 
             onClick={scrollPrev}
             style={{
@@ -148,24 +148,27 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
               top: '50%',
               transform: 'translateY(-50%)',
               zIndex: 20,
-              color: 'white',
-              opacity: 0.65,
-              background: 'none',
+              color: '#333',
+              backgroundColor: 'white',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
               border: 'none',
-              padding: 0,
               cursor: 'pointer',
-              filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.95))',
-              transition: 'opacity 0.2s',
-              lineHeight: 1,
+              transition: 'all 0.2s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '0.65')}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.05)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
             aria-label="Ảnh trước"
           >
-            <ChevronLeft size={44} strokeWidth={2.5} />
+            <ChevronLeft size={24} strokeWidth={2.5} />
           </button>
 
-          {/* Nút Next — absolute so với wrapper, đè lên trên ảnh bên PHẢI */}
+          {/* Nút Next — style giống thiết kế Long Châu (tròn trắng, icon tối) */}
           <button 
             onClick={scrollNext}
             style={{
@@ -174,22 +177,56 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
               top: '50%',
               transform: 'translateY(-50%)',
               zIndex: 20,
-              color: 'white',
-              opacity: 0.65,
-              background: 'none',
+              color: '#333',
+              backgroundColor: 'white',
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
               border: 'none',
-              padding: 0,
               cursor: 'pointer',
-              filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.95))',
-              transition: 'opacity 0.2s',
-              lineHeight: 1,
+              transition: 'all 0.2s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '0.65')}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.05)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
             aria-label="Ảnh sau"
           >
-            <ChevronRight size={44} strokeWidth={2.5} />
+            <ChevronRight size={24} strokeWidth={2.5} />
           </button>
+
+          {/* Dấu chấm phân trang (Pagination Dots) ở đáy */}
+          <div style={{
+            position: 'absolute',
+            bottom: '16px',
+            left: '0',
+            right: '0',
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '8px',
+            zIndex: 20,
+          }}>
+            {banners.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => emblaApi && emblaApi.scrollTo(index)}
+                style={{
+                  width: index === selectedIndex ? '20px' : '8px',
+                  height: '8px',
+                  borderRadius: '4px',
+                  backgroundColor: index === selectedIndex ? '#192b49' : 'rgba(255,255,255,0.8)',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
+                }}
+                aria-label={`Chuyển đến ảnh ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
