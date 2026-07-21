@@ -14,14 +14,14 @@ function getYoutubeId(url: string) {
 const TikTokVideoEmbed = ({ videoUrl, tId }: { videoUrl: string, tId: string }) => {
   return (
     <iframe
-      className="w-full h-full absolute inset-0"
+      className="w-full"
       src={`https://www.tiktok.com/player/v1/${tId}?music_info=1&description=1`}
       title="TikTok video player"
       frameBorder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       referrerPolicy="strict-origin-when-cross-origin"
       allowFullScreen
-      style={{ aspectRatio: '9/16' }}
+      style={{ aspectRatio: '9/16', minHeight: '500px' }}
     ></iframe>
   );
 };

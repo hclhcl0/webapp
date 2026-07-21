@@ -325,7 +325,7 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
             </div>
             <div 
               className={styles.iframeWrapper}
-              style={modalVideo.platform === 'tiktok' ? { aspectRatio: 'auto', background: 'transparent' } : {}}
+              style={modalVideo.platform === 'tiktok' ? { aspectRatio: '9/16', background: 'transparent', maxWidth: '400px', margin: '0 auto' } : {}}
             >
               {modalVideo.platform === 'tiktok' ? (
                 <TikTokVideoEmbed videoUrl={modalVideo.videoUrl} />
