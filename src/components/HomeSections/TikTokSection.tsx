@@ -29,7 +29,7 @@ export async function TikTokSection({ title = 'KÊNH TIKTOK CDC ĐÀ NẴNG', ch
     return (
       <section className="w-full py-2">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+          <div className="p-2 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
             <div className="global-section-header">
               <h2 className="global-section-title">
                 {title || 'Video TikTok'}

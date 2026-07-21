@@ -41,7 +41,7 @@ export function BannerSection({ image, title, subtitle, linkUrl, openInNewTab, s
   let finalContent = content;
   if (style === 'card') {
     finalContent = (
-      <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+      <div className="p-1 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
         {content}
       </div>
     );

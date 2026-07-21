@@ -90,7 +90,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
     return (
       <section className={styles.newsSection}>
         <div className="container">
-          <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+          <div className="p-2 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
             <div className="global-section-header">
               <h2 className="global-section-title">
                 {title}
@@ -106,7 +106,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
   return (
     <section className={styles.newsSection}>
       <div className="container">
-        <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
+        <div className="p-2 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
           <div className="global-section-header">
           <h2 className="global-section-title">
             {title}
