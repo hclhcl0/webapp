@@ -98,24 +98,24 @@ export async function VideoSection({
           {layout === 'featured' && videos.length > 1 ? (
             <div className="grid md:grid-cols-[2fr_1fr] gap-4 relative z-10">
               {/* Main video */}
-              <VideoCardPopup video={videos[0]} isFeatured={true} />
+              <VideoCardPopup video={videos[0]} videoList={videos} initialIndex={0} isFeatured={true} />
 
               {/* Side list */}
               <div className="flex flex-col gap-3">
-                {videos.slice(1).map((video: any) => (
-                  <VideoCardPopup key={video.id} video={video} />
+                {videos.slice(1).map((video: any, i: number) => (
+                  <VideoCardPopup key={video.id} video={video} videoList={videos} initialIndex={i + 1} />
                 ))}
               </div>
             </div>
           ) : (
             <div className="relative z-10">
               <VideoSliderClient>
-                {videos.map((video: any) => (
+                {videos.map((video: any, index: number) => (
                   <div 
                     key={video.id} 
                     className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-0.5rem)] md:flex-[0_0_calc(33.333%-0.75rem)] lg:flex-[0_0_calc(25%-0.75rem)] min-w-0"
                   >
-                    <VideoCardPopup video={video} variant="vertical" />
+                    <VideoCardPopup video={video} videoList={videos} initialIndex={index} variant="vertical" />
                   </div>
                 ))}
               </VideoSliderClient>

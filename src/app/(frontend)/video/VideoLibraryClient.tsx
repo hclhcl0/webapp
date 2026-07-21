@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { PlayCircle, X, Globe } from 'lucide-react';
+import { PlayCircle, X, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import styles from './Video.module.css';
 
@@ -83,8 +83,7 @@ function getPlatformColor(platform: string) {
 export default function VideoLibraryClient({ videos, channels }: { videos: any[]; channels: any[] }) {
   const [activePlatform, setActivePlatform] = useState('all');
   const [activeChannel, setActiveChannel] = useState('all');
-  const [modalVideo, setModalVideo] = useState<any | null>(null);
-
+  const [modalVideoIndex, setModalVideoIndex] = useState<number>(-1);
   // Filter channels by active platform
   const filteredChannels = useMemo(() => {
     if (activePlatform === 'all') return channels;
@@ -105,15 +104,26 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
     setActiveChannel('all');
   }, []);
 
-  const openModal = useCallback((video: any) => {
-    setModalVideo(video);
+  const modalVideo = modalVideoIndex >= 0 ? filteredVideos[modalVideoIndex] : null;
+
+  const openModal = useCallback((index: number) => {
+    setModalVideoIndex(index);
     document.body.style.overflow = 'hidden';
   }, []);
 
   const closeModal = useCallback(() => {
-    setModalVideo(null);
+    setModalVideoIndex(-1);
     document.body.style.overflow = '';
   }, []);
+
+  const navigateVideo = useCallback((direction: number) => {
+    setModalVideoIndex((prev) => {
+      let next = prev + direction;
+      if (next < 0) next = filteredVideos.length - 1;
+      if (next >= filteredVideos.length) next = 0;
+      return next;
+    });
+  }, [filteredVideos.length]);
 
   // Build embed URL
   function buildEmbedUrl(video: any) {
@@ -226,7 +236,7 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
         </div>
       ) : (
         <div className={styles.videoGrid}>
-          {filteredVideos.map((video: any) => {
+          {filteredVideos.map((video: any, index: number) => {
             const thumb = buildThumbnail(video);
             const color = getPlatformColor(video.platform);
             const isTikTok = video.platform === 'tiktok';
@@ -235,7 +245,7 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
               : '';
 
             return (
-              <div key={video.id} className={styles.videoCard} onClick={() => openModal(video)}>
+              <div key={video.id} className={styles.videoCard} onClick={() => openModal(index)}>
                 {/* Thumbnail */}
                 <div className={styles.thumbWrapper}>
                   {thumb ? (
@@ -308,6 +318,24 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
       {/* Modal */}
       {modalVideo && (
         <div className={styles.modalBackdrop} onClick={closeModal}>
+          {filteredVideos.length > 1 && (
+            <>
+              <button 
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-[1000] bg-black/50 hover:bg-black text-white rounded-full p-2 md:p-3 transition-colors cursor-pointer"
+                onClick={(e) => { e.stopPropagation(); navigateVideo(-1); }}
+                aria-label="Video trước"
+              >
+                <ChevronLeft size={32} />
+              </button>
+              <button 
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-[1000] bg-black/50 hover:bg-black text-white rounded-full p-2 md:p-3 transition-colors cursor-pointer"
+                onClick={(e) => { e.stopPropagation(); navigateVideo(1); }}
+                aria-label="Video tiếp theo"
+              >
+                <ChevronRight size={32} />
+              </button>
+            </>
+          )}
           <div 
             className={styles.modalBox} 
             onClick={e => e.stopPropagation()}
