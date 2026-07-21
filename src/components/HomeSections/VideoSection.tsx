@@ -111,7 +111,7 @@ export async function VideoSection({
                 ))}
               </VideoSliderClient>
             </div>
-        </div>
+          )}
       </div>
     </section>
   );
