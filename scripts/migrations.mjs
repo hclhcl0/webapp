@@ -565,7 +565,7 @@ export const MIGRATION_STATEMENTS = [
 
   `CREATE TABLE IF NOT EXISTS "settings_blocks_video_section_channels" (
     "_order" integer NOT NULL,
-    "_parent_id" integer NOT NULL,
+    "_parent_id" varchar NOT NULL,
     "id" varchar PRIMARY KEY NOT NULL,
     "channel_id" integer NOT NULL,
     CONSTRAINT "settings_blocks_video_section_channels_parent_fk"
@@ -2780,7 +2780,7 @@ export const MIGRATION_STATEMENTS = [
 
   `CREATE TABLE IF NOT EXISTS "site_settings_blocks_video_section_channels" (
     "_order" integer NOT NULL,
-    "_parent_id" integer NOT NULL,
+    "_parent_id" varchar NOT NULL,
     "id" varchar PRIMARY KEY NOT NULL,
     "channel_id" integer NOT NULL,
     CONSTRAINT "site_settings_blocks_video_section_channels_parent_fk"
