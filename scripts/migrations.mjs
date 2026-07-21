@@ -3367,6 +3367,8 @@ export const MIGRATION_STATEMENTS = [
 ,
 
   `DO $$ BEGIN ALTER TABLE "site_settings_blocks_video_section" ADD COLUMN IF NOT EXISTS "source_type" varchar DEFAULT 'auto'; EXCEPTION WHEN duplicate_column THEN null; END $$`,
-  `DO $$ BEGIN ALTER TABLE "settings_blocks_video_section" ADD COLUMN IF NOT EXISTS "source_type" varchar DEFAULT 'auto'; EXCEPTION WHEN duplicate_column THEN null; END $$`
+  `DO $$ BEGIN ALTER TABLE "settings_blocks_video_section" ADD COLUMN IF NOT EXISTS "source_type" varchar DEFAULT 'auto'; EXCEPTION WHEN duplicate_column THEN null; END $$`,
 
+  `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "warning_section_icon" varchar; EXCEPTION WHEN duplicate_column THEN null; END $$`,
+  `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "warning_section_title" varchar; EXCEPTION WHEN duplicate_column THEN null; END $$`
 ];
