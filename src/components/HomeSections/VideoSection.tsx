@@ -7,7 +7,9 @@ import VideoSliderClient from './VideoSliderClient';
 
 interface VideoSectionProps {
   title?: string;
+  sourceType?: 'auto' | 'manual';
   channels?: { channel: string | { id: string } }[];
+  manualVideos?: any[];
   limit?: number;
   layout?: 'grid' | 'featured';
 }
@@ -28,16 +30,45 @@ async function getVideos(channelIds: string[], limit: number) {
   }
 }
 
-export async function VideoSection({ title = 'VIDEO NỔI BẬT', channels, limit = 4, layout = 'grid' }: VideoSectionProps) {
-  if (!channels || !Array.isArray(channels) || channels.length === 0) return null;
+export async function VideoSection({ 
+  title = 'VIDEO NỔI BẬT', 
+  sourceType = 'auto',
+  channels, 
+  manualVideos,
+  limit = 4, 
+  layout = 'grid' 
+}: VideoSectionProps) {
+  let videos: any[] = [];
 
-  const channelIds = channels
-    .map(c => typeof c.channel === 'object' ? c.channel.id : c.channel)
-    .filter(Boolean);
+  if (sourceType === 'manual') {
+    if (!manualVideos || manualVideos.length === 0) return null;
+    
+    // Kiểm tra xem manualVideos đã được populate (có object) hay mới chỉ là mảng ID
+    const isPopulated = typeof manualVideos[0] === 'object';
+    if (isPopulated) {
+      videos = manualVideos;
+    } else {
+      const payload = await getPayload({ config: configPromise });
+      const { docs } = await payload.find({
+        collection: 'videos',
+        where: { id: { in: manualVideos } },
+        depth: 1,
+      });
+      // Giữ nguyên thứ tự video đã được chọn
+      videos = manualVideos.map(id => docs.find(d => d.id === id)).filter(Boolean);
+    }
+  } else {
+    if (!channels || !Array.isArray(channels) || channels.length === 0) return null;
 
-  if (channelIds.length === 0) return null;
+    const channelIds = channels
+      .map(c => typeof c.channel === 'object' ? c.channel.id : c.channel)
+      .filter(Boolean);
 
-  const videos = await getVideos(channelIds, limit);
+    if (channelIds.length === 0) return null;
+
+    videos = await getVideos(channelIds, limit);
+  }
+
   if (!videos.length) return null;
 
   const sectionTitle = title || 'VIDEO NỔI BẬT';

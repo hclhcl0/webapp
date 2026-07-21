@@ -3332,4 +3332,38 @@ export const MIGRATION_STATEMENTS = [
   END $$;
   `,
 
+,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_rels" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "order" integer,
+    "parent_id" integer NOT NULL,
+    "path" varchar NOT NULL,
+    "videos_id" integer,
+    CONSTRAINT "site_settings_rels_parent_fk"
+      FOREIGN KEY ("parent_id") REFERENCES "site_settings" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "site_settings_rels_videos_fk"
+      FOREIGN KEY ("videos_id") REFERENCES "videos" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_rels_order_idx" ON "site_settings_rels" USING btree ("order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_rels_parent_idx" ON "site_settings_rels" USING btree ("parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_rels_path_idx" ON "site_settings_rels" USING btree ("path")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_rels_videos_id_idx" ON "site_settings_rels" USING btree ("videos_id")`,
+
+  `CREATE TABLE IF NOT EXISTS "settings_rels" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "order" integer,
+    "parent_id" integer NOT NULL,
+    "path" varchar NOT NULL,
+    "videos_id" integer,
+    CONSTRAINT "settings_rels_parent_fk"
+      FOREIGN KEY ("parent_id") REFERENCES "settings" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "settings_rels_videos_fk"
+      FOREIGN KEY ("videos_id") REFERENCES "videos" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "settings_rels_order_idx" ON "settings_rels" USING btree ("order")`,
+  `CREATE INDEX IF NOT EXISTS "settings_rels_parent_idx" ON "settings_rels" USING btree ("parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "settings_rels_path_idx" ON "settings_rels" USING btree ("path")`,
+  `CREATE INDEX IF NOT EXISTS "settings_rels_videos_id_idx" ON "settings_rels" USING btree ("videos_id")`
+
 ];

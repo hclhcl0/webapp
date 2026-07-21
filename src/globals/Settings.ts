@@ -437,9 +437,22 @@ export const Settings: GlobalConfig = {
               defaultValue: 'VIDEO NỔI BẬT',
             },
             {
+              name: 'sourceType',
+              type: 'radio',
+              label: 'Nguồn Video',
+              options: [
+                { label: 'Lấy tự động từ Kênh', value: 'auto' },
+                { label: 'Chọn thủ công từng Video', value: 'manual' }
+              ],
+              defaultValue: 'auto',
+            },
+            {
               name: 'channels',
               type: 'array',
               label: 'Chọn các Kênh hiển thị',
+              admin: {
+                condition: (data, siblingData) => siblingData.sourceType !== 'manual',
+              },
               minRows: 1,
               labels: { singular: 'Kênh', plural: 'Các kênh' },
               fields: [
@@ -452,6 +465,16 @@ export const Settings: GlobalConfig = {
                   maxDepth: 0,
                 }
               ]
+            },
+            {
+              name: 'manualVideos',
+              type: 'relationship',
+              relationTo: 'videos',
+              hasMany: true,
+              label: 'Chọn Video thủ công',
+              admin: {
+                condition: (data, siblingData) => siblingData.sourceType === 'manual',
+              },
             },
             {
               type: 'row',
