@@ -3419,6 +3419,6 @@ export const MIGRATION_STATEMENTS = [
     ALTER TABLE "vaccine_packages_items" ADD CONSTRAINT "vaccine_packages_items_parent_id_fk"
     FOREIGN KEY ("_parent_id") REFERENCES "vaccine_packages"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN null;
-  END $$`
-
+  END $$`,
+  `ALTER TYPE enum_banners_position ADD VALUE IF NOT EXISTS 'vaccine_slider';`
 ];
