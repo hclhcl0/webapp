@@ -119,7 +119,7 @@ export default function VideoLibraryClient({ videos, channels }: { videos: any[]
   function buildEmbedUrl(video: any) {
     if (video.platform === 'youtube') {
       const ytId = extractYoutubeId(video.videoUrl);
-      return ytId ? `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0` : null;
+      return ytId ? `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3` : null;
     }
     if (video.platform === 'tiktok') {
       const match = video.videoUrl.match(/tiktok\.com\/.*video\/(\d+)/);

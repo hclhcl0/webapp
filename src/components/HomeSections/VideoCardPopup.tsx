@@ -117,7 +117,7 @@ export function VideoCardPopup({ video, isFeatured = false, variant = 'horizonta
             <div className={`relative w-full ${variant === 'vertical' ? 'h-full absolute inset-0' : 'aspect-video'}`}>
               <iframe
                 className="w-full h-full absolute inset-0"
-                src={`https://www.youtube.com/embed/${yId}?autoplay=1`}
+                src={`https://www.youtube.com/embed/${yId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3`}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
