@@ -19,39 +19,23 @@ const PLATFORMS = [
 ];
 
 const TikTokVideoEmbed = ({ videoUrl }: { videoUrl: string }) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
   const match = videoUrl.match(/tiktok\.com\/.*video\/(\d+)/);
   const tId = match ? match[1] : null;
 
-  React.useEffect(() => {
-    if (!containerRef.current || !tId) return;
+  if (!tId) return null;
 
-    // Remove existing script if any
-    const existingScript = document.querySelector('script[src="https://www.tiktok.com/embed.js"]');
-    if (existingScript) existingScript.remove();
-
-    // Insert blockquote
-    containerRef.current.innerHTML = `
-      <blockquote 
-        class="tiktok-embed" 
-        cite="${videoUrl}" 
-        data-video-id="${tId}" 
-        style="max-width: 400px; min-width: 325px; margin: 0 auto;"
-      >
-        <section></section>
-      </blockquote>
-    `;
-
-    // Inject script
-    const script = document.createElement('script');
-    script.src = 'https://www.tiktok.com/embed.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => { script.remove(); };
-  }, [tId, videoUrl]);
-
-  return <div ref={containerRef} style={{ width: '100%', display: 'flex', justifyContent: 'center' }} />;
+  return (
+    <iframe
+      className={styles.iframe}
+      src={`https://www.tiktok.com/player/v1/${tId}?music_info=1&description=1`}
+      title="TikTok video player"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      referrerPolicy="strict-origin-when-cross-origin"
+      allowFullScreen
+      style={{ aspectRatio: '9/16' }}
+    />
+  );
 };
 
 function extractYoutubeId(url: string) {
