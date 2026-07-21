@@ -107,9 +107,6 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
     <section className={styles.newsSection}>
       <div className="container">
         <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
-          {categoryId && (
-            <hr className="border-t-2 border-gray-200 mb-8 mt-2 shadow-sm" />
-          )}
           <div className="global-section-header">
           <h2 className="global-section-title">
             {title}

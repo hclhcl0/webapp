@@ -27,7 +27,7 @@ export function QuickLinksSection({ title = 'DỊCH VỤ TRỰC TUYẾN', links 
   if (!links?.length) return null;
 
   return (
-    <section className="w-full py-4 bg-white border-y border-[var(--border)]">
+    <section className="w-full py-4 bg-white">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="p-4 sm:p-5 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
           {title && (
