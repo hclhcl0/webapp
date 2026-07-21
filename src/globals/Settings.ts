@@ -428,7 +428,7 @@ export const Settings: GlobalConfig = {
         {
           slug: 'videoSection',
           interfaceName: 'VideoSection',
-          labels: { singular: '🎬 Khu vực Video YouTube', plural: 'Khu vực Video YouTube' },
+          labels: { singular: '🎬 Khu vực Video Đa Kênh', plural: 'Khu vực Video Đa Kênh' },
           fields: [
             {
               name: 'title',
