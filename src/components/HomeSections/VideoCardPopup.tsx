@@ -71,7 +71,7 @@ export function VideoCardPopup({
   // Card values
   const yId = getYoutubeId(video.videoUrl);
   const tId = getTiktokId(video.videoUrl);
-  const thumbUrl = video.thumbnail?.url || (yId ? `https://img.youtube.com/vi/${yId}/${isFeatured ? 'maxresdefault' : 'hqdefault'}.jpg` : '');
+  const thumbUrl = video.thumbnail?.url || (yId ? `https://img.youtube.com/vi/${yId}/maxresdefault.jpg` : '');
 
   // Modal values
   const activeVideo = (videoList.length > 0 && activeIndex >= 0) ? videoList[activeIndex] : video;
