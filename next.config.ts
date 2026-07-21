@@ -21,7 +21,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     cpus: 1,
-    memoryBasedWorkersCount: true,
+    workerThreads: false,
+    memoryBasedWorkersCount: false,
     optimizeCss: true, // Inlines critical CSS to avoid render-blocking
     optimizePackageImports: ['lucide-react', 'react-icons'], // Loại bỏ JS thừa từ các thư viện icon
     serverActions: {
