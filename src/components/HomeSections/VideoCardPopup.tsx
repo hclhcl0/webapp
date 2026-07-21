@@ -100,7 +100,7 @@ export function VideoCardPopup({
           
           {/* Vertical Title Gradient Overlay */}
           {variant === 'vertical' && (
-             <div className="absolute inset-x-0 bottom-0 h-[50%] bg-gradient-to-t from-black to-transparent opacity-95 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
+             <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent opacity-95 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
           )}
 
           {/* Play button overlay */}
@@ -111,7 +111,7 @@ export function VideoCardPopup({
               </svg>
             </div>
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/40 transition-all duration-300 z-20">
+            <div className="absolute inset-0 flex items-center justify-center bg-transparent group-hover:bg-slate-900/50 transition-all duration-300 z-20">
               <div className={`rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 border border-white/30 ${isFeatured ? 'w-20 h-20' : 'w-14 h-14'}`}>
                 <svg viewBox="0 0 24 24" fill="white" className={`${isFeatured ? 'w-8 h-8 ml-1.5' : 'w-6 h-6 ml-1'} drop-shadow-md`}>
                   <polygon points="5 3 19 12 5 21 5 3" />
