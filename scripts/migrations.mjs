@@ -563,6 +563,20 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "settings_blocks_video_section_parent_idx" ON "settings_blocks_video_section" USING btree ("_parent_id")`,
   `CREATE INDEX IF NOT EXISTS "settings_blocks_video_section_path_idx" ON "settings_blocks_video_section" USING btree ("_path")`,
 
+  `CREATE TABLE IF NOT EXISTS "settings_blocks_video_section_channels" (
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "channel_id" integer NOT NULL,
+    CONSTRAINT "settings_blocks_video_section_channels_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "settings_blocks_video_section" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "settings_blocks_video_section_channels_channel_fk"
+      FOREIGN KEY ("channel_id") REFERENCES "video_channels" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "settings_blocks_video_section_channels_order_idx" ON "settings_blocks_video_section_channels" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "settings_blocks_video_section_channels_parent_idx" ON "settings_blocks_video_section_channels" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "settings_blocks_video_section_channels_channel_idx" ON "settings_blocks_video_section_channels" USING btree ("channel_id")`,
+
   `CREATE TABLE IF NOT EXISTS "settings_blocks_tiktok_section" (
     "id" serial PRIMARY KEY NOT NULL,
     "_order" integer NOT NULL,
@@ -2310,7 +2324,7 @@ export const MIGRATION_STATEMENTS = [
       FOREIGN KEY ("_parent_id") REFERENCES "_pages_v" ("id") ON DELETE cascade ON UPDATE no action
   )`,
   `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_order_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_order")`,
-  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_parent_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_parent_idx" ON "_pages_v_blocks_file_downloads_block_parent_idx" USING btree ("_parent_id")`,
   `CREATE INDEX IF NOT EXISTS "_pages_v_blocks_file_downloads_block_path_idx" ON "_pages_v_blocks_file_downloads_block" USING btree ("_path")`,
 
   `CREATE TABLE IF NOT EXISTS "_pages_v_blocks_file_downloads_block_files" (
@@ -2763,6 +2777,20 @@ export const MIGRATION_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_order_idx" ON "site_settings_blocks_video_section" USING btree ("_order")`,
   `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_parent_idx" ON "site_settings_blocks_video_section" USING btree ("_parent_id")`,
   `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_path_idx" ON "site_settings_blocks_video_section" USING btree ("_path")`,
+
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_video_section_channels" (
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "channel_id" integer NOT NULL,
+    CONSTRAINT "site_settings_blocks_video_section_channels_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "site_settings_blocks_video_section" ("id") ON DELETE cascade ON UPDATE no action,
+    CONSTRAINT "site_settings_blocks_video_section_channels_channel_fk"
+      FOREIGN KEY ("channel_id") REFERENCES "video_channels" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_channels_order_idx" ON "site_settings_blocks_video_section_channels" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_channels_parent_idx" ON "site_settings_blocks_video_section_channels" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_video_section_channels_channel_idx" ON "site_settings_blocks_video_section_channels" USING btree ("channel_id")`,
 
   `CREATE TABLE IF NOT EXISTS "site_settings_blocks_tiktok_section" (
     "id" serial PRIMARY KEY NOT NULL,

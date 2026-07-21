@@ -7,17 +7,17 @@ import VideoSliderClient from './VideoSliderClient';
 
 interface VideoSectionProps {
   title?: string;
-  channel: { id: string } | string;
+  channels?: { channel: string | { id: string } }[];
   limit?: number;
   layout?: 'grid' | 'featured';
 }
 
-async function getVideos(channelId: string, limit: number) {
+async function getVideos(channelIds: string[], limit: number) {
   try {
     const payload = await getPayload({ config: configPromise });
     const { docs } = await payload.find({
       collection: 'videos',
-      where: { channel: { equals: channelId } },
+      where: { channel: { in: channelIds } },
       sort: '-publishedDate',
       limit,
       depth: 1,
@@ -28,11 +28,16 @@ async function getVideos(channelId: string, limit: number) {
   }
 }
 
-export async function VideoSection({ title = 'VIDEO NỔI BẬT', channel, limit = 4, layout = 'grid' }: VideoSectionProps) {
-  const channelId = typeof channel === 'object' ? channel.id : channel;
-  if (!channelId) return null;
+export async function VideoSection({ title = 'VIDEO NỔI BẬT', channels, limit = 4, layout = 'grid' }: VideoSectionProps) {
+  if (!channels || !Array.isArray(channels) || channels.length === 0) return null;
 
-  const videos = await getVideos(channelId, limit);
+  const channelIds = channels
+    .map(c => typeof c.channel === 'object' ? c.channel.id : c.channel)
+    .filter(Boolean);
+
+  if (channelIds.length === 0) return null;
+
+  const videos = await getVideos(channelIds, limit);
   if (!videos.length) return null;
 
   const sectionTitle = title || 'VIDEO NỔI BẬT';

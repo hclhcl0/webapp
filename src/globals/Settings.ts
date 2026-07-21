@@ -437,12 +437,21 @@ export const Settings: GlobalConfig = {
               defaultValue: 'VIDEO NỔI BẬT',
             },
             {
-              name: 'channel',
-              type: 'relationship',
-              relationTo: 'video-channels',
-              label: 'Chọn kênh YouTube hiển thị',
-              required: true,
-              maxDepth: 0,
+              name: 'channels',
+              type: 'array',
+              label: 'Chọn các Kênh hiển thị',
+              minRows: 1,
+              labels: { singular: 'Kênh', plural: 'Các kênh' },
+              fields: [
+                {
+                  name: 'channel',
+                  type: 'relationship',
+                  relationTo: 'video-channels',
+                  label: 'Kênh',
+                  required: true,
+                  maxDepth: 0,
+                }
+              ]
             },
             {
               type: 'row',
