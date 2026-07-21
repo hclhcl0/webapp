@@ -1,1 +1,0 @@
-const { Client } = require("pg"); const c = new Client(process.env.DATABASE_URI); c.connect().then(() => c.query("SELECT COUNT(*) FROM documents")).then(r => console.log("Count:", r.rows[0].count)).finally(() => c.end());

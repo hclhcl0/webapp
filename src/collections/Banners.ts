@@ -36,7 +36,7 @@ export const Banners: CollectionConfig = {
       type: 'text',
       label: 'Đường dẫn khi Click (Không bắt buộc)',
       admin: {
-        description: 'Nhập URL nếu muốn Banner có thể click được (VD: /news/ten-bai-viet)',
+        description: 'Nhập đường dẫn để khách hàng click vào banner. Dùng link nội bộ (VD: /goi-vac-xin, /cam-nang) hoặc link web khác (VD: https://facebook.com/...)',
       },
     },
     {
@@ -54,8 +54,8 @@ export const Banners: CollectionConfig = {
       type: 'select',
       defaultValue: 'home_slider',
       options: [
-        { label: 'Slider Trang chủ (Trên cùng)', value: 'home_slider' },
-        { label: 'Slider Trang Gói Vắc xin', value: 'vaccine_slider' },
+        { label: 'Slider Trang chủ (URL: /)', value: 'home_slider' },
+        { label: 'Slider Trang Gói/Danh mục Vắc xin (URL: /goi-vac-xin)', value: 'vaccine_slider' },
         { label: 'Cột bên phải (Sidebar)', value: 'sidebar' },
         { label: 'Dưới cùng trang (Footer)', value: 'footer' },
       ],

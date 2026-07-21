@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
@@ -55,6 +55,12 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
   const [selectedDisease, setSelectedDisease] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'popular' | 'price_asc' | 'price_desc'>('popular');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedDisease, searchQuery, sortBy]);
 
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 5000 })]);
 
@@ -86,18 +92,21 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
     return filtered;
   }, [vaccines, selectedDisease, searchQuery, sortBy]);
 
+  const totalPages = Math.ceil(filteredVaccines.length / itemsPerPage);
+  const currentVaccines = filteredVaccines.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
-    <div className="w-full bg-[#f4f6f9] min-h-screen pb-12 font-sans">
+    <div className="w-full bg-[#f4f6f9] min-h-screen pb-12">
       
       {/* ── Banners (Container rounded) ── */}
       <div className="container mx-auto px-4 max-w-7xl pt-6 mb-6">
         {banners && banners.length > 0 ? (
-          <div className="w-full bg-white relative overflow-hidden rounded-2xl shadow-sm" ref={emblaRef}>
+          <div className="w-full bg-white relative overflow-hidden rounded-2xl shadow-sm border-2 border-white" ref={emblaRef}>
             <div className="flex touch-pan-y">
               {banners.map((banner) => {
                 const slideContent = (
                   <div key={banner.id} className="relative flex-[0_0_100%] min-w-0">
-                    <div className="w-full relative aspect-[21/9] md:aspect-[4/1] bg-gray-100">
+                    <div className="w-full relative aspect-[21/9] md:aspect-[5/1] bg-gray-100">
                       <Image
                         src={banner.image?.url || ''}
                         alt={banner.title || ''}
@@ -136,17 +145,17 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
             </div>
           </div>
         ) : (
-          <div className="w-full bg-white relative overflow-hidden rounded-2xl shadow-sm" ref={emblaRef}>
+          <div className="w-full bg-white relative overflow-hidden rounded-2xl shadow-sm border-2 border-white" ref={emblaRef}>
             <div className="flex touch-pan-y">
               {[1, 2].map((_, idx) => (
                 <div key={idx} className="relative flex-[0_0_100%] min-w-0">
-                  <div className="w-full h-[180px] md:h-[280px] bg-gradient-to-r from-[#1250dc] to-[#0ea5e9] relative flex items-center px-6 md:px-16">
+                  <div className="w-full h-[160px] md:h-[240px] bg-gradient-to-r from-[#007a8c] to-[#0ea5e9] relative flex items-center px-6 md:px-16">
                     <div className="text-white z-10 max-w-xl">
-                      <h2 className="text-xl md:text-4xl font-black mb-2 uppercase text-yellow-300 drop-shadow-md">
+                      <h2 className="text-xl md:text-4xl font-bold mb-2 uppercase text-yellow-300 drop-shadow-md">
                         GÓI VẮC XIN NGỪA HPV
                       </h2>
-                      <p className="text-base md:text-xl font-semibold mb-4 text-blue-50">Bảo vệ toàn diện sức khỏe</p>
-                      <div className="inline-flex items-center gap-2 bg-white text-[#1250dc] rounded-full px-5 py-2.5 font-bold shadow-md hover:bg-yellow-50 transition cursor-pointer">
+                      <p className="text-base md:text-xl font-semibold mb-4 text-[#f0f9fa]">Bảo vệ toàn diện sức khỏe</p>
+                      <div className="inline-flex items-center gap-2 bg-white text-[#007a8c] rounded-full px-5 py-2.5 font-bold shadow-md hover:bg-yellow-50 transition cursor-pointer">
                         <span>Tư vấn ngay: {phoneNumber}</span>
                       </div>
                     </div>
@@ -159,43 +168,40 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
         )}
       </div>
 
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex flex-col lg:flex-row gap-6">
-          
-          {/* ── LEFT SIDEBAR (Desktop) / TOP MENU (Mobile) ── */}
-          <div className="w-full lg:w-1/4 flex-shrink-0">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
-              
-              {/* Type Switcher */}
-              <div className="flex border-b border-gray-100">
-                <button
-                  onClick={() => setActiveTab('disease')}
-                  className={`flex-1 py-4 text-center font-bold text-[15px] transition-colors ${activeTab === 'disease' ? 'text-[#1250dc] border-b-2 border-[#1250dc] bg-blue-50/50' : 'text-gray-500 hover:bg-gray-50'}`}
-                >
-                  Vắc xin lẻ
-                </button>
-                <button
-                  onClick={() => setActiveTab('package')}
-                  className={`flex-1 py-4 text-center font-bold text-[15px] transition-colors ${activeTab === 'package' ? 'text-[#1250dc] border-b-2 border-[#1250dc] bg-blue-50/50' : 'text-gray-500 hover:bg-gray-50'}`}
-                >
-                  Gói vắc xin
-                </button>
-              </div>
+      {/* ── GLOBAL TABS ── */}
+      <div className="container mx-auto px-4 max-w-7xl mb-6 flex justify-center">
+        <div className="flex gap-2 w-full sm:w-fit bg-white p-1.5 rounded-full shadow-sm border border-gray-200">
+          <button
+            onClick={() => setActiveTab('disease')}
+            className={`flex-1 sm:w-48 py-3 px-4 rounded-full text-center font-bold text-[15px] transition-all ${activeTab === 'disease' ? 'text-white bg-[#007a8c] shadow-md' : 'text-gray-600 bg-transparent hover:bg-[#f0f9fa]'}`}
+          >
+            Vắc xin phòng bệnh
+          </button>
+          <button
+            onClick={() => setActiveTab('package')}
+            className={`flex-1 sm:w-48 py-3 px-4 rounded-full text-center font-bold text-[15px] transition-all ${activeTab === 'package' ? 'text-white bg-[#007a8c] shadow-md' : 'text-gray-600 bg-transparent hover:bg-[#f0f9fa]'}`}
+          >
+            Gói vắc xin
+          </button>
+        </div>
+      </div>
 
-              {/* Disease Categories List (Only show when activeTab is disease) */}
-              {activeTab === 'disease' && (
-                <div className="max-h-[60vh] overflow-y-auto custom-scrollbar">
+      <div className="container mx-auto px-4 max-w-7xl">
+        {activeTab === 'disease' ? (
+          <div className="flex flex-col lg:flex-row gap-6">
+            
+            {/* ── LEFT SIDEBAR (Desktop) / TOP MENU (Mobile) ── */}
+            <div className="w-full lg:w-1/4 flex-shrink-0">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
+                
+                {/* Disease Categories List */}
+                <div className="max-h-[70vh] overflow-y-auto custom-scrollbar">
                   <div className="p-2">
                     <button
                       onClick={() => setSelectedDisease(null)}
-                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left ${selectedDisease === null ? 'bg-[#1250dc] text-white font-bold' : 'text-gray-700 hover:bg-gray-100 font-medium'}`}
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left ${selectedDisease === null ? 'bg-[#007a8c] text-white font-bold' : 'text-gray-700 hover:bg-gray-100 font-medium'}`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`p-1.5 rounded-lg ${selectedDisease === null ? 'bg-white/20' : 'bg-gray-200'}`}>
-                           <Shield size={16} />
-                        </div>
-                        <span className="text-[14px]">Tất cả vắc xin</span>
-                      </div>
+                      <span className="text-[14px]">Tất cả vắc xin</span>
                       <span className={`text-[11px] px-2 py-0.5 rounded-full ${selectedDisease === null ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-500'}`}>
                         {vaccines.length}
                       </span>
@@ -205,29 +211,18 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
                       <button
                         key={i}
                         onClick={() => setSelectedDisease(d.name)}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left mt-1 ${selectedDisease === d.name ? 'bg-[#1250dc] text-white font-bold' : 'text-gray-700 hover:bg-gray-100 font-medium'}`}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left mt-1 ${selectedDisease === d.name ? 'bg-[#007a8c] text-white font-bold' : 'text-gray-700 hover:bg-gray-100 font-medium'}`}
                       >
-                        <div className="flex items-center gap-3">
-                          <div className={`p-1.5 rounded-lg ${selectedDisease === d.name ? 'bg-white/20 text-white' : 'bg-blue-50 text-[#1250dc]'}`}>
-                            {d.icon}
-                          </div>
-                          <span className="text-[14px] leading-tight line-clamp-2 pr-2">{d.name}</span>
-                        </div>
+                        <span className="text-[14px] leading-tight line-clamp-2 pr-2">{d.name}</span>
                       </button>
                     ))}
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* ── RIGHT MAIN CONTENT ── */}
-          <div className="w-full lg:w-3/4 flex-1">
-            {activeTab === 'package' ? (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-1 md:p-4">
-                 <VaccinePackageUI packages={packages} phoneNumber={phoneNumber} />
               </div>
-            ) : (
+            </div>
+
+            {/* ── RIGHT MAIN CONTENT ── */}
+            <div className="w-full lg:w-3/4 flex-1">
               <div className="flex flex-col gap-4">
                 {/* Search & Filter Bar */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -238,7 +233,7 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
                     <input
                       type="text"
                       placeholder="Tìm tên vắc xin hoặc loại bệnh..."
-                      className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#1250dc]/30 focus:border-[#1250dc] transition-all"
+                      className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#007a8c]/30 focus:border-[#007a8c] transition-all"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -248,19 +243,19 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
                     <span className="text-xs font-semibold text-gray-500 whitespace-nowrap hidden sm:block uppercase tracking-wider">Sắp xếp:</span>
                     <button
                       onClick={() => setSortBy('popular')}
-                      className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${sortBy === 'popular' ? 'bg-blue-50 text-[#1250dc] border border-blue-200' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                      className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${sortBy === 'popular' ? 'bg-[#f0f9fa] text-[#007a8c] border border-[#d0eef2]' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
                     >
                       Bán chạy
                     </button>
                     <button
                       onClick={() => setSortBy('price_asc')}
-                      className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${sortBy === 'price_asc' ? 'bg-blue-50 text-[#1250dc] border border-blue-200' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                      className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${sortBy === 'price_asc' ? 'bg-[#f0f9fa] text-[#007a8c] border border-[#d0eef2]' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
                     >
                       Giá thấp
                     </button>
                     <button
                       onClick={() => setSortBy('price_desc')}
-                      className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${sortBy === 'price_desc' ? 'bg-blue-50 text-[#1250dc] border border-blue-200' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                      className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${sortBy === 'price_desc' ? 'bg-[#f0f9fa] text-[#007a8c] border border-[#d0eef2]' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
                     >
                       Giá cao
                     </button>
@@ -277,64 +272,101 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
                     <p className="text-gray-500 text-sm">Thử tìm kiếm với một từ khóa khác hoặc bỏ chọn bệnh lý.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                    {filteredVaccines.map((v) => (
-                      <div key={v.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col group cursor-pointer">
-                        {/* Top Banner (Abstract representation of the product) */}
-                        <div className="h-28 bg-gradient-to-br from-blue-50 to-[#e0e7ff] relative p-4 flex items-start justify-between border-b border-blue-50">
-                          <div className={`text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-md whitespace-nowrap shadow-sm
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                      {currentVaccines.map((v) => (
+                      <div key={v.id} className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col group cursor-pointer">
+                        {/* Top Banner */}
+                        <div className="bg-gradient-to-br from-[#f0f9fa] to-[#d0eef2] relative px-3 py-2.5 flex items-start justify-between border-b border-gray-100">
+                          <div className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded shadow-sm
                             ${v.status === 'in_stock' ? 'bg-[#e6f4ea] text-[#137333] border border-[#ceead6]' : 'bg-[#fce8e6] text-[#c5221f] border border-[#fad2cf]'}`}
                           >
                             {v.status === 'in_stock' ? 'Còn hàng' : 'Hết hàng'}
                           </div>
-                          
-                          <div className="w-16 h-16 bg-white rounded-full shadow-md flex items-center justify-center text-[#1250dc] absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 border-[5px] border-white z-10">
-                             <Syringe size={28} strokeWidth={2} />
-                          </div>
                         </div>
                         
                         {/* Content */}
-                        <div className="p-5 pt-10 flex-1 flex flex-col bg-white">
-                          <p className="text-[11px] font-bold text-[#1250dc] uppercase tracking-wider mb-1 line-clamp-1">{v.disease}</p>
-                          <h3 className="font-bold text-gray-800 text-base leading-snug mb-4 line-clamp-2 min-h-[44px] group-hover:text-[#1250dc] transition-colors">{v.name}</h3>
+                        <div className="p-3.5 flex-1 flex flex-col bg-white">
+                          <p className="text-[10px] font-bold text-[#007a8c] uppercase tracking-wider mb-1 line-clamp-1">{v.disease}</p>
+                          <h3 className="font-bold text-gray-800 text-[14px] leading-snug mb-3 line-clamp-2 min-h-[40px] group-hover:text-[#007a8c] transition-colors">{v.name}</h3>
                           
-                          <div className="grid grid-cols-1 gap-2.5 mb-5 flex-1">
-                            <div className="flex items-start gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span>
-                              <div className="text-xs">
-                                <span className="text-gray-500 font-medium">Xuất xứ: </span>
-                                <span className="text-gray-800 font-semibold">{v.origin}</span>
+                          <div className="grid grid-cols-1 gap-1 mb-3 flex-1">
+                            {v.origin && (
+                              <div className="flex items-start gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span>
+                                <div className="text-[11px] leading-tight">
+                                  <span className="text-gray-500 font-medium">Xuất xứ: </span>
+                                  <span className="text-gray-800 font-semibold">{v.origin}</span>
+                                </div>
                               </div>
-                            </div>
-                            <div className="flex items-start gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span>
-                              <div className="text-xs">
-                                <span className="text-gray-500 font-medium">Phòng bệnh: </span>
-                                <span className="text-gray-800 font-semibold line-clamp-2" title={v.target_group}>{v.target_group}</span>
+                            )}
+                            {v.target_group && (
+                              <div className="flex items-start gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#007a8c] mt-1.5 flex-shrink-0"></span>
+                                <div className="text-[11px] leading-tight">
+                                  <span className="text-gray-800 font-semibold line-clamp-2" title={v.target_group}>{v.target_group}</span>
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </div>
 
-                          <div className="pt-4 border-t border-gray-100 flex items-center justify-between mb-4">
+                          <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between mb-3">
                              <div className="flex flex-col">
-                               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Giá bán</span>
-                               <span className="text-xl font-black text-[#1250dc]">{v.price.toLocaleString('vi-VN')}đ</span>
+                               <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Giá bán</span>
+                               <span className="text-[16px] font-bold text-[#007a8c]">{v.price.toLocaleString('vi-VN')}đ</span>
                              </div>
                           </div>
                           
-                          <button className="w-full bg-white border-2 border-[#1250dc] text-[#1250dc] hover:bg-[#1250dc] hover:text-white font-bold py-2.5 rounded-xl transition-colors text-sm flex items-center justify-center gap-2 group-hover:bg-[#1250dc] group-hover:text-white shadow-sm">
-                             Đăng ký <ChevronRight size={16} />
+                          <button className="w-full bg-white border border-[#007a8c] text-[#007a8c] hover:bg-[#007a8c] hover:text-white font-bold py-1.5 rounded-lg transition-colors text-[12px] flex items-center justify-center gap-1 group-hover:bg-[#007a8c] group-hover:text-white shadow-sm">
+                             Đăng ký <ChevronRight size={14} />
                           </button>
                         </div>
                       </div>
                     ))}
-                  </div>
+                    </div>
+                    
+                    {/* Pagination UI */}
+                    {totalPages > 1 && (
+                      <div className="flex justify-center items-center gap-2 mt-8 mb-4">
+                        <button
+                          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                          disabled={currentPage === 1}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white border border-gray-200 text-gray-600 hover:bg-[#007a8c] hover:text-white hover:border-[#007a8c] shadow-sm'}`}
+                        >
+                          <ChevronRight className="rotate-180" size={18} />
+                        </button>
+                        
+                        <div className="flex items-center gap-1">
+                          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                            <button
+                              key={page}
+                              onClick={() => setCurrentPage(page)}
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${currentPage === page ? 'bg-[#007a8c] text-white shadow-md' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}
+                            >
+                              {page}
+                            </button>
+                          ))}
+                        </div>
+
+                        <button
+                          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                          disabled={currentPage === totalPages}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white border border-gray-200 text-gray-600 hover:bg-[#007a8c] hover:text-white hover:border-[#007a8c] shadow-sm'}`}
+                        >
+                          <ChevronRight size={18} />
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
-            )}
+            </div>
           </div>
-
-        </div>
+        ) : (
+          <div className="w-full pt-4">
+            <VaccinePackageUI packages={packages} vaccines={vaccines} phoneNumber={phoneNumber} />
+          </div>
+        )}
       </div>
     </div>
   );
