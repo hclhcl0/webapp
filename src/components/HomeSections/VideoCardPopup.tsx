@@ -120,12 +120,12 @@ export function VideoCardPopup({
             </div>
           )}
         </div>
-        <div className={`relative z-20 ${variant === 'vertical' ? 'p-4 mt-auto flex flex-col' : (isFeatured ? "p-4" : "p-3 flex-1 flex flex-col")}`}>
-          <h4 className={`${variant === 'vertical' ? 'font-bold text-white text-[15px] group-hover:text-blue-300 drop-shadow-md' : (isFeatured ? 'font-bold text-base' : 'text-sm font-semibold')} line-clamp-3 transition-colors leading-tight ${variant !== 'vertical' && 'text-gray-800 group-hover:text-[var(--primary)]'}`}>
+        <div className={`relative z-20 ${variant === 'vertical' ? 'p-2.5 sm:p-3 mt-auto flex flex-col' : (isFeatured ? "p-4" : "p-3 flex-1 flex flex-col")}`}>
+          <h4 className={`${variant === 'vertical' ? 'font-bold text-white text-xs sm:text-[13px] group-hover:text-blue-300 drop-shadow-md' : (isFeatured ? 'font-bold text-base' : 'text-sm font-semibold')} line-clamp-2 transition-colors leading-snug ${variant !== 'vertical' && 'text-gray-800 group-hover:text-[var(--primary)]'}`}>
             {video.title}
           </h4>
           {variant === 'vertical' && video.description && (
-             <p className="text-white/90 text-xs line-clamp-3 mt-1.5 drop-shadow-md font-medium">
+             <p className="text-white/80 text-[10px] sm:text-xs line-clamp-1 mt-0.5 drop-shadow-md">
                {video.description}
              </p>
           )}

@@ -129,7 +129,7 @@ export async function VideoSection({
                 {videos.map((video: any, index: number) => (
                   <div 
                     key={video.id} 
-                    className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-0.25rem)] md:flex-[0_0_calc(33.333%-0.375rem)] lg:flex-[0_0_calc(20%-0.4rem)] min-w-0"
+                    className="flex-[0_0_42%] sm:flex-[0_0_calc(33.333%-0.375rem)] md:flex-[0_0_calc(25%-0.375rem)] lg:flex-[0_0_calc(16.666%-0.4rem)] min-w-0 aspect-[3/4]"
                   >
                     <VideoCardPopup video={video} videoList={videos} initialIndex={index} variant="vertical" />
                   </div>
