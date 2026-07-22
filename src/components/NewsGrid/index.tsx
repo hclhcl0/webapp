@@ -157,17 +157,6 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                     {article.description && (
                       <p className={styles.listExcerpt}>{article.description}</p>
                     )}
-                    <div className={styles.listMeta}>
-                      <span className="flex items-center gap-1">
-                        <Calendar size={12} /> 
-                        {new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Eye size={12} /> 
-                        {article.views || 0}
-                      </span>
-                      <span className="ml-auto text-[var(--primary)] font-semibold text-xs">{catName}</span>
-                    </div>
                   </div>
                 </article>
               );
@@ -220,10 +209,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                         {article.title}
                       </Link>
                     </h4>
-                    <div className={styles.sideMeta}>
-                      <span>{new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}</span>
-                      <span className="text-[var(--primary)]">{sideCatName}</span>
-                    </div>
+
                   </div>
                 </article>
               );
@@ -255,7 +241,6 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                         unoptimized={!isInternalUrl(featuredMediaUrl)}
                       />
                     </Link>
-                    <span className={styles.catBadge}>{featuredCatName}</span>
                   </div>
                   <div className={styles.bigBody}>
                     <h3 className={styles.bigTitle}>
@@ -266,16 +251,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                     {featuredArticle.description && (
                       <p className={styles.bigExcerpt}>{featuredArticle.description}</p>
                     )}
-                    <div className={styles.bigMeta}>
-                      <span className="flex items-center gap-2">
-                        <Calendar size={12} /> 
-                        {new Date(featuredArticle.publishedAt || featuredArticle.createdAt).toLocaleDateString('vi-VN')}
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <Eye size={12} /> 
-                        {featuredArticle.views || 0}
-                      </span>
-                    </div>
+
                   </div>
                 </div>
 
@@ -308,10 +284,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                               {article.title}
                             </Link>
                           </h4>
-                          <div className={styles.sideMeta}>
-                            <span>{new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}</span>
-                            <span className="text-[var(--primary)]">{sideCatName}</span>
-                          </div>
+
                         </div>
                       </article>
                     );
@@ -349,7 +322,6 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                         unoptimized={!isInternalUrl(mediaUrl)}
                       />
                     </Link>
-                    <span className={styles.catBadge}>{catName}</span>
                   </div>
                   <div className={styles.body}>
                     <h3 className={styles.title}>
@@ -357,10 +329,7 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                         {article.title}
                       </Link>
                     </h3>
-                    <div className={styles.meta}>
-                      <span className="flex items-center gap-2"><Calendar size={12}/> {new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}</span>
-                      <span className="flex items-center gap-2"><Eye size={12}/> {article.views || 0}</span>
-                    </div>
+
                   </div>
                 </article>
               );

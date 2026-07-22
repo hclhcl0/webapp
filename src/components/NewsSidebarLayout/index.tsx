@@ -95,9 +95,6 @@ export const NewsSidebarLayout = async ({
                         src={articles[0].image?.url || 'https://via.placeholder.com/800x450?text=CDC'}
                         alt={articles[0].title}
                       />
-                      <span className={styles.catBadge}>
-                        {typeof articles[0].category === 'object' ? articles[0].category?.name : 'Tin tức'}
-                      </span>
                     </Link>
                     <div className={styles.featuredBody}>
                       <h3 className={styles.featuredTitle}>

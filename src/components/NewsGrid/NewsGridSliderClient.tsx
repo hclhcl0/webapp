@@ -66,7 +66,6 @@ export const NewsGridSliderClient = ({ articles, desktopCols, mobileCols }: News
                         unoptimized={!isInternalUrl(mediaUrl)}
                       />
                     </Link>
-                    <span className={styles.catBadge}>{catName}</span>
                   </div>
                   <div className={styles.body}>
                     <h3 className={styles.title}>
@@ -74,16 +73,7 @@ export const NewsGridSliderClient = ({ articles, desktopCols, mobileCols }: News
                         {article.title}
                       </Link>
                     </h3>
-                    <div className={styles.meta}>
-                      <span className="flex items-center gap-2">
-                        <Calendar size={12} /> 
-                        <span suppressHydrationWarning>{new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}</span>
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <Eye size={12} /> 
-                        {article.views || 0}
-                      </span>
-                    </div>
+
                   </div>
                 </article>
               </div>
