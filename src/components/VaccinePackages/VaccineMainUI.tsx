@@ -170,16 +170,16 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
 
       {/* ── GLOBAL TABS ── */}
       <div className="container mx-auto px-4 max-w-7xl mb-6 flex justify-center">
-        <div className="flex gap-2 w-full sm:w-fit bg-white p-1.5 rounded-full shadow-sm border border-gray-200">
+        <div className="flex gap-1 w-full sm:w-fit bg-white p-1 rounded-full shadow-sm border border-gray-100">
           <button
             onClick={() => setActiveTab('disease')}
-            className={`flex-1 sm:w-48 py-3 px-4 rounded-full text-center font-bold text-[15px] transition-all ${activeTab === 'disease' ? 'text-white bg-[#007a8c] shadow-md' : 'text-gray-600 bg-transparent hover:bg-[#f0f9fa]'}`}
+            className={`flex-1 sm:w-48 py-2 px-4 rounded-full text-center font-bold text-[14px] transition-all ${activeTab === 'disease' ? 'text-white bg-[#007a8c] shadow-md' : 'text-gray-600 bg-transparent hover:bg-[#f0f9fa]'}`}
           >
             Vắc xin phòng bệnh
           </button>
           <button
             onClick={() => setActiveTab('package')}
-            className={`flex-1 sm:w-48 py-3 px-4 rounded-full text-center font-bold text-[15px] transition-all ${activeTab === 'package' ? 'text-white bg-[#007a8c] shadow-md' : 'text-gray-600 bg-transparent hover:bg-[#f0f9fa]'}`}
+            className={`flex-1 sm:w-48 py-2 px-4 rounded-full text-center font-bold text-[14px] transition-all ${activeTab === 'package' ? 'text-white bg-[#007a8c] shadow-md' : 'text-gray-600 bg-transparent hover:bg-[#f0f9fa]'}`}
           >
             Gói vắc xin
           </button>
@@ -188,21 +188,20 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
 
       <div className="container mx-auto px-4 max-w-7xl">
         {activeTab === 'disease' ? (
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col lg:flex-row p-4 md:p-6 md:pb-4 gap-6 relative">
             
             {/* ── LEFT SIDEBAR (Desktop) / TOP MENU (Mobile) ── */}
-            <div className="w-full lg:w-1/4 flex-shrink-0">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
+            <div className="w-full lg:w-1/4 flex-shrink-0 border-b lg:border-b-0 lg:border-r border-gray-100 pb-4 lg:pb-0 lg:pr-4 relative">
+              <div className="sticky top-24 max-h-[calc(100vh-160px)] overflow-y-auto custom-scrollbar">
                 
                 {/* Disease Categories List */}
-                <div className="max-h-[70vh] overflow-y-auto custom-scrollbar">
-                  <div className="p-2">
+                <div className="p-1.5">
                     <button
                       onClick={() => setSelectedDisease(null)}
-                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left ${selectedDisease === null ? 'bg-[#007a8c] text-white font-bold' : 'text-gray-700 hover:bg-gray-100 font-medium'}`}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all text-left ${selectedDisease === null ? 'bg-[#007a8c] text-white font-bold' : 'text-gray-700 hover:bg-gray-100 font-medium'}`}
                     >
-                      <span className="text-[14px]">Tất cả vắc xin</span>
-                      <span className={`text-[11px] px-2 py-0.5 rounded-full ${selectedDisease === null ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                      <span className="text-[13px]">Tất cả vắc xin</span>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${selectedDisease === null ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-500'}`}>
                         {vaccines.length}
                       </span>
                     </button>
@@ -211,13 +210,12 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
                       <button
                         key={i}
                         onClick={() => setSelectedDisease(d.name)}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left mt-1 ${selectedDisease === d.name ? 'bg-[#007a8c] text-white font-bold' : 'text-gray-700 hover:bg-gray-100 font-medium'}`}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-all text-left mt-0.5 ${selectedDisease === d.name ? 'bg-[#007a8c] text-white font-bold' : 'text-gray-700 hover:bg-gray-100 font-medium'}`}
                       >
-                        <span className="text-[14px] leading-tight line-clamp-2 pr-2">{d.name}</span>
+                        <span className="text-[13px] leading-snug line-clamp-2 pr-2">{d.name}</span>
                       </button>
                     ))}
                   </div>
-                </div>
               </div>
             </div>
 
@@ -225,7 +223,7 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
             <div className="w-full lg:w-3/4 flex-1">
               <div className="flex flex-col gap-4">
                 {/* Search & Filter Bar */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
                   <div className="relative flex-1 max-w-md">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <Search size={18} className="text-gray-400" />
@@ -275,51 +273,45 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
                   <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                       {currentVaccines.map((v) => (
-                      <div key={v.id} className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col group cursor-pointer">
-                        {/* Top Banner */}
-                        <div className="bg-gradient-to-br from-[#f0f9fa] to-[#d0eef2] relative px-3 py-2.5 flex items-start justify-between border-b border-gray-100">
-                          <div className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded shadow-sm
-                            ${v.status === 'in_stock' ? 'bg-[#e6f4ea] text-[#137333] border border-[#ceead6]' : 'bg-[#fce8e6] text-[#c5221f] border border-[#fad2cf]'}`}
-                          >
+                      <div key={v.id} className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:border-[#007a8c]/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col group cursor-pointer p-3">
+                        {/* Header: Disease & Badge */}
+                        <div className="flex justify-between items-start mb-1.5 gap-2">
+                           <p className="text-[10px] font-bold text-[#007a8c] uppercase tracking-wider line-clamp-1 leading-snug">{v.disease}</p>
+                           <div className={`text-[8px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded flex-shrink-0
+                            ${v.status === 'in_stock' ? 'bg-[#e6f4ea] text-[#137333]' : 'bg-[#fce8e6] text-[#c5221f]'}`}
+                           >
                             {v.status === 'in_stock' ? 'Còn hàng' : 'Hết hàng'}
-                          </div>
+                           </div>
                         </div>
-                        
-                        {/* Content */}
-                        <div className="p-3.5 flex-1 flex flex-col bg-white">
-                          <p className="text-[10px] font-bold text-[#007a8c] uppercase tracking-wider mb-1 line-clamp-1">{v.disease}</p>
-                          <h3 className="font-bold text-gray-800 text-[14px] leading-snug mb-3 line-clamp-2 min-h-[40px] group-hover:text-[#007a8c] transition-colors">{v.name}</h3>
-                          
-                          <div className="grid grid-cols-1 gap-1 mb-3 flex-1">
+
+                        {/* Title */}
+                        <h3 className="font-bold text-gray-800 text-[13px] leading-snug mb-2 line-clamp-2 group-hover:text-[#007a8c] transition-colors">{v.name}</h3>
+
+                        {/* Info list */}
+                        <div className="flex flex-col gap-1 mb-3 flex-1">
                             {v.origin && (
-                              <div className="flex items-start gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-gray-300 mt-1.5 flex-shrink-0"></span>
-                                <div className="text-[11px] leading-tight">
-                                  <span className="text-gray-500 font-medium">Xuất xứ: </span>
-                                  <span className="text-gray-800 font-semibold">{v.origin}</span>
-                                </div>
+                              <div className="flex items-center gap-1.5 text-[11px]">
+                                <span className="w-1 h-1 rounded-full bg-gray-400 flex-shrink-0"></span>
+                                <span className="text-gray-500">Xuất xứ: <span className="text-gray-800 font-semibold">{v.origin}</span></span>
                               </div>
                             )}
                             {v.target_group && (
-                              <div className="flex items-start gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#007a8c] mt-1.5 flex-shrink-0"></span>
-                                <div className="text-[11px] leading-tight">
-                                  <span className="text-gray-800 font-semibold line-clamp-2" title={v.target_group}>{v.target_group}</span>
-                                </div>
+                              <div className="flex items-start gap-1.5 text-[11px]">
+                                <span className="w-1 h-1 rounded-full bg-[#007a8c] mt-1.5 flex-shrink-0"></span>
+                                <span className="text-gray-800 font-medium line-clamp-2 leading-tight" title={v.target_group}>{v.target_group}</span>
                               </div>
                             )}
-                          </div>
+                        </div>
 
-                          <div className="pt-2.5 border-t border-gray-100 flex items-center justify-between mb-3">
-                             <div className="flex flex-col">
-                               <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Giá bán</span>
-                               <span className="text-[16px] font-bold text-[#007a8c]">{v.price.toLocaleString('vi-VN')}đ</span>
-                             </div>
-                          </div>
-                          
-                          <button className="w-full bg-white border border-[#007a8c] text-[#007a8c] hover:bg-[#007a8c] hover:text-white font-bold py-1.5 rounded-lg transition-colors text-[12px] flex items-center justify-center gap-1 group-hover:bg-[#007a8c] group-hover:text-white shadow-sm">
-                             Đăng ký <ChevronRight size={14} />
-                          </button>
+                        {/* Footer: Price and Button */}
+                        <div className="flex items-end justify-between mt-auto pt-2.5 border-t border-gray-100">
+                           <div className="flex flex-col">
+                             <span className="text-[9px] text-gray-400 uppercase tracking-wider mb-0.5">Giá bán</span>
+                             <span className="text-[14px] font-bold text-[#e02b2b] leading-none">{v.price.toLocaleString('vi-VN')}đ</span>
+                           </div>
+                           <button className="bg-white border border-[#007a8c] text-[#007a8c] font-bold py-1 px-3 rounded transition-colors text-[11px] flex items-center justify-center gap-0.5 group-hover:bg-[#007a8c] group-hover:text-white shadow-sm">
+                             Đăng ký <ChevronRight size={12} />
+                           </button>
                         </div>
                       </div>
                     ))}
@@ -327,7 +319,7 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
                     
                     {/* Pagination UI */}
                     {totalPages > 1 && (
-                      <div className="flex justify-center items-center gap-2 mt-8 mb-4">
+                      <div className="flex justify-center items-center gap-2 mt-6 mb-1">
                         <button
                           onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                           disabled={currentPage === 1}
