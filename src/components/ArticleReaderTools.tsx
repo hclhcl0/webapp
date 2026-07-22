@@ -403,7 +403,7 @@ export function ArticleReaderTools({
     const titleEl = document.querySelector("h1");
     const titleText = titleEl ? titleEl.textContent || "" : "";
 
-    const textEls = Array.from(prose.querySelectorAll("p, h2, h3, li"));
+    const textEls = Array.from(prose.querySelectorAll("p, h2, h3, li, th, td"));
     const paragraphs = textEls
       .map(el => el.textContent?.trim() || "")
       .filter(text => text.length > 0);
@@ -529,36 +529,28 @@ export function ArticleReaderTools({
       {(mode === "all" || mode === "tools") && cfg.showFontSize && (
       <div className="reader-tools-group">
         <button
-          onClick={() => setFontSize("normal")}
-          className={`reader-tools-btn font-size-btn w-10 h-10 shrink-0 min-w-[40px] ${fontSize === "normal" ? "bg-gov-primary text-white" : ""}`}
-          title="Cỡ chữ thường"
+          onClick={() => {
+            if (fontSize === "normal") setFontSize("large");
+            else if (fontSize === "large") setFontSize("xlarge");
+            else setFontSize("normal");
+          }}
+          className="reader-tools-btn font-size-btn w-10 h-10 shrink-0 min-w-[40px] bg-gov-primary text-white font-bold"
+          title={`Cỡ chữ: ${fontSize === "normal" ? "Thường" : fontSize === "large" ? "Lớn" : "Rất lớn"}`}
         >
-          A
-        </button>
-        <button
-          onClick={() => setFontSize("large")}
-          className={`reader-tools-btn font-size-btn w-10 h-10 shrink-0 min-w-[40px] ${fontSize === "large" ? "bg-gov-primary text-white" : ""}`}
-          title="Cỡ chữ lớn"
-        >
-          A+
-        </button>
-        <button
-          onClick={() => setFontSize("xlarge")}
-          className={`reader-tools-btn font-size-btn w-10 h-10 shrink-0 min-w-[40px] ${fontSize === "xlarge" ? "bg-gov-primary text-white" : ""}`}
-          title="Cỡ chữ rất lớn"
-        >
-          A++
+          {fontSize === "normal" ? "Aa" : fontSize === "large" ? "Aa+" : "Aa++"}
         </button>
       </div>
       )}
 
       {/* TTS Audio Controls group */}
-      {isSupported && cfg.showTTS && (mode === "all" || mode === "tts") && (
+      {isSupported && cfg.showTTS && (mode === "all" || mode === "tts" || mode === "tools") && (
         <div className={mode === "tts" ? "flex items-center gap-2 flex-row flex-wrap" : "reader-tools-group"}>
-          <span className="reader-tools-label">
-            <AudioIcon />
-            <span className="reader-tools-btn-text hidden">Nghe bài viết:</span>
-          </span>
+          {mode === "tts" && (
+            <span className="reader-tools-label">
+              <AudioIcon />
+              <span className="reader-tools-btn-text hidden">Nghe bài viết:</span>
+            </span>
+          )}
           <button
             onClick={handlePlayPause}
             className={`reader-tools-btn w-10 h-10 shrink-0 min-w-[40px] ${isPlaying && !isPaused ? "bg-gov-primary text-white border-gov-primary hover:bg-gov-primary-dark" : "bg-white text-gray-800"}`}
@@ -579,7 +571,7 @@ export function ArticleReaderTools({
             </button>
           )}
 
-          {isPlaying && (
+          {isPlaying && mode !== "tools" && (
             <div className="flex items-center gap-1 border border-gray-200 rounded-lg bg-white px-2 py-1 h-[40px]">
               <span className="text-xs text-gray-500 font-medium">Tốc độ:</span>
               <select
@@ -595,7 +587,7 @@ export function ArticleReaderTools({
             </div>
           )}
           
-          {isPlaying && voices.length > 1 && (
+          {isPlaying && voices.length > 1 && mode !== "tools" && (
             <div className="flex items-center gap-1 border border-gray-200 rounded-lg bg-white px-2 py-1 h-[40px]">
               <span className="text-xs text-gray-500 font-medium">Giọng:</span>
               <select

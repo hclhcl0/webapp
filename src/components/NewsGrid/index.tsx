@@ -15,6 +15,7 @@ interface NewsGridProps {
   limitOverride?: number;
   layoutOverride?: string;
   excludeId?: string | number;
+  disableContainer?: boolean;
 }
 
 async function getLatestArticles(limit: number, categoryId?: string | number, excludeId?: string | number) {
@@ -77,7 +78,7 @@ function isInternalUrl(url: string) {
   return url.startsWith('/') || url.startsWith('./') || url.includes('ecdc.vnos.org');
 }
 
-export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOverride, layoutOverride, excludeId }: NewsGridProps) => {
+export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOverride, layoutOverride, excludeId, disableContainer }: NewsGridProps) => {
   const { limit: defaultRows, desktopCols, mobileCols, homeNewsLayout } = await getNewsSettings();
   const actualLimit = limitOverride || defaultRows || 8;
   const articles = await getLatestArticles(actualLimit, categoryId, excludeId);
@@ -88,8 +89,8 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
 
   if (!articles || articles.length === 0) {
     return (
-      <section className={styles.newsSection}>
-        <div className="container">
+      <section className={`${styles.newsSection} ${disableContainer ? '!py-0' : ''}`}>
+        <div className={disableContainer ? "w-full" : "container"}>
           <div className="p-2 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
             <div className="global-section-header">
               <h2 className="global-section-title">
@@ -104,8 +105,8 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
   }
 
   return (
-    <section className={styles.newsSection}>
-      <div className="container">
+    <section className={`${styles.newsSection} ${disableContainer ? '!py-0' : ''}`}>
+      <div className={disableContainer ? "w-full" : "container"}>
         <div className="p-2 bg-white/70 border border-gray-200/50 rounded-2xl backdrop-blur-sm shadow-sm mb-6">
           <div className="global-section-header">
           <h2 className="global-section-title">
@@ -187,6 +188,44 @@ export const NewsGrid = async ({ categoryId, categoryName, categorySlug, limitOv
                     {new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}
                   </span>
                 </div>
+              );
+            })}
+          </div>
+        ) : layout === 'list-small' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            {articles.map((article: any) => {
+              const sideMediaUrl = article.image?.url || '/logo.png';
+              const sideCatName = article.category?.name || 'Tin tức';
+
+              return (
+                <article key={article.id} className={styles.sideItem}>
+                  <div className={styles.sideImage}>
+                    <Link href={`/bai-viet/${article.slug || article.id}`}>
+                      <Image
+                        src={sideMediaUrl}
+                        alt={article.title}
+                        width={120}
+                        height={80}
+                        sizes="(max-width: 640px) 30vw, 120px"
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        quality={60}
+                        unoptimized={!isInternalUrl(sideMediaUrl)}
+                      />
+                    </Link>
+                  </div>
+                  <div className={styles.sideBody}>
+                    <h4 className={styles.sideTitle}>
+                      <Link href={`/bai-viet/${article.slug || article.id}`}>
+                        {article.title}
+                      </Link>
+                    </h4>
+                    <div className={styles.sideMeta}>
+                      <span>{new Date(article.publishedAt || article.createdAt).toLocaleDateString('vi-VN')}</span>
+                      <span className="text-[var(--primary)]">{sideCatName}</span>
+                    </div>
+                  </div>
+                </article>
               );
             })}
           </div>

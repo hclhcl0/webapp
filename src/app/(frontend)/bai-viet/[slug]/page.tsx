@@ -185,20 +185,20 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
         
         {/* Main Content Wrapper - relative for sidebar positioning */}
         <div className="relative">
-          <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 py-4 md:py-8 md:pl-16 overflow-visible min-w-0">
+          <article className="relative bg-white rounded-xl shadow-sm border border-gray-100 pt-3 pb-4 md:pt-5 md:pb-8 md:pl-16 overflow-visible min-w-0">
             
             <div className="px-4 md:px-0 md:pr-6 lg:pr-8">
-              <div className="flex items-center text-sm text-gray-500 mb-4 md:mb-6 overflow-x-auto whitespace-nowrap pb-2">
+              <div className="flex items-center text-sm text-gray-500 mb-2 md:mb-3 overflow-x-auto whitespace-nowrap pb-1">
                  <Link href="/" className="hover:text-gov-primary transition-colors">Trang chủ</Link>
                  <span className="mx-2 flex-shrink-0">/</span>
                  <Link href={`/chuyen-muc/${catSlug}`} className="hover:text-gov-primary transition-colors">{catName}</Link>
               </div>
               
-              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 md:mb-6 leading-tight break-words">
+              <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 mb-3 md:mb-5 leading-tight break-words">
                  {article.title}
               </h1>
               
-              <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm text-gray-500 border-b border-gray-100 pb-3 mb-3 md:pb-6 md:mb-8">
+              <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm text-gray-500 border-b border-gray-100 pb-2 mb-2 md:pb-3 md:mb-4">
                  <span className="flex items-center gap-1.5">
                      <Calendar size={14} className="md:w-4 md:h-4"/>
                      {new Date((article as any).publishedAt || article.createdAt).toLocaleDateString('vi-VN')}
@@ -208,9 +208,6 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
                  <Link href={`/chuyen-muc/${catSlug}`} className="bg-gov-secondary/10 text-gov-secondary hover:bg-gov-secondary hover:text-white transition-colors px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[10px] md:text-xs font-medium">
                    {catName}
                  </Link>
-                 <div className="ml-auto flex items-center w-full md:w-auto mt-2 md:mt-0">
-                   <ArticleReaderTools mode="tts" toolsConfig={readerToolsConfig} />
-                 </div>
               </div>
 
               {/* Mobile Reader Tools */}
@@ -220,10 +217,10 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
             </div>
 
             {/* Main Prose Content */}
-            <div className="px-1 md:px-0 md:pr-4 lg:pr-6 relative">
+            <div className="px-1 md:px-0 md:pr-4 lg:pr-6 flex">
               {/* Desktop Sticky Reader Tools - pinned to the start of prose content */}
-              <div className="hidden md:block absolute top-0 -left-[52px] w-10 h-full z-10">
-                <div className="sticky top-32">
+              <div className="hidden md:block w-10 shrink-0 -ml-[64px] mr-6 relative">
+                <div className="sticky top-32 z-10">
                   <ArticleReaderTools mode="tools" toolsConfig={readerToolsConfig} />
                 </div>
               </div>
@@ -243,8 +240,9 @@ export default async function ArticlePage({ params, searchParams }: PageParams) 
               categoryId={targetParentId} 
               categoryName="Bài viết liên quan" 
               limitOverride={6} 
-              layoutOverride="grid" 
-              excludeId={article.id} 
+              layoutOverride="list-small" 
+              excludeId={article.id}
+              disableContainer={true}
             />
           </div>
         </div>

@@ -506,7 +506,7 @@
   width: 90px;
   height: 60px;
   flex-shrink: 0;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md, 0.5rem);
   overflow: hidden;
   position: relative;
 }

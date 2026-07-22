@@ -161,7 +161,7 @@ export default async function RootLayout({
       </head>
       <body className="bg-gray-100/80 antialiased selection:bg-teal-600 selection:text-white">
         <ScrollToTopHelper />
-        <div className="w-full bg-white min-h-screen shadow-2xl flex flex-col overflow-x-hidden relative">
+        <div className="w-full bg-white min-h-screen shadow-2xl flex flex-col overflow-x-clip relative">
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

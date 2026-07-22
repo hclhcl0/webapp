@@ -3420,5 +3420,37 @@ export const MIGRATION_STATEMENTS = [
     FOREIGN KEY ("_parent_id") REFERENCES "vaccine_packages"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN null;
   END $$`,
-  `ALTER TYPE enum_banners_position ADD VALUE IF NOT EXISTS 'vaccine_slider';`
+  `ALTER TYPE enum_banners_position ADD VALUE IF NOT EXISTS 'vaccine_slider';`,
+  `CREATE TABLE IF NOT EXISTS "payload_locked_documents" (
+    "id" serial PRIMARY KEY,
+    "global_slug" varchar,
+    "updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT now() NOT NULL
+  );`,
+  `CREATE TABLE IF NOT EXISTS "payload_locked_documents_rels" (
+    "id" serial PRIMARY KEY,
+    "order" integer,
+    "parent_id" integer,
+    "path" varchar
+  );`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "departments_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "users_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "media_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "categories_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "tags_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "articles_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "pages_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "banners_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "documents_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "document_signers_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "work_schedules_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "video_channels_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "videos_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "form_submissions_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "org_units_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "ai_knowledge_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "api_keys_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "procurements_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "vaccines_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "vaccine_packages_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`
 ];
