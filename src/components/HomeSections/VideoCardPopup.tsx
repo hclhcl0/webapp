@@ -105,8 +105,8 @@ export function VideoCardPopup({
 
           {/* Play button overlay */}
           {variant === 'vertical' ? (
-            <div className="absolute top-3 left-3 z-20 pointer-events-none drop-shadow-md">
-              <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-20 pointer-events-none drop-shadow-md">
+              <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 sm:w-6 sm:h-6">
                 <path fillRule="evenodd" clipRule="evenodd" d="M12.7 6.3L15.3 3.7C15.7 3.3 16.3 3.3 16.7 3.7C17.1 4.1 17.1 4.7 16.7 5.1L14.8 7H18C20.2 7 22 8.8 22 11V17C22 19.2 20.2 21 18 21H6C3.8 21 2 19.2 2 17V11C2 8.8 3.8 7 6 7H9.2L7.3 5.1C6.9 4.7 6.9 4.1 7.3 3.7C7.7 3.3 8.3 3.3 8.7 3.7L11.3 6.3C11.5 6.5 11.7 6.6 12 6.6C12.3 6.6 12.5 6.5 12.7 6.3ZM10.5 11.5L14.5 14L10.5 16.5V11.5Z" />
               </svg>
             </div>
@@ -120,8 +120,8 @@ export function VideoCardPopup({
             </div>
           )}
         </div>
-        <div className={`relative z-20 ${variant === 'vertical' ? 'p-2.5 sm:p-3 mt-auto flex flex-col' : (isFeatured ? "p-4" : "p-3 flex-1 flex flex-col")}`}>
-          <h4 className={`${variant === 'vertical' ? 'font-bold text-white text-xs sm:text-[13px] group-hover:text-blue-300 drop-shadow-md' : (isFeatured ? 'font-bold text-base' : 'text-sm font-semibold')} line-clamp-2 transition-colors leading-snug ${variant !== 'vertical' && 'text-gray-800 group-hover:text-[var(--primary)]'}`}>
+        <div className={`relative z-20 ${variant === 'vertical' ? 'p-2 sm:p-3 mt-auto flex flex-col' : (isFeatured ? "p-4" : "p-3 flex-1 flex flex-col")}`}>
+          <h4 className={`${variant === 'vertical' ? 'font-bold text-white text-[11px] sm:text-[13px] group-hover:text-blue-300 drop-shadow-md' : (isFeatured ? 'font-bold text-base' : 'text-sm font-semibold')} line-clamp-2 transition-colors leading-tight ${variant !== 'vertical' && 'text-gray-800 group-hover:text-[var(--primary)]'}`}>
             {video.title}
           </h4>
           {variant === 'vertical' && video.description && (
