@@ -324,7 +324,7 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
           </a>
         </div>
       ) : (
-        <div className={`bg-white rounded-3xl border border-[#00a4ff]/30 shadow-[0_20px_50px_-12px_rgba(0,122,140,0.25)] ring-4 ring-[#00a4ff]/10 overflow-hidden relative flex flex-col lg:block ${compact ? '' : 'lg:min-h-[500px]'}`}>
+        <div className={`bg-white rounded-3xl border border-[#00a4ff]/40 shadow-[0_20px_60px_-15px_rgba(0,164,255,0.4)] ring-4 ring-[#00a4ff]/20 overflow-hidden relative flex flex-col lg:block ${compact ? '' : 'lg:min-h-[500px]'}`}>
           {/* ── Sidebar ── */}
           <div className="w-full lg:w-72 xl:w-80 lg:border-r border-[#00a4ff]/10 bg-gradient-to-b from-[#f0f8f9] to-white flex flex-col relative z-10">
             <div className="p-3 space-y-2 overflow-y-auto custom-scrollbar flex-1 max-h-[500px] lg:max-h-none">
