@@ -78,7 +78,7 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
     return (
       <button
         onClick={() => setSelected(pkg)}
-        className={`w-full flex items-stretch pr-3 rounded-2xl border text-left transition-all duration-200 cursor-pointer relative
+        className={`w-full flex items-stretch pr-3 border text-left transition-all duration-200 cursor-pointer relative ${isActive ? "rounded-t-2xl lg:rounded-2xl z-10" : "rounded-2xl z-10"}
           ${isActive
             ? "border-[#00a4ff] bg-white shadow-sm"
             : "border-gray-100 bg-white hover:border-[#00a4ff]/40 hover:bg-gray-50"
@@ -111,42 +111,11 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
     );
   };
 
-  return (
-    <div className="w-full">
-      {packages.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-gray-200/60 shadow-sm p-16 text-center">
-          <div className="text-6xl mb-4">💉</div>
-          <h2 className="text-xl font-bold text-gray-700 mb-2">Chưa có gói vắc xin nào</h2>
-          <p className="text-gray-500 text-sm mb-6">Vui lòng thêm gói vắc xin trong trang quản trị CMS.</p>
-          <a href={`tel:${phoneNumber}`}
-            className="inline-flex items-center gap-2 bg-[#00a4ff] text-white font-bold px-6 py-3 rounded-xl">
-            <Phone size={17} />
-            Gọi tư vấn: {phoneNumber}
-          </a>
-        </div>
-      ) : (
-        <div className={`bg-white rounded-3xl border border-[#00a4ff]/30 shadow-[0_20px_50px_-12px_rgba(0,122,140,0.25)] ring-4 ring-[#00a4ff]/10 overflow-hidden relative flex flex-col lg:block ${compact ? '' : 'lg:min-h-[500px]'}`}>
-          {/* ── Sidebar ── */}
-          <div className="w-full lg:w-72 xl:w-80 lg:border-r border-[#00a4ff]/10 bg-gradient-to-b from-[#f0f8f9] to-white flex flex-col relative z-10">
-            <div className="p-3 space-y-2 overflow-y-auto custom-scrollbar flex-1 max-h-[500px] lg:max-h-none">
-              {packages.map((pkg) => (
-                <PackageCard key={pkg.id} pkg={pkg} />
-              ))}
-            </div>
-              {/* Mobile View All Link */}
-              {compact && (
-                <div className="p-3 lg:hidden flex justify-center border-t border-[#00a4ff]/10 bg-[#f0f8f9]/50">
-                  <a href="/goi-vac-xin" className="inline-flex items-center gap-1 text-[#00a4ff] font-semibold text-[13px] px-4 py-1.5 rounded-full border border-[#00a4ff]/40 bg-white hover:bg-[#00a4ff] hover:text-white transition-all">
-                    Xem tất cả gói vắc xin
-                    <ChevronRight size={14} />
-                  </a>
-                </div>
-              )}
-            </div>
 
-
-          {/* ── Detail Panel ── */}
-          <div className={`${compact ? 'hidden lg:flex' : 'flex'} flex-1 flex-col lg:absolute lg:top-0 lg:bottom-0 lg:left-72 xl:left-80 lg:right-0 bg-white overflow-hidden`}>
+  const renderDetailPanel = (isMobile: boolean = false) => {
+    if (!selected) return null;
+    return (
+      <div className={`flex flex-col bg-white overflow-hidden ${isMobile ? 'lg:hidden mt-0 rounded-b-2xl border-x border-b border-[#00a4ff]/30 shadow-[0_10px_20px_-10px_rgba(0,164,255,0.15)] z-0 relative' : 'hidden lg:flex flex-1 lg:absolute lg:top-0 lg:bottom-0 lg:left-72 xl:left-80 lg:right-0'}`}>
 
             {/* Header */}
             <div className="bg-[#00a4ff]/5 px-6 min-h-[56px] flex items-center justify-center border-b border-[#00a4ff]/10 relative z-10 overflow-hidden">
@@ -329,7 +298,52 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
                 </div>
               )}
             </div>
-          </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="w-full">
+      {packages.length === 0 ? (
+        <div className="bg-white rounded-3xl border border-gray-200/60 shadow-sm p-16 text-center">
+          <div className="text-6xl mb-4">💉</div>
+          <h2 className="text-xl font-bold text-gray-700 mb-2">Chưa có gói vắc xin nào</h2>
+          <p className="text-gray-500 text-sm mb-6">Vui lòng thêm gói vắc xin trong trang quản trị CMS.</p>
+          <a href={`tel:${phoneNumber}`}
+            className="inline-flex items-center gap-2 bg-[#00a4ff] text-white font-bold px-6 py-3 rounded-xl">
+            <Phone size={17} />
+            Gọi tư vấn: {phoneNumber}
+          </a>
+        </div>
+      ) : (
+        <div className={`bg-white rounded-3xl border border-[#00a4ff]/30 shadow-[0_20px_50px_-12px_rgba(0,122,140,0.25)] ring-4 ring-[#00a4ff]/10 overflow-hidden relative flex flex-col lg:block ${compact ? '' : 'lg:min-h-[500px]'}`}>
+          {/* ── Sidebar ── */}
+          <div className="w-full lg:w-72 xl:w-80 lg:border-r border-[#00a4ff]/10 bg-gradient-to-b from-[#f0f8f9] to-white flex flex-col relative z-10">
+            <div className="p-3 space-y-2 overflow-y-auto custom-scrollbar flex-1 max-h-[500px] lg:max-h-none">
+              {packages.map((pkg) => {
+                const isActive = selected?.id === pkg.id;
+                return (
+                  <div key={pkg.id} className="flex flex-col relative z-10">
+                    <PackageCard pkg={pkg} />
+                    {isActive && renderDetailPanel(true)}
+                  </div>
+                );
+              })}
+            </div>
+              {/* Mobile View All Link */}
+              {compact && (
+                <div className="p-3 lg:hidden flex justify-center border-t border-[#00a4ff]/10 bg-[#f0f8f9]/50">
+                  <a href="/goi-vac-xin" className="inline-flex items-center gap-1 text-[#00a4ff] font-semibold text-[13px] px-4 py-1.5 rounded-full border border-[#00a4ff]/40 bg-white hover:bg-[#00a4ff] hover:text-white transition-all">
+                    Xem tất cả gói vắc xin
+                    <ChevronRight size={14} />
+                  </a>
+                </div>
+              )}
+            </div>
+
+
+          {/* ── Detail Panel (Desktop) ── */}
+          {renderDetailPanel(false)}
         </div>
       )}
     </div>

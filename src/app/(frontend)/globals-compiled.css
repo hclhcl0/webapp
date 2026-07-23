@@ -1791,6 +1791,10 @@
   .rounded-tr-full {
     border-top-right-radius: calc(infinity * 1px);
   }
+  .rounded-b-2xl {
+    border-bottom-right-radius: var(--radius-2xl);
+    border-bottom-left-radius: var(--radius-2xl);
+  }
   .rounded-b-none {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
@@ -2830,6 +2834,9 @@
   .pr-0 {
     padding-right: calc(var(--spacing) * 0);
   }
+  .pr-1 {
+    padding-right: calc(var(--spacing) * 1);
+  }
   .pr-2 {
     padding-right: calc(var(--spacing) * 2);
   }
@@ -3462,6 +3469,10 @@
   }
   .shadow-\[0_8px_30px_rgb\(0\,0\,0\,0\.04\)\] {
     --tw-shadow: 0 8px 30px var(--tw-shadow-color, rgb(0,0,0,0.04));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-\[0_10px_20px_-10px_rgba\(0\,164\,255\,0\.15\)\] {
+    --tw-shadow: 0 10px 20px -10px var(--tw-shadow-color, rgba(0,164,255,0.15));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .shadow-\[0_20px_50px_-12px_rgba\(0\,122\,140\,0\.15\)\] {
@@ -5724,6 +5735,11 @@
   .lg\:gap-5 {
     @media (width >= 64rem) {
       gap: calc(var(--spacing) * 5);
+    }
+  }
+  .lg\:rounded-2xl {
+    @media (width >= 64rem) {
+      border-radius: var(--radius-2xl);
     }
   }
   .lg\:border-r {
