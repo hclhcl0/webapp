@@ -634,12 +634,11 @@
 .global-section-title::before {
   content: '';
   display: inline-block;
-  width: 7px;
-  height: 1.125rem;
-  background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(to bottom right, var(--primary), var(--primary-dark));
   margin-right: 0.6rem;
-  transform: skewX(-15deg);
-  border-radius: 1px;
+  border-radius: 3px;
 }
 
 .global-section-title-white::before {
