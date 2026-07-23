@@ -84,9 +84,9 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
             : "border-gray-100 bg-white hover:border-[#00a4ff]/40 hover:bg-gray-50"
           }`}
       >
-        {/* External Triangle */}
+        {/* External Triangle (Desktop) */}
         {isActive && (
-          <div className="absolute top-1/2 -right-[1px] translate-x-full -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[7px] border-l-[#00a4ff] z-20" />
+          <div className="hidden lg:block absolute top-1/2 -right-[1px] translate-x-full -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent border-l-[7px] border-l-[#00a4ff] z-20" />
         )}
         
         {/* Thumbnail */}
@@ -106,6 +106,14 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
           <p className={`font-medium uppercase text-[13px] leading-tight ${isActive ? "text-[#00a4ff]" : "text-gray-800"}`}>
             {pkg.name}
           </p>
+        </div>
+        {/* Mobile Arrow */}
+        <div className="lg:hidden flex items-center pr-1 ml-1">
+          {isActive ? (
+            <ChevronDown size={18} className="text-[#00a4ff]" />
+          ) : (
+            <ChevronRight size={18} className="text-gray-300" />
+          )}
         </div>
       </button>
     );
