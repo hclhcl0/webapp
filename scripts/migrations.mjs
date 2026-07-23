@@ -1,4 +1,4 @@
-/**
+﻿/**
  * MIGRATION STATEMENTS — nguồn duy nhất (single source of truth)
  * Cập nhật lúc: 11/06/2026 23:00
  *
@@ -3483,5 +3483,45 @@ export const MIGRATION_STATEMENTS = [
     ALTER TABLE "site_settings" ADD CONSTRAINT "site_settings_popup_services_mascot_id_media_id_fk" FOREIGN KEY ("popup_services_mascot_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   EXCEPTION
     WHEN duplicate_object THEN null;
-  END $$;`
+  END $$;`,
+
+  // ====================================================
+  // BATCH: vaccineSection block for settings homeSections
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "settings_blocks_vaccine_section" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar DEFAULT 'Goi Vac Xin Bao Ve Toan Dien',
+    "subtitle" varchar,
+    "limit" numeric DEFAULT 20,
+    "show_view_all" boolean DEFAULT true,
+    CONSTRAINT "settings_blocks_vaccine_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "settings" ("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "settings_blocks_vaccine_section_order_idx" ON "settings_blocks_vaccine_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "settings_blocks_vaccine_section_parent_idx" ON "settings_blocks_vaccine_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "settings_blocks_vaccine_section_path_idx" ON "settings_blocks_vaccine_section" USING btree ("_path")`,
+
+  // ====================================================
+  // BATCH: vaccineSection block for site_settings homeSections
+  // ====================================================
+  `CREATE TABLE IF NOT EXISTS "site_settings_blocks_vaccine_section" (
+    "id" varchar PRIMARY KEY NOT NULL,
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "_path" text NOT NULL,
+    "block_name" varchar,
+    "title" varchar DEFAULT 'Gói Vắc Xin Bảo Vệ Toàn Diện',
+    "subtitle" varchar,
+    "limit" numeric DEFAULT 20,
+    "show_view_all" boolean DEFAULT true,
+    CONSTRAINT "site_settings_blocks_vaccine_section_parent_fk"
+      FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action
+  )`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_vaccine_section_order_idx" ON "site_settings_blocks_vaccine_section" USING btree ("_order")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_vaccine_section_parent_idx" ON "site_settings_blocks_vaccine_section" USING btree ("_parent_id")`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_vaccine_section_path_idx" ON "site_settings_blocks_vaccine_section" USING btree ("_path")`
 ];
