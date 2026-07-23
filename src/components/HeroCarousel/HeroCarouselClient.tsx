@@ -80,7 +80,7 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
     <section className={`${styles.heroSection} h-full`}>
       <div className="w-full h-full">
         {/* Wrapper ngoài cùng có position:relative để các nút absolute định vị theo */}
-        <div style={{ position: 'relative', height: '100%' }}>
+        <div className="relative h-full group">
           {/* Khung carousel — overflow:hidden để ảnh không bị tràn */}
           <div
             className={`${styles.embla} ${sizeClass} ${isFade || isZoom || isFlip ? styles.effectWrapper : ''} h-full`}
@@ -139,62 +139,24 @@ export const HeroCarouselClient = ({ banners, globalSize, globalCustomHeight, gl
             </div>
           </div>
 
-          {/* Nút Prev — style giống thiết kế Long Châu (tròn trắng, icon tối) */}
+          {/* Nút Prev */}
           <button 
             onClick={scrollPrev}
-            style={{
-              position: 'absolute',
-              left: '16px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              zIndex: 20,
-              color: '#333',
-              backgroundColor: 'white',
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.05)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 text-white bg-transparent border-none outline-none"
+            style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}
             aria-label="Ảnh trước"
           >
-            <ChevronLeft size={24} strokeWidth={2.5} />
+            <ChevronLeft size={36} strokeWidth={2} />
           </button>
 
-          {/* Nút Next — style giống thiết kế Long Châu (tròn trắng, icon tối) */}
+          {/* Nút Next */}
           <button 
             onClick={scrollNext}
-            style={{
-              position: 'absolute',
-              right: '16px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              zIndex: 20,
-              color: '#333',
-              backgroundColor: 'white',
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.05)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
-            aria-label="Ảnh sau"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 text-white bg-transparent border-none outline-none"
+            style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}
+            aria-label="Ảnh tiếp theo"
           >
-            <ChevronRight size={24} strokeWidth={2.5} />
+            <ChevronRight size={36} strokeWidth={2} />
           </button>
 
           {/* Dấu chấm phân trang (Pagination Dots) ở đáy */}
