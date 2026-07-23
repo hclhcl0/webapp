@@ -3452,5 +3452,36 @@ export const MIGRATION_STATEMENTS = [
   `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "api_keys_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
   `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "procurements_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
   `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "vaccines_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
-  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "vaccine_packages_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`
+  `DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "vaccine_packages_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN "popup_services_title" varchar; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN "popup_services_subtitle" varchar; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN "popup_services_mascot_id" integer; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `DO $$ BEGIN ALTER TABLE "site_settings" ADD COLUMN "popup_services_header_color" varchar; EXCEPTION WHEN duplicate_column THEN null; END $$;`,
+  `CREATE TABLE IF NOT EXISTS "site_settings_popup_services_items" (
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "icon" varchar,
+    "icon_image_id" integer,
+    "title" varchar,
+    "description" varchar,
+    "link_url" varchar
+  );`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_popup_services_items_order_idx" ON "site_settings_popup_services_items" USING btree ("_order");`,
+  `CREATE INDEX IF NOT EXISTS "site_settings_popup_services_items_parent_id_idx" ON "site_settings_popup_services_items" USING btree ("_parent_id");`,
+  `DO $$ BEGIN
+    ALTER TABLE "site_settings_popup_services_items" ADD CONSTRAINT "site_settings_popup_services_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION
+    WHEN duplicate_object THEN null;
+  END $$;`,
+  `DO $$ BEGIN
+    ALTER TABLE "site_settings_popup_services_items" ADD CONSTRAINT "site_settings_popup_services_items_icon_image_id_media_id_fk" FOREIGN KEY ("icon_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION
+    WHEN duplicate_object THEN null;
+  END $$;`,
+  `DO $$ BEGIN
+    ALTER TABLE "site_settings" ADD CONSTRAINT "site_settings_popup_services_mascot_id_media_id_fk" FOREIGN KEY ("popup_services_mascot_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  EXCEPTION
+    WHEN duplicate_object THEN null;
+  END $$;`
 ];

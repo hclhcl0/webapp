@@ -198,9 +198,11 @@ export default buildConfig({
         // Drizzle push ở production sẽ hỏi interactive → treo Docker container.
         // Để force sync 1 lần (khi có schema mới lớn): đặt PAYLOAD_FORCE_PUSH=true tạm thời.
         push: (() => {
-          if (process.env.NODE_ENV === 'development') return true;
-          const val = String(process.env['PAYLOAD_FORCE_PUSH']).toLowerCase().trim();
-          return val === 'true' || val === '1' || val === 'yes';
+          // Temporarily disable auto-push in dev to prevent interactive prompt hangs
+          return false;
+          // if (process.env.NODE_ENV === 'development') return true;
+          // const val = String(process.env['PAYLOAD_FORCE_PUSH']).toLowerCase().trim();
+          // return val === 'true' || val === '1' || val === 'yes';
         })(),
       })
     : sqliteAdapter({
