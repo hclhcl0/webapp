@@ -77,7 +77,7 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
     const isActive = selected?.id === pkg.id;
     return (
       <button
-        onClick={() => setSelected(pkg)}
+        onClick={() => setSelected(isActive ? null : pkg)}
         className={`w-full flex items-stretch pr-3 border text-left transition-all duration-200 cursor-pointer relative ${isActive ? "rounded-t-2xl lg:rounded-2xl z-10" : "rounded-2xl z-10"}
           ${isActive
             ? "border-[#00a4ff] bg-white shadow-sm"
@@ -121,7 +121,17 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
 
 
   const renderDetailPanel = (isMobile: boolean = false) => {
-    if (!selected) return null;
+    if (!selected) {
+      if (isMobile) return null;
+      return (
+        <div className="hidden lg:flex flex-1 lg:absolute lg:top-0 lg:bottom-0 lg:left-72 xl:left-80 lg:right-0 items-center justify-center bg-gray-50/30">
+          <div className="text-center opacity-60 pointer-events-none">
+            <div className="text-5xl mb-4">💉</div>
+            <p className="text-gray-500 font-medium text-[15px]">Vui lòng chọn một gói vắc xin<br/>để xem chi tiết</p>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className={`flex flex-col bg-white overflow-hidden ${isMobile ? 'lg:hidden mt-0 rounded-b-2xl border-x border-b border-[#00a4ff]/30 shadow-[0_10px_20px_-10px_rgba(0,164,255,0.15)] z-0 relative' : 'hidden lg:flex flex-1 lg:absolute lg:top-0 lg:bottom-0 lg:left-72 xl:left-80 lg:right-0'}`}>
 
