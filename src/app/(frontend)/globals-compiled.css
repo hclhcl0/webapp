@@ -1138,6 +1138,9 @@
   .w-\[3px\] {
     width: 3px;
   }
+  .w-\[30\%\] {
+    width: 30%;
+  }
   .w-\[45\%\] {
     width: 45%;
   }
@@ -4855,6 +4858,11 @@
       width: calc(var(--spacing) * 48);
     }
   }
+  .sm\:w-\[25\%\] {
+    @media (width >= 40rem) {
+      width: 25%;
+    }
+  }
   .sm\:w-\[35\%\] {
     @media (width >= 40rem) {
       width: 35%;
@@ -5155,6 +5163,11 @@
   .md\:w-96 {
     @media (width >= 48rem) {
       width: calc(var(--spacing) * 96);
+    }
+  }
+  .md\:w-\[20\%\] {
+    @media (width >= 48rem) {
+      width: 20%;
     }
   }
   .md\:w-\[30\%\] {
