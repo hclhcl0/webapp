@@ -118,7 +118,7 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
       <div className={`flex flex-col bg-white overflow-hidden ${isMobile ? 'lg:hidden mt-0 rounded-b-2xl border-x border-b border-[#00a4ff]/30 shadow-[0_10px_20px_-10px_rgba(0,164,255,0.15)] z-0 relative' : 'hidden lg:flex flex-1 lg:absolute lg:top-0 lg:bottom-0 lg:left-72 xl:left-80 lg:right-0'}`}>
 
             {/* Header */}
-            <div className="bg-[#00a4ff]/5 px-6 min-h-[56px] flex items-center justify-center border-b border-[#00a4ff]/10 relative z-10 overflow-hidden">
+            <div className={`bg-[#00a4ff]/5 px-6 min-h-[56px] items-center justify-center border-b border-[#00a4ff]/10 relative z-10 overflow-hidden ${isMobile ? 'hidden' : 'flex'}`}>
               {/* Decorative transparent background pattern */}
               <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%2300a4ff\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E")' }}></div>
               
