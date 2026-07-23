@@ -166,12 +166,31 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
               {selected?.items?.map((item, idx) => (
                 <div key={idx} className="py-2.5">
                   <div className="text-[14px] font-medium text-[#00a4ff] mb-1.5 flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-[#00a4ff] flex items-center justify-center flex-shrink-0">
-                      <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <span>{item.diseaseName || 'Nhiều nguyên nhân'}</span>
+                    {(() => {
+                      const originalQty = item.doses || 1;
+                      const currentQty = customDoses[idx] !== undefined ? customDoses[idx] : originalQty;
+                      const isChecked = currentQty > 0;
+                      
+                      return (
+                        <button 
+                          onClick={() => {
+                            if (isChecked) {
+                              setCustomDoses(prev => ({ ...prev, [idx]: 0 }));
+                            } else {
+                              setCustomDoses(prev => ({ ...prev, [idx]: originalQty }));
+                            }
+                          }}
+                          className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 cursor-pointer transition-colors ${isChecked ? 'bg-[#00a4ff]' : 'bg-gray-200 border border-gray-300'}`}
+                        >
+                          {isChecked && (
+                            <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
+                        </button>
+                      );
+                    })()}
+                    <span className={customDoses[idx] === 0 ? 'text-gray-400 line-through' : ''}>{item.diseaseName || 'Nhiều nguyên nhân'}</span>
                   </div>
                   <div className="grid grid-cols-[1fr_auto_auto] md:grid-cols-[1fr_100px_100px_120px] gap-3 items-center">
                     {/* Vaccine dropdown / display */}
