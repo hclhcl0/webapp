@@ -42,10 +42,7 @@
   flex-direction: column;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
+
 
 .imageHolder {
   position: relative;
@@ -69,6 +66,8 @@
 .card:hover .imageHolder img {
   transform: scale(1.05);
 }
+
+
 
 .catBadge {
   position: absolute;
@@ -234,11 +233,7 @@
   transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
 }
 
-.listItem:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  border-color: var(--primary);
-}
+
 
 .listImage {
   width: 120px;
@@ -266,6 +261,8 @@
 .listItem:hover .listImage img {
   transform: scale(1.05);
 }
+
+
 
 .listBody {
   display: flex;
@@ -424,6 +421,8 @@
   transform: scale(1.03);
 }
 
+
+
 .bigBody {
   padding: 1.25rem 0;
   display: flex;
@@ -512,6 +511,8 @@
 .sideItem:hover .sideImage img {
   transform: scale(1.05);
 }
+
+
 
 .sideBody {
   display: flex;

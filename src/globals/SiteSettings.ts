@@ -927,10 +927,98 @@ export const SiteSettings: GlobalConfig = {
               options: [
                 { label: 'Tự soạn thảo (Manual)', value: 'manual' },
                 { label: 'Lấy từ Bài viết (Article)', value: 'article' },
+                { label: '📋 Danh sách dịch vụ / Thông báo (Services)', value: 'services' },
               ],
               admin: {
                 condition: (data) => data?.popup?.enabled,
               },
+            },
+            // ── Fields for Services popup type ──────────────────────
+            {
+              name: 'servicesTitle',
+              type: 'text',
+              label: '[Dịch vụ] Tiêu đề banner',
+              defaultValue: 'Dịch vụ & Thông báo CDC Đà Nẵng',
+              admin: {
+                condition: (data) => data?.popup?.enabled && data?.popup?.type === 'services',
+                description: 'Tiêu đề hiển thị trên banner màu xanh ở đầu popup.',
+              },
+            },
+            {
+              name: 'servicesSubtitle',
+              type: 'text',
+              label: '[Dịch vụ] Phụ đề banner',
+              admin: {
+                condition: (data) => data?.popup?.enabled && data?.popup?.type === 'services',
+              },
+            },
+            {
+              name: 'servicesMascot',
+              type: 'upload',
+              relationTo: 'media',
+              label: '[Dịch vụ] Ảnh mascot / nhân vật',
+              admin: {
+                condition: (data) => data?.popup?.enabled && data?.popup?.type === 'services',
+                description: 'Ảnh nhân vật nổi phía trên popup. Nên dùng ảnh nền trong suốt (PNG).',
+              },
+            },
+            {
+              name: 'servicesHeaderColor',
+              type: 'text',
+              label: '[Dịch vụ] Màu banner (hex)',
+              defaultValue: '#00a99d',
+              admin: {
+                condition: (data) => data?.popup?.enabled && data?.popup?.type === 'services',
+                description: 'Màu nền của banner tiêu đề. Ví dụ: #00a99d, #1a4fa0',
+              },
+            },
+            {
+              name: 'servicesItems',
+              type: 'array',
+              label: '[Dịch vụ] Danh sách mục',
+              admin: {
+                condition: (data) => data?.popup?.enabled && data?.popup?.type === 'services',
+                description: 'Thêm các mục thông tin dịch vụ hoặc thông báo muốn hiển thị trong popup.',
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'icon',
+                      type: 'text',
+                      label: 'Emoji icon (ví dụ: 💉, 🏥)',
+                      admin: { width: '30%' },
+                    },
+                    {
+                      name: 'iconImage',
+                      type: 'upload',
+                      relationTo: 'media',
+                      label: 'Hoặc ảnh icon (ưu tiên hơn emoji)',
+                      admin: { width: '70%' },
+                    },
+                  ],
+                },
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'Tiêu đề mục',
+                  required: true,
+                },
+                {
+                  name: 'description',
+                  type: 'text',
+                  label: 'Mô tả ngắn',
+                },
+                {
+                  name: 'linkUrl',
+                  type: 'text',
+                  label: 'Đường dẫn (để trống nếu không có link)',
+                  admin: {
+                    description: 'Nếu điền, mục này sẽ có nút mũi tên và có thể nhấn vào.',
+                  },
+                },
+              ],
             },
             {
               name: 'transparentBackground',
