@@ -54,6 +54,83 @@ function buildCategoryFilter(allowedIds: string[], userId: string | number, incl
   };
 }
 
+/**
+ * Chuyển đổi cây Lexical node sang HTML đơn giản để gửi qua webhook Zalo OA.
+ * Chỉ xử lý các node cơ bản: paragraph, heading, text, list, upload (image).
+ */
+function lexicalNodesToHtml(nodes: any[], baseUrl: string): string {
+  if (!Array.isArray(nodes)) return '';
+
+  return nodes.map((node) => {
+    const type = node.type;
+    const children = node.children || [];
+
+    switch (type) {
+      case 'paragraph': {
+        const inner = lexicalNodesToHtml(children, baseUrl);
+        return inner.trim() ? `<p>${inner}</p>` : '';
+      }
+      case 'heading': {
+        const inner = lexicalNodesToHtml(children, baseUrl);
+        return `<b>${inner}</b><br>`;
+      }
+      case 'text': {
+        let text = node.text || '';
+        if (!text) return '';
+        // Escape HTML
+        text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        if (node.format) {
+          if (node.format & 1) text = `<b>${text}</b>`;   // Bold
+          if (node.format & 2) text = `<i>${text}</i>`;   // Italic
+        }
+        return text;
+      }
+      case 'link': {
+        const inner = lexicalNodesToHtml(children, baseUrl);
+        const url = node.fields?.url || node.url || '#';
+        return `<a href="${url}">${inner}</a>`;
+      }
+      case 'list': {
+        const tag = node.listType === 'number' ? 'ol' : 'ul';
+        const items = lexicalNodesToHtml(children, baseUrl);
+        return `<${tag}>${items}</${tag}>`;
+      }
+      case 'listitem': {
+        const inner = lexicalNodesToHtml(children, baseUrl);
+        return `<li>${inner}</li>`;
+      }
+      case 'upload': {
+        // Hình ảnh inline
+        if (node.relationTo === 'media' && node.value) {
+          const imgUrl = typeof node.value === 'object'
+            ? (node.value.url?.startsWith('/') ? `${baseUrl}${node.value.url}` : node.value.url)
+            : '';
+          if (imgUrl) {
+            const alt = node.value?.alt || '';
+            return `<img src="${imgUrl}" alt="${alt}">`;
+          }
+        }
+        return '';
+      }
+      case 'horizontalrule':
+        return '<br>';
+      case 'linebreak':
+        return '<br>';
+      case 'block': {
+        // Custom blocks: chỉ lấy text nếu có caption
+        const blockData = node.fields || {};
+        const caption = blockData.caption || blockData.title || '';
+        return caption ? `<p><i>${caption}</i></p>` : '';
+      }
+      default:
+        // Đệ quy với children nếu có
+        return children.length > 0 ? lexicalNodesToHtml(children, baseUrl) : '';
+    }
+  }).join('');
+}
+
+
+
 export const Articles: CollectionConfig = {
   slug: 'articles',
   labels: {
@@ -251,6 +328,16 @@ export const Articles: CollectionConfig = {
             const imgPath = imgField?.sizes?.card?.url || imgField?.url || '';
             const coverUrl = imgPath.startsWith('/') ? `${baseUrl}${imgPath}` : imgPath;
 
+            // Convert Lexical JSON content sang HTML để gửi kèm webhook
+            let htmlContent = '';
+            try {
+              if (doc.content?.root) {
+                htmlContent = lexicalNodesToHtml(doc.content.root.children || [], baseUrl);
+              }
+            } catch (e) {
+              console.warn('[Auto Broadcast] Không chuyển đổi được content sang HTML:', e);
+            }
+
             // Gọi webhook đến Zalo Admin (fire-and-forget, không block response)
             fetch(webhookUrl, {
               method: 'POST',
@@ -260,6 +347,7 @@ export const Articles: CollectionConfig = {
                 slug: doc.slug,
                 description: doc.description || '',
                 imageUrl: coverUrl,
+                htmlContent,
                 webhookSecret,
               }),
             }).catch((err: Error) =>
