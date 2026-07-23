@@ -227,6 +227,51 @@ export const Settings: GlobalConfig = {
       },
       blocks: [
         ScheduleBlock,
+
+        // ── Block Gói Vắc Xin ──
+        {
+          slug: 'vaccineSection',
+          interfaceName: 'VaccineSection',
+          labels: { singular: '🧬 Khu vực Gói Vắc Xin', plural: 'Khu vực Gói Vắc Xin' },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'Tiêu đề khu vực',
+                  defaultValue: 'Gói Vắc Xin Bảo Vệ Toàn Diện',
+                },
+                {
+                  name: 'subtitle',
+                  type: 'text',
+                  label: 'Mô tả phụ (tùy chọn)',
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'limit',
+                  type: 'number',
+                  label: 'Số gói hiển thị tối đa',
+                  defaultValue: 20,
+                  min: 1,
+                  max: 50,
+                },
+                {
+                  name: 'showViewAll',
+                  type: 'checkbox',
+                  label: 'Hiển thị nút "Xem chi tiết"',
+                  defaultValue: true,
+                },
+              ],
+            },
+          ],
+        },
+
         // ── Block 1: Khu vực tin tức theo chuyên mục ──
         {
           slug: 'newsCategorySection',

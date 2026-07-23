@@ -8,6 +8,7 @@ import { RichTextSection } from './RichTextSection';
 import { VideoSection } from './VideoSection';
 import { TikTokSection } from './TikTokSection';
 import { ScheduleBlock } from '../blocks/ScheduleBlock';
+import { VaccineSection } from './VaccineSection';
 
 interface HomeSectionRendererProps {
   sections: any[];
@@ -131,6 +132,17 @@ export async function HomeSectionRenderer({ sections }: HomeSectionRendererProps
               <RichTextSection
                 key={`${blockType}-${index}`}
                 content={section.content}
+              />
+            );
+
+          case 'vaccineSection':
+            return (
+              <VaccineSection
+                key={`${blockType}-${index}`}
+                title={section.title}
+                subtitle={section.subtitle}
+                limit={section.limit}
+                showViewAll={section.showViewAll !== false}
               />
             );
 
