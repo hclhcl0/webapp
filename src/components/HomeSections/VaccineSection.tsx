@@ -62,7 +62,7 @@ export async function VaccineSection({
 
 
         {/* ── Main UI (compact mode) ── */}
-        <div className="relative z-10 max-w-[1100px] mx-auto mt-4">
+        <div className="relative z-10 w-full mx-auto mt-4">
           {/* Decorative glowing blobs */}
           <div className="absolute top-1/2 left-0 -translate-x-1/3 -translate-y-1/2 w-64 h-64 bg-[#33b5ff] rounded-full blur-[80px] opacity-25 -z-10 animate-pulse-slow" />
           <div className="absolute top-1/2 right-0 translate-x-1/3 -translate-y-1/2 w-80 h-80 bg-[#00a4ff] rounded-full blur-[100px] opacity-20 -z-10 animate-pulse-slow" style={{ animationDelay: '2s' }} />
