@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description: "Thông tin y tế, phòng chống dịch bệnh, an toàn thực phẩm tại thành phố Đà Nẵng.",
     images: [
       {
-        url: "https://ecdc.vnos.org/og-image.png",
+        url: "https://ecdc.vnos.org/logo.png",
         width: 1200,
         height: 630,
         alt: "CDC Đà Nẵng - Trung tâm Kiểm soát Bệnh tật",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
     description: "Thông tin y tế, phòng chống dịch bệnh, an toàn thực phẩm tại thành phố Đà Nẵng.",
-    images: ["https://ecdc.vnos.org/og-image.png"],
+    images: ["https://ecdc.vnos.org/logo.png"],
   },
   icons: {
     icon: [
