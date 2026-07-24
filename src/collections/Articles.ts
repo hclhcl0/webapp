@@ -306,10 +306,9 @@ export const Articles: CollectionConfig = {
     ],
     afterChange: [
       async ({ doc, previousDoc, req }) => {
-        // Chỉ trigger khi chuyển trạng thái sang published VÀ checkbox autoZaloBroadcast được bật
+        // Trigger khi bài ở trạng thái published VÀ checkbox autoZaloBroadcast được bật
         if (
           doc._status === 'published' &&
-          previousDoc?._status !== 'published' &&
           doc.autoZaloBroadcast
         ) {
           try {
