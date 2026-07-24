@@ -6,7 +6,7 @@ import { Phone, ChevronRight, Shield, Clock, Package, ChevronDown } from "lucide
 
 interface VaccineItem {
   id: string;
-  vaccine: { id?: string; name: string; origin?: string; disease?: string; price?: number };
+  vaccine: { id?: string; name: string; origin?: string; disease?: string; price?: number; scheduleDoses?: number };
   diseaseName?: string;
   doses: number;
   protocol?: string;
@@ -50,9 +50,10 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
     setSelectedAlternatives({});
   }, [selected?.id]);
 
-  const handleDoseChange = (idx: number, delta: number, originalDoses: number) => {
+  const handleDoseChange = (idx: number, delta: number, originalDoses: number, maxDoses?: number) => {
     const current = customDoses[idx] !== undefined ? customDoses[idx] : originalDoses;
-    const newVal = Math.max(0, current + delta);
+    let newVal = Math.max(0, current + delta);
+    if (maxDoses != null && newVal > maxDoses) newVal = maxDoses;
     setCustomDoses(prev => ({ ...prev, [idx]: newVal }));
   };
 
@@ -251,19 +252,37 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
                     </p>
                     {/* Quantity */}
                     <div className="hidden md:flex justify-center">
-                      <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-white">
-                        <button
-                          onClick={() => handleDoseChange(idx, -1, item.doses || 1)}
-                          className="px-2.5 py-1 text-gray-400 hover:bg-gray-50 transition-colors"
-                        >—</button>
-                        <span className="px-3 text-[13px] font-medium text-gray-700 border-x border-gray-100">
-                          {customDoses[idx] !== undefined ? customDoses[idx] : (item.doses || 1)}
-                        </span>
-                        <button
-                          onClick={() => handleDoseChange(idx, 1, item.doses || 1)}
-                          className="px-2.5 py-1 text-gray-400 hover:bg-gray-50 transition-colors"
-                        >+</button>
-                      </div>
+                      {(() => {
+                        const maxDoses = item.vaccine?.scheduleDoses ?? undefined;
+                        const currentQty2 = customDoses[idx] !== undefined ? customDoses[idx] : (item.doses || 1);
+                        const atMax = maxDoses != null && currentQty2 >= maxDoses;
+                        return (
+                          <div className="flex flex-col items-center gap-0.5">
+                            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-white">
+                              <button
+                                onClick={() => handleDoseChange(idx, -1, item.doses || 1, maxDoses)}
+                                className="px-2.5 py-1 text-gray-400 hover:bg-gray-50 transition-colors"
+                              >—</button>
+                              <span className="px-3 text-[13px] font-medium text-gray-700 border-x border-gray-100">
+                                {currentQty2}
+                              </span>
+                              <button
+                                onClick={() => handleDoseChange(idx, 1, item.doses || 1, maxDoses)}
+                                disabled={atMax}
+                                title={atMax ? `Tối đa ${maxDoses} liều theo phác đồ` : undefined}
+                                className={`px-2.5 py-1 transition-colors ${
+                                  atMax
+                                    ? 'text-gray-200 cursor-not-allowed bg-gray-50'
+                                    : 'text-gray-400 hover:bg-gray-50'
+                                }`}
+                              >+</button>
+                            </div>
+                            {maxDoses != null && (
+                              <span className="text-[10px] text-gray-400">tối đa {maxDoses} liều</span>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                     {/* Price */}
                     <div className="text-right">
