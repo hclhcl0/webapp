@@ -1,4 +1,4 @@
-﻿/**
+/**
  * MIGRATION STATEMENTS — nguồn duy nhất (single source of truth)
  * Cập nhật lúc: 11/06/2026 23:00
  *
@@ -3523,5 +3523,10 @@ export const MIGRATION_STATEMENTS = [
   )`,
   `CREATE INDEX IF NOT EXISTS "site_settings_blocks_vaccine_section_order_idx" ON "site_settings_blocks_vaccine_section" USING btree ("_order")`,
   `CREATE INDEX IF NOT EXISTS "site_settings_blocks_vaccine_section_parent_idx" ON "site_settings_blocks_vaccine_section" USING btree ("_parent_id")`,
-  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_vaccine_section_path_idx" ON "site_settings_blocks_vaccine_section" USING btree ("_path")`
+  `CREATE INDEX IF NOT EXISTS "site_settings_blocks_vaccine_section_path_idx" ON "site_settings_blocks_vaccine_section" USING btree ("_path")`,
+
+  // ====================================================
+  // BATCH: Add scheduleDoses to vaccines (phác đồ chuẩn)
+  // ====================================================
+  `DO $$ BEGIN ALTER TABLE "vaccines" ADD COLUMN "schedule_doses" numeric; EXCEPTION WHEN duplicate_column THEN null; END $$`
 ];

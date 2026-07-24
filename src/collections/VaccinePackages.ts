@@ -1,6 +1,4 @@
 import type { CollectionConfig } from 'payload';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
 
 export const VaccinePackages: CollectionConfig = {
   slug: 'vaccine-packages',
@@ -16,24 +14,23 @@ export const VaccinePackages: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      async ({ data, req, operation }) => {
+      async ({ data, req }) => {
         const items: any[] = data?.items || [];
         if (!items.length) return data;
 
-        const payload = await getPayload({ config: configPromise });
         const errors: string[] = [];
 
         await Promise.all(
-          items.map(async (item: any, idx: number) => {
+          items.map(async (item: any) => {
             const vaccineId = typeof item.vaccine === 'object' ? item.vaccine?.id : item.vaccine;
             if (!vaccineId || !item.doses) return;
 
             try {
-              const vaccine = await payload.findByID({ collection: 'vaccines', id: vaccineId });
+              const vaccine = await req.payload.findByID({ collection: 'vaccines', id: vaccineId });
               const maxDoses = (vaccine as any)?.scheduleDoses;
               if (maxDoses != null && item.doses > maxDoses) {
                 errors.push(
-                  `Vắc xin “${(vaccine as any)?.name || vaccineId}”: số liều trong gói (${item.doses}) vượt quá phác đồ chuẩn (${maxDoses} liều)`
+                  `Vắc xin "${(vaccine as any)?.name || vaccineId}": số liều trong gói (${item.doses}) vượt quá phác đồ chuẩn (${maxDoses} liều)`
                 );
               }
             } catch {
