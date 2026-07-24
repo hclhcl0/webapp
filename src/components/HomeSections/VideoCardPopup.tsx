@@ -100,7 +100,7 @@ export function VideoCardPopup({
           
           {/* Vertical Title Gradient Overlay */}
           {variant === 'vertical' && (
-             <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent opacity-95 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
+             <div className="absolute inset-x-0 bottom-0 h-[65%] bg-gradient-to-t from-black via-black/70 to-transparent opacity-95 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
           )}
 
           {/* Play button overlay */}
@@ -120,13 +120,13 @@ export function VideoCardPopup({
             </div>
           )}
         </div>
-        <div className={`relative z-20 ${variant === 'vertical' ? 'p-2 sm:p-3 mt-auto flex flex-col' : (isFeatured ? "p-4" : "p-3 flex-1 flex flex-col")}`}>
+        <div className={`relative z-20 ${variant === 'vertical' ? 'p-2 sm:p-3 mt-auto flex flex-col gap-0.5' : (isFeatured ? "p-4" : "p-3 flex-1 flex flex-col")}`}>
           <h4 className={`${variant === 'vertical' ? 'font-bold text-white text-[11px] sm:text-[13px] group-hover:text-blue-300 drop-shadow-md' : (isFeatured ? 'font-bold text-base' : 'text-sm font-semibold')} line-clamp-2 transition-colors leading-tight ${variant !== 'vertical' && 'text-gray-800 group-hover:text-[var(--primary)]'}`}>
             {video.title}
           </h4>
-          {variant === 'vertical' && video.description && (
-             <p className="text-white/80 text-[10px] sm:text-xs line-clamp-1 mt-0.5 drop-shadow-md">
-               {video.description}
+          {variant === 'vertical' && (
+             <p className="text-white/75 text-[10px] sm:text-[11px] line-clamp-1 drop-shadow-md leading-tight">
+               {video.description || new Date(video.publishedDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
              </p>
           )}
           {variant !== 'vertical' && !isFeatured && video.publishedDate && (
