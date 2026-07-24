@@ -76,5 +76,14 @@ export const Vaccines: CollectionConfig = {
         description: 'Các lưu ý thêm về liều tiêm, khoảng cách các mũi...',
       },
     },
+    {
+      name: 'scheduleDoses',
+      type: 'number',
+      label: 'Phác đồ chuẩn (Tổng số liều)',
+      min: 1,
+      admin: {
+        description: 'Số liều theo phác đồ điều trị chuẩn của nhà sản xuất (VD: 3 liều cho Hexaxim). Gói vắc xin không được đặt quá số này.',
+      },
+    },
   ],
 };

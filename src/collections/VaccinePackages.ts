@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload';
+import { getPayload } from 'payload';
+import configPromise from '@payload-config';
 
 export const VaccinePackages: CollectionConfig = {
   slug: 'vaccine-packages',
@@ -11,6 +13,44 @@ export const VaccinePackages: CollectionConfig = {
     defaultColumns: ['name', 'targetGroup', 'packageType', 'discountPrice', 'isActive'],
     group: 'Dịch vụ Y tế',
     description: 'Quản lý các gói combo vắc xin. Đường dẫn trang hiển thị trên web: /goi-vac-xin',
+  },
+  hooks: {
+    beforeChange: [
+      async ({ data, req, operation }) => {
+        const items: any[] = data?.items || [];
+        if (!items.length) return data;
+
+        const payload = await getPayload({ config: configPromise });
+        const errors: string[] = [];
+
+        await Promise.all(
+          items.map(async (item: any, idx: number) => {
+            const vaccineId = typeof item.vaccine === 'object' ? item.vaccine?.id : item.vaccine;
+            if (!vaccineId || !item.doses) return;
+
+            try {
+              const vaccine = await payload.findByID({ collection: 'vaccines', id: vaccineId });
+              const maxDoses = (vaccine as any)?.scheduleDoses;
+              if (maxDoses != null && item.doses > maxDoses) {
+                errors.push(
+                  `Vắc xin “${(vaccine as any)?.name || vaccineId}”: số liều trong gói (${item.doses}) vượt quá phác đồ chuẩn (${maxDoses} liều)`
+                );
+              }
+            } catch {
+              // Vắc xin không tìm thấy — bỏ qua
+            }
+          })
+        );
+
+        if (errors.length) {
+          throw new Error(
+            `Không thể lưu gói vắc xin:\n${errors.join('\n')}`
+          );
+        }
+
+        return data;
+      },
+    ],
   },
   fields: [
     // ─── Thông tin cơ bản ───────────────────────────────────────
@@ -105,6 +145,9 @@ export const VaccinePackages: CollectionConfig = {
           required: true,
           defaultValue: 1,
           min: 1,
+          admin: {
+            description: '⚠️ Không được vượt quá Phác đồ chuẩn đã khai báo trong Danh mục Vắc xin. Hệ thống sẽ báo lỗi nếu vượt quá.',
+          },
         },
         {
           name: 'protocol',
