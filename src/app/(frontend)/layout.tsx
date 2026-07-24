@@ -14,7 +14,10 @@ import configPromise from "@payload-config";
 
 export const revalidate = 60;
 
+const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || "https://ecdc.ksbtdanang.vn";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(serverUrl),
   title: "TRUNG TÂM KIỂM SOÁT BỆNH TẬT THÀNH PHỐ ĐÀ NẴNG",
   description: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng - Thông tin y tế, phòng chống dịch bệnh, an toàn thực phẩm tại thành phố Đà Nẵng.",
   manifest: "/manifest.webmanifest",
@@ -22,13 +25,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "vi_VN",
-    url: "https://ecdc.ksbtdanang.vn",
+    url: "/",
     siteName: "CDC Đà Nẵng",
     title: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
     description: "Thông tin y tế, phòng chống dịch bệnh, an toàn thực phẩm tại thành phố Đà Nẵng.",
     images: [
       {
-        url: "https://ecdc.ksbtdanang.vn/logo.png",
+        url: "/logo.png",
         width: 1200,
         height: 630,
         alt: "CDC Đà Nẵng - Trung tâm Kiểm soát Bệnh tật",
@@ -39,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Trung tâm Kiểm soát Bệnh tật Thành phố Đà Nẵng",
     description: "Thông tin y tế, phòng chống dịch bệnh, an toàn thực phẩm tại thành phố Đà Nẵng.",
-    images: ["https://ecdc.ksbtdanang.vn/logo.png"],
+    images: ["/logo.png"],
   },
   icons: {
     icon: [
