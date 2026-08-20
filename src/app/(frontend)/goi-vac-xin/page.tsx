@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'Các gói vắc xin combo theo độ tuổi và đối tượng tại CDC Đà Nẵng. Cam kết giữ giá, luôn đủ hàng và miễn phí nhắc lịch hẹn.',
 };
 
-export const revalidate = 300; // 5 phút
+export const dynamic = 'force-dynamic'; // 5 phút
 
 export default async function GoiVacXinPage() {
   const payload = await getPayload({ config: configPromise });

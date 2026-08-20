@@ -13,7 +13,7 @@ import { VisitTracker } from "@/components/VisitTracker";
 import { getPayload } from "payload";
 import configPromise from "@payload-config";
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || "https://ecdc.ksbtdanang.vn";
 
