@@ -15,6 +15,7 @@ import { EmbedBlock } from './EmbedBlock';
 import { DividerBlock } from './DividerBlock';
 import { TableBlock } from './TableBlock';
 import { MagazineBlock } from '../../blocks/MagazineBlock/Component';
+import PopupClientBlock from '@/components/blocks/PopupClientBlock';
 
 // Existing block components
 import HeroBannerBlockComp from '@/components/blocks/HeroBannerBlock';
@@ -106,6 +107,9 @@ export function PageBlockRenderer({ blocks }: Props) {
                 cards={block.cards || []}
               />
             );
+
+          case 'popupBlock':
+            return <PopupClientBlock key={key} data={block} converters={getJsxConverters()} />;
 
           case 'cardBlock': {
             const { image, title, description, linkUrl, linkLabel } = block;

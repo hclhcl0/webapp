@@ -28,7 +28,6 @@ import { DocumentSigners } from './collections/DocumentSigners.ts';
 import { SiteSettings } from './globals/SiteSettings.ts';
 import { Settings } from './globals/Settings.ts';
 import { SiteStats } from './globals/SiteStats.ts';
-import { WorkSchedules } from './collections/WorkSchedules.ts';
 import { Videos } from './collections/Videos.ts';
 import { VideoChannels } from './collections/VideoChannels.ts';
 import { FormSubmissions } from './collections/FormSubmissions.ts';
@@ -124,12 +123,15 @@ export default buildConfig({
           path: '/bulk-upload',
         },
       },
+      beforeNavLinks: [
+        '@/app/(payload)/admin/components/AdminLogo.tsx#AdminLogo',
+      ],
       afterNavLinks: [
         '@/components/Admin/GuideNavLink.tsx',
         '@/components/Admin/BulkUploadLink.tsx',
       ],
       beforeDashboard: [
-        '@/app/(payload)/admin/components/AuthorWelcome.tsx#AuthorWelcome',
+        '@/app/(payload)/admin/components/DashboardWelcome.tsx#DashboardWelcome',
       ]
     }
   },
@@ -138,27 +140,26 @@ export default buildConfig({
     fallbackLanguage: 'vi',
   },
   collections: withRBAC([
-    Departments,
-    Users,
-    MediaFolders,
-    Media,
+    Articles,
     Categories,
     Tags,
-    Articles,
+    MediaFolders,
+    Media,
     Pages,
-    Banners,
     Documents,
     DocumentSigners,
-    WorkSchedules,
-    VideoChannels,
-    Videos,
-    FormSubmissions,
-    OrgUnits,
-    AiKnowledge,
-    ApiKeys,
     Procurements,
     Vaccines,
     VaccinePackages,
+    Videos,
+    VideoChannels,
+    OrgUnits,
+    Banners,
+    FormSubmissions,
+    AiKnowledge,
+    ApiKeys,
+    Departments,
+    Users,
   ]),
   globals: globalsWithRBAC([
     SiteSettings,

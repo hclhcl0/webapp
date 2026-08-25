@@ -28,22 +28,22 @@ import { ZaloWidgetBlock } from '../blocks/ZaloWidgetBlock.ts';
 import { LivestreamBlock } from '../blocks/LivestreamBlock.ts';
 import { ScheduleBlock } from '../blocks/ScheduleBlock.ts';
 import { MagazineBlock } from '../blocks/MagazineBlock.ts';
+import { PopupBlock } from '../blocks/PopupBlock.ts';
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: {
     singular: 'Trang nội dung',
-    plural: 'Các trang nội dung',
+    plural: 'Các trang niội dung',
   },
   admin: {
-    description: '👉 Đường dẫn xem trên website: /[slug]',
+    description: '👒 Đường dẫn xem trên website: /[slug]',
     useAsTitle: 'title',
     group: 'Nội dung',
     defaultColumns: ['title', 'slug', 'pageType', 'updatedAt'],
-    description: 'Tạo và quản lý các trang nội dung như Giới thiệu, Liên hệ, FAQ, v.v.',
     preview: (doc) => {
       if (doc?.slug) {
-        return `/${doc.slug}?preview=true`;
+        return `${doc.slug}?preview=true`;
       }
       return null;
     },
@@ -58,7 +58,7 @@ export const Pages: CollectionConfig = {
     drafts: true,
   },
   fields: [
-    // ── Thông tin cơ bản ──
+    // ── Thông tin cơ bản ─�@
     {
       name: 'title',
       type: 'text',
@@ -75,7 +75,7 @@ export const Pages: CollectionConfig = {
         components: {
           Field: '@/components/SlugField.tsx#SlugField',
         },
-        description: 'Đường dẫn URL (VD: gioi-thieu → /gioi-thieu)',
+        description: 'Đường dẫn URL (VD: gioi-thieu ↏ /gioi-thieu)',
       },
     },
     {
@@ -84,45 +84,45 @@ export const Pages: CollectionConfig = {
       label: 'Loại trang',
       defaultValue: 'standard',
       options: [
-        { label: '📄 Trang thông tin chuẩn', value: 'standard' },
-        { label: '🏥 Trang Giới thiệu / Về chúng tôi', value: 'about' },
-        { label: '📞 Trang Liên hệ (có form)', value: 'contact' },
-        { label: '❓ Trang FAQ / Hỏi đáp', value: 'faq' },
-        { label: '🚀 Trang Landing Page', value: 'landing' },
+        { label: '�4 Trang thông tin chuẩn', value: 'standard' },
+        { label: '🤥 Trang Giới thiệu / Về chúng tôi', value: 'about' },
+        { label: '🕐 Trang Liên hệ (có form)', value: 'contact' },
+        { label: '❩ Trang FAQ | phản hểi', value: 'faq' },
+        { label: '🚐 Trang Landing Page', value: 'landing' },
       ],
       admin: {
         position: 'sidebar',
-        description: 'Chọn loại trang để áp dụng template phù hợp.',
+        description: 'Chọn loại trang để ap dụng template phù hợp.',
       },
     },
-    // ── Layout & Hiển thị ──
+    // ── Layout & Hiển thị ♠♠
     {
       name: 'layout',
       type: 'select',
       label: 'Bố cục trang',
       defaultValue: 'withSidebar',
       options: [
-        { label: '📰 Có Sidebar (như trang bài viết)', value: 'withSidebar' },
-        { label: '📃 Nội dung hẹp căn giữa (dạng tài liệu)', value: 'narrow' },
-        { label: '🖥️ Toàn chiều rộng (không sidebar)', value: 'fullWidth' },
+        { label: '�, Có Sidebar (như trang bài viết)', value: 'withSidebar' },
+        { label: '📍 Nội dung hẹp căn giỳa (dạng tài liệu', value: 'narrow' },
+        { label: '💻 Toàn chiều rộng (không sidebar)', value: 'fullWidth' },
       ],
       admin: {
         position: 'sidebar',
       },
     },
-    // ── SEO ──
+    // ─�@ 'SEO' ♠♠
     {
       name: 'seo',
       type: 'group',
-      label: 'SEO & Chia sẻ mạng xã hội',
+      label: 'SEO & Chia sẁ mạng xã hội',
       admin: {
-        description: 'Tùy chỉnh thông tin hiển thị khi chia sẻ lên Google, Facebook, Zalo...',
+        description: 'Tùy chỉnh thông tin hiển thị khi chia sẫ lên Google, Facebook, Zalo...',
       },
       fields: [
         {
           name: 'title',
           type: 'text',
-          label: 'Tiêu đề SEO (để trống = dùng tiêu đề trang)',
+          label: 'Tiêu đị SEO (dęể trống = dùng tiêu đề trang)',
           admin: { description: 'Tối đa 60 ký tự. VD: Giới thiệu CDC Đà Nẵng | Trung tâm Kiểm soát Bệnh tật' },
         },
         {
@@ -135,54 +135,46 @@ export const Pages: CollectionConfig = {
           name: 'ogImage',
           type: 'upload',
           relationTo: 'media',
-          label: 'Ảnh chia sẻ (Open Graph Image)',
-          admin: { description: 'Kích thước khuyến nghị: 1200×630px. Hiển thị khi chia sẻ lên Facebook, Zalo.' },
+          label: 'ảnh chia sẫ (Open Graph Image)',
+          admin: { description: 'Kích thước khuyến nghị: 1200×630px. Hiển thị khi chia sẫ lên Facebook, Zalo.' },
         },
       ],
     },
-    // ── Nội dung trang (Blocks) ──
+    // ♠♠ Nội dung trang (Blocks) ♠♠
     {
       name: 'content',
       type: 'blocks',
       label: 'Nội dung trang (Page Builder)',
       labels: {
         singular: 'Thành phần',
-        plural: 'Danh sách thành phần',
+        plural: 'Danh sḑch thành phần',
       },
       admin: {
         description: 'Kéo thả để sắp xếp thứ tự hiển thị các thành phần của trang.',
       },
       blocks: [
-        // Văn bản & Trình soạn thảo
         RichTextBlock,
         SectionTitleBlock,
         CalloutBlock,
-        // Layout
         ColumnsBlock,
         DividerBlock,
-        // Thẻ & Danh sách
         CardGridBlock,
         CardBlock,
         StepsBlock,
-        // Tương tác
+        PopupBlock,
         FaqBlock,
         ButtonBlock,
         CtaBannerBlock,
-        // Phương tiện
         VideoBlock,
         TikTokBlock,
         GalleryBlock,
         PDFBlock,
-        // Nhúng & Bảng
         EmbedBlock,
         TableBlock,
-        // Bài viết
         RelatedArticlesBlock,
         CategoryNewsBlock,
-        // Quote & Audio
         QuoteBlock,
         AudioBlock,
-        // New Media Blocks
         FileDownloadsBlock,
         SliderBlock,
         InfographicBlock,
@@ -190,7 +182,6 @@ export const Pages: CollectionConfig = {
         LivestreamBlock,
         ScheduleBlock,
         MagazineBlock,
-        // Legacy
         HeroBannerBlock,
       ],
     },

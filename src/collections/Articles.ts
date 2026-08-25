@@ -22,6 +22,7 @@ import { InfographicBlock } from '../blocks/InfographicBlock.ts';
 import { ZaloWidgetBlock } from '../blocks/ZaloWidgetBlock.ts';
 import { LivestreamBlock } from '../blocks/LivestreamBlock.ts';
 import { CardBlock } from '../blocks/CardBlock.ts';
+import { PopupBlock } from '../blocks/PopupBlock.ts';
 
 /**
  * Trích xuất danh sách ID chuyên mục được phân công của user.
@@ -521,6 +522,7 @@ export const Articles: CollectionConfig = {
             VideoBlock, TikTokBlock, PDFBlock, GalleryBlock, CalloutBlock, ButtonBlock, ImageLinkBlock, RelatedArticlesBlock, ColumnsBlock,
             TableBlock, ExcelTableBlock, FaqBlock, EmbedBlock, QuoteBlock, AudioBlock,
             FileDownloadsBlock, SliderBlock, InfographicBlock, ZaloWidgetBlock, LivestreamBlock,
+            CardBlock, PopupBlock,
             NewsListBlockStub, ExternalLinksBlockStub
           ] }),
         ]

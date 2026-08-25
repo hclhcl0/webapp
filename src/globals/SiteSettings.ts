@@ -161,19 +161,12 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
 
-        // ─────────────────────────────────────────────,
-            {
-          type: 'collapsible',
-          label: 'Bố cục Trang chủ',
-          fields: [
-            ...(Settings.fields as any[]).filter(f => ['homeContent', 'homeSections'].includes(f.name))
-          ]
-        },
         // ─────────────────────────────────────────────
-          ]
-        },
+        ...(Settings.fields as any[]).filter(f => ['homeContent', 'homeSections'].includes(f.name))
+      ]
+    },
         {
-          label: 'Thành phần dùng chung',
+          label: 'Header, Footer & Menu',
           fields: [
             {
           type: 'group',
@@ -533,12 +526,7 @@ export const SiteSettings: GlobalConfig = {
         },
 
         // ─────────────────────────────────────────────
-          ]
-        },
-                {
-          label: 'Menu',
-          fields: [
-    {
+        {
           type: 'group',
           label: 'Menu Điều Hướng',
           name: 'menu',
@@ -603,7 +591,6 @@ export const SiteSettings: GlobalConfig = {
                         { label: '🛒 Mua sắm & Đấu thầu', value: '/mua-sam' },
                         { label: '🏥 Dịch vụ y tế', value: '/dich-vu' },
                         { label: '🎬 Video truyền thông', value: '/video' },
-                        { label: '📅 Lịch công tác', value: '/lich-cong-tac' },
                         { label: '📞 Liên hệ', value: '/contact' },
                         { label: '🔍 Tìm kiếm', value: '/search' },
                       ],
@@ -646,7 +633,6 @@ export const SiteSettings: GlobalConfig = {
                         { label: '🛒 Mua sắm & Đấu thầu', value: '/mua-sam' },
                         { label: '🏥 Dịch vụ y tế', value: '/dich-vu' },
                         { label: '🎬 Video truyền thông', value: '/video' },
-                        { label: '📅 Lịch công tác', value: '/lich-cong-tac' },
                         { label: '📞 Liên hệ', value: '/contact' },
                         { label: '🔍 Tìm kiếm', value: '/search' },
                       ],
@@ -841,7 +827,7 @@ export const SiteSettings: GlobalConfig = {
         // ─────────────────────────────────────────────,
             {
           type: 'collapsible',
-          label: 'Cấu hình Nâng cao',
+          label: 'Cấu hình Nâng cao (Widget & Theme)',
           fields: [
             ...(Settings.fields as any[]).filter(f => ['themeConfig', 'sidebarWidgets'].includes(f.name))
           ]
@@ -851,7 +837,7 @@ export const SiteSettings: GlobalConfig = {
         {
           label: 'Tính năng mở rộng',
           fields: [
-            {
+        {
           type: 'group',
           label: 'AI Chat',
           name: 'aiChatSettings',
@@ -993,16 +979,31 @@ export const SiteSettings: GlobalConfig = {
                   fields: [
                     {
                       name: 'icon',
-                      type: 'text',
-                      label: 'Emoji icon (ví dụ: 💉, 🏥)',
-                      admin: { width: '30%' },
+                      type: 'select',
+                      label: 'Biểu tượng (Icon)',
+                      defaultValue: '💉',
+                      options: [
+                        { label: '💉 Tiêm chủng / Vắc xin', value: '💉' },
+                        { label: '🏥 Bệnh viện / Cơ sở y tế', value: '🏥' },
+                        { label: '🧪 Xét nghiệm / Phòng Lab', value: '🧪' },
+                        { label: '🩺 Khám bệnh / Sức khỏe', value: '🩺' },
+                        { label: '💊 Dược phẩm / Thuốc', value: '💊' },
+                        { label: '📋 Hồ sơ / Thủ tục hành chính', value: '📋' },
+                        { label: '👥 Đội ngũ / Bác sĩ', value: '👥' },
+                        { label: '📞 Tổng đài / Hotline', value: '📞' },
+                        { label: '🌐 Dịch vụ công trực tuyến', value: '🌐' },
+                        { label: '📄 Tra cứu kết quả / Văn bản', value: '📄' },
+                        { label: '🛡️ Phòng chống dịch bệnh', value: '🛡️' },
+                        { label: '⚡ Thông báo khẩn cấp', value: '⚡' },
+                      ],
+                      admin: { width: '40%' },
                     },
                     {
                       name: 'iconImage',
                       type: 'upload',
                       relationTo: 'media',
-                      label: 'Hoặc ảnh icon (ưu tiên hơn emoji)',
-                      admin: { width: '70%' },
+                      label: 'Hoặc ảnh Icon tải lên (tùy chọn)',
+                      admin: { width: '60%' },
                     },
                   ],
                 },
@@ -1155,9 +1156,18 @@ export const SiteSettings: GlobalConfig = {
               fields: [
                 {
                   name: 'icon',
-                  type: 'text',
-                  label: 'Biểu tượng (Icon)',
+                  type: 'select',
+                  label: 'Biểu tượng cảnh báo',
                   defaultValue: '🔥',
+                  options: [
+                    { label: '🔥 Lửa (Khẩn cấp)', value: '🔥' },
+                    { label: '🚨 Còi báo động (Cấp cứu)', value: '🚨' },
+                    { label: '⚠️ Biển cảnh báo (Lưu ý)', value: '⚠️' },
+                    { label: '📢 Loa phát thanh (Thông báo)', value: '📢' },
+                    { label: '⚡ Tia sét (Nóng / Tiêu điểm)', value: '⚡' },
+                    { label: '🔴 Chấm đỏ (Quan trọng)', value: '🔴' },
+                    { label: '🛡️ Phòng chống dịch', value: '🛡️' },
+                  ],
                 },
                 {
                   name: 'title',

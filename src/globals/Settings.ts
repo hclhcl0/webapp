@@ -233,7 +233,7 @@ export const Settings: GlobalConfig = {
         {
           slug: 'vaccineSection',
           interfaceName: 'VaccineSection',
-          labels: { singular: '🧬 Khu vực Gói Vắc Xin', plural: 'Khu vực Gói Vắc Xin' },
+          labels: { singular: '💉 Khu vực Gói Vắc Xin', plural: 'Khu vực Gói Vắc Xin' },
           fields: [
             {
               type: 'row',
@@ -681,10 +681,21 @@ export const Settings: GlobalConfig = {
               fields: [
                 {
                   name: 'icon',
-                  type: 'text',
-                  label: 'Icon (emoji hoặc tên icon)',
+                  type: 'select',
+                  label: 'Biểu tượng chỉ số (Icon)',
                   defaultValue: '🏥',
-                  admin: { description: 'Dán emoji vào đây, VD: 🏥 🧪 💉 👥 🌐' },
+                  options: [
+                    { label: '🏥 Bệnh viện / Cơ sở y tế', value: '🏥' },
+                    { label: '💉 Tiêm chủng / Liều tiêm', value: '💉' },
+                    { label: '🧪 Mẫu xét nghiệm', value: '🧪' },
+                    { label: '🩺 Lượt khám chữa bệnh', value: '🩺' },
+                    { label: '👥 Người dân / Bệnh nhân', value: '👥' },
+                    { label: '👨‍⚕️ Bác sĩ / Cán bộ y tế', value: '👨‍⚕️' },
+                    { label: '📈 Tỷ lệ hoàn thành / Đạt chuẩn', value: '📈' },
+                    { label: '🌐 Trực tuyến / Dịch vụ công', value: '🌐' },
+                    { label: '🏆 Thành tích / Giải thưởng', value: '🏆' },
+                    { label: '🛡️ Phòng dịch an toàn', value: '🛡️' },
+                  ],
                 },
                 {
                   name: 'value',
@@ -733,10 +744,21 @@ export const Settings: GlobalConfig = {
               fields: [
                 {
                   name: 'icon',
-                  type: 'text',
-                  label: 'Icon (emoji)',
-                  defaultValue: '🔗',
-                  admin: { description: 'Dán emoji, VD: 📋 🏥 💊 🧾 📞 🌐' },
+                  type: 'select',
+                  label: 'Biểu tượng liên kết (Icon)',
+                  defaultValue: '📋',
+                  options: [
+                    { label: '📋 Thủ tục hành chính', value: '📋' },
+                    { label: '🏥 Dịch vụ khám bệnh', value: '🏥' },
+                    { label: '💉 Đặt lịch tiêm chủng', value: '💉' },
+                    { label: '🧪 Tra cứu kết quả xét nghiệm', value: '🧪' },
+                    { label: '💊 Danh mục thuốc / Dược', value: '💊' },
+                    { label: '🧾 Bảng giá dịch vụ', value: '🧾' },
+                    { label: '📞 Tư vấn sức khỏe / Hotline', value: '📞' },
+                    { label: '🌐 Cổng Dịch vụ công', value: '🌐' },
+                    { label: '📄 Văn bản & Quy định', value: '📄' },
+                    { label: '🔗 Liên kết ngoài', value: '🔗' },
+                  ],
                 },
                 {
                   name: 'label',

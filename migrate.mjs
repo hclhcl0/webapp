@@ -6,6 +6,14 @@ import { MIGRATION_STATEMENTS } from './scripts/migrations.mjs';
 import { execSync } from 'child_process';
 
 
+try {
+  if (typeof process.loadEnvFile === 'function') {
+    process.loadEnvFile();
+  }
+} catch (e) {
+  // Không có file .env hoặc đã có biến môi trường
+}
+
 const dbUrl = process.env.DATABASE_URI || process.env.POSTGRES_URL || process.env.DATABASE_URL;
 
 if (!dbUrl) {

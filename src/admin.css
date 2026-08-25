@@ -322,7 +322,7 @@ code, pre, kbd, samp, .code {
 }
 
 /* INPUTS */
-.field-type input[type="text"],
+.field-type input[type="text"]:not([id^="react-select-"]):not([class*="react-select"]):not([class*="rs__"]),
 .field-type input[type="password"],
 .field-type input[type="email"],
 .field-type input[type="number"],
@@ -336,7 +336,7 @@ code, pre, kbd, samp, .code {
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.02) !important;
 }
 
-.field-type input:focus,
+.field-type input:focus:not([id^="react-select-"]):not([class*="react-select"]):not([class*="rs__"]),
 .field-type textarea:focus,
 .react-select__control--is-focused {
   border-color: var(--tw-primary) !important;
@@ -375,36 +375,445 @@ code, pre, kbd, samp, .code {
   color: var(--tw-text-hover) !important;
 }
 
-/* SIDEBAR & HEADER */
-.nav {
-  background-color: var(--tw-card) !important;
-  border-right: 1px solid var(--tw-border) !important;
+/* ==========================================
+   SIDEBAR REDESIGN (UI/UX PRO MAX)
+   ========================================== */
+
+/* ==========================================
+   SIDEBAR REDESIGN (UI/UX PRO MAX COMPACT DENSITY)
+   ========================================== */
+
+/* ==========================================
+   SIDEBAR (MINIMALIST & SWISS STYLE - CLEAN & SLEEK)
+   ========================================== */
+
+/* ==========================================
+   SIDEBAR (BORDERLESS, CLEAN & SMOOTH)
+   ========================================== */
+
+/* 1. Sidebar Container & Scrollbar */
+.nav,
+aside.nav,
+[class*="nav__wrapper"],
+[class*="nav__scroll"] {
+  background-color: var(--tw-card, #ffffff) !important;
+  border-right: 1px solid var(--tw-border, #e2e8f0) !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
-.nav__link {
-  border-radius: 8px !important;
-  margin: 2px 12px !important;
-  padding: 8px 12px !important;
-  color: var(--tw-text-muted) !important;
+.nav__scroll,
+[class*="nav__scroll"] {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent !important;
+  padding: 0 0 2rem 0 !important;
+}
+
+/* Nav Header & Toggle Button (Không viền) */
+.nav__header,
+[class*="nav__header"],
+.nav__brand,
+[class*="nav__brand"] {
+  padding: 8px 12px 6px 12px !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+.nav__toggler,
+.nav-toggler,
+[class*="nav__toggler"],
+[class*="nav-toggler"] {
+  border: none !important;
+  background: transparent !important;
+  color: var(--tw-text-muted, #64748b) !important;
+  cursor: pointer !important;
+  border-radius: 6px !important;
+  padding: 4px !important;
+}
+
+.nav__toggler:hover,
+.nav-toggler:hover {
+  background-color: var(--theme-elevation-100, #f1f5f9) !important;
+  color: var(--tw-text-hover, #0f172a) !important;
+}
+
+/* 2. Group Headers (Không viền) */
+.nav-group,
+[class*="nav-group"] {
+  margin: 0 0 4px 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.nav-group:not(:first-child) {
+  margin-top: 10px !important;
+  padding-top: 6px !important;
+}
+
+.nav-group__toggle,
+.nav-group__label,
+[class*="nav-group__toggle"],
+[class*="nav-group__label"],
+button.nav-group__toggle {
+  font-size: 0.74rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #334155 !important; /* Màu slate-700 đậm nét và rõ ràng */
+  padding: 8px 12px 3px 12px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  line-height: 1.2 !important;
+}
+
+.nav-group__toggle:hover,
+button.nav-group__toggle:hover {
+  color: #0284c7 !important;
+}
+
+.nav-group__indicator,
+[class*="nav-group__indicator"] {
+  opacity: 0.5 !important;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 3. Reset Lists */
+.nav ul,
+.nav ol,
+.nav li,
+.nav-group ul,
+.nav-group ol,
+.nav-group li,
+.nav-group__content,
+[class*="nav-group__content"],
+[class*="nav__link-wrapper"] {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1px !important;
+  border: none !important;
+}
+
+/* 4. Tab Links Mịn Màng & Hoàn Toàn Không Viền */
+.nav__link-indicator,
+[class*="nav__link-indicator"] {
+  display: none !important;
+}
+
+.nav a,
+.nav a.nav__link,
+.nav div.nav__link,
+.nav [class*="nav__link"] {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  width: auto !important;
+  margin: 2px 6px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 10px 0 8px !important;
+  box-sizing: border-box !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  border: none !important;
+  border-left: 3.5px solid transparent !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--tw-text-main, #334155) !important;
+  font-size: 0.86rem !important;
   font-weight: 500 !important;
-  font-size: 0.875rem !important; /* Fix mobile font boosting */
+  line-height: 1 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
 }
 
-.nav__link:hover {
-  background-color: var(--tw-bg) !important;
-  color: var(--tw-text-hover) !important;
+.nav a *,
+.nav div.nav__link *,
+.nav [class*="nav__link"] * {
+  text-align: left !important;
+  justify-content: flex-start !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
-.nav__link--active, .nav__link.active {
-  background-color: var(--tw-nav-active-bg) !important;
-  color: var(--tw-nav-active-text) !important;
+.nav .nav__link-label,
+.nav [class*="nav__link-label"] {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+  text-align: left !important;
+  color: inherit !important;
+  font-weight: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 1 auto !important;
+  height: 100% !important;
+}
+
+/* Hover State: Nền xám mềm không viền */
+.nav a:hover,
+.nav__link:hover,
+[class*="nav__link"]:hover {
+  background-color: var(--theme-elevation-100, #f1f5f9) !important;
+  color: var(--tw-text-hover, #0f172a) !important;
+}
+
+/* Active State: Nền xanh pastel dịu mắt + Viền trái thẳng tắp */
+.nav div.nav__link,
+.nav .nav__link:has(.nav__link-indicator),
+.nav [class*="nav__link"]:has([class*="link-indicator"]),
+.nav a.active,
+.nav a--active,
+.nav a.nav__link--active,
+.nav a[aria-current="page"],
+.nav__link--active,
+.nav__link.active,
+[class*="nav__link--active"],
+[class*="nav__link"].active,
+.nav-group a.active,
+[class*="nav-group"] a.active,
+.nav-group a[aria-current="page"] {
+  background-color: #eff6ff !important;
+  color: #0284c7 !important;
+  font-weight: 700 !important;
+  border-radius: 6px !important;
+  border: none !important;
+  border-left: 3.5px solid #0284c7 !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  padding: 0 10px 0 8px !important;
+  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.08) !important;
+}
+
+.nav div.nav__link *,
+.nav .nav__link:has(.nav__link-indicator) *,
+.nav a.active *,
+.nav a.nav__link--active *,
+.nav a[aria-current="page"] *,
+.nav__link--active *,
+.nav__link.active * {
+  color: #0284c7 !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+}
+
+/* Mũi tên chỉ sang bên phải cho Tab Active (Căn giữa hàng dọc chuẩn xác) */
+.nav div.nav__link::after,
+.nav .nav__link:has(.nav__link-indicator)::after,
+.nav [class*="nav__link"]:has([class*="link-indicator"])::after,
+.nav a.active::after,
+.nav a--active::after,
+.nav a.nav__link--active::after,
+.nav a[aria-current="page"]::after,
+.nav__link--active::after,
+.nav__link.active::after,
+[class*="nav__link--active"]::after,
+[class*="nav__link"].active::after,
+.nav-group a.active::after,
+[class*="nav-group"] a.active::after {
+  content: "→" !important;
+  margin-left: auto !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #0284c7 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  height: 100% !important;
+  padding-left: 8px !important;
+}
+
+/* 5. Nút Bảng điều khiển (Pill nhẹ không viền) */
+a.nav__link[href="/admin"],
+a.nav__link[href$="/admin"],
+.nav a[href="/admin"],
+.nav a[href$="/admin"],
+[class*="nav"] a[href="/admin"],
+[class*="nav"] a[href$="/admin"] {
+  background-color: #f0f9ff !important;
+  color: #0284c7 !important;
+  font-size: 0.88rem !important;
   font-weight: 600 !important;
+  padding: 8px 12px !important;
+  margin: 6px 8px 6px 8px !important;
+  border-radius: 6px !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: 36px !important;
 }
+
+a.nav__link[href="/admin"]:hover,
+a.nav__link[href$="/admin"]:hover,
+.nav a[href="/admin"]:hover,
+.nav a[href$="/admin"]:hover {
+  background-color: #e0f2fe !important;
+  color: #0369a1 !important;
+  border: none !important;
+}
+
+a.nav__link[href="/admin"].active,
+a.nav__link--active[href="/admin"],
+.nav a[href="/admin"].active,
+.nav a[href="/admin"][aria-current="page"],
+.nav div.nav__link[href="/admin"] {
+  background-color: #eff6ff !important;
+  color: #0284c7 !important;
+  font-weight: 700 !important;
+  border: none !important;
+  padding-left: 14px !important;
+}
+
+/* 6. Dark Mode Không Viền */
+html[data-theme="dark"] .nav,
+html[data-theme="dark"] aside.nav {
+  background-color: #0c0e14 !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .nav__header {
+  border: none !important;
+}
+
+html[data-theme="dark"] .nav-group__toggle,
+html[data-theme="dark"] .nav-group__label {
+  color: #cbd5e1 !important;
+  font-weight: 800 !important;
+}
+
+html[data-theme="dark"] .nav-group__toggle:hover,
+html[data-theme="dark"] button.nav-group__toggle:hover {
+  color: #38bdf8 !important;
+}
+
+html[data-theme="dark"] .nav a,
+html[data-theme="dark"] .nav__link {
+  color: #94a3b8 !important;
+  border: none !important;
+}
+
+html[data-theme="dark"] .nav a:hover,
+html[data-theme="dark"] .nav__link:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+html[data-theme="dark"] .nav div.nav__link,
+html[data-theme="dark"] .nav .nav__link:has(.nav__link-indicator),
+html[data-theme="dark"] .nav [class*="nav__link"]:has([class*="link-indicator"]),
+html[data-theme="dark"] .nav a.active,
+html[data-theme="dark"] .nav a--active,
+html[data-theme="dark"] .nav a.nav__link--active,
+html[data-theme="dark"] .nav a[aria-current="page"],
+html[data-theme="dark"] .nav__link--active,
+html[data-theme="dark"] .nav__link.active,
+html[data-theme="dark"] [class*="nav__link--active"],
+html[data-theme="dark"] [class*="nav__link"].active,
+html[data-theme="dark"] .nav-group a.active,
+html[data-theme="dark"] [class*="nav-group"] a.active,
+html[data-theme="dark"] a.nav__link[href="/admin"].active,
+html[data-theme="dark"] .nav a[href="/admin"].active {
+  background-color: rgba(56, 189, 248, 0.12) !important;
+  color: #38bdf8 !important;
+  font-weight: 700 !important;
+  border: none !important;
+  padding-left: 14px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme="dark"] .nav div.nav__link::before,
+html[data-theme="dark"] .nav .nav__link:has(.nav__link-indicator)::before,
+html[data-theme="dark"] .nav [class*="nav__link"]:has([class*="link-indicator"])::before,
+html[data-theme="dark"] .nav a.active::before,
+html[data-theme="dark"] .nav a--active::before,
+html[data-theme="dark"] .nav a.nav__link--active::before,
+html[data-theme="dark"] .nav a[aria-current="page"]::before,
+html[data-theme="dark"] .nav__link--active::before,
+html[data-theme="dark"] .nav__link.active::before {
+  background-color: #38bdf8 !important;
+}
+
+html[data-theme="dark"] .nav div.nav__link *,
+html[data-theme="dark"] .nav .nav__link:has(.nav__link-indicator) *,
+html[data-theme="dark"] .nav a.active *,
+html[data-theme="dark"] .nav a.nav__link--active *,
+html[data-theme="dark"] .nav a[aria-current="page"] *,
+html[data-theme="dark"] .nav__link--active *,
+html[data-theme="dark"] .nav__link.active * {
+  color: #38bdf8 !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme="dark"] .nav div.nav__link::after,
+html[data-theme="dark"] .nav .nav__link:has(.nav__link-indicator)::after,
+html[data-theme="dark"] .nav a.active::after,
+html[data-theme="dark"] .nav a.nav__link--active::after,
+html[data-theme="dark"] .nav a[aria-current="page"]::after,
+html[data-theme="dark"] .nav__link--active::after {
+  color: #38bdf8 !important;
+}
+
+
 
 .app-header {
   background-color: var(--tw-card) !important;
   border-bottom: 1px solid var(--tw-border) !important;
 }
+
+/* ==========================================
+   BREADCRUMB LOGO ICON (BÊN TRÁI BẢNG ĐIỀU KHIỂN)
+   ========================================== */
+.step-nav__home,
+.step-nav a[href="/admin"],
+[class*="step-nav"] [class*="home"],
+.app-header .step-nav__home {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  border-radius: 8px !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12) !important;
+  padding: 3px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+  transition: transform 0.15s ease !important;
+  margin-right: 4px !important;
+}
+
+.step-nav__home:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
+}
+
+.step-nav__home img,
+.step-nav img,
+[class*="step-nav"] img {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+
 
 /* Typography Overrides */
 h1, h2, h3, h4, h5, h6, .card-title, .dashboard__title {
@@ -486,22 +895,6 @@ html[data-theme="dark"] .card {
   border: 1px solid var(--theme-border) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
   border-radius: 12px !important;
-}
-
-html[data-theme="dark"] .nav__link {
-  color: var(--theme-text-muted) !important;
-}
-
-html[data-theme="dark"] .nav__link:hover {
-  background-color: rgba(255, 255, 255, 0.04) !important;
-  color: var(--theme-text-hover) !important;
-}
-
-html[data-theme="dark"] .nav__link--active, 
-html[data-theme="dark"] .nav__link.active {
-  background-color: rgba(99, 102, 241, 0.15) !important; /* Subtle indigo tint */
-  color: #a5b4fc !important; /* Indigo 300 */
-  border: 1px solid rgba(99, 102, 241, 0.2) !important;
 }
 
 /* Custom Primary Button Style for Dark Theme */
@@ -766,3 +1159,276 @@ html[data-theme="dark"] .tabs-field,
 html[data-theme="dark"] [class*="tabs-field"] {
   background-color: transparent !important;
 }
+
+/* ==========================================
+   FORM INPUTS & EDITING EXPERIENCE (UI/UX PRO MAX)
+   ========================================== */
+
+/* 1. Labels & Field Hierarchy */
+.field-type .field-label,
+.field-label,
+label.field-label {
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  margin-bottom: 6px !important;
+  color: var(--theme-text) !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: visible !important;
+}
+
+.field-label .required,
+span.required {
+  color: #ef4444 !important;
+  font-weight: 700 !important;
+}
+
+.field-description {
+  font-size: 0.8rem !important;
+  color: var(--theme-text) !important;
+  opacity: 0.65 !important;
+  margin-top: 4px !important;
+  line-height: 1.4 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+/* Chống cắt chữ cho Blocks, Collapsibles và Tiêu đề khối */
+.collapsible,
+.collapsible__toggle,
+.collapsible__header,
+.collapsible__content,
+.blocks-field,
+.blocks-field__row,
+.blocks-field__block-header,
+.blocks-field__header,
+[class*="blocks-field"],
+[class*="collapsible"] {
+  overflow: visible !important;
+  max-width: 100% !important;
+}
+
+.collapsible__toggle-wrap,
+.collapsible__header,
+.blocks-field__block-header,
+[class*="collapsible__header"],
+[class*="block-header"] {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  height: auto !important;
+  min-height: 38px !important;
+}
+
+.collapsible__toggle-wrap span,
+.collapsible__header span,
+.blocks-field__block-header span,
+[class*="block-header"] span,
+.collapsible__title {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  max-width: 100% !important;
+  display: inline-block !important;
+}
+
+/* Ẩn hoàn toàn pill "Chưa..." bị co cụm / cắt chữ vô nghĩa */
+.section-title,
+.blocks-field .section-title,
+[class*="section-title"],
+.blocks-field__block-header .section-title {
+  display: none !important;
+}
+
+/* Làm đẹp thanh Pill nhãn thành phần khối (Block Header) */
+.blocks-field__block-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.blocks-field__block-number {
+  font-weight: 700 !important;
+  color: var(--tw-text-muted, #64748b) !important;
+  font-size: 0.82rem !important;
+}
+
+.blocks-field__block-pill,
+[class*="blocks-field__block-pill"] {
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  background-color: var(--theme-elevation-100, #f8fafc) !important;
+  color: var(--theme-elevation-900, #0f172a) !important;
+  border: 1px solid var(--theme-elevation-200, #e2e8f0) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* 2. Modern Inputs & Textareas with Minimum 44px Touch Targets */
+.field-type input[type="text"]:not([id^="react-select-"]):not([class*="react-select"]):not([class*="rs__"]),
+.field-type input[type="password"],
+.field-type input[type="email"],
+.field-type input[type="number"],
+.field-type input[type="url"],
+.field-type textarea,
+.react-select__control,
+.select__control {
+  min-height: 42px !important;
+  padding: 8px 14px !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--theme-elevation-200) !important;
+  background-color: var(--theme-elevation-50) !important;
+  color: var(--theme-text) !important;
+  font-size: 0.925rem !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+/* Reset hoàn toàn cho ô gõ tìm kiếm nội bộ bên trong React-Select / Relationship */
+.react-select__input,
+.react-select__input-container,
+.rs__input,
+[class*="react-select__input"],
+[class*="rs__input"],
+.react-select__value-container {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.react-select__input input,
+.react-select__input-container input,
+.rs__input input,
+[class*="react-select__input"] input,
+[class*="rs__input"] input,
+input[id^="react-select-"] {
+  min-height: unset !important;
+  height: auto !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+}
+
+.field-type input:hover:not([id^="react-select-"]):not([class*="react-select"]):not([class*="rs__"]),
+.field-type textarea:hover,
+.react-select__control:hover {
+  border-color: var(--theme-elevation-350) !important;
+}
+
+.field-type input:focus:not([id^="react-select-"]):not([class*="react-select"]):not([class*="rs__"]),
+.field-type textarea:focus,
+.react-select__control--is-focused {
+  border-color: #0ea5e9 !important;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important;
+  outline: none !important;
+}
+
+/* 3. Rich Text Editor (Lexical) UX Polish */
+.rich-text-lexical {
+  border-radius: 10px !important;
+  border: 1px solid var(--theme-elevation-200) !important;
+  overflow: hidden !important;
+  background-color: var(--theme-elevation-50) !important;
+}
+
+.rich-text-lexical .toolbar,
+.lexical-toolbar,
+[class*="toolbar__root"] {
+  border-bottom: 1px solid var(--theme-elevation-150) !important;
+  background-color: var(--theme-elevation-100) !important;
+  padding: 6px 10px !important;
+  gap: 4px !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.rich-text-lexical .ContentEditable__root {
+  min-height: 240px !important;
+  padding: 16px 20px !important;
+  font-size: 0.975rem !important;
+  line-height: 1.7 !important;
+}
+
+/* 4. Action Buttons UX */
+.btn:not(.nav-toggler):not(.step-nav__toggle):not([class*="toggler"]):not([class*="icon"]):not([class*="toggle"]):not([class*="drawer"]) {
+  min-height: 40px !important;
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease-out !important;
+}
+
+.btn:active {
+  transform: scale(0.98) !important;
+}
+
+/* ==========================================
+   MOBILE-FIRST RESPONSIVE OPTIMIZATIONS
+   ========================================== */
+@media (max-width: 768px) {
+  /* Prevent iOS/Safari auto-zoom on inputs */
+  .field-type input[type="text"]:not([id^="react-select-"]):not([class*="react-select"]):not([class*="rs__"]),
+  .field-type input[type="password"],
+  .field-type input[type="email"],
+  .field-type input[type="number"],
+  .field-type input[type="url"],
+  .field-type textarea,
+  .react-select__control {
+    font-size: 16px !important;
+    min-height: 46px !important;
+  }
+
+  /* Full-width touch friendly buttons */
+  .btn {
+    min-height: 44px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* Document Drawer & Modals full width on mobile */
+  .drawer__content,
+  .document-drawer__content,
+  .list-drawer__content {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important;
+  }
+
+  /* Table Horizontal Scrolling on Mobile with Visual Indicator */
+  .collection-list__wrap,
+  .table,
+  .collection-list table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Lexical Editor Toolbar Scrollable */
+  .rich-text-lexical .toolbar {
+    flex-wrap: nowrap !important;
+  }
+
+  /* Compact form padding */
+  .template-default__wrap,
+  .collection-edit,
+  .global-edit {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+

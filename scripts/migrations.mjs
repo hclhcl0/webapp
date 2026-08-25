@@ -3728,5 +3728,72 @@ export const MIGRATION_STATEMENTS = [
     ALTER TABLE "site_settings_menu_menu_items_sub_items"
       ADD CONSTRAINT "site_settings_menu_menu_items_sub_items_parent_fk"
       FOREIGN KEY ("_parent_id") REFERENCES "site_settings_menu_menu_items" ("id") ON DELETE cascade ON UPDATE no action;
-  END $$;`
+  END $$;`,
+
+  // ==================================================
+  // BATCH: Fix missing media_folders_id in payload_locked_documents_rels
+  // ==================================================
+  `DO $$ 
+  BEGIN 
+    ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "media_folders_id" varchar;
+  EXCEPTION WHEN duplicate_column THEN null; 
+  END $$;`,
+  `DO $$ 
+  BEGIN 
+    ALTER TABLE "payload_locked_documents_rels" 
+    ADD CONSTRAINT "payload_locked_documents_rels_media_folders_fk" 
+    FOREIGN KEY ("media_folders_id") REFERENCES "public"."media_folders"("id") ON DELETE cascade ON UPDATE no action;
+  EXCEPTION WHEN duplicate_object THEN null; 
+  END $$;`,
+  `CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_media_folders_id_idx" 
+  ON "payload_locked_documents_rels" USING btree ("media_folders_id");`,
+
+  // ==================================================
+  // BATCH: PopupBlock tables for pages
+  // ==================================================
+  `
+    CREATE TABLE IF NOT EXISTS "pages_blocks_popup_block" (
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "_path" text NOT NULL,
+      "id" varchar PRIMARY KEY NOT NULL,
+      "button_text" varchar,
+      "button_style" varchar DEFAULT 'primary',
+      "button_icon" varchar DEFAULT '🔍',
+      "modal_size" varchar DEFAULT 'lg',
+      "modal_title" varchar DEFAULT 'THÔNG TIN CHI TIẾT',
+      "modal_subtitle" varchar,
+      "modal_content" jsonb,
+      "show_close_button" boolean DEFAULT true,
+      "close_button_text" varchar DEFAULT 'Đóng lại',
+      "block_name" varchar
+    );
+    CREATE INDEX IF NOT EXISTS "pages_blocks_popup_block_order_idx" ON "pages_blocks_popup_block" ("_order");
+    CREATE INDEX IF NOT EXISTS "pages_blocks_popup_block_parent_id_idx" ON "pages_blocks_popup_block" ("_parent_id");
+    CREATE INDEX IF NOT EXISTS "pages_blocks_popup_block_path_idx" ON "pages_blocks_popup_block" ("_path");
+    DO $$ BEGIN ALTER TABLE "pages_blocks_popup_block" ADD CONSTRAINT "pages_blocks_popup_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+  `,
+  `
+    CREATE TABLE IF NOT EXISTS "_pages_v_blocks_popup_block" (
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "_path" text NOT NULL,
+      "id" serial PRIMARY KEY NOT NULL,
+      "_uuid" varchar,
+      "button_text" varchar,
+      "button_style" varchar DEFAULT 'primary',
+      "button_icon" varchar DEFAULT '🔍',
+      "modal_size" varchar DEFAULT 'lg',
+      "modal_title" varchar DEFAULT 'THÔNG TIN CHI TIẾT',
+      "modal_subtitle" varchar,
+      "modal_content" jsonb,
+      "show_close_button" boolean DEFAULT true,
+      "close_button_text" varchar DEFAULT 'Đóng lại',
+      "block_name" varchar
+    );
+    CREATE INDEX IF NOT EXISTS "_pages_v_blocks_popup_block_order_idx" ON "_pages_v_blocks_popup_block" ("_order");
+    CREATE INDEX IF NOT EXISTS "_pages_v_blocks_popup_block_parent_id_idx" ON "_pages_v_blocks_popup_block" ("_parent_id");
+    CREATE INDEX IF NOT EXISTS "_pages_v_blocks_popup_block_path_idx" ON "_pages_v_blocks_popup_block" ("_path");
+    DO $$ BEGIN ALTER TABLE "_pages_v_blocks_popup_block" ADD CONSTRAINT "_pages_v_blocks_popup_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+  `
 ];

@@ -18,7 +18,6 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
       case 'videos':
       case 'video-channels':
       case 'banners':
-      case 'work-schedules':
         allowedRoles = ['admin', 'moderator', 'editor'];
         break;
       case 'pages':
