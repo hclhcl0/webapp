@@ -140,15 +140,30 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
           if (typeof originalHidden === 'boolean' && originalHidden) return true;
 
           // Trước tiên kiểm tra: Role có quyền mặc định với collection này không?
-          // Nếu Role không có quyền theo mặc định → ẩn luôn, không cần xét module
           const roleHasDefaultAccess = allowedRoles.includes(userRole);
 
           const allowedModules = getUserAllowedModules(user);
+
+          // [DEBUG] Log cho articles để trace vấn đề
+          if (col.slug === 'articles' && userRole === 'editor') {
+            console.log(`[RBAC DEBUG] articles hidden check for editor:`, {
+              userRole,
+              allowedModules,
+              roleHasDefaultAccess,
+              userId: user?.id,
+              rawAllowedModules: user?.allowedModules,
+            });
+          }
+
           if (allowedModules) {
             // Nếu có phân công module cụ thể:
             // - Role phải có quyền mặc định VÀ module phải được phân công
             if (!roleHasDefaultAccess) return true; // Role không có quyền mặc định → ẩn
-            return !isCollectionInAllowedModules(allowedModules, col.slug);
+            const inModules = isCollectionInAllowedModules(allowedModules, col.slug);
+            if (col.slug === 'articles' && userRole === 'editor') {
+              console.log(`[RBAC DEBUG] articles inModules:`, inModules, '=> hidden:', !inModules);
+            }
+            return !inModules;
           }
 
           // Không phân công module cụ thể → theo quyền mặc định của vai trò
@@ -158,6 +173,7 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
     };
   });
 };
+
 
 
 export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
