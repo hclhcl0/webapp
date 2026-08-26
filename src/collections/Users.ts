@@ -1,10 +1,16 @@
 import type { CollectionConfig } from 'payload';
 
-const isAdmin = ({ req: { user } }: any) => {
-  if (!user) return false;
-  const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
-  return role === 'admin';
+/** Các vai trò mà Biên tập viên được phép tạo / quản lý */
+const EDITOR_MANAGEABLE_ROLES = ['editor', 'author', 'user'];
+
+const getRole = (user: any): string | null => {
+  if (!user) return null;
+  const r = Array.isArray(user?.role) ? user.role[0] : user?.role;
+  return typeof r === 'string' ? r.toLowerCase() : null;
 };
+
+const isAdmin = ({ req: { user } }: any) => getRole(user) === 'admin';
+const isAdminOrEditor = ({ req: { user } }: any) => ['admin', 'editor'].includes(getRole(user) ?? '');
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -15,10 +21,12 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     group: 'Quản trị hệ thống',
+    // Admin: xem toàn bộ menu. Editor: cũng thấy menu để tạo/quản lý CTV
     hidden: ({ user }: any) => {
-      const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
-      return role !== 'admin';
+      const role = getRole(user);
+      return role !== 'admin' && role !== 'editor';
     },
+    defaultColumns: ['email', 'name', 'role', 'department', 'createdAt'],
     components: {
       beforeList: [
         '@/components/Admin/UserPermissionsNote.tsx#UserPermissionsNote',
@@ -26,51 +34,99 @@ export const Users: CollectionConfig = {
     },
   },
   auth: {
-    maxLoginAttempts: 10000, // Tạm thời vô hiệu hóa khóa tài khoản do bot tấn công
+    maxLoginAttempts: 10000,
     cookies: {
-      secure: process.env.NODE_ENV === 'production', // HTTPS production
+      secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'Lax' : 'Lax',
     },
     tokenExpiration: 28800, // 8 tiếng
   },
   access: {
+    // Vào được Admin panel: mọi role trừ 'user'
     admin: ({ req: { user } }) => {
-      const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
-      return role && role !== 'user';
+      const role = getRole(user);
+      return !!role && role !== 'user';
     },
-    // Chỉ Admin mới được xem và quản lý danh sách user, hoặc user tự xem chính mình
+
+    // ── READ ──────────────────────────────────────────────────────────────
     read: ({ req: { user } }) => {
       if (!user) return false;
-      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      const role = getRole(user);
       if (role === 'admin') return true;
-      return {
-        id: {
-          equals: user.id,
-        },
-      };
+      // Editor: xem được tài khoản editor / author / user (không thấy admin / moderator)
+      if (role === 'editor') {
+        return {
+          or: [
+            { id: { equals: user.id } },                // luôn xem được mình
+            { role: { in: EDITOR_MANAGEABLE_ROLES } },  // và cấp thấp hơn / ngang
+          ],
+        };
+      }
+      // Các role khác: chỉ xem chính mình
+      return { id: { equals: user.id } };
     },
+
+    // ── CREATE ────────────────────────────────────────────────────────────
     create: ({ req: { user } }) => {
-      if (!user) return true; // Cho phép tạo user đầu tiên khi hệ thống trống, Payload tự xử lý logic first user.
-      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
-      return role === 'admin';
+      if (!user) return true; // first-user seed
+      const role = getRole(user);
+      return role === 'admin' || role === 'editor';
     },
+
+    // ── UPDATE ────────────────────────────────────────────────────────────
     update: ({ req: { user } }) => {
       if (!user) return false;
-      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
+      const role = getRole(user);
       if (role === 'admin') return true;
-      return {
-        id: {
-          equals: user.id,
-        },
-      };
+      // Editor: sửa tài khoản editor / author / user và chính mình
+      if (role === 'editor') {
+        return {
+          or: [
+            { id: { equals: user.id } },
+            { role: { in: EDITOR_MANAGEABLE_ROLES } },
+          ],
+        };
+      }
+      return { id: { equals: user.id } };
     },
+
+    // ── DELETE ────────────────────────────────────────────────────────────
     delete: ({ req: { user } }) => {
       if (!user) return false;
-      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
-      return role === 'admin';
+      const role = getRole(user);
+      if (role === 'admin') return true;
+      // Editor: chỉ xóa author / user (không xóa editor khác, không xóa chính mình)
+      if (role === 'editor') {
+        return { role: { in: ['author', 'user'] } };
+      }
+      return false;
     },
   },
+
+  // ── HOOK: Chặn Editor tạo/sửa tài khoản vượt phạm vi ─────────────────
+  hooks: {
+    beforeChange: [
+      ({ req, data, operation }) => {
+        const actorRole = getRole(req.user);
+        if (actorRole === 'editor') {
+          // Editor không được đặt role cao hơn editor (admin/moderator)
+          if (data.role && !EDITOR_MANAGEABLE_ROLES.includes(data.role)) {
+            data.role = 'author'; // reset về author nếu cố tình set cao hơn
+          }
+          // Editor không được tự gán allowedModules / allowedCategories / department
+          if (operation === 'create') {
+            delete data.allowedModules;
+            delete data.allowedCategories;
+            delete data.department;
+          }
+        }
+        return data;
+      },
+    ],
+  },
+
   fields: [
+    // ── Role ────────────────────────────────────────────────────────────
     {
       name: 'role',
       type: 'select',
@@ -85,13 +141,17 @@ export const Users: CollectionConfig = {
         { label: 'Người dùng (User)', value: 'user' },
       ],
       access: {
-        // Chỉ admin mới được sửa quyền của người khác (và của chính mình)
+        // Admin: đổi mọi role. Editor: chỉ sửa role trong phạm vi (bảo vệ bởi hook)
         update: isAdmin,
+        create: isAdminOrEditor,
       },
       admin: {
         position: 'sidebar',
+        description: 'Admin: chọn tất cả. Biên tập viên: chỉ tạo được Editor / Author / User.',
       },
     },
+
+    // ── Department ──────────────────────────────────────────────────────
     {
       name: 'department',
       type: 'relationship',
@@ -99,18 +159,23 @@ export const Users: CollectionConfig = {
       hasMany: false,
       label: 'Phòng / Khoa / Bộ phận',
       access: {
+        create: isAdmin,
         update: isAdmin,
       },
       admin: {
         position: 'sidebar',
-        description: 'Chỉ Admin mới có quyền phân công phòng ban. Chỉ áp dụng cho Nhân viên/Tác giả.',
+        description: 'Chỉ Admin mới có quyền phân công phòng ban.',
       },
     },
+
+    // ── Tên ─────────────────────────────────────────────────────────────
     {
       name: 'name',
       type: 'text',
       label: 'Họ và tên',
     },
+
+    // ── allowedCategories ────────────────────────────────────────────────
     {
       name: 'allowedCategories',
       type: 'relationship',
@@ -118,26 +183,28 @@ export const Users: CollectionConfig = {
       hasMany: true,
       label: 'Chuyên mục bài viết được phân công',
       access: {
-        // Chỉ admin mới có quyền phân công chuyên mục cho tài khoản
+        create: isAdmin,
         update: isAdmin,
       },
       admin: {
-        description: 'Chỉ Admin mới có quyền phân công. Để trống = không giới hạn chuyên mục (xem/sửa tất cả). Áp dụng cho Editor, Moderator và Author.',
+        description: 'Chỉ Admin mới có quyền phân công. Để trống = không giới hạn chuyên mục.',
         position: 'sidebar',
         condition: (data: any) => ['editor', 'moderator', 'author'].includes(data?.role),
       },
     },
+
+    // ── allowedModules ───────────────────────────────────────────────────
     {
       name: 'allowedModules',
       type: 'select',
       hasMany: true,
       label: 'Chức năng / Module được phân công',
       access: {
-        // Chỉ admin mới có quyền phân công module cho tài khoản
+        create: isAdmin,
         update: isAdmin,
       },
       admin: {
-        description: 'Chỉ Admin mới có quyền phân công. Để trống = toàn quyền truy cập theo vai trò. Chọn cụ thể = chỉ hiển thị và cho phép thao tác trên các chức năng được chọn.',
+        description: 'Chỉ Admin mới có quyền phân công. Để trống = toàn quyền theo vai trò.',
         position: 'sidebar',
         condition: (data: any) => ['editor', 'moderator', 'author'].includes(data?.role),
       },
@@ -158,3 +225,5 @@ export const Users: CollectionConfig = {
     },
   ],
 };
+
+

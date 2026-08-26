@@ -118,6 +118,8 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
         break;
       case 'users':
       case 'api-keys':
+        allowedRoles = ['admin', 'editor'];
+        break;
       default:
         allowedRoles = ['admin'];
         break;
