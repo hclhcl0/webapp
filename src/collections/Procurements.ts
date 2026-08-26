@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { canAccessModule } from '../lib/rbac.ts';
 
 export const Procurements: CollectionConfig = {
   slug: 'procurements',
@@ -14,9 +15,9 @@ export const Procurements: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
-    update: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
-    delete: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
+    create: ({ req: { user } }) => canAccessModule(user, 'procurements', ['admin', 'editor', 'moderator']),
+    update: ({ req: { user } }) => canAccessModule(user, 'procurements', ['admin', 'editor', 'moderator']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'procurements', ['admin', 'editor']),
   },
   fields: [
     {

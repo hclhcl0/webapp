@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { canAccessModule } from '../lib/rbac.ts';
 
 export const Vaccines: CollectionConfig = {
   slug: 'vaccines',
@@ -11,6 +12,12 @@ export const Vaccines: CollectionConfig = {
     defaultColumns: ['name', 'disease', 'price', 'status'],
     group: 'Dịch vụ Y tế',
     description: 'Quản lý danh mục vắc xin lẻ. Đường dẫn hiển thị trên web: /goi-vac-xin',
+  },
+  access: {
+    read: () => true,
+    create: ({ req: { user } }) => canAccessModule(user, 'vaccines', ['admin', 'moderator', 'editor']),
+    update: ({ req: { user } }) => canAccessModule(user, 'vaccines', ['admin', 'moderator', 'editor']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'vaccines', ['admin', 'moderator']),
   },
   fields: [
     {

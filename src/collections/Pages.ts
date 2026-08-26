@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { canAccessModule } from '../lib/rbac.ts';
 import { HeroBannerBlock } from '../blocks/HeroBanner.ts';
 import { CategoryNewsBlock } from '../blocks/CategoryNews.ts';
 import { ColumnsBlock } from '../blocks/ColumnsBlock.ts';
@@ -50,9 +51,9 @@ export const Pages: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
-    update: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
-    delete: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
+    create: ({ req: { user } }) => canAccessModule(user, 'pages', ['admin', 'editor', 'moderator']),
+    update: ({ req: { user } }) => canAccessModule(user, 'pages', ['admin', 'editor', 'moderator']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'pages', ['admin']),
   },
   versions: {
     drafts: true,

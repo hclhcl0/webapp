@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { canAccessModule } from '../lib/rbac.ts';
 
 export const Banners: CollectionConfig = {
   slug: 'banners',
@@ -13,9 +14,9 @@ export const Banners: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
-    update: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
-    delete: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
+    create: ({ req: { user } }) => canAccessModule(user, 'banners', ['admin', 'editor', 'moderator']),
+    update: ({ req: { user } }) => canAccessModule(user, 'banners', ['admin', 'editor', 'moderator']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'banners', ['admin', 'editor']),
   },
   fields: [
     {

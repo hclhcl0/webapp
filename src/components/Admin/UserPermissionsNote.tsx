@@ -89,25 +89,39 @@ const PERMISSIONS: {
     author: '❌',
   },
   {
-    module: '🖼 Banner',
+    module: '💉 Vắc xin / Gói tiêm',
     admin: 'Toàn quyền',
     editor: 'Thêm/Sửa/Xóa',
-    moderator: '❌',
-    author: '❌',
+    moderator: 'Thêm/Sửa',
+    author: '❌ (hoặc theo Module phân công)',
+  },
+  {
+    module: '🤖 Tri thức AI',
+    admin: 'Toàn quyền',
+    editor: '❌ (hoặc theo Module phân công)',
+    moderator: 'Thêm/Sửa',
+    author: '❌ (hoặc theo Module phân công)',
   },
   {
     module: '🎬 Video / Kênh',
     admin: 'Toàn quyền',
     editor: 'Thêm/Sửa',
     moderator: 'Thêm/Sửa',
-    author: '❌',
+    author: '❌ (hoặc theo Module phân công)',
+  },
+  {
+    module: '🖼 Banner',
+    admin: 'Toàn quyền',
+    editor: 'Thêm/Sửa/Xóa',
+    moderator: '❌ (hoặc theo Module phân công)',
+    author: '❌ (hoặc theo Module phân công)',
   },
   {
     module: '📩 Form liên hệ',
     admin: 'Xem/Sửa/Xóa',
     editor: 'Xem/Sửa',
     moderator: 'Xem/Sửa',
-    author: '❌',
+    author: '❌ (hoặc theo Module phân công)',
     note: 'Người dùng ngoài website vẫn gửi form được (không cần đăng nhập)',
   },
   {
@@ -254,9 +268,14 @@ export function UserPermissionsNote() {
             </tbody>
           </table>
 
-          <div style={{ padding: '0.75rem 1.25rem', color: 'var(--theme-elevation-500, #94a3b8)', fontSize: '0.78rem', borderTop: '1px solid var(--theme-elevation-150, #f1f5f9)' }}>
-            💡 Tip: Khi tạo tài khoản với vai trò <strong style={{ color: 'var(--theme-elevation-800)' }}>Editor / Moderator / Author</strong>, hãy chọn thêm <strong style={{ color: 'var(--theme-elevation-800)' }}>"Chuyên mục được phân công"</strong> ở sidebar bên phải.
-            Nếu để trống → không giới hạn chuyên mục (áp dụng cho toàn bộ nội dung).
+          <div style={{ padding: '0.75rem 1.25rem', color: 'var(--theme-elevation-600, #64748b)', fontSize: '0.8rem', borderTop: '1px solid var(--theme-elevation-150, #f1f5f9)', lineHeight: 1.6 }}>
+            <div>💡 <strong>Phân quyền linh hoạt theo tài khoản (Sidebar bên phải khi chỉnh sửa User):</strong></div>
+            <div style={{ marginTop: '0.25rem' }}>
+              • <strong style={{ color: 'var(--theme-elevation-800)' }}>Chuyên mục bài viết được phân công:</strong> Lọc giới hạn quyền xem/viết bài chỉ trong các chuyên mục được chọn (để trống = tất cả).
+            </div>
+            <div style={{ marginTop: '0.25rem' }}>
+              • <strong style={{ color: 'var(--theme-elevation-800)' }}>Chức năng / Module được phân công:</strong> Chọn cụ thể các phân hệ (Video, Vắc xin, AI, Banner, Văn bản...) mà nhân viên được phép truy cập và quản lý (để trống = truy cập tất cả theo quyền của vai trò).
+            </div>
           </div>
         </div>
       )}

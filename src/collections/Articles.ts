@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { lexicalEditor, FixedToolbarFeature, HeadingFeature, AlignFeature, HTMLConverterFeature, BlocksFeature } from '@payloadcms/richtext-lexical';
+import { canAccessModule } from '../lib/rbac.ts';
 import { VideoBlock } from '../blocks/VideoBlock.ts';
 import { TikTokBlock } from '../blocks/TikTokBlock.ts';
 import { PDFBlock } from '../blocks/PDFBlock.ts';
@@ -192,8 +193,7 @@ export const Articles: CollectionConfig = {
     // ─── CREATE ───────────────────────────────────────────────────────────────
     create: ({ req: { user } }) => {
       if (!user) return false;
-      const role = Array.isArray(user.role) ? user.role[0]?.toLowerCase() : user.role?.toLowerCase();
-      return ['admin', 'editor', 'moderator', 'author'].includes(role as string);
+      return canAccessModule(user, 'articles', ['admin', 'editor', 'moderator', 'author']);
     },
 
     // ─── UPDATE ───────────────────────────────────────────────────────────────

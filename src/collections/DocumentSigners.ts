@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { canAccessModule } from '../lib/rbac.ts';
 
 export const DocumentSigners: CollectionConfig = {
   slug: 'document-signers',
@@ -12,9 +13,9 @@ export const DocumentSigners: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
-    update: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
-    delete: ({ req: { user } }) => ['admin', 'editor'].includes(user?.role as string),
+    create: ({ req: { user } }) => canAccessModule(user, 'documents', ['admin', 'editor', 'moderator']),
+    update: ({ req: { user } }) => canAccessModule(user, 'documents', ['admin', 'editor', 'moderator']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'documents', ['admin', 'editor']),
   },
   fields: [
     {

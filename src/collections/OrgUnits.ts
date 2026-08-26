@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { canAccessModule } from '../lib/rbac.ts';
 
 export const OrgUnits: CollectionConfig = {
   slug: 'org-units',
@@ -13,18 +14,9 @@ export const OrgUnits: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => {
-      if (!user) return false;
-      return ['admin', 'editor'].includes(user.role as string);
-    },
-    update: ({ req: { user } }) => {
-      if (!user) return false;
-      return ['admin', 'editor'].includes(user.role as string);
-    },
-    delete: ({ req: { user } }) => {
-      if (!user) return false;
-      return user.role === 'admin';
-    },
+    create: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin', 'editor']),
+    update: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin', 'editor']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin']),
   },
   fields: [
     {

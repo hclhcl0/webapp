@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { extractAiKnowledgeHook } from './hooks/extractAiKnowledge.ts';
+import { canAccessModule } from '../lib/rbac.ts';
 
 export const AiKnowledge: CollectionConfig = {
   slug: 'ai-knowledge',
@@ -11,6 +12,12 @@ export const AiKnowledge: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'updatedAt'],
     group: 'AI & Trợ lý ảo',
+  },
+  access: {
+    read: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),
+    create: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),
+    update: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),
   },
   upload: {
     staticDir: 'media/ai-docs',

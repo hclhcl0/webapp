@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { canAccessModule } from '../lib/rbac.ts';
 
 export const FormSubmissions: CollectionConfig = {
   slug: 'form-submissions',
@@ -13,10 +14,10 @@ export const FormSubmissions: CollectionConfig = {
     description: 'Lưu trữ các phản hồi và yêu cầu liên hệ từ người dùng.',
   },
   access: {
-    read: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
+    read: ({ req: { user } }) => canAccessModule(user, 'form-submissions', ['admin', 'editor', 'moderator']),
     create: () => true, // Public — cho phép gửi form liên hệ từ website
-    update: ({ req: { user } }) => ['admin', 'editor', 'moderator'].includes(user?.role as string),
-    delete: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
+    update: ({ req: { user } }) => canAccessModule(user, 'form-submissions', ['admin', 'editor', 'moderator']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'form-submissions', ['admin']),
   },
   fields: [
     {

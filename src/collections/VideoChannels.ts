@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload';
+import { canAccessModule } from '../lib/rbac.ts';
 
 export const VideoChannels: CollectionConfig = {
   slug: 'video-channels',
@@ -13,9 +14,9 @@ export const VideoChannels: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
-    update: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin') || (Array.isArray(user?.role) ? user.role.includes('editor') : user?.role === 'editor'),
-    delete: ({ req: { user } }) => (Array.isArray(user?.role) ? user.role.includes('admin') : user?.role === 'admin'),
+    create: ({ req: { user } }) => canAccessModule(user, 'videos', ['admin', 'editor', 'moderator']),
+    update: ({ req: { user } }) => canAccessModule(user, 'videos', ['admin', 'editor', 'moderator']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'videos', ['admin']),
   },
   fields: [
     {
