@@ -117,9 +117,9 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
         allowedRoles = ['admin', 'moderator'];
         break;
       case 'users':
-      case 'api-keys':
         allowedRoles = ['admin', 'editor'];
         break;
+      case 'api-keys':
       default:
         allowedRoles = ['admin'];
         break;
@@ -137,6 +137,16 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
           if (!userRole) return true; // Hide if not logged in
           if (userRole === 'admin') return false; // Admin xem toàn bộ
           
+          // Collection 'users': Quyền truy cập theo vai trò (Admin & Editor quản lý CTV), không bị lọc bởi allowedModules
+          if (col.slug === 'users') {
+            return !['admin', 'editor'].includes(userRole);
+          }
+
+          // Collection 'api-keys': Chỉ dành riêng cho Admin
+          if (col.slug === 'api-keys') {
+            return userRole !== 'admin';
+          }
+
           // If original hidden exists and returns true, respect it
           if (typeof originalHidden === 'function' && originalHidden(args)) return true;
           if (typeof originalHidden === 'boolean' && originalHidden) return true;
@@ -153,7 +163,7 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
             return !isCollectionInAllowedModules(allowedModules, col.slug);
           }
 
-          // Không phân công module cụ thể → theo quyền mặc định của vai trò
+          // Không phân công module cụ thể -> theo quyền mặc định của vai trò
           return !roleHasDefaultAccess;
         }
       }

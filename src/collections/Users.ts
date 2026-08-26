@@ -12,6 +12,17 @@ const getRole = (user: any): string | null => {
 const isAdmin = ({ req: { user } }: any) => getRole(user) === 'admin';
 const isAdminOrEditor = ({ req: { user } }: any) => ['admin', 'editor'].includes(getRole(user) ?? '');
 
+const canUpdateRole = ({ req: { user }, id }: any) => {
+  const role = getRole(user);
+  if (role === 'admin') return true;
+  if (role === 'editor') {
+    // Editor không được tự đổi role của chính mình
+    if (user?.id === id) return false;
+    return true;
+  }
+  return false;
+};
+
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
@@ -114,7 +125,7 @@ export const Users: CollectionConfig = {
             data.role = 'author'; // reset về author nếu cố tình set cao hơn
           }
           // Editor không được tự gán allowedModules / allowedCategories / department
-          if (operation === 'create') {
+          if (operation === 'create' || operation === 'update') {
             delete data.allowedModules;
             delete data.allowedCategories;
             delete data.department;
@@ -141,8 +152,8 @@ export const Users: CollectionConfig = {
         { label: 'Người dùng (User)', value: 'user' },
       ],
       access: {
-        // Admin: đổi mọi role. Editor: chỉ sửa role trong phạm vi (bảo vệ bởi hook)
-        update: isAdmin,
+        // Admin: đổi mọi role. Editor: chỉ sửa role của CTV cấp dưới (không tự sửa mình)
+        update: canUpdateRole,
         create: isAdminOrEditor,
       },
       admin: {

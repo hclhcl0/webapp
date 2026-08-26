@@ -141,9 +141,10 @@ const PERMISSIONS: {
   {
     module: '👤 Tài khoản',
     admin: 'Toàn quyền',
-    editor: '❌',
+    editor: 'Tạo & Quản lý CTV',
     moderator: '❌',
     author: 'Xem thông tin mình',
+    note: 'Biên tập viên được xem, tạo và quản lý tài khoản CTV/Tác giả và Người dùng',
   },
 ];
 
