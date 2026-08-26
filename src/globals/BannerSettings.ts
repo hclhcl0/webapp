@@ -1,4 +1,4 @@
-﻿import type { GlobalConfig } from 'payload';
+import type { GlobalConfig } from 'payload';
 import { canAccessModule } from '../lib/rbac.ts';
 
 export const BannerSettings: GlobalConfig = {
@@ -11,6 +11,59 @@ export const BannerSettings: GlobalConfig = {
   access: {
     read: () => true,
     update: ({ req: { user } }) => canAccessModule(user, 'banners', ['admin', 'editor', 'moderator']),
+  },
+  hooks: {
+    afterRead: [
+      async ({ doc, req }) => {
+        // Tự động mang danh sách ảnh quảng cáo & banner đã thêm trong Settings sang menu mới nếu menu mới chưa có dữ liệu
+        const hasAdSlides = Array.isArray(doc?.adSlider?.slides) && doc.adSlider.slides.length > 0;
+        const hasSidebarBanners = Array.isArray(doc?.sidebarBanners) && doc.sidebarBanners.length > 0;
+        const hasHeroSlider = Boolean(doc?.heroSlider?.heroSliderSize && doc?.heroSlider?.heroSliderSize !== 'medium');
+
+        if (!hasAdSlides || !hasSidebarBanners || !hasHeroSlider) {
+          try {
+            const siteSettings: any = await req.payload.findGlobal({
+              slug: 'site-settings',
+              depth: 2,
+            });
+
+            // 1. Lấy Danh sách ảnh quảng cáo từ latestNewsSection trong Settings cũ
+            if (!hasAdSlides && siteSettings?.homeSections) {
+              const latestNews = (siteSettings.homeSections as any[]).find(
+                (s: any) => s.blockType === 'latestNewsSection' && s.adSlider?.slides?.length > 0
+              );
+              if (latestNews?.adSlider) {
+                doc.adSlider = {
+                  enabled: latestNews.adSlider.enabled ?? true,
+                  title: latestNews.adSlider.title || 'DỊCH VỤ NỔI BẬT',
+                  autoplayInterval: latestNews.adSlider.autoplayInterval ?? 5,
+                  slides: latestNews.adSlider.slides || [],
+                };
+              }
+            }
+
+            // 2. Lấy Danh sách Banner bên trái (Dưới Menu dọc)
+            if (!hasSidebarBanners && siteSettings?.banner?.sidebarBanners?.length > 0) {
+              doc.sidebarBanners = siteSettings.banner.sidebarBanners;
+            }
+
+            // 3. Lấy cấu hình Slider Banner trang chủ
+            if (!hasHeroSlider && siteSettings?.banner) {
+              doc.heroSlider = {
+                heroSliderSize: siteSettings.banner.heroSliderSize || 'medium',
+                heroSliderCustomHeight: siteSettings.banner.heroSliderCustomHeight || 500,
+                heroSliderEffect: siteSettings.banner.heroSliderEffect || 'slide',
+                heroSliderAutoplayDelay: siteSettings.banner.heroSliderAutoplayDelay || 5000,
+                heroSliderAutoplay: siteSettings.banner.heroSliderAutoplay !== false,
+              };
+            }
+          } catch (e) {
+            // bỏ qua nếu site-settings không tìm thấy
+          }
+        }
+        return doc;
+      },
+    ],
   },
   fields: [
     // ── Khối 1: Sidebar Quảng cáo dịch vụ (ảnh 9:16) ──

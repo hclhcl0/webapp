@@ -3920,5 +3920,83 @@ export const MIGRATION_STATEMENTS = [
     CREATE INDEX IF NOT EXISTS "banner_settings_rels_order_idx" ON "banner_settings_rels" ("order");
     CREATE INDEX IF NOT EXISTS "banner_settings_rels_parent_idx" ON "banner_settings_rels" ("parent_id");
     CREATE INDEX IF NOT EXISTS "banner_settings_rels_path_idx" ON "banner_settings_rels" ("path");
+  `,
+
+  // ==================================================
+  // BATCH: Migrate existing adSlider & sidebarBanners data to banner_settings
+  // ==================================================
+  `
+    -- 1. Đảm bảo bản ghi banner_settings (id = 1) tồn tại
+    INSERT INTO "banner_settings" ("id", "ad_slider_enabled", "ad_slider_title", "ad_slider_autoplay_interval", "updated_at", "created_at")
+    VALUES (1, true, 'DỊCH VỤ NỔI BẬT', 5, now(), now())
+    ON CONFLICT ("id") DO NOTHING;
+
+    -- 2. Sao chép cấu hình ad_slider từ site_settings_blocks_latest_news_section
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'site_settings_blocks_latest_news_section') THEN
+        UPDATE "banner_settings" bs
+        SET
+          "ad_slider_enabled" = COALESCE(lns.ad_slider_enabled, bs.ad_slider_enabled),
+          "ad_slider_title" = COALESCE(lns.ad_slider_title, bs.ad_slider_title),
+          "ad_slider_autoplay_interval" = COALESCE(lns.ad_slider_autoplay_interval, bs.ad_slider_autoplay_interval)
+        FROM "site_settings_blocks_latest_news_section" lns
+        WHERE bs.id = 1 AND lns.ad_slider_title IS NOT NULL;
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
+
+    -- 3. Sao chép toàn bộ ảnh quảng cáo từ site_settings_blocks_latest_news_section_ad_slider_slides
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'site_settings_blocks_latest_news_section_ad_slider_slides') THEN
+        INSERT INTO "banner_settings_ad_slider_slides" ("_order", "_parent_id", "id", "image_id", "link_url", "open_in_new_tab", "alt_text")
+        SELECT 
+          src."_order", 
+          1 as "_parent_id", 
+          'mig_' || src."id" as "id", 
+          src."image_id", 
+          src."link_url", 
+          COALESCE(src."open_in_new_tab", false), 
+          src."alt_text"
+        FROM "site_settings_blocks_latest_news_section_ad_slider_slides" src
+        ON CONFLICT ("id") DO NOTHING;
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
+
+    -- 4. Sao chép danh sách banner cột trái từ site_settings_banner_sidebar_banners
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'site_settings_banner_sidebar_banners') THEN
+        INSERT INTO "banner_settings_sidebar_banners" ("_order", "_parent_id", "id", "image_id", "url", "open_in_new_tab")
+        SELECT
+          src."_order",
+          1 as "_parent_id",
+          'mig_sb_' || src."id" as "id",
+          src."image_id",
+          src."url",
+          COALESCE(src."open_in_new_tab", true)
+        FROM "site_settings_banner_sidebar_banners" src
+        ON CONFLICT ("id") DO NOTHING;
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
+
+    -- 5. Sao chép cấu hình hero_slider từ site_settings
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT FROM information_schema.columns WHERE table_name = 'site_settings' AND column_name = 'banner_hero_slider_size') THEN
+        UPDATE "banner_settings" bs
+        SET
+          "hero_slider_hero_slider_size" = COALESCE(ss.banner_hero_slider_size, bs.hero_slider_hero_slider_size),
+          "hero_slider_hero_slider_custom_height" = COALESCE(ss.banner_hero_slider_custom_height, bs.hero_slider_hero_slider_custom_height),
+          "hero_slider_hero_slider_effect" = COALESCE(ss.banner_hero_slider_effect, bs.hero_slider_hero_slider_effect),
+          "hero_slider_hero_slider_autoplay_delay" = COALESCE(ss.banner_hero_slider_autoplay_delay, bs.hero_slider_hero_slider_autoplay_delay)
+        FROM "site_settings" ss
+        WHERE bs.id = 1;
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
   `
 ];
