@@ -3998,5 +3998,74 @@ export const MIGRATION_STATEMENTS = [
       END IF;
     EXCEPTION WHEN others THEN null;
     END $$;
+  `,
+
+  // ==================================================
+  // BATCH: Tables for video_warning_settings Global
+  // ==================================================
+  `
+    CREATE TABLE IF NOT EXISTS "video_warning_settings" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "is_enabled" boolean DEFAULT true,
+      "icon" varchar DEFAULT '🔥',
+      "title" varchar DEFAULT 'Cảnh báo quan trọng',
+      "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+      "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+    );
+
+    ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "is_enabled" boolean DEFAULT true;
+    ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "icon" varchar DEFAULT '🔥';
+    ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "title" varchar DEFAULT 'Cảnh báo quan trọng';
+    ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "updated_at" timestamp(3) with time zone DEFAULT now();
+    ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "created_at" timestamp(3) with time zone DEFAULT now();
+
+    CREATE TABLE IF NOT EXISTS "video_warning_settings_rels" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "order" integer,
+      "parent_id" integer NOT NULL,
+      "path" varchar NOT NULL,
+      "videos_id" integer
+    );
+    CREATE INDEX IF NOT EXISTS "video_warning_settings_rels_order_idx" ON "video_warning_settings_rels" ("order");
+    CREATE INDEX IF NOT EXISTS "video_warning_settings_rels_parent_idx" ON "video_warning_settings_rels" ("parent_id");
+    CREATE INDEX IF NOT EXISTS "video_warning_settings_rels_path_idx" ON "video_warning_settings_rels" ("path");
+    CREATE INDEX IF NOT EXISTS "video_warning_settings_rels_videos_id_idx" ON "video_warning_settings_rels" ("videos_id");
+    DO $$ BEGIN
+      ALTER TABLE "video_warning_settings_rels" ADD CONSTRAINT "video_warning_settings_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."video_warning_settings"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null; END $$;
+    DO $$ BEGIN
+      ALTER TABLE "video_warning_settings_rels" ADD CONSTRAINT "video_warning_settings_rels_videos_fk" FOREIGN KEY ("videos_id") REFERENCES "public"."videos"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+    -- Tự động di chuyển dữ liệu cảnh báo từ site_settings
+    INSERT INTO "video_warning_settings" ("id", "is_enabled", "icon", "title", "updated_at", "created_at")
+    VALUES (1, true, '🔥', 'Cảnh báo quan trọng', now(), now())
+    ON CONFLICT ("id") DO NOTHING;
+
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT FROM information_schema.columns WHERE table_name = 'site_settings' AND column_name = 'warning_section_title') THEN
+        UPDATE "video_warning_settings" vws
+        SET
+          "is_enabled" = COALESCE(ss.warning_section_is_enabled, vws.is_enabled),
+          "icon" = COALESCE(ss.warning_section_icon, vws.icon),
+          "title" = COALESCE(ss.warning_section_title, vws.title)
+        FROM "site_settings" ss
+        WHERE vws.id = 1;
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
+
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'site_settings_rels') THEN
+        INSERT INTO "video_warning_settings_rels" ("order", "parent_id", "path", "videos_id")
+        SELECT "order", 1 as "parent_id", 'videos' as "path", "videos_id"
+        FROM "site_settings_rels"
+        WHERE "path" = 'warningSection.videos' AND "videos_id" IS NOT NULL
+        ON CONFLICT DO NOTHING;
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
   `
 ];

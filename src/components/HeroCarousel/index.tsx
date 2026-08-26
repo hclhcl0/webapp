@@ -55,19 +55,31 @@ async function getSliderSettings() {
     const bannerSettings: any = await payload.findGlobal({ slug: 'banner-settings' }).catch(() => null);
     const heroSlider = bannerSettings?.heroSlider;
 
+    const videoWarningSettings: any = await payload.findGlobal({ slug: 'video-warning-settings' }).catch(() => null);
+
     const settings = await payload.findGlobal({ slug: 'site-settings' });
     const bannerConfig = (settings as any)?.banner || {};
-    const warningSection = (settings as any)?.warningSection || {};
+    const oldWarning = (settings as any)?.warningSection || {};
+
+    const warningEnabled = videoWarningSettings?.isEnabled !== undefined 
+      ? Boolean(videoWarningSettings.isEnabled) 
+      : (oldWarning.isEnabled !== false);
+    const warningTitle = videoWarningSettings?.title || oldWarning.title || 'Cảnh báo quan trọng';
+    const warningIcon = videoWarningSettings?.icon || oldWarning.icon || '🔥';
+    const warningVideos = (Array.isArray(videoWarningSettings?.videos) && videoWarningSettings.videos.length > 0)
+      ? videoWarningSettings.videos
+      : (oldWarning.videos || []);
+
     return {
       size: heroSlider?.heroSliderSize || bannerConfig.heroSliderSize || 'medium',
       customHeight: heroSlider?.heroSliderCustomHeight || bannerConfig.heroSliderCustomHeight || 500,
       effect: heroSlider?.heroSliderEffect || bannerConfig.heroSliderEffect || 'slide',
       autoplay: (heroSlider?.heroSliderAutoplay ?? bannerConfig.heroSliderAutoplay) !== false,
       autoplayDelay: heroSlider?.heroSliderAutoplayDelay || bannerConfig.heroSliderAutoplayDelay || 5000,
-      warningEnabled: warningSection.isEnabled !== false, // default true
-      warningTitle: warningSection.title || 'Cảnh báo quan trọng',
-      warningIcon: warningSection.icon || '🔥',
-      warningVideos: warningSection.videos || [],
+      warningEnabled,
+      warningTitle,
+      warningIcon,
+      warningVideos,
     };
   } catch (error) {
     return {

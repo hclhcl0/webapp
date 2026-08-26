@@ -1141,6 +1141,9 @@ export const SiteSettings: GlobalConfig = {
           type: 'group',
           label: 'Phân cảnh báo quan trọng',
           name: 'warningSection',
+          admin: {
+            hidden: true, // Đã chuyển sang Quản lý Video -> 3. Cấu hình Cảnh báo quan trọng
+          },
           fields: [
             {
               name: 'isEnabled',

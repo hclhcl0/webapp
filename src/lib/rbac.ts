@@ -5,7 +5,7 @@ import type { CollectionConfig, GlobalConfig } from 'payload';
  */
 export const MODULE_COLLECTION_MAP: Record<string, string[]> = {
   'articles': ['articles'],
-  'videos': ['videos', 'video-channels'],
+  'videos': ['videos', 'video-channels', 'video-warning-settings'],
   'vaccines': ['vaccines', 'vaccine-packages'],
   'ai-knowledge': ['ai-knowledge'],
   'banners': ['banners', 'banner-settings'],
@@ -183,6 +183,7 @@ export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
         allowedRoles = ['admin', 'moderator'];
         break;
       case 'banner-settings':
+      case 'video-warning-settings':
         allowedRoles = ['admin', 'moderator', 'editor'];
         break;
       case 'site-settings':
@@ -212,8 +213,10 @@ export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
           const allowedModules = getUserAllowedModules(user);
           if (allowedModules) {
             if (!roleHasDefaultAccess) return true;
-            // Với banner-settings, nó thuộc module 'banners'
-            const targetSlug = glb.slug === 'banner-settings' ? 'banners' : glb.slug;
+            // Với banner-settings và video-warning-settings, map sang module cha
+            let targetSlug = glb.slug;
+            if (glb.slug === 'banner-settings') targetSlug = 'banners';
+            if (glb.slug === 'video-warning-settings') targetSlug = 'videos';
             return !isCollectionInAllowedModules(allowedModules, targetSlug);
           }
           
