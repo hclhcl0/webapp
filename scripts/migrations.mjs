@@ -3853,6 +3853,17 @@ export const MIGRATION_STATEMENTS = [
       "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
     );
 
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "ad_slider_enabled" boolean DEFAULT true;
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "ad_slider_title" varchar DEFAULT 'DỊCH VỤ NỔI BẬT';
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "ad_slider_autoplay_interval" numeric DEFAULT 5;
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "hero_slider_hero_slider_size" varchar DEFAULT 'medium';
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "hero_slider_hero_slider_custom_height" numeric;
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "hero_slider_hero_slider_effect" varchar DEFAULT 'slide';
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "hero_slider_hero_slider_autoplay_delay" numeric DEFAULT 5000;
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "hero_slider_hero_slider_autoplay" boolean DEFAULT true;
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "updated_at" timestamp(3) with time zone DEFAULT now();
+    ALTER TABLE "banner_settings" ADD COLUMN IF NOT EXISTS "created_at" timestamp(3) with time zone DEFAULT now();
+
     CREATE TABLE IF NOT EXISTS "banner_settings_ad_slider_slides" (
       "_order" integer NOT NULL,
       "_parent_id" integer NOT NULL,
@@ -3871,6 +3882,11 @@ export const MIGRATION_STATEMENTS = [
       ALTER TABLE "banner_settings_ad_slider_slides" ADD CONSTRAINT "banner_settings_ad_slider_slides_image_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN null; END $$;
 
+    ALTER TABLE "banner_settings_ad_slider_slides" ADD COLUMN IF NOT EXISTS "image_id" integer;
+    ALTER TABLE "banner_settings_ad_slider_slides" ADD COLUMN IF NOT EXISTS "link_url" varchar;
+    ALTER TABLE "banner_settings_ad_slider_slides" ADD COLUMN IF NOT EXISTS "open_in_new_tab" boolean DEFAULT false;
+    ALTER TABLE "banner_settings_ad_slider_slides" ADD COLUMN IF NOT EXISTS "alt_text" varchar;
+
     CREATE TABLE IF NOT EXISTS "banner_settings_sidebar_banners" (
       "_order" integer NOT NULL,
       "_parent_id" integer NOT NULL,
@@ -3888,6 +3904,11 @@ export const MIGRATION_STATEMENTS = [
     DO $$ BEGIN
       ALTER TABLE "banner_settings_sidebar_banners" ADD CONSTRAINT "banner_settings_sidebar_banners_image_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+    ALTER TABLE "banner_settings_sidebar_banners" ADD COLUMN IF NOT EXISTS "image_id" integer;
+    ALTER TABLE "banner_settings_sidebar_banners" ADD COLUMN IF NOT EXISTS "url" varchar;
+    ALTER TABLE "banner_settings_sidebar_banners" ADD COLUMN IF NOT EXISTS "open_in_new_tab" boolean DEFAULT true;
+    ALTER TABLE "banner_settings_sidebar_banners" ADD COLUMN IF NOT EXISTS "title" varchar;
 
     CREATE TABLE IF NOT EXISTS "banner_settings_rels" (
       "id" serial PRIMARY KEY NOT NULL,
