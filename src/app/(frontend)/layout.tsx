@@ -105,7 +105,8 @@ export default async function RootLayout({
     const payload = await getPayload({ config: configPromise });
     const settings = await payload.findGlobal({ slug: 'site-settings', depth: 2 });
     themeConfig = (settings as any)?.themeConfig;
-    popupConfig = (settings as any)?.popup;
+    const popupSettings: any = await payload.findGlobal({ slug: 'popup-settings', depth: 2 }).catch(() => null);
+    popupConfig = (popupSettings && popupSettings.enabled !== undefined) ? popupSettings : (settings as any)?.popup;
   } catch (e) {
     console.error("Error fetching settings in layout:", e);
   }

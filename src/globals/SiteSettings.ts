@@ -902,6 +902,9 @@ export const SiteSettings: GlobalConfig = {
           type: 'group',
           label: 'Thông báo (Popup)',
           name: 'popup',
+          admin: {
+            hidden: true, // Đã chuyển sang Quản lý Banner & Quảng cáo -> 3. Thông báo (Popup)
+          },
           fields: [
             {
               name: 'enabled',

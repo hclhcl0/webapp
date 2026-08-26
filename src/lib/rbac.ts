@@ -8,7 +8,7 @@ export const MODULE_COLLECTION_MAP: Record<string, string[]> = {
   'videos': ['videos', 'video-channels', 'video-warning-settings'],
   'vaccines': ['vaccines', 'vaccine-packages'],
   'ai-knowledge': ['ai-knowledge'],
-  'banners': ['banners', 'banner-settings'],
+  'banners': ['banners', 'banner-settings', 'popup-settings'],
   'documents': ['documents', 'document-signers'],
   'procurements': ['procurements'],
   'pages': ['pages'],
@@ -183,6 +183,7 @@ export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
         allowedRoles = ['admin', 'moderator'];
         break;
       case 'banner-settings':
+      case 'popup-settings':
       case 'video-warning-settings':
         allowedRoles = ['admin', 'moderator', 'editor'];
         break;
@@ -213,9 +214,9 @@ export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
           const allowedModules = getUserAllowedModules(user);
           if (allowedModules) {
             if (!roleHasDefaultAccess) return true;
-            // Với banner-settings và video-warning-settings, map sang module cha
+            // Với banner-settings, popup-settings và video-warning-settings, map sang module cha
             let targetSlug = glb.slug;
-            if (glb.slug === 'banner-settings') targetSlug = 'banners';
+            if (glb.slug === 'banner-settings' || glb.slug === 'popup-settings') targetSlug = 'banners';
             if (glb.slug === 'video-warning-settings') targetSlug = 'videos';
             return !isCollectionInAllowedModules(allowedModules, targetSlug);
           }

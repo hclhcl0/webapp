@@ -4067,5 +4067,122 @@ export const MIGRATION_STATEMENTS = [
       END IF;
     EXCEPTION WHEN others THEN null;
     END $$;
+  `,
+
+  // ==================================================
+  // BATCH: Tables for popup_settings Global
+  // ==================================================
+  `
+    CREATE TABLE IF NOT EXISTS "popup_settings" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "enabled" boolean DEFAULT false,
+      "type" varchar DEFAULT 'manual',
+      "services_title" varchar DEFAULT 'Dịch vụ & Thông báo CDC Đà Nẵng',
+      "services_subtitle" varchar,
+      "services_mascot_id" integer,
+      "services_header_color" varchar DEFAULT '#00a99d',
+      "transparent_background" boolean DEFAULT false,
+      "article_id" integer,
+      "title" varchar DEFAULT 'THÔNG BÁO QUAN TRỌNG',
+      "image_id" integer,
+      "video_url" varchar,
+      "content" jsonb,
+      "link_url" varchar,
+      "delay_seconds" numeric DEFAULT 1,
+      "show_once" boolean DEFAULT true,
+      "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+      "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+    );
+
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "enabled" boolean DEFAULT false;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "type" varchar DEFAULT 'manual';
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "services_title" varchar DEFAULT 'Dịch vụ & Thông báo CDC Đà Nẵng';
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "services_subtitle" varchar;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "services_mascot_id" integer;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "services_header_color" varchar DEFAULT '#00a99d';
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "transparent_background" boolean DEFAULT false;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "article_id" integer;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "title" varchar DEFAULT 'THÔNG BÁO QUAN TRỌNG';
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "image_id" integer;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "video_url" varchar;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "content" jsonb;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "link_url" varchar;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "delay_seconds" numeric DEFAULT 1;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "show_once" boolean DEFAULT true;
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "updated_at" timestamp(3) with time zone DEFAULT now();
+    ALTER TABLE "popup_settings" ADD COLUMN IF NOT EXISTS "created_at" timestamp(3) with time zone DEFAULT now();
+
+    CREATE TABLE IF NOT EXISTS "popup_settings_services_items" (
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "id" varchar PRIMARY KEY NOT NULL,
+      "icon" varchar DEFAULT '💉',
+      "icon_image_id" integer,
+      "title" varchar NOT NULL,
+      "description" varchar,
+      "link_url" varchar
+    );
+    CREATE INDEX IF NOT EXISTS "popup_settings_services_items_order_idx" ON "popup_settings_services_items" ("_order");
+    CREATE INDEX IF NOT EXISTS "popup_settings_services_items_parent_id_idx" ON "popup_settings_services_items" ("_parent_id");
+    DO $$ BEGIN
+      ALTER TABLE "popup_settings_services_items" ADD CONSTRAINT "popup_settings_services_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."popup_settings"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null; END $$;
+    DO $$ BEGIN
+      ALTER TABLE "popup_settings_services_items" ADD CONSTRAINT "popup_settings_services_items_icon_image_id_fk" FOREIGN KEY ("icon_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+    CREATE TABLE IF NOT EXISTS "popup_settings_rels" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "order" integer,
+      "parent_id" integer NOT NULL,
+      "path" varchar NOT NULL,
+      "articles_id" integer,
+      "media_id" integer
+    );
+    CREATE INDEX IF NOT EXISTS "popup_settings_rels_order_idx" ON "popup_settings_rels" ("order");
+    CREATE INDEX IF NOT EXISTS "popup_settings_rels_parent_idx" ON "popup_settings_rels" ("parent_id");
+    CREATE INDEX IF NOT EXISTS "popup_settings_rels_path_idx" ON "popup_settings_rels" ("path");
+
+    -- Tự động chuyển dữ liệu popup từ site_settings
+    INSERT INTO "popup_settings" ("id", "enabled", "type", "title", "updated_at", "created_at")
+    VALUES (1, false, 'manual', 'THÔNG BÁO QUAN TRỌNG', now(), now())
+    ON CONFLICT ("id") DO NOTHING;
+
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT FROM information_schema.columns WHERE table_name = 'site_settings' AND column_name = 'popup_title') THEN
+        UPDATE "popup_settings" ps
+        SET
+          "enabled" = COALESCE(ss.popup_enabled, ps.enabled),
+          "type" = COALESCE(ss.popup_type, ps.type),
+          "services_title" = COALESCE(ss.popup_services_title, ps.services_title),
+          "services_subtitle" = COALESCE(ss.popup_services_subtitle, ps.services_subtitle),
+          "services_mascot_id" = COALESCE(ss.popup_services_mascot_id, ps.services_mascot_id),
+          "services_header_color" = COALESCE(ss.popup_services_header_color, ps.services_header_color),
+          "transparent_background" = COALESCE(ss.popup_transparent_background, ps.transparent_background),
+          "article_id" = COALESCE(ss.popup_article_id, ps.article_id),
+          "title" = COALESCE(ss.popup_title, ps.title),
+          "image_id" = COALESCE(ss.popup_image_id, ps.image_id),
+          "video_url" = COALESCE(ss.popup_video_url, ps.video_url),
+          "content" = COALESCE(ss.popup_content, ps.content),
+          "link_url" = COALESCE(ss.popup_link_url, ps.link_url),
+          "delay_seconds" = COALESCE(ss.popup_delay_seconds, ps.delay_seconds),
+          "show_once" = COALESCE(ss.popup_show_once, ps.show_once)
+        FROM "site_settings" ss
+        WHERE ps.id = 1;
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
+
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'site_settings_popup_services_items') THEN
+        INSERT INTO "popup_settings_services_items" ("_order", "_parent_id", "id", "icon", "icon_image_id", "title", "description", "link_url")
+        SELECT "src"."_order", 1 as "_parent_id", 'pop_' || "src"."id", "src"."icon", "src"."icon_image_id", "src"."title", "src"."description", "src"."link_url"
+        FROM "site_settings_popup_services_items" src
+        ON CONFLICT DO NOTHING;
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
   `
 ];

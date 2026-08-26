@@ -30,6 +30,7 @@ import { Settings } from './globals/Settings.ts';
 import { SiteStats } from './globals/SiteStats.ts';
 import { BannerSettings } from './globals/BannerSettings.ts';
 import { VideoWarningSettings } from './globals/VideoWarningSettings.ts';
+import { PopupSettings } from './globals/PopupSettings.ts';
 import { Videos } from './collections/Videos.ts';
 import { VideoChannels } from './collections/VideoChannels.ts';
 import { FormSubmissions } from './collections/FormSubmissions.ts';
@@ -171,6 +172,7 @@ export default buildConfig({
     SiteStats,
     BannerSettings,
     VideoWarningSettings,
+    PopupSettings,
   ]),
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN

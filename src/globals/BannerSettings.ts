@@ -3,7 +3,7 @@ import { canAccessModule } from '../lib/rbac.ts';
 
 export const BannerSettings: GlobalConfig = {
   slug: 'banner-settings',
-  label: '2. Sidebar Quảng cáo dịch vụ và các banner khác',
+  label: '2. Banner khác',
   admin: {
     group: 'Quản lý Banner & Quảng cáo',
     description: 'Cấu hình khối Sidebar quảng cáo dịch vụ (ảnh 9:16), Banner cột bên trái và Cài đặt Slider trang chủ.',
