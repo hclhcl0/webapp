@@ -8,7 +8,7 @@ export const MediaFolders: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    group: 'Nội dung',
+    group: 'Báo chí & Tin tức',
   },
   access: {
     read: () => true,

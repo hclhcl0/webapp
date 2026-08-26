@@ -10,7 +10,7 @@ export const Documents: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['documentNumber', 'title', 'documentType', 'publishedDate', 'issuer'],
-    group: 'Nội dung',
+    group: 'Thông tin Đơn vị & Pháp quy',
     description: '👉 Đường dẫn xem trên website: /documents',
   },
   access: {

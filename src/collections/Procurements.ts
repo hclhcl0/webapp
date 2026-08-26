@@ -11,7 +11,7 @@ export const Procurements: CollectionConfig = {
     description: '👉 Đường dẫn xem trên website: /mua-sam',
     useAsTitle: 'title',
     defaultColumns: ['title', 'procurementType', 'status', 'deadline', 'publishedDate'],
-    group: 'Nội dung',
+    group: 'Thông tin Đơn vị & Pháp quy',
   },
   access: {
     read: () => true,

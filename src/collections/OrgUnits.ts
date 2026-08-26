@@ -10,7 +10,7 @@ export const OrgUnits: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'unitType', 'order'],
-    group: 'Giới thiệu',
+    group: 'Thông tin Đơn vị & Pháp quy',
   },
   access: {
     read: () => true,

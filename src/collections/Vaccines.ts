@@ -10,7 +10,7 @@ export const Vaccines: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'disease', 'price', 'status'],
-    group: 'Dịch vụ Y tế',
+    group: 'Dịch vụ Y tế & Tiêm chủng',
     description: 'Quản lý danh mục vắc xin lẻ. Đường dẫn hiển thị trên web: /goi-vac-xin',
   },
   access: {

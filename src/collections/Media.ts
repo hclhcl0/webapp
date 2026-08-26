@@ -9,7 +9,7 @@ export const Media: CollectionConfig = {
   admin: {
     useAsTitle: 'filename',
     defaultColumns: ['filename', 'alt', 'folder', 'updatedAt'],
-    group: 'Nội dung',
+    group: 'Báo chí & Tin tức',
     components: {
       beforeListTable: [
         '@/components/Admin/MediaFolderFilter',

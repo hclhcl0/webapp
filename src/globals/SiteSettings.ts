@@ -10,7 +10,7 @@ export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
   label: 'Cài đặt trang web',
   admin: {
-    group: 'Cài đặt giao diện',
+    group: 'Quản trị hệ thống',
   },
   access: {
     read: () => true,

@@ -147,7 +147,7 @@ export const Articles: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'reviewStatus', '_status', 'publishedAt'],
     listSearchableFields: ['title', 'slug', 'description', 'author_name'],
-    group: 'Nội dung',
+    group: 'Báo chí & Tin tức',
     preview: (doc) => {
       if (doc?.slug) {
         return `/bai-viet/${doc.slug}?preview=true`;

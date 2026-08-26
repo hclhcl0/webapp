@@ -11,7 +11,7 @@ export const AiKnowledge: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'updatedAt'],
-    group: 'AI & Trợ lý ảo',
+    group: 'Quản trị hệ thống',
   },
   access: {
     read: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),

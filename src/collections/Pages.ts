@@ -35,12 +35,12 @@ export const Pages: CollectionConfig = {
   slug: 'pages',
   labels: {
     singular: 'Trang nội dung',
-    plural: 'Các trang niội dung',
+    plural: 'Các trang nội dung',
   },
   admin: {
-    description: '👒 Đường dẫn xem trên website: /[slug]',
+    description: '👉 Đường dẫn xem trên website: /[slug]',
     useAsTitle: 'title',
-    group: 'Nội dung',
+    group: 'Thông tin Đơn vị & Pháp quy',
     defaultColumns: ['title', 'slug', 'pageType', 'updatedAt'],
     preview: (doc) => {
       if (doc?.slug) {

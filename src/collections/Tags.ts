@@ -8,7 +8,7 @@ export const Tags: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    group: 'Nội dung',
+    group: 'Báo chí & Tin tức',
   },
   access: {
     read: () => true,

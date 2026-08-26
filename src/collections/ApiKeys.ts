@@ -9,7 +9,7 @@ export const ApiKeys: CollectionConfig = {
   admin: {
     useAsTitle: 'label',
     defaultColumns: ['label', 'provider', 'isActive', 'usageCount'],
-    group: 'AI & Trợ lý ảo',
+    group: 'Quản trị hệ thống',
   },
   fields: [
     { name: 'label', type: 'text', required: true, label: 'Tên gợi nhớ' },

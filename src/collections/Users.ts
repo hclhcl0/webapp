@@ -220,18 +220,25 @@ export const Users: CollectionConfig = {
         condition: (data: any) => ['editor', 'moderator', 'author'].includes(data?.role),
       },
       options: [
-        { label: '📰 Quản lý Bài viết', value: 'articles' },
-        { label: '🎬 Quản lý Video & Kênh', value: 'videos' },
-        { label: '💉 Quản lý Vắc xin & Gói Vắc xin', value: 'vaccines' },
-        { label: '🤖 Kho Tri thức AI (Knowledge)', value: 'ai-knowledge' },
-        { label: '🖼️ Quản lý Banner quảng cáo', value: 'banners' },
-        { label: '📄 Quản lý Văn bản / Tài liệu', value: 'documents' },
-        { label: '🏗️ Mua sắm & Đấu thầu', value: 'procurements' },
-        { label: '📑 Quản lý Trang nội dung (Pages)', value: 'pages' },
-        { label: '🏛️ Quản lý Cơ cấu tổ chức', value: 'org-units' },
-        { label: '📝 Quản lý Form đăng ký / Liên hệ', value: 'form-submissions' },
-        { label: '🖼️ Thư viện Hình ảnh / Media', value: 'media' },
-        { label: '🗂️ Quản lý Chuyên mục & Thẻ', value: 'categories' },
+        // ── 📰 Báo chí & Truyền thông ──
+        { label: '📰 [Báo chí & Tin tức] Bài viết & Tin tức', value: 'articles' },
+        { label: '🗂️ [Báo chí & Tin tức] Chuyên mục & Thẻ bài viết', value: 'categories' },
+        { label: '🖼️ [Báo chí & Tin tức] Thư viện Hình ảnh / Media', value: 'media' },
+        { label: '🎬 [Báo chí & Tin tức] Video & Kênh Video', value: 'videos' },
+        { label: '🖼️ [Báo chí & Tin tức] Banner & Sidebar Quảng cáo', value: 'banners' },
+
+        // ── 💉 Dịch vụ Y tế & Tiêm chủng ──
+        { label: '💉 [Dịch vụ Y tế] Vắc xin & Gói tiêm chủng', value: 'vaccines' },
+        { label: '📝 [Dịch vụ Y tế] Khách hàng đăng ký tiêm / Liên hệ', value: 'form-submissions' },
+
+        // ── 🏛️ Thông tin Đơn vị & Pháp quy ──
+        { label: '📄 [Pháp quy] Văn bản & Tài liệu chỉ đạo', value: 'documents' },
+        { label: '🏗️ [Pháp quy] Mua sắm & Đấu thầu công', value: 'procurements' },
+        { label: '📑 [Đơn vị] Các trang nội dung tĩnh (Giới thiệu...)', value: 'pages' },
+        { label: '🏛️ [Đơn vị] Cơ cấu tổ chức / Ban lãnh đạo', value: 'org-units' },
+
+        // ── 🤖 Kỹ thuật & AI ──
+        { label: '🤖 [Kỹ thuật] Kho Tri thức Trợ lý ảo AI', value: 'ai-knowledge' },
       ],
     },
   ],

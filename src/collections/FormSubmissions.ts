@@ -4,13 +4,13 @@ import { canAccessModule } from '../lib/rbac.ts';
 export const FormSubmissions: CollectionConfig = {
   slug: 'form-submissions',
   labels: {
-    singular: 'Phản hồi / Liên hệ',
-    plural: 'Danh sách Phản hồi / Liên hệ',
+    singular: 'Đăng ký / Liên hệ',
+    plural: 'Đăng ký tiêm & Liên hệ',
   },
   admin: {
     useAsTitle: 'subject',
     defaultColumns: ['subject', 'name', 'email', 'createdAt', 'status'],
-    group: 'Quản lý',
+    group: 'Dịch vụ Y tế & Tiêm chủng',
     description: 'Lưu trữ các phản hồi và yêu cầu liên hệ từ người dùng.',
   },
   access: {

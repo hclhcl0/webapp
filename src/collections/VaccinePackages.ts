@@ -10,7 +10,7 @@ export const VaccinePackages: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'targetGroup', 'packageType', 'discountPrice', 'isActive'],
-    group: 'Dịch vụ Y tế',
+    group: 'Dịch vụ Y tế & Tiêm chủng',
     description: 'Quản lý các gói combo vắc xin. Đường dẫn trang hiển thị trên web: /goi-vac-xin',
   },
   access: {

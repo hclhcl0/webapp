@@ -4,7 +4,7 @@ export const SiteStats: GlobalConfig = {
   slug: 'site-stats',
   label: 'Thống kê Truy cập',
   admin: {
-    group: 'Cấu hình',
+    group: 'Quản trị hệ thống',
     description: 'Số liệu thống kê lượt truy cập website. Tự động cập nhật, không cần chỉnh sửa thủ công.',
   },
   access: {

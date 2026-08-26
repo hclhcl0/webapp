@@ -105,7 +105,7 @@ const PERMISSIONS: {
   {
     module: '🎬 Video / Kênh',
     admin: 'Toàn quyền',
-    editor: 'Thêm/Sửa',
+    editor: 'Thêm/Sửa/Xóa',
     moderator: 'Thêm/Sửa',
     author: '❌ (hoặc theo Module phân công)',
   },

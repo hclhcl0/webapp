@@ -10,7 +10,7 @@ export const Categories: CollectionConfig = {
     description: '👉 Đường dẫn xem trên website: /[slug]',
     useAsTitle: 'name',
     defaultColumns: ['name', 'orderNum'],
-    group: 'Nội dung',
+    group: 'Báo chí & Tin tức',
   },
   defaultSort: '-orderNum',
   access: {
