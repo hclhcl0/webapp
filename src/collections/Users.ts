@@ -1,5 +1,11 @@
 import type { CollectionConfig } from 'payload';
 
+const isAdmin = ({ req: { user } }: any) => {
+  if (!user) return false;
+  const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
+  return role === 'admin';
+};
+
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
@@ -9,6 +15,10 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     group: 'Quản trị hệ thống',
+    hidden: ({ user }: any) => {
+      const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
+      return role !== 'admin';
+    },
     components: {
       beforeList: [
         '@/components/Admin/UserPermissionsNote.tsx#UserPermissionsNote',
@@ -76,10 +86,7 @@ export const Users: CollectionConfig = {
       ],
       access: {
         // Chỉ admin mới được sửa quyền của người khác (và của chính mình)
-        update: ({ req: { user } }) => {
-          const role = Array.isArray(user?.role) ? user.role[0]?.toLowerCase() : user?.role?.toLowerCase();
-          return role === 'admin';
-        },
+        update: isAdmin,
       },
       admin: {
         position: 'sidebar',
@@ -91,9 +98,12 @@ export const Users: CollectionConfig = {
       relationTo: 'departments',
       hasMany: false,
       label: 'Phòng / Khoa / Bộ phận',
+      access: {
+        update: isAdmin,
+      },
       admin: {
         position: 'sidebar',
-        description: 'Phòng ban công tác. Chỉ áp dụng cho Nhân viên/Tác giả.',
+        description: 'Chỉ Admin mới có quyền phân công phòng ban. Chỉ áp dụng cho Nhân viên/Tác giả.',
       },
     },
     {
@@ -107,8 +117,12 @@ export const Users: CollectionConfig = {
       relationTo: 'categories',
       hasMany: true,
       label: 'Chuyên mục bài viết được phân công',
+      access: {
+        // Chỉ admin mới có quyền phân công chuyên mục cho tài khoản
+        update: isAdmin,
+      },
       admin: {
-        description: 'Để trống = không giới hạn chuyên mục (xem/sửa tất cả). Áp dụng cho Editor, Moderator và Author.',
+        description: 'Chỉ Admin mới có quyền phân công. Để trống = không giới hạn chuyên mục (xem/sửa tất cả). Áp dụng cho Editor, Moderator và Author.',
         position: 'sidebar',
         condition: (data: any) => ['editor', 'moderator', 'author'].includes(data?.role),
       },
@@ -118,8 +132,12 @@ export const Users: CollectionConfig = {
       type: 'select',
       hasMany: true,
       label: 'Chức năng / Module được phân công',
+      access: {
+        // Chỉ admin mới có quyền phân công module cho tài khoản
+        update: isAdmin,
+      },
       admin: {
-        description: 'Để trống = toàn quyền truy cập theo vai trò. Chọn cụ thể = chỉ hiển thị và cho phép thao tác trên các chức năng được chọn.',
+        description: 'Chỉ Admin mới có quyền phân công. Để trống = toàn quyền truy cập theo vai trò. Chọn cụ thể = chỉ hiển thị và cho phép thao tác trên các chức năng được chọn.',
         position: 'sidebar',
         condition: (data: any) => ['editor', 'moderator', 'author'].includes(data?.role),
       },
