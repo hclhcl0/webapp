@@ -3795,5 +3795,43 @@ export const MIGRATION_STATEMENTS = [
     CREATE INDEX IF NOT EXISTS "_pages_v_blocks_popup_block_parent_id_idx" ON "_pages_v_blocks_popup_block" ("_parent_id");
     CREATE INDEX IF NOT EXISTS "_pages_v_blocks_popup_block_path_idx" ON "_pages_v_blocks_popup_block" ("_path");
     DO $$ BEGIN ALTER TABLE "_pages_v_blocks_popup_block" ADD CONSTRAINT "_pages_v_blocks_popup_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_object THEN null; END $$;
+  `,
+
+  // ==================================================
+  // BATCH: Table for users.allowedModules (multi-select)
+  // ==================================================
+  `
+    DO $$ BEGIN
+      CREATE TYPE "public"."enum_users_allowed_modules" AS ENUM(
+        'articles',
+        'videos',
+        'vaccines',
+        'ai-knowledge',
+        'banners',
+        'documents',
+        'procurements',
+        'pages',
+        'org-units',
+        'form-submissions',
+        'media',
+        'categories'
+      );
+    EXCEPTION
+      WHEN duplicate_object THEN null;
+    END $$;
+
+    CREATE TABLE IF NOT EXISTS "users_allowed_modules" (
+      "order" integer NOT NULL,
+      "parent_id" integer NOT NULL,
+      "value" "public"."enum_users_allowed_modules",
+      "id" serial PRIMARY KEY NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS "users_allowed_modules_order_idx" ON "users_allowed_modules" ("order");
+    CREATE INDEX IF NOT EXISTS "users_allowed_modules_parent_id_idx" ON "users_allowed_modules" ("parent_id");
+    DO $$ BEGIN
+      ALTER TABLE "users_allowed_modules" ADD CONSTRAINT "users_allowed_modules_parent_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION
+      WHEN duplicate_object THEN null;
+    END $$;
   `
 ];
