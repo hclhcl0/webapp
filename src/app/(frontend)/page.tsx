@@ -11,8 +11,22 @@ import { HomeSectionRenderer } from '@/components/HomeSections/HomeSectionRender
 export default async function HomePage() {
   const payload = await getPayload({ config: configPromise });
   const settings = await payload.findGlobal({ slug: 'site-settings', depth: 2 });
-  const homeSections = (settings as any)?.homeSections || [];
+  const bannerSettings = await payload.findGlobal({ slug: 'banner-settings', depth: 2 }).catch(() => null);
+  let homeSections = (settings as any)?.homeSections || [];
   const homeContent = settings?.homeContent;
+
+  // Nếu bannerSettings có cấu hình adSlider và có ảnh, ưu tiên áp dụng cho latestNewsSection
+  if (bannerSettings?.adSlider && Array.isArray(bannerSettings.adSlider.slides) && bannerSettings.adSlider.slides.length > 0) {
+    homeSections = homeSections.map((sec: any) => {
+      if (sec.blockType === 'latestNewsSection') {
+        return {
+          ...sec,
+          adSlider: bannerSettings.adSlider,
+        };
+      }
+      return sec;
+    });
+  }
 
   const isHomeContentEmpty = !homeContent || 
     (homeContent.root?.children?.length === 1 && 

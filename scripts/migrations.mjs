@@ -3833,5 +3833,71 @@ export const MIGRATION_STATEMENTS = [
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;
+  `,
+
+  // ==================================================
+  // BATCH: Tables for banner_settings Global
+  // ==================================================
+  `
+    CREATE TABLE IF NOT EXISTS "banner_settings" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "ad_slider_enabled" boolean DEFAULT true,
+      "ad_slider_title" varchar DEFAULT 'DỊCH VỤ NỔI BẬT',
+      "ad_slider_autoplay_interval" numeric DEFAULT 5,
+      "hero_slider_hero_slider_size" varchar DEFAULT 'medium',
+      "hero_slider_hero_slider_custom_height" numeric,
+      "hero_slider_hero_slider_effect" varchar DEFAULT 'slide',
+      "hero_slider_hero_slider_autoplay_delay" numeric DEFAULT 5000,
+      "hero_slider_hero_slider_autoplay" boolean DEFAULT true,
+      "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+      "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS "banner_settings_ad_slider_slides" (
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "id" varchar PRIMARY KEY NOT NULL,
+      "image_id" integer,
+      "link_url" varchar,
+      "open_in_new_tab" boolean DEFAULT false,
+      "alt_text" varchar
+    );
+    CREATE INDEX IF NOT EXISTS "banner_settings_ad_slider_slides_order_idx" ON "banner_settings_ad_slider_slides" ("_order");
+    CREATE INDEX IF NOT EXISTS "banner_settings_ad_slider_slides_parent_id_idx" ON "banner_settings_ad_slider_slides" ("_parent_id");
+    DO $$ BEGIN
+      ALTER TABLE "banner_settings_ad_slider_slides" ADD CONSTRAINT "banner_settings_ad_slider_slides_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."banner_settings"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null; END $$;
+    DO $$ BEGIN
+      ALTER TABLE "banner_settings_ad_slider_slides" ADD CONSTRAINT "banner_settings_ad_slider_slides_image_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+    CREATE TABLE IF NOT EXISTS "banner_settings_sidebar_banners" (
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "id" varchar PRIMARY KEY NOT NULL,
+      "image_id" integer,
+      "url" varchar,
+      "open_in_new_tab" boolean DEFAULT true,
+      "title" varchar
+    );
+    CREATE INDEX IF NOT EXISTS "banner_settings_sidebar_banners_order_idx" ON "banner_settings_sidebar_banners" ("_order");
+    CREATE INDEX IF NOT EXISTS "banner_settings_sidebar_banners_parent_id_idx" ON "banner_settings_sidebar_banners" ("_parent_id");
+    DO $$ BEGIN
+      ALTER TABLE "banner_settings_sidebar_banners" ADD CONSTRAINT "banner_settings_sidebar_banners_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."banner_settings"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null; END $$;
+    DO $$ BEGIN
+      ALTER TABLE "banner_settings_sidebar_banners" ADD CONSTRAINT "banner_settings_sidebar_banners_image_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+    CREATE TABLE IF NOT EXISTS "banner_settings_rels" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "order" integer,
+      "parent_id" integer NOT NULL,
+      "path" varchar NOT NULL,
+      "media_id" integer
+    );
+    CREATE INDEX IF NOT EXISTS "banner_settings_rels_order_idx" ON "banner_settings_rels" ("order");
+    CREATE INDEX IF NOT EXISTS "banner_settings_rels_parent_idx" ON "banner_settings_rels" ("parent_id");
+    CREATE INDEX IF NOT EXISTS "banner_settings_rels_path_idx" ON "banner_settings_rels" ("path");
   `
 ];

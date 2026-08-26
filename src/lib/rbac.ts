@@ -8,7 +8,7 @@ export const MODULE_COLLECTION_MAP: Record<string, string[]> = {
   'videos': ['videos', 'video-channels'],
   'vaccines': ['vaccines', 'vaccine-packages'],
   'ai-knowledge': ['ai-knowledge'],
-  'banners': ['banners'],
+  'banners': ['banners', 'banner-settings'],
   'documents': ['documents', 'document-signers'],
   'procurements': ['procurements'],
   'pages': ['pages'],
@@ -182,9 +182,11 @@ export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
       case 'site-stats':
         allowedRoles = ['admin', 'moderator'];
         break;
+      case 'banner-settings':
+        allowedRoles = ['admin', 'moderator', 'editor'];
+        break;
       case 'site-settings':
       case 'settings':
-      case 'banner-settings':
       default:
         allowedRoles = ['admin'];
         break;
@@ -204,8 +206,18 @@ export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
           
           if (typeof originalHidden === 'function' && originalHidden(args)) return true;
           if (typeof originalHidden === 'boolean' && originalHidden) return true;
+
+          const roleHasDefaultAccess = allowedRoles.includes(userRole);
+
+          const allowedModules = getUserAllowedModules(user);
+          if (allowedModules) {
+            if (!roleHasDefaultAccess) return true;
+            // Với banner-settings, nó thuộc module 'banners'
+            const targetSlug = glb.slug === 'banner-settings' ? 'banners' : glb.slug;
+            return !isCollectionInAllowedModules(allowedModules, targetSlug);
+          }
           
-          return !allowedRoles.includes(userRole);
+          return !roleHasDefaultAccess;
         }
       }
     };

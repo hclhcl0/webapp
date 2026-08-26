@@ -52,15 +52,18 @@ async function getWarningVideos() {
 async function getSliderSettings() {
   try {
     const payload = await getPayload({ config: configPromise });
+    const bannerSettings: any = await payload.findGlobal({ slug: 'banner-settings' }).catch(() => null);
+    const heroSlider = bannerSettings?.heroSlider;
+
     const settings = await payload.findGlobal({ slug: 'site-settings' });
     const bannerConfig = (settings as any)?.banner || {};
     const warningSection = (settings as any)?.warningSection || {};
     return {
-      size: bannerConfig.heroSliderSize || 'medium',
-      customHeight: bannerConfig.heroSliderCustomHeight || 500,
-      effect: bannerConfig.heroSliderEffect || 'slide',
-      autoplay: bannerConfig.heroSliderAutoplay !== false,
-      autoplayDelay: bannerConfig.heroSliderAutoplayDelay || 5000,
+      size: heroSlider?.heroSliderSize || bannerConfig.heroSliderSize || 'medium',
+      customHeight: heroSlider?.heroSliderCustomHeight || bannerConfig.heroSliderCustomHeight || 500,
+      effect: heroSlider?.heroSliderEffect || bannerConfig.heroSliderEffect || 'slide',
+      autoplay: (heroSlider?.heroSliderAutoplay ?? bannerConfig.heroSliderAutoplay) !== false,
+      autoplayDelay: heroSlider?.heroSliderAutoplayDelay || bannerConfig.heroSliderAutoplayDelay || 5000,
       warningEnabled: warningSection.isEnabled !== false, // default true
       warningTitle: warningSection.title || 'Cảnh báo quan trọng',
       warningIcon: warningSection.icon || '🔥',

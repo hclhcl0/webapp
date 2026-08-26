@@ -4,11 +4,11 @@ import { canAccessModule } from '../lib/rbac.ts';
 export const Banners: CollectionConfig = {
   slug: 'banners',
   labels: {
-    singular: 'Banner quảng cáo',
-    plural: 'Danh sách Banner',
+    singular: 'Banner',
+    plural: '1. Danh sách Banner',
   },
   admin: {
-    group: 'Cài đặt giao diện',
+    group: 'Quản lý Banner & Quảng cáo',
     useAsTitle: 'title',
     defaultColumns: ['title', 'position', 'order', 'isActive'],
   },

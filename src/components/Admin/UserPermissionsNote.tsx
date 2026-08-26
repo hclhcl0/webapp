@@ -113,8 +113,9 @@ const PERMISSIONS: {
     module: '🖼 Banner',
     admin: 'Toàn quyền',
     editor: 'Thêm/Sửa/Xóa',
-    moderator: '❌ (hoặc theo Module phân công)',
+    moderator: 'Thêm/Sửa',
     author: '❌ (hoặc theo Module phân công)',
+    note: 'Menu riêng gồm: 1. Danh sách banner & 2. Sidebar Quảng cáo dịch vụ, Banner khác',
   },
   {
     module: '📩 Form liên hệ',
