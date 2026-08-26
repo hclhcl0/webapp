@@ -111,6 +111,9 @@ export default buildConfig({
     user: 'users',
     css: path.resolve(dirname, 'admin.css'),
     components: {
+      actions: [
+        '@/components/Admin/HeaderSaveButton.tsx#HeaderSaveButton',
+      ],
       graphics: {
         Logo: '@/app/(payload)/admin/components/AdminLogo.tsx#AdminLogo',
         Icon: '@/app/(payload)/admin/components/AdminIcon.tsx#AdminIcon',

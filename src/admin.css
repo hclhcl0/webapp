@@ -1432,3 +1432,52 @@ input[id^="react-select-"] {
   }
 }
 
+/* ==========================================
+   HEADER TOP SAVE BUTTON (BÊN TRÁI AVATAR)
+   ========================================== */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.app-header__actions {
+  display: flex !important;
+  align-items: center !important;
+}
+
+#header-top-save-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 8px !important;
+  padding: 6px 14px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35) !important;
+  transition: all 0.18s ease-in-out !important;
+  margin-right: 8px !important;
+  height: 34px !important;
+  white-space: nowrap !important;
+}
+
+#header-top-save-btn:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.45) !important;
+}
+
+#header-top-save-btn:active {
+  transform: translateY(1px) !important;
+}
+
+html[data-theme="dark"] #header-top-save-btn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
