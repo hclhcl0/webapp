@@ -65,16 +65,22 @@ export function canAccessModule(
   if (!role || role === 'user') return false;
   if (role === 'admin') return true;
 
+  // Kiểm tra role có quyền mặc định không
+  const roleHasDefaultAccess = allowedDefaultRoles.includes(role);
+
   const allowedModules = getUserAllowedModules(user);
   
   // Nếu user có thiết lập danh sách module phân công cụ thể
   if (allowedModules) {
+    // Role phải có quyền mặc định VÀ module phải được phân công
+    if (!roleHasDefaultAccess) return false;
     return isCollectionInAllowedModules(allowedModules, colSlug);
   }
 
-  // Nếu không phân công module (để trống) -> áp dụng theo vai trò mặc định
-  return allowedDefaultRoles.includes(role);
+  // Nếu không phân công module (để trống) → áp dụng theo vai trò mặc định
+  return roleHasDefaultAccess;
 }
+
 
 export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] => {
   return collections.map((col) => {
@@ -133,19 +139,26 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
           if (typeof originalHidden === 'function' && originalHidden(args)) return true;
           if (typeof originalHidden === 'boolean' && originalHidden) return true;
 
+          // Trước tiên kiểm tra: Role có quyền mặc định với collection này không?
+          // Nếu Role không có quyền theo mặc định → ẩn luôn, không cần xét module
+          const roleHasDefaultAccess = allowedRoles.includes(userRole);
+
           const allowedModules = getUserAllowedModules(user);
           if (allowedModules) {
-            // Nếu có phân công module: chỉ hiển thị các module được phân công
+            // Nếu có phân công module cụ thể:
+            // - Role phải có quyền mặc định VÀ module phải được phân công
+            if (!roleHasDefaultAccess) return true; // Role không có quyền mặc định → ẩn
             return !isCollectionInAllowedModules(allowedModules, col.slug);
           }
 
-          // Không phân công module cụ thể -> theo quyền mặc định của vai trò
-          return !allowedRoles.includes(userRole);
+          // Không phân công module cụ thể → theo quyền mặc định của vai trò
+          return !roleHasDefaultAccess;
         }
       }
     };
   });
 };
+
 
 export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
   return globals.map((glb) => {
