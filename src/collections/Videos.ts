@@ -5,13 +5,13 @@ export const Videos: CollectionConfig = {
   slug: 'videos',
   labels: {
     singular: 'Video',
-    plural: 'Thư viện Video',
+    plural: '1. Danh sách Video',
   },
   admin: {
     description: '👉 Đường dẫn xem trên website: /video',
     useAsTitle: 'title',
     defaultColumns: ['title', 'platform', 'channel', 'publishedDate'],
-    group: 'Thư viện Video',
+    group: 'Quản lý Video',
   },
   access: {
     read: () => true,

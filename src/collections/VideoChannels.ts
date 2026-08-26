@@ -5,18 +5,18 @@ export const VideoChannels: CollectionConfig = {
   slug: 'video-channels',
   labels: {
     singular: 'Kênh Video',
-    plural: 'Quản lý Kênh Video',
+    plural: '2. Quản lý Kênh Video',
   },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'platform', 'channelUrl'],
-    group: 'Thư viện Video',
+    group: 'Quản lý Video',
   },
   access: {
     read: () => true,
     create: ({ req: { user } }) => canAccessModule(user, 'videos', ['admin', 'editor', 'moderator']),
     update: ({ req: { user } }) => canAccessModule(user, 'videos', ['admin', 'editor', 'moderator']),
-    delete: ({ req: { user } }) => canAccessModule(user, 'videos', ['admin']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'videos', ['admin', 'editor']),
   },
   fields: [
     {
