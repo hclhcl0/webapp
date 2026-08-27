@@ -15,35 +15,37 @@ export const VideoWarningSettings: GlobalConfig = {
   hooks: {
     beforeValidate: [
       ({ data }) => {
-        if (data && (!data.icon || typeof data.icon !== 'string' || data.icon.trim() === '')) {
-          data.icon = '🔥';
+        if (data) {
+          if (!data.icon || typeof data.icon !== 'string' || data.icon.trim() === '') {
+            data.icon = '🔥';
+          }
+          if (!data.title || typeof data.title !== 'string' || data.title.trim() === '') {
+            data.title = 'Cảnh báo quan trọng';
+          }
+          // Chuẩn hóa mảng videos: trích xuất ID nếu là object, chuyển sang number hợp lệ
+          if (Array.isArray(data.videos)) {
+            data.videos = data.videos
+              .map((v: any) => {
+                if (typeof v === 'object' && v !== null && v.id) return v.id;
+                if (typeof v === 'number') return v;
+                if (typeof v === 'string' && v.trim() !== '') {
+                  const num = Number(v);
+                  return isNaN(num) ? v : num;
+                }
+                return null;
+              })
+              .filter((v: any) => v !== null && v !== undefined);
+          }
         }
         return data;
       },
     ],
     afterRead: [
-      async ({ doc, req }) => {
+      ({ doc }) => {
         if (!doc.icon) doc.icon = '🔥';
-        // Tự động sao chép dữ liệu từ site-settings cũ nếu global mới chưa có cấu hình
-        if (!doc?.title || !doc?.videos || (Array.isArray(doc.videos) && doc.videos.length === 0)) {
-          try {
-            const siteSettings: any = await req.payload.findGlobal({
-              slug: 'site-settings',
-              depth: 1,
-            });
-            const ws = siteSettings?.warningSection;
-            if (ws) {
-              if (doc.isEnabled === undefined && ws.isEnabled !== undefined) doc.isEnabled = ws.isEnabled;
-              if (!doc.title && ws.title) doc.title = ws.title;
-              if (ws.icon) doc.icon = ws.icon;
-              if ((!doc.videos || doc.videos.length === 0) && ws.videos?.length > 0) {
-                doc.videos = ws.videos;
-              }
-            }
-          } catch (e) {
-            // ignore
-          }
-        }
+        if (!doc.title) doc.title = 'Cảnh báo quan trọng';
+        if (doc.isEnabled === undefined) doc.isEnabled = true;
+        if (!doc.videos) doc.videos = [];
         return doc;
       },
     ],
@@ -99,6 +101,8 @@ export const VideoWarningSettings: GlobalConfig = {
       type: 'relationship',
       relationTo: 'videos',
       hasMany: true,
+      required: false,
+      validate: () => true,
       label: 'Danh sách Video cảnh báo chỉ định',
       admin: {
         description: 'Chọn các video hiển thị trong khung cảnh báo. Nếu để trống, hệ thống sẽ tự động lấy các video được đánh dấu "Video cảnh báo" mới nhất.',

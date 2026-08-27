@@ -1189,6 +1189,8 @@ export const SiteSettings: GlobalConfig = {
               type: 'relationship',
               relationTo: 'videos',
               hasMany: true,
+              required: false,
+              validate: () => true,
               label: 'Danh sách Video cảnh báo',
             }
           ]

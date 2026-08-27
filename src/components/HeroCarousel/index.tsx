@@ -65,8 +65,7 @@ async function getSliderSettings() {
       ? Boolean(videoWarningSettings.isEnabled) 
       : (oldWarning.isEnabled !== false);
     const warningTitle = videoWarningSettings?.title || oldWarning.title || 'Cảnh báo quan trọng';
-    const warningIcon = videoWarningSettings?.icon || oldWarning.icon || '🔥';
-    const warningVideos = (Array.isArray(videoWarningSettings?.videos) && videoWarningSettings.videos.length > 0)
+    const warningVideos = (videoWarningSettings && Array.isArray(videoWarningSettings.videos))
       ? videoWarningSettings.videos
       : (oldWarning.videos || []);
 
