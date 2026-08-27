@@ -1165,6 +1165,7 @@ export const SiteSettings: GlobalConfig = {
                   type: 'select',
                   label: 'Biểu tượng cảnh báo',
                   defaultValue: '🔥',
+                  validate: () => true,
                   options: [
                     { label: '🔥 Lửa (Khẩn cấp)', value: '🔥' },
                     { label: '🚨 Còi báo động (Cấp cứu)', value: '🚨' },

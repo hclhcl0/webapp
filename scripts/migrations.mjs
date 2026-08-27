@@ -4052,6 +4052,10 @@ export const MIGRATION_STATEMENTS = [
           "title" = COALESCE(ss.warning_section_title, vws.title)
         FROM "site_settings" ss
         WHERE vws.id = 1;
+
+        UPDATE "video_warning_settings"
+        SET "icon" = '🔥'
+        WHERE "icon" IS NULL OR "icon" = '' OR "icon" NOT IN ('🔥', '🚨', '⚠️', '📢', '⚡', '🔴', '🛡️', E'\u26A0\uFE0F', E'\u26A1\uFE0F', E'\uD83D\uDEE1\uFE0F');
       END IF;
     EXCEPTION WHEN others THEN null;
     END $$;

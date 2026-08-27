@@ -37,6 +37,7 @@ import { DashboardWelcome as DashboardWelcome_30434ccad63d64d396b6f05b6e9abd5c }
 import { default as default_1aa2999a49364743565bf91f3348acdc } from '@/components/Admin/UserGuideView.tsx'
 import { default as default_11bea0dfd321d7b114d61c03fc2ce164 } from '@/components/Admin/BulkUploadView.tsx'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { HeaderSaveButton as HeaderSaveButton_custom } from '@/components/Admin/HeaderSaveButton.tsx'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
@@ -78,5 +79,6 @@ export const importMap = {
   "@/app/(payload)/admin/components/DashboardWelcome.tsx#DashboardWelcome": DashboardWelcome_30434ccad63d64d396b6f05b6e9abd5c,
   "@/components/Admin/UserGuideView.tsx#default": default_1aa2999a49364743565bf91f3348acdc,
   "@/components/Admin/BulkUploadView.tsx#default": default_11bea0dfd321d7b114d61c03fc2ce164,
-  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
+  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@/components/Admin/HeaderSaveButton.tsx#HeaderSaveButton": HeaderSaveButton_custom
 }

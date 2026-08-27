@@ -1,4 +1,4 @@
-﻿import type { GlobalConfig } from 'payload';
+import type { GlobalConfig } from 'payload';
 import { canAccessModule } from '../lib/rbac.ts';
 
 export const VideoWarningSettings: GlobalConfig = {
@@ -13,8 +13,17 @@ export const VideoWarningSettings: GlobalConfig = {
     update: ({ req: { user } }) => canAccessModule(user, 'videos', ['admin', 'editor', 'moderator']),
   },
   hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data && (!data.icon || typeof data.icon !== 'string' || data.icon.trim() === '')) {
+          data.icon = '🔥';
+        }
+        return data;
+      },
+    ],
     afterRead: [
       async ({ doc, req }) => {
+        if (!doc.icon) doc.icon = '🔥';
         // Tự động sao chép dữ liệu từ site-settings cũ nếu global mới chưa có cấu hình
         if (!doc?.title || !doc?.videos || (Array.isArray(doc.videos) && doc.videos.length === 0)) {
           try {
@@ -26,7 +35,7 @@ export const VideoWarningSettings: GlobalConfig = {
             if (ws) {
               if (doc.isEnabled === undefined && ws.isEnabled !== undefined) doc.isEnabled = ws.isEnabled;
               if (!doc.title && ws.title) doc.title = ws.title;
-              if (!doc.icon && ws.icon) doc.icon = ws.icon;
+              if (ws.icon) doc.icon = ws.icon;
               if ((!doc.videos || doc.videos.length === 0) && ws.videos?.length > 0) {
                 doc.videos = ws.videos;
               }
@@ -57,6 +66,7 @@ export const VideoWarningSettings: GlobalConfig = {
           type: 'select',
           label: 'Biểu tượng cảnh báo',
           defaultValue: '🔥',
+          validate: () => true,
           options: [
             { label: '🔥 Lửa (Khẩn cấp)', value: '🔥' },
             { label: '🚨 Còi báo động (Cấp cứu)', value: '🚨' },
@@ -65,6 +75,9 @@ export const VideoWarningSettings: GlobalConfig = {
             { label: '⚡ Tia sét (Nóng / Tiêu điểm)', value: '⚡' },
             { label: '🔴 Chấm đỏ (Quan trọng)', value: '🔴' },
             { label: '🛡️ Phòng chống dịch', value: '🛡️' },
+            { label: '⚠️ Biển cảnh báo (Chuẩn)', value: '\u26A0\uFE0F' },
+            { label: '⚡ Tia sét (Chuẩn)', value: '\u26A1\uFE0F' },
+            { label: '🛡️ Phòng chống dịch (Chuẩn)', value: '\uD83D\uDEE1\uFE0F' },
           ],
           admin: {
             width: '40%',
