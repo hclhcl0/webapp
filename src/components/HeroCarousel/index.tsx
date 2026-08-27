@@ -31,7 +31,7 @@ async function getBanners() {
 async function getWarningVideos() {
   try {
     const payload = await getPayload({ config: configPromise });
-    const { docs } = await payload.find({
+    let { docs } = await payload.find({
       collection: 'videos',
       where: {
         isWarning: {
@@ -40,8 +40,18 @@ async function getWarningVideos() {
       },
       sort: '-publishedDate',
       limit: 6,
-      depth: 1,
+      depth: 2,
     });
+    // Nếu chưa có video nào được tick là Video cảnh báo, tự động lấy video mới nhất
+    if (!docs || docs.length === 0) {
+      const res = await payload.find({
+        collection: 'videos',
+        sort: '-publishedDate',
+        limit: 6,
+        depth: 2,
+      });
+      docs = res.docs;
+    }
     return docs;
   } catch (error) {
     console.error("Error fetching warning videos:", error);
@@ -55,7 +65,10 @@ async function getSliderSettings() {
     const bannerSettings: any = await payload.findGlobal({ slug: 'banner-settings' }).catch(() => null);
     const heroSlider = bannerSettings?.heroSlider;
 
-    const videoWarningSettings: any = await payload.findGlobal({ slug: 'video-warning-settings' }).catch(() => null);
+    const videoWarningSettings: any = await payload.findGlobal({ 
+      slug: 'video-warning-settings',
+      depth: 2,
+    }).catch(() => null);
 
     const settings = await payload.findGlobal({ slug: 'site-settings' });
     const bannerConfig = (settings as any)?.banner || {};
@@ -65,9 +78,31 @@ async function getSliderSettings() {
       ? Boolean(videoWarningSettings.isEnabled) 
       : (oldWarning.isEnabled !== false);
     const warningTitle = videoWarningSettings?.title || oldWarning.title || 'Cảnh báo quan trọng';
-    const warningVideos = (videoWarningSettings && Array.isArray(videoWarningSettings.videos))
+    const warningIcon = videoWarningSettings?.icon || oldWarning.icon || '🔥';
+
+    // Đảm bảo luôn lấy được đối tượng video đầy đủ (có videoUrl, thumbnail)
+    let warningVideos: any[] = [];
+    const rawVideos = (videoWarningSettings && Array.isArray(videoWarningSettings.videos))
       ? videoWarningSettings.videos
       : (oldWarning.videos || []);
+
+    if (Array.isArray(rawVideos) && rawVideos.length > 0) {
+      const ids = rawVideos
+        .map((v: any) => (typeof v === 'object' && v !== null ? v.id : v))
+        .filter(Boolean);
+
+      if (ids.length > 0) {
+        const { docs } = await payload.find({
+          collection: 'videos',
+          where: {
+            id: { in: ids },
+          },
+          depth: 2,
+          limit: ids.length,
+        });
+        warningVideos = ids.map((id: any) => docs.find((d: any) => String(d.id) === String(id))).filter(Boolean);
+      }
+    }
 
     return {
       size: heroSlider?.heroSliderSize || bannerConfig.heroSliderSize || 'medium',

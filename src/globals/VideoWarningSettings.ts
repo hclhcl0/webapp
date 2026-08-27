@@ -105,6 +105,8 @@ export const VideoWarningSettings: GlobalConfig = {
       validate: () => true,
       label: 'Danh sách Video cảnh báo chỉ định',
       admin: {
+        isSortable: false,
+        allowCreate: false,
         description: 'Chọn các video hiển thị trong khung cảnh báo. Nếu để trống, hệ thống sẽ tự động lấy các video được đánh dấu "Video cảnh báo" mới nhất.',
       },
     },

@@ -1481,3 +1481,22 @@ html[data-theme="dark"] #header-top-save-btn {
   border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
+/* ==========================================
+   REACT-SELECT TAG REMOVE BUTTON FIX
+   ========================================== */
+.multi-value-remove,
+.react-select__multi-value__remove {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 10 !important;
+  position: relative !important;
+  transition: background-color 0.15s ease, transform 0.15s ease !important;
+}
+
+.multi-value-remove:hover,
+.react-select__multi-value__remove:hover {
+  background-color: rgba(239, 68, 68, 0.2) !important;
+  color: #ef4444 !important;
+  transform: scale(1.1) !important;
+}
+
