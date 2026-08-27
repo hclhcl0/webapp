@@ -57,6 +57,13 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
     setCustomDoses(prev => ({ ...prev, [idx]: newVal }));
   };
 
+  // Tính giá theo số liều: Liều 1 tính đủ giá; từ liều thứ 2 trở đi giảm 50.000đ/liều (miễn phí tư vấn)
+  const calcDosePrice = (pricePerDose: number, qty: number) => {
+    if (qty <= 0 || !pricePerDose) return 0;
+    if (qty === 1) return pricePerDose;
+    return pricePerDose + (qty - 1) * Math.max(0, pricePerDose - 50000);
+  };
+
   const getDynamicPrice = () => {
     if (!selected) return 0;
     let total = selected.discountPrice;
@@ -65,9 +72,15 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
       const originalQty = maxDoses != null ? Math.min(item.doses || 1, maxDoses) : (item.doses || 1);
       const currentQty = customDoses[idx] !== undefined ? customDoses[idx] : originalQty;
       const alt = selectedAlternatives[idx];
-      total -= originalQty * (item.vaccine?.price || 0);
-      const newPrice = alt ? alt.price : (item.vaccine?.price || 0);
-      total += currentQty * newPrice;
+
+      const basePrice = item.vaccine?.price || 0;
+      const newPrice = alt ? alt.price : basePrice;
+
+      const originalCost = calcDosePrice(basePrice, originalQty);
+      const currentCost = calcDosePrice(newPrice, currentQty);
+
+      total -= originalCost;
+      total += currentCost;
     });
     return Math.max(0, total);
   };
@@ -297,8 +310,21 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
                         const originalQty = maxDoses != null ? Math.min(item.doses || 1, maxDoses) : (item.doses || 1);
                         const currentQty = customDoses[idx] !== undefined ? customDoses[idx] : originalQty;
 
-                        return displayPrice ? (
-                          <p className="text-[14px] font-medium text-gray-800">{formatPrice(displayPrice * currentQty)}</p>
+                        return displayPrice && currentQty > 0 ? (
+                          <div className="flex flex-col items-end">
+                            <p className="text-[14px] font-bold text-gray-800">
+                              {formatPrice(calcDosePrice(displayPrice, currentQty))}
+                            </p>
+                            {currentQty >= 2 ? (
+                              <span className="text-[10px] text-emerald-600 font-semibold inline-flex items-center gap-0.5 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60 mt-0.5" title="Mỗi liều từ liều thứ 2 được giảm 50.000đ do miễn phí khám & tư vấn">
+                                -{formatPrice((currentQty - 1) * 50000)} (liều 2+ miễn phí tư vấn)
+                              </span>
+                            ) : (
+                              <span className="text-[10px] text-gray-400">
+                                {formatPrice(displayPrice)}/liều
+                              </span>
+                            )}
+                          </div>
                         ) : (
                           <p className="text-sm text-gray-400">—</p>
                         );
@@ -342,7 +368,13 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
 
               {/* Note */}
               {compact ? (
-                <div className="mt-4">
+                <div className="mt-4 flex flex-col gap-2">
+                  <div className="flex items-center gap-2 p-2.5 bg-emerald-50 border border-emerald-200/80 rounded-xl text-emerald-800 text-[12px] shadow-sm">
+                    <span className="text-base flex-shrink-0">🎁</span>
+                    <p className="leading-snug">
+                      <strong>Lưu ý:</strong> Khi tiêm từ <strong>liều thứ 2</strong> sẽ được <strong>-50.000đ/liều</strong> (Miễn phí khám &amp; tư vấn).
+                    </p>
+                  </div>
                   <a
                     href="/goi-vac-xin"
                     className="inline-flex items-center gap-1.5 text-[13px] text-[#00a4ff] font-semibold hover:underline underline-offset-4"
@@ -352,11 +384,17 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
                   </a>
                 </div>
               ) : (
-                <div className="mt-6 space-y-2">
-                  <div className="flex items-start gap-2">
-                    <span className="text-[14px] mt-0.5 flex-shrink-0">💡</span>
-                    <p className="text-[13px] text-gray-600 leading-relaxed">
-                      Quý khách có thể bỏ chọn các Liều đã tiêm để tùy chỉnh gói tiêm phù hợp với nhu cầu.
+                <div className="mt-5 space-y-2.5">
+                  <div className="flex items-center gap-2.5 p-3 bg-gradient-to-r from-emerald-50 to-teal-50/40 border border-emerald-200 rounded-xl text-emerald-800 text-[13px] shadow-sm">
+                    <span className="text-lg flex-shrink-0">🎁</span>
+                    <p className="leading-snug">
+                      <strong>Lưu ý ưu đãi gói:</strong> Đối với các vắc xin tiêm từ <strong>liều thứ 2</strong> trở đi sẽ được <strong>-50.000đ/liều</strong> (Miễn phí khám &amp; tư vấn).
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2 text-gray-500 text-[12px] px-1">
+                    <span className="mt-0.5 flex-shrink-0">💡</span>
+                    <p className="leading-relaxed">
+                      Quý khách có thể bấm tăng/giảm số liều hoặc bỏ chọn các liều đã tiêm để hệ thống tự động tính lại chi phí phù hợp nhất.
                     </p>
                   </div>
                 </div>

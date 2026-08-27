@@ -169,7 +169,7 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
       </div>
 
       {/* ── GLOBAL TABS ── */}
-      <div className="container mx-auto px-4 max-w-7xl mb-6 flex justify-center">
+      <div className="container mx-auto px-4 max-w-7xl mb-4 flex justify-center">
         <div className="flex gap-1 w-full sm:w-fit bg-white p-1 rounded-full shadow-sm border border-gray-100">
           <button
             onClick={() => setActiveTab('disease')}
@@ -183,6 +183,21 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
           >
             Gói vắc xin
           </button>
+        </div>
+      </div>
+
+      {/* ── Policy Banner ── */}
+      <div className="container mx-auto px-4 max-w-7xl mb-4">
+        <div className="flex items-center justify-between gap-3 bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 border border-emerald-200/80 rounded-2xl px-4 py-2.5 shadow-sm">
+          <div className="flex items-center gap-2.5 text-[13px] text-emerald-900">
+            <span className="text-base">🎁</span>
+            <span>
+              <strong>Chính sách ưu đãi tiêm chủng:</strong> Đối với các loại vắc xin tiêm từ <strong>liều thứ 2</strong> trở đi sẽ được <strong>-50.000đ/liều</strong> (Miễn phí khám &amp; tư vấn).
+            </span>
+          </div>
+          <span className="hidden md:inline-flex text-[11px] font-bold text-emerald-700 bg-emerald-100/70 border border-emerald-300/60 px-2.5 py-0.5 rounded-full whitespace-nowrap">
+            Áp dụng toàn hệ thống
+          </span>
         </div>
       </div>
 
@@ -306,8 +321,9 @@ export function VaccineMainUI({ packages, vaccines, banners, phoneNumber }: Prop
                         {/* Footer: Price and Button */}
                         <div className="flex items-end justify-between mt-auto pt-2.5 border-t border-gray-100">
                            <div className="flex flex-col">
-                             <span className="text-[9px] text-gray-400 uppercase tracking-wider mb-0.5">Giá bán</span>
+                             <span className="text-[9px] text-gray-400 uppercase tracking-wider mb-0.5">Giá mũi 1</span>
                              <span className="text-[14px] font-bold text-[#e02b2b] leading-none">{v.price.toLocaleString('vi-VN')}đ</span>
+                             <span className="text-[10px] text-emerald-600 font-semibold mt-0.5">Mũi 2+: -50.000đ</span>
                            </div>
                            <button className="bg-white border border-[#007a8c] text-[#007a8c] font-bold py-1 px-3 rounded transition-colors text-[11px] flex items-center justify-center gap-0.5 group-hover:bg-[#007a8c] group-hover:text-white shadow-sm">
                              Đăng ký <ChevronRight size={12} />

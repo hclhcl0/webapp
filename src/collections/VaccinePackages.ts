@@ -11,7 +11,7 @@ export const VaccinePackages: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'targetGroup', 'packageType', 'discountPrice', 'isActive'],
     group: 'Dịch vụ Y tế & Tiêm chủng',
-    description: 'Quản lý các gói combo vắc xin. Đường dẫn trang hiển thị trên web: /goi-vac-xin',
+    description: 'Quản lý các gói combo vắc xin. Lưu ý: Tiêm từ liều thứ 2 trở đi sẽ được giảm 50.000đ/liều (miễn phí khám & tư vấn). Đường dẫn web: /goi-vac-xin',
   },
   access: {
     read: () => true,
