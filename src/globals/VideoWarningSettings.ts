@@ -45,6 +45,7 @@ export const VideoWarningSettings: GlobalConfig = {
         if (!doc.icon) doc.icon = '🔥';
         if (!doc.title) doc.title = 'Cảnh báo quan trọng';
         if (doc.isEnabled === undefined) doc.isEnabled = true;
+        if (!doc.videoSource) doc.videoSource = 'manual';
         if (!doc.videos) doc.videos = [];
         return doc;
       },
@@ -97,6 +98,19 @@ export const VideoWarningSettings: GlobalConfig = {
       ],
     },
     {
+      name: 'videoSource',
+      type: 'radio',
+      label: 'Cách thức lấy Video cảnh báo',
+      defaultValue: 'manual',
+      options: [
+        { label: 'Chỉ hiển thị các video chọn trong danh sách dưới (Nếu xóa hết hoặc để trống: KHÔNG hiển thị video)', value: 'manual' },
+        { label: 'Tự động lấy các video được đánh dấu "Video cảnh báo" mới nhất', value: 'auto_warning' },
+      ],
+      admin: {
+        description: 'Mặc định: Chỉ hiển thị các video bạn chọn bên dưới. Khi xóa hết video thì website sẽ ẩn video cảnh báo.',
+      },
+    },
+    {
       name: 'videos',
       type: 'relationship',
       relationTo: 'videos',
@@ -107,7 +121,8 @@ export const VideoWarningSettings: GlobalConfig = {
       admin: {
         isSortable: false,
         allowCreate: false,
-        description: 'Chọn các video hiển thị trong khung cảnh báo. Nếu để trống, hệ thống sẽ tự động lấy các video được đánh dấu "Video cảnh báo" mới nhất.',
+        condition: (data) => data?.videoSource !== 'auto_warning',
+        description: 'Chọn các video hiển thị trong khung cảnh báo. Nếu xóa hết danh sách này, website sẽ không hiển thị video.',
       },
     },
   ],

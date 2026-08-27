@@ -31,7 +31,7 @@ async function getBanners() {
 async function getWarningVideos() {
   try {
     const payload = await getPayload({ config: configPromise });
-    let { docs } = await payload.find({
+    const { docs } = await payload.find({
       collection: 'videos',
       where: {
         isWarning: {
@@ -42,17 +42,7 @@ async function getWarningVideos() {
       limit: 6,
       depth: 2,
     });
-    // Nếu chưa có video nào được tick là Video cảnh báo, tự động lấy video mới nhất
-    if (!docs || docs.length === 0) {
-      const res = await payload.find({
-        collection: 'videos',
-        sort: '-publishedDate',
-        limit: 6,
-        depth: 2,
-      });
-      docs = res.docs;
-    }
-    return docs;
+    return docs || [];
   } catch (error) {
     console.error("Error fetching warning videos:", error);
     return [];
@@ -79,28 +69,42 @@ async function getSliderSettings() {
       : (oldWarning.isEnabled !== false);
     const warningTitle = videoWarningSettings?.title || oldWarning.title || 'Cảnh báo quan trọng';
     const warningIcon = videoWarningSettings?.icon || oldWarning.icon || '🔥';
+    const videoSource = videoWarningSettings?.videoSource || 'manual';
 
-    // Đảm bảo luôn lấy được đối tượng video đầy đủ (có videoUrl, thumbnail)
+    // Xử lý danh sách video:
     let warningVideos: any[] = [];
-    const rawVideos = (videoWarningSettings && Array.isArray(videoWarningSettings.videos))
-      ? videoWarningSettings.videos
-      : (oldWarning.videos || []);
 
-    if (Array.isArray(rawVideos) && rawVideos.length > 0) {
-      const ids = rawVideos
-        .map((v: any) => (typeof v === 'object' && v !== null ? v.id : v))
-        .filter(Boolean);
+    if (videoWarningSettings) {
+      if (videoSource === 'auto_warning') {
+        // Chế độ tự động: lấy các video được tick "Video cảnh báo"
+        warningVideos = await getWarningVideos();
+      } else {
+        // Chế độ chỉ định: lấy đúng các video người dùng đã chọn
+        const rawVideos = videoWarningSettings.videos;
+        if (Array.isArray(rawVideos) && rawVideos.length > 0) {
+          const ids = rawVideos
+            .map((v: any) => (typeof v === 'object' && v !== null ? v.id : v))
+            .filter(Boolean);
 
-      if (ids.length > 0) {
-        const { docs } = await payload.find({
-          collection: 'videos',
-          where: {
-            id: { in: ids },
-          },
-          depth: 2,
-          limit: ids.length,
-        });
-        warningVideos = ids.map((id: any) => docs.find((d: any) => String(d.id) === String(id))).filter(Boolean);
+          if (ids.length > 0) {
+            const { docs } = await payload.find({
+              collection: 'videos',
+              where: {
+                id: { in: ids },
+              },
+              depth: 2,
+              limit: ids.length,
+            });
+            warningVideos = ids.map((id: any) => docs.find((d: any) => String(d.id) === String(id))).filter(Boolean);
+          }
+        }
+        // Nếu người dùng đã xóa hết video trong danh sách chỉ định: warningVideos vẫn là [] (KHÔNG hiển thị video)
+      }
+    } else {
+      // Fallback nếu chưa có video-warning-settings
+      const oldVideos = oldWarning.videos || [];
+      if (Array.isArray(oldVideos) && oldVideos.length > 0) {
+        warningVideos = oldVideos;
       }
     }
 
@@ -134,11 +138,7 @@ export const HeroCarousel = async () => {
   const banners = await getBanners();
   const settings = await getSliderSettings();
 
-  // Lấy danh sách video: ưu tiên từ CMS settings, fallback auto-fetch
-  let warningVideos = settings.warningVideos;
-  if (!warningVideos || warningVideos.length === 0) {
-    warningVideos = await getWarningVideos();
-  }
+  const warningVideos = settings.warningVideos;
   const showWarning = settings.warningEnabled && warningVideos && warningVideos.length > 0;
 
   if (!banners || banners.length === 0) {

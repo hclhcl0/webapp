@@ -4016,6 +4016,7 @@ export const MIGRATION_STATEMENTS = [
     ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "is_enabled" boolean DEFAULT true;
     ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "icon" varchar DEFAULT '🔥';
     ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "title" varchar DEFAULT 'Cảnh báo quan trọng';
+    ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "video_source" varchar DEFAULT 'manual';
     ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "updated_at" timestamp(3) with time zone DEFAULT now();
     ALTER TABLE "video_warning_settings" ADD COLUMN IF NOT EXISTS "created_at" timestamp(3) with time zone DEFAULT now();
 
