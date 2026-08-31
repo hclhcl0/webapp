@@ -9,7 +9,9 @@ export const DocumentSigners: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    hidden: true,
+    defaultColumns: ['name', 'position', 'updatedAt'],
+    group: 'Thông tin Đơn vị & Pháp quy',
+    description: 'Quản lý danh sách người ký duyệt các văn bản điều hành, thông báo.',
   },
   access: {
     read: () => true,
@@ -28,6 +30,9 @@ export const DocumentSigners: CollectionConfig = {
       name: 'position',
       type: 'text',
       label: 'Chức vụ',
+      admin: {
+        placeholder: 'VD: Giám đốc, Phó Giám đốc, Trưởng phòng...',
+      },
     },
   ],
 };

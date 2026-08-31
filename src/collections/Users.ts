@@ -232,7 +232,7 @@ export const Users: CollectionConfig = {
         { label: '📝 [Dịch vụ Y tế] Khách hàng đăng ký tiêm / Liên hệ', value: 'form-submissions' },
 
         // ── 🏛️ Thông tin Đơn vị & Pháp quy ──
-        { label: '📄 [Pháp quy] Văn bản & Tài liệu chỉ đạo', value: 'documents' },
+        { label: '📄 [Pháp quy] Văn bản & Người ký văn bản', value: 'documents' },
         { label: '🏗️ [Pháp quy] Mua sắm & Đấu thầu công', value: 'procurements' },
         { label: '📑 [Đơn vị] Các trang nội dung tĩnh (Giới thiệu...)', value: 'pages' },
         { label: '🏛️ [Đơn vị] Cơ cấu tổ chức / Ban lãnh đạo', value: 'org-units' },
