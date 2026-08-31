@@ -30,14 +30,14 @@ export const Users: CollectionConfig = {
     plural: 'Danh sách tài khoản',
   },
   admin: {
-    useAsTitle: 'email',
+    useAsTitle: 'username',
     group: 'Quản trị hệ thống',
     // Admin: xem toàn bộ menu. Editor: cũng thấy menu để tạo/quản lý CTV
     hidden: ({ user }: any) => {
       const role = getRole(user);
       return role !== 'admin' && role !== 'editor';
     },
-    defaultColumns: ['email', 'name', 'role', 'department', 'createdAt'],
+    defaultColumns: ['username', 'name', 'role', 'department', 'createdAt'],
     components: {
       beforeList: [
         '@/components/Admin/UserPermissionsNote.tsx#UserPermissionsNote',
@@ -45,6 +45,10 @@ export const Users: CollectionConfig = {
     },
   },
   auth: {
+    loginWithUsername: {
+      allowEmailLogin: true,
+      requireEmail: false,
+    },
     maxLoginAttempts: 10000,
     cookies: {
       secure: process.env.NODE_ENV === 'production',

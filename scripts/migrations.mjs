@@ -4189,5 +4189,13 @@ export const MIGRATION_STATEMENTS = [
       END IF;
     EXCEPTION WHEN others THEN null;
     END $$;
+  `,
+
+  // ==================================================
+  // BATCH: Add username column to users table
+  // ==================================================
+  `
+    ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "username" varchar;
+    CREATE UNIQUE INDEX IF NOT EXISTS "users_username_idx" ON "users" USING btree ("username");
   `
 ];

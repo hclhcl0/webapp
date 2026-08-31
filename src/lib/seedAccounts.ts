@@ -244,14 +244,19 @@ export const seedAccounts = async (payload: Payload) => {
     }
   }
 
-  // 3. Khởi tạo đúng duy nhất 16 tài khoản khoa phòng (mật khẩu: 118ldl)
+  // 3. Khởi tạo đúng duy nhất 16 tài khoản khoa phòng (mật khẩu: 118ldl, username 6 ký tự)
   for (const item of DEPARTMENT_ACCOUNTS) {
     const deptId = departmentMap.get(item.deptCode);
 
     try {
       const existing = await payload.find({
         collection: 'users',
-        where: { email: { equals: item.email } },
+        where: {
+          or: [
+            { username: { equals: item.code } },
+            { email: { equals: item.email } },
+          ],
+        },
         limit: 1,
       });
 
@@ -259,6 +264,7 @@ export const seedAccounts = async (payload: Payload) => {
         await payload.create({
           collection: 'users',
           data: {
+            username: item.code,
             email: item.email,
             password: '118ldl',
             name: item.name,
@@ -266,22 +272,24 @@ export const seedAccounts = async (payload: Payload) => {
             department: deptId || undefined,
           },
         });
-        payload.logger.info(`[Seed] Created department user: ${item.email}`);
+        payload.logger.info(`[Seed] Created department user: ${item.code} (${item.email})`);
       } else {
         const userDoc = existing.docs[0];
         await payload.update({
           collection: 'users',
           id: userDoc.id,
           data: {
+            username: item.code,
+            email: item.email,
             password: '118ldl',
             name: item.name,
             department: deptId || userDoc.department,
           },
         });
-        payload.logger.info(`[Seed] Updated department user: ${item.email}`);
+        payload.logger.info(`[Seed] Updated department user: ${item.code} (${item.email})`);
       }
     } catch (error: any) {
-      payload.logger.error(`[Seed] Error seeding ${item.email}: ${error.message}`);
+      payload.logger.error(`[Seed] Error seeding ${item.code}: ${error.message}`);
     }
   }
 };
