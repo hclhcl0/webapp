@@ -3,7 +3,6 @@ import type { Payload } from 'payload';
 
 export interface DeptAccountDef {
   code: string;
-  altCode?: string;
   email: string;
   name: string;
   deptName: string;
@@ -15,9 +14,8 @@ export interface DeptAccountDef {
 
 export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
   {
-    code: 'ptchcd',
-    altCode: 'kptchc',
-    email: 'ptchcd@cdcdanang.vn',
+    code: 'tchcdn',
+    email: 'tchcdn@cdcdanang.vn',
     name: 'Phòng Tổ chức - Hành chính',
     deptName: 'Phòng Tổ chức - Hành chính',
     deptCode: 'P-TCHC',
@@ -26,9 +24,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'pkhnvd',
-    altCode: 'kpkhnv',
-    email: 'pkhnvd@cdcdanang.vn',
+    code: 'khnvdn',
+    email: 'khnvdn@cdcdanang.vn',
     name: 'Phòng Kế hoạch - Nghiệp vụ',
     deptName: 'Phòng Kế hoạch - Nghiệp vụ',
     deptCode: 'P-KHNV',
@@ -37,9 +34,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'ptcktd',
-    altCode: 'kptckt',
-    email: 'ptcktd@cdcdanang.vn',
+    code: 'tcktdn',
+    email: 'tcktdn@cdcdanang.vn',
     name: 'Phòng Tài chính - Kế toán',
     deptName: 'Phòng Tài chính - Kế toán',
     deptCode: 'P-TCKT',
@@ -48,9 +44,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kpcbtn',
-    altCode: 'kpcbtn',
-    email: 'kpcbtn@cdcdanang.vn',
+    code: 'pcbtnd',
+    email: 'pcbtnd@cdcdanang.vn',
     name: 'Khoa Phòng chống bệnh truyền nhiễm',
     deptName: 'Khoa Phòng chống bệnh truyền nhiễm',
     deptCode: 'K-PCBTN',
@@ -59,9 +54,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kpchiv',
-    altCode: 'kphiva',
-    email: 'kpchiv@cdcdanang.vn',
+    code: 'pchivd',
+    email: 'pchivd@cdcdanang.vn',
     name: 'Khoa phòng chống HIV/AIDS',
     deptName: 'Khoa phòng chống HIV/AIDS',
     deptCode: 'K-HIV',
@@ -70,9 +64,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kpbkln',
-    altCode: 'kpcbln',
-    email: 'kpbkln@cdcdanang.vn',
+    code: 'pcbkln',
+    email: 'pcbkln@cdcdanang.vn',
     name: 'Khoa phòng, chống bệnh không lây nhiễm',
     deptName: 'Khoa phòng, chống bệnh không lây nhiễm',
     deptCode: 'K-BKLN',
@@ -81,9 +74,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kdinhd',
-    altCode: 'kpdduo',
-    email: 'kdinhd@cdcdanang.vn',
+    code: 'dduong',
+    email: 'dduong@cdcdanang.vn',
     name: 'Khoa Dinh dưỡng',
     deptName: 'Khoa Dinh dưỡng',
     deptCode: 'K-DD',
@@ -92,9 +84,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kskmty',
-    altCode: 'kpskmt',
-    email: 'kskmty@cdcdanang.vn',
+    code: 'skmtyt',
+    email: 'skmtyt@cdcdanang.vn',
     name: 'Khoa Sức khỏe môi trường - Y tế trường học',
     deptName: 'Khoa Sức khỏe môi trường - Y tế trường học',
     deptCode: 'K-SKMT',
@@ -103,9 +94,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kbnghn',
-    altCode: 'kpbngn',
-    email: 'kbnghn@cdcdanang.vn',
+    code: 'bnghen',
+    email: 'bnghen@cdcdanang.vn',
     name: 'Khoa Bệnh nghề nghiệp',
     deptName: 'Khoa Bệnh nghề nghiệp',
     deptCode: 'K-BNN',
@@ -114,9 +104,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kcssks',
-    altCode: 'kpskss',
-    email: 'kcssks@cdcdanang.vn',
+    code: 'csskss',
+    email: 'csskss@cdcdanang.vn',
     name: 'Khoa chăm sóc sức khỏe sinh sản',
     deptName: 'Khoa chăm sóc sức khỏe sinh sản',
     deptCode: 'K-SKSS',
@@ -125,9 +114,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kttgds',
-    altCode: 'kpttgd',
-    email: 'kttgds@cdcdanang.vn',
+    code: 'ttgdsk',
+    email: 'ttgdsk@cdcdanang.vn',
     name: 'Khoa Truyền thông, giáo dục sức khỏe',
     deptName: 'Khoa Truyền thông, giáo dục sức khỏe',
     deptCode: 'K-TTGDSK',
@@ -136,9 +124,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kkstct',
-    altCode: 'kpkstc',
-    email: 'kkstct@cdcdanang.vn',
+    code: 'kstctd',
+    email: 'kstctd@cdcdanang.vn',
     name: 'Khoa Ký sinh trùng - Côn trùng',
     deptName: 'Khoa Ký sinh trùng - Côn trùng',
     deptCode: 'K-KST',
@@ -147,9 +134,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kkdytq',
-    altCode: 'kpkdyt',
-    email: 'kkdytq@cdcdanang.vn',
+    code: 'kdytqt',
+    email: 'kdytqt@cdcdanang.vn',
     name: 'Khoa Kiểm dịch Y tế quốc tế',
     deptName: 'Khoa Kiểm dịch Y tế quốc tế',
     deptCode: 'K-KDYT',
@@ -158,9 +144,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kdvtyt',
-    altCode: 'kpdvty',
-    email: 'kdvtyt@cdcdanang.vn',
+    code: 'dvtytd',
+    email: 'dvtytd@cdcdanang.vn',
     name: 'Khoa Dược - Vật tư Y tế',
     deptName: 'Khoa Dược - Vật tư Y tế',
     deptCode: 'K-DVTYT',
@@ -169,9 +154,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'kxncdh',
-    altCode: 'kpxncd',
-    email: 'kxncdh@cdcdanang.vn',
+    code: 'xncdha',
+    email: 'xncdha@cdcdanang.vn',
     name: 'Khoa Xét nghiệm - CĐHA - TDCN',
     deptName: 'Khoa Xét nghiệm - CĐHA - TDCN',
     deptCode: 'K-XN',
@@ -180,9 +164,8 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     role: 'author',
   },
   {
-    code: 'pkdkdn',
-    altCode: 'kppkdk',
-    email: 'pkdkdn@cdcdanang.vn',
+    code: 'khamdk',
+    email: 'khamdk@cdcdanang.vn',
     name: 'Phòng khám đa khoa',
     deptName: 'Phòng khám đa khoa',
     deptCode: 'P-PKDK',
@@ -190,6 +173,18 @@ export const DEPARTMENT_ACCOUNTS: DeptAccountDef[] = [
     order: 17,
     role: 'author',
   },
+];
+
+// Danh sách các email cũ cần dọn dẹp (nếu có)
+const OLD_EMAILS_TO_CLEANUP = [
+  'kptchc@cdcdanang.vn', 'ptchcd@cdcdanang.vn', 'kpkhnv@cdcdanang.vn', 'pkhnvd@cdcdanang.vn',
+  'kptckt@cdcdanang.vn', 'ptcktd@cdcdanang.vn', 'kpcbtn@cdcdanang.vn', 'kphiva@cdcdanang.vn',
+  'kpchiv@cdcdanang.vn', 'kpbkln@cdcdanang.vn', 'kpcbln@cdcdanang.vn', 'kpdduo@cdcdanang.vn',
+  'kdinhd@cdcdanang.vn', 'kpskmt@cdcdanang.vn', 'kskmty@cdcdanang.vn', 'kpbngn@cdcdanang.vn',
+  'kbnghn@cdcdanang.vn', 'kpskss@cdcdanang.vn', 'kcssks@cdcdanang.vn', 'kpttgd@cdcdanang.vn',
+  'kttgds@cdcdanang.vn', 'kpkstc@cdcdanang.vn', 'kkstct@cdcdanang.vn', 'kpkdyt@cdcdanang.vn',
+  'kkdytq@cdcdanang.vn', 'kpdvty@cdcdanang.vn', 'kdvtyt@cdcdanang.vn', 'kpxncd@cdcdanang.vn',
+  'kxncdh@cdcdanang.vn', 'kppkdk@cdcdanang.vn', 'pkdkdn@cdcdanang.vn',
 ];
 
 export const seedAccounts = async (payload: Payload) => {
@@ -226,50 +221,67 @@ export const seedAccounts = async (payload: Payload) => {
     }
   }
 
-  // 2. Khởi tạo 16 tài khoản khoa phòng với mật khẩu 118ldl
-  for (const item of DEPARTMENT_ACCOUNTS) {
-    const deptId = departmentMap.get(item.deptCode);
-    const emailsToEnsure = [item.email];
-    if (item.altCode && item.altCode !== item.code) {
-      emailsToEnsure.push(`${item.altCode}@cdcdanang.vn`);
-    }
-
-    for (const email of emailsToEnsure) {
+  // 2. Dọn dẹp các email cũ không nằm trong danh sách 16 tài khoản chuẩn
+  const validEmails = new Set(DEPARTMENT_ACCOUNTS.map(a => a.email));
+  for (const oldEmail of OLD_EMAILS_TO_CLEANUP) {
+    if (!validEmails.has(oldEmail)) {
       try {
-        const existing = await payload.find({
+        const oldUser = await payload.find({
           collection: 'users',
-          where: { email: { equals: email } },
+          where: { email: { equals: oldEmail } },
           limit: 1,
         });
-
-        if (existing.totalDocs === 0) {
-          await payload.create({
+        if (oldUser.totalDocs > 0) {
+          await payload.delete({
             collection: 'users',
-            data: {
-              email: email,
-              password: '118ldl',
-              name: item.name,
-              role: item.role || 'author',
-              department: deptId || undefined,
-            },
+            id: oldUser.docs[0].id,
           });
-          payload.logger.info(`[Seed] Created department user: ${email}`);
-        } else {
-          // Cập nhật mật khẩu và phòng ban nếu cần
-          const userDoc = existing.docs[0];
-          await payload.update({
-            collection: 'users',
-            id: userDoc.id,
-            data: {
-              password: '118ldl',
-              department: deptId || userDoc.department,
-            },
-          });
-          payload.logger.info(`[Seed] Updated department user password & dept: ${email}`);
+          payload.logger.info(`[Seed] Removed redundant account: ${oldEmail}`);
         }
-      } catch (error: any) {
-        payload.logger.error(`[Seed] Error seeding ${email}: ${error.message}`);
+      } catch (e: any) {
+        // ignore
       }
+    }
+  }
+
+  // 3. Khởi tạo đúng duy nhất 16 tài khoản khoa phòng (mật khẩu: 118ldl)
+  for (const item of DEPARTMENT_ACCOUNTS) {
+    const deptId = departmentMap.get(item.deptCode);
+
+    try {
+      const existing = await payload.find({
+        collection: 'users',
+        where: { email: { equals: item.email } },
+        limit: 1,
+      });
+
+      if (existing.totalDocs === 0) {
+        await payload.create({
+          collection: 'users',
+          data: {
+            email: item.email,
+            password: '118ldl',
+            name: item.name,
+            role: item.role || 'author',
+            department: deptId || undefined,
+          },
+        });
+        payload.logger.info(`[Seed] Created department user: ${item.email}`);
+      } else {
+        const userDoc = existing.docs[0];
+        await payload.update({
+          collection: 'users',
+          id: userDoc.id,
+          data: {
+            password: '118ldl',
+            name: item.name,
+            department: deptId || userDoc.department,
+          },
+        });
+        payload.logger.info(`[Seed] Updated department user: ${item.email}`);
+      }
+    } catch (error: any) {
+      payload.logger.error(`[Seed] Error seeding ${item.email}: ${error.message}`);
     }
   }
 };

@@ -12,12 +12,11 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       message: 'Đã khởi tạo thành công 16 tài khoản các khoa phòng!',
-      accounts: DEPARTMENT_ACCOUNTS.map(a => ({
+      accounts: DEPARTMENT_ACCOUNTS.map((a, idx) => ({
+        stt: idx + 1,
         name: a.name,
         code: a.code,
-        altCode: a.altCode,
         email: a.email,
-        altEmail: a.altCode && a.altCode !== a.code ? `${a.altCode}@cdcdanang.vn` : undefined,
         password: '118ldl',
         role: a.role,
         deptCode: a.deptCode,
