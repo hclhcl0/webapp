@@ -23,7 +23,9 @@ export const VideoWarningSettings: GlobalConfig = {
             data.title = 'Cảnh báo quan trọng';
           }
           // Chuẩn hóa mảng videos: trích xuất ID nếu là object, chuyển sang number hợp lệ
-          if (Array.isArray(data.videos)) {
+          if (data.videos === null || data.videos === undefined) {
+            data.videos = [];
+          } else if (Array.isArray(data.videos)) {
             data.videos = data.videos
               .map((v: any) => {
                 if (typeof v === 'object' && v !== null && v.id) return v.id;
@@ -69,7 +71,7 @@ export const VideoWarningSettings: GlobalConfig = {
           type: 'select',
           label: 'Biểu tượng cảnh báo',
           defaultValue: '🔥',
-          validate: () => true,
+          validate: () => true as const,
           options: [
             { label: '🔥 Lửa (Khẩn cấp)', value: '🔥' },
             { label: '🚨 Còi báo động (Cấp cứu)', value: '🚨' },
@@ -116,7 +118,7 @@ export const VideoWarningSettings: GlobalConfig = {
       relationTo: 'videos',
       hasMany: true,
       required: false,
-      validate: () => true,
+      validate: () => true as const,
       label: 'Danh sách Video cảnh báo chỉ định',
       admin: {
         isSortable: false,

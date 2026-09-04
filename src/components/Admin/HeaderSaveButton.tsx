@@ -44,25 +44,6 @@ export const HeaderSaveButton: React.FC = () => {
     return () => clearTimeout(timer);
   }, [pathname]);
 
-  // Ngăn chặn sự kiện click trên nút "x" (xóa tag) của react-select bị nổi bọt gây mở dropdown và tự chọn lại video
-  useEffect(() => {
-    const handleCaptureClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (!target) return;
-      const removeBtn = target.closest(
-        '.multi-value-remove, .react-select__multi-value__remove, [class*="multi-value-remove"]'
-      );
-      if (removeBtn) {
-        e.stopPropagation();
-      }
-    };
-
-    window.addEventListener('click', handleCaptureClick, true); // capture phase
-    return () => {
-      window.removeEventListener('click', handleCaptureClick, true);
-    };
-  }, []);
-
   const handleSave = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();

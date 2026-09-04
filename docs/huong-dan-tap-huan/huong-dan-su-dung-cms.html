@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hướng Dẫn Sử Dụng CMS – CDC Đà Nẵng</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13pt; color: #1a1a2e; background: #f5f7fa; line-height: 1.7; }
+    @media print {
+      body { background: #fff; font-size: 11pt; }
+      .no-print { display: none !important; }
+      .page-break { page-break-before: always; }
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+    .cover { background: linear-gradient(135deg, #005baa 0%, #0083ca 50%, #00a8e8 100%); color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 40px; }
+    .cover h1 { font-size: 28pt; font-weight: 800; margin-bottom: 12px; }
+    .cover h2 { font-size: 17pt; font-weight: 400; opacity: 0.9; margin-bottom: 8px; }
+    .cover .subtitle { font-size: 13pt; opacity: 0.8; max-width: 600px; margin: 20px auto 0; }
+    .cover .meta-box { margin-top: 48px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 12px; padding: 20px 40px; display: inline-flex; gap: 60px; flex-wrap: wrap; justify-content: center; }
+    .cover .meta-item label { font-size: 10pt; opacity: 0.7; display: block; margin-bottom: 4px; }
+    .cover .meta-item span { font-size: 13pt; font-weight: 600; }
+    .page-section { margin-top: 48px; }
+    .section-header { display: flex; align-items: center; gap: 14px; background: #005baa; color: white; border-radius: 10px 10px 0 0; padding: 14px 22px; }
+    .section-header h2 { font-size: 14pt; font-weight: 700; }
+    .section-body { background: white; border: 1px solid #d6e4f0; border-top: none; border-radius: 0 0 10px 10px; padding: 28px 30px; }
+    .step { display: flex; gap: 18px; margin-bottom: 30px; align-items: flex-start; }
+    .step-num { flex-shrink: 0; width: 38px; height: 38px; background: #005baa; color: white; border-radius: 50%; font-size: 15pt; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .step-content h3 { font-size: 13pt; font-weight: 700; color: #005baa; margin-bottom: 6px; }
+    .step-content p { margin-bottom: 6px; color: #333; }
+    .img-placeholder { background: #f0f6ff; border: 2px dashed #90b8e8; border-radius: 10px; padding: 30px 20px; text-align: center; color: #5a89c0; margin: 14px 0; font-size: 11pt; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+    .img-placeholder .ph-icon { font-size: 36px; }
+    .img-placeholder em { color: #3a70b0; font-style: normal; font-weight: 600; }
+    .img-placeholder .ph-note { font-size: 9.5pt; color: #7aa0cc; }
+    .account-table { width: 100%; border-collapse: collapse; font-size: 10.5pt; margin-top: 12px; }
+    .account-table thead tr { background: #005baa; color: white; }
+    .account-table th { padding: 10px 12px; text-align: left; font-weight: 600; }
+    .account-table td { padding: 9px 12px; border-bottom: 1px solid #e5edf7; }
+    .account-table tbody tr:nth-child(even) { background: #f4f8fd; }
+    .code { font-family: 'Courier New', monospace; font-weight: 700; color: #0060c0; font-size: 11pt; }
+    .pw { font-family: 'Courier New', monospace; color: #c0392b; font-weight: 700; }
+    .note { display: flex; gap: 12px; border-radius: 8px; padding: 14px 18px; margin: 14px 0; font-size: 11.5pt; }
+    .note.info { background: #e8f4fd; border-left: 4px solid #2196f3; }
+    .note.warning { background: #fff8e1; border-left: 4px solid #f0a500; }
+    .note.danger { background: #fdecea; border-left: 4px solid #e53935; }
+    .note.success { background: #e8f5e9; border-left: 4px solid #43a047; }
+    .note .note-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .note .note-body strong { display: block; margin-bottom: 4px; font-size: 12pt; }
+    code { background: #eef2ff; color: #2a5caa; font-family: 'Courier New', monospace; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 11pt; }
+    .checklist { list-style: none; padding-left: 0; margin: 10px 0; }
+    .checklist li { padding: 7px 0 7px 32px; position: relative; border-bottom: 1px dashed #e0eaf5; font-size: 11.5pt; }
+    .checklist li::before { content: '☐'; position: absolute; left: 0; color: #005baa; font-size: 18px; line-height: 1.3; }
+    .toc-card { background: white; border: 1px solid #d6e4f0; border-radius: 10px; padding: 26px 30px; margin-top: 30px; }
+    .toc-card h2 { font-size: 14pt; color: #005baa; margin-bottom: 16px; border-bottom: 2px solid #eaf2fb; padding-bottom: 10px; }
+    .toc-list { list-style: none; counter-reset: toc-counter; }
+    .toc-list li { counter-increment: toc-counter; padding: 7px 0; border-bottom: 1px dotted #d0e2f5; font-size: 11.5pt; }
+    .toc-list li::before { content: counter(toc-counter) ". "; font-weight: 700; color: #005baa; }
+    .toc-list li a { color: #1a4f8a; text-decoration: none; }
+    .doc-footer { margin-top: 60px; border-top: 2px solid #d6e4f0; padding: 24px 0; text-align: center; color: #7a94b0; font-size: 10pt; }
+    .print-btn { position: fixed; bottom: 30px; right: 30px; background: #005baa; color: white; border: none; border-radius: 50px; padding: 14px 28px; font-size: 13pt; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(0,91,170,0.4); z-index: 999; }
+    hr.divider { border: none; border-top: 2px dashed #d6e4f0; margin: 32px 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .info-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 11pt; }
+    .info-table thead tr { background: #e8f0fb; }
+    .info-table th { padding: 9px 14px; text-align: left; border: 1px solid #c8d8f0; }
+    .info-table td { padding: 9px 14px; border: 1px solid #dde8f5; vertical-align: top; }
+    .info-table tr:nth-child(even) { background: #f7faff; }
+  </style>
+</head>
+<body>
+<button class="print-btn no-print" onclick="window.print()">In / Xuất PDF</button>
+
+<div class="cover">
+  <div style="font-size:72px; margin-bottom:24px;">&#127973;</div>
+  <h1>Hướng Dẫn Sử Dụng<br>Hệ Thống Quản Lý Nội Dung</h1>
+  <h2>Cổng Thông Tin Điện Tử – CDC Đà Nẵng</h2>
+  <p class="subtitle">Tài liệu tập huấn dành cho cán bộ phụ trách truyền thông các Khoa / Phòng</p>
+  <div class="meta-box">
+    <div class="meta-item"><label>Phiên bản</label><span>1.0 – 2026</span></div>
+    <div class="meta-item"><label>Đơn vị ban hành</label><span>Phòng KHNV</span></div>
+    <div class="meta-item"><label>Bảo mật</label><span>Nội bộ</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="toc-card">
+    <h2>Mục Lục</h2>
+    <ol class="toc-list">
+      <li><a href="#s1">Giới thiệu hệ thống</a></li>
+      <li><a href="#s2">Danh sách tài khoản các Khoa / Phòng</a></li>
+      <li><a href="#s3">Cách đăng nhập vào hệ thống</a></li>
+      <li><a href="#s4">Giao diện trang quản trị (Dashboard)</a></li>
+      <li><a href="#s5">Tạo bài viết mới</a></li>
+      <li><a href="#s6">Chỉnh sửa và xóa bài viết</a></li>
+      <li><a href="#s7">Đăng tải hình ảnh / tài liệu</a></li>
+      <li><a href="#s8">Quy trình duyệt và xuất bản bài viết</a></li>
+      <li><a href="#s9">Đổi mật khẩu cá nhân</a></li>
+      <li><a href="#s10">Các lỗi thường gặp &amp; cách xử lý</a></li>
+      <li><a href="#s11">Danh sách kiểm tra trước khi đăng bài</a></li>
+    </ol>
+  </div>
+
+  <div class="page-section" id="s1">
+    <div class="section-header"><h2>1. Giới Thiệu Hệ Thống</h2></div>
+    <div class="section-body">
+      <p>Hệ thống Quản lý Nội dung (CMS) của CDC Đà Nẵng cho phép các Khoa / Phòng chủ động <strong>đăng tải, quản lý bài viết, hình ảnh, tài liệu</strong> lên cổng thông tin điện tử.</p>
+      <div class="note info"><span class="note-icon">&#127760;</span><div class="note-body"><strong>Địa chỉ trang quản trị:</strong> <code>https://cdcdanang.vn/admin</code></div></div>
+      <p style="margin-top:12px;">Hệ thống hỗ trợ:</p>
+      <ul style="padding-left:20px; margin-top:8px;">
+        <li>✅ Đăng, sửa, xóa bài viết tin tức, thông báo</li>
+        <li>✅ Upload hình ảnh, file tài liệu (PDF, Word...)</li>
+        <li>✅ Quản lý theo từng Khoa / Phòng riêng biệt</li>
+        <li>✅ Giao diện tiếng Việt, thao tác đơn giản</li>
+      </ul>
+      <div class="note warning" style="margin-top:16px;"><span class="note-icon">⚠️</span><div class="note-body"><strong>Lưu ý:</strong> Tài khoản của từng Khoa / Phòng chỉ có quyền <em>Tác giả (Author)</em>. Bài viết sau khi tạo sẽ được gửi duyệt — chưa tự động hiển thị trên website mà cần cán bộ biên tập phê duyệt.</div></div>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s2">
+    <div class="section-header"><h2>2. Danh Sách Tài Khoản Các Khoa / Phòng</h2></div>
+    <div class="section-body">
+      <div class="note success"><span class="note-icon">&#128273;</span><div class="note-body"><strong>Thông tin đăng nhập:</strong> Tên tài khoản là <strong>6 ký tự viết tắt</strong> (không cần @email). Mật khẩu chung ban đầu là <code>118ldl</code>. Đề nghị đổi mật khẩu ngay sau khi đăng nhập lần đầu.</div></div>
+      <table class="account-table">
+        <thead><tr><th style="width:40px">STT</th><th>Tên Khoa / Phòng</th><th>Tên đăng nhập</th><th>Mật khẩu ban đầu</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Phòng Tổ chức - Hành chính</td><td class="code">tchcdn</td><td class="pw">118ldl</td></tr>
+          <tr><td>2</td><td>Phòng Kế hoạch - Nghiệp vụ</td><td class="code">khnvdn</td><td class="pw">118ldl</td></tr>
+          <tr><td>3</td><td>Phòng Tài chính - Kế toán</td><td class="code">tcktdn</td><td class="pw">118ldl</td></tr>
+          <tr><td>4</td><td>Khoa Phòng chống bệnh truyền nhiễm</td><td class="code">pcbtnd</td><td class="pw">118ldl</td></tr>
+          <tr><td>5</td><td>Khoa Phòng chống HIV/AIDS</td><td class="code">pchivd</td><td class="pw">118ldl</td></tr>
+          <tr><td>6</td><td>Khoa Phòng, chống bệnh không lây nhiễm</td><td class="code">pcbkln</td><td class="pw">118ldl</td></tr>
+          <tr><td>7</td><td>Khoa Dinh dưỡng</td><td class="code">dduong</td><td class="pw">118ldl</td></tr>
+          <tr><td>8</td><td>Khoa Sức khỏe môi trường - Y tế trường học</td><td class="code">skmtyt</td><td class="pw">118ldl</td></tr>
+          <tr><td>9</td><td>Khoa Bệnh nghề nghiệp</td><td class="code">bnghen</td><td class="pw">118ldl</td></tr>
+          <tr><td>10</td><td>Khoa Chăm sóc sức khỏe sinh sản</td><td class="code">csskss</td><td class="pw">118ldl</td></tr>
+          <tr><td>11</td><td>Khoa Truyền thông, giáo dục sức khỏe</td><td class="code">ttgdsk</td><td class="pw">118ldl</td></tr>
+          <tr><td>12</td><td>Khoa Ký sinh trùng - Côn trùng</td><td class="code">kstctd</td><td class="pw">118ldl</td></tr>
+          <tr><td>13</td><td>Khoa Kiểm dịch Y tế quốc tế</td><td class="code">kdytqt</td><td class="pw">118ldl</td></tr>
+          <tr><td>14</td><td>Khoa Dược - Vật tư Y tế</td><td class="code">dvtytd</td><td class="pw">118ldl</td></tr>
+          <tr><td>15</td><td>Khoa Xét nghiệm - CĐHA - TDCN</td><td class="code">xncdha</td><td class="pw">118ldl</td></tr>
+          <tr><td>16</td><td>Phòng khám đa khoa</td><td class="code">khamdk</td><td class="pw">118ldl</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s3">
+    <div class="section-header"><h2>3. Cách Đăng Nhập Vào Hệ Thống</h2></div>
+    <div class="section-body">
+      <div class="step"><div class="step-num">1</div><div class="step-content">
+        <h3>Mở trình duyệt và truy cập địa chỉ quản trị</h3>
+        <p>Mở trình duyệt web (Chrome, Edge, Firefox...) và gõ địa chỉ: <code>https://cdcdanang.vn/admin</code></p>
+      </div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 3.1] Ảnh chụp màn hình trình duyệt với địa chỉ trang quản trị</em><p class="ph-note">→ Gợi ý: Chụp màn hình thanh địa chỉ trình duyệt đang gõ URL</p></div>
+
+      <div class="step"><div class="step-num">2</div><div class="step-content">
+        <h3>Trang đăng nhập hiện ra</h3>
+        <p>Trang đăng nhập hiển thị với 2 ô nhập liệu: <strong>Tên tài khoản</strong> và <strong>Mật khẩu</strong>.</p>
+      </div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 3.2] Trang đăng nhập (form login)</em><p class="ph-note">→ Gợi ý: Chụp toàn màn hình form đăng nhập</p></div>
+
+      <div class="step"><div class="step-num">3</div><div class="step-content">
+        <h3>Nhập tên tài khoản và mật khẩu</h3>
+        <p>Nhập <strong>Tên tài khoản</strong> (ví dụ: <code>dduong</code> cho Khoa Dinh dưỡng) và <strong>Mật khẩu</strong> <code>118ldl</code>.</p>
+        <div class="note warning"><span class="note-icon">⚠️</span><div class="note-body"><strong>Không gõ @email phía sau tên tài khoản!</strong> Chỉ cần gõ đúng 6 ký tự. Ví dụ: <code>dduong</code> — không phải <code>dduong@cdcdanang.vn</code>.</div></div>
+      </div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 3.3] Ô đăng nhập đã điền tên tài khoản và mật khẩu</em><p class="ph-note">→ Gợi ý: Chụp màn hình sau khi đã nhập thông tin, trước khi bấm Đăng nhập</p></div>
+
+      <div class="step"><div class="step-num">4</div><div class="step-content">
+        <h3>Nhấn nút “Đăng nhập”</h3>
+        <p>Bấm nút <strong>Đăng nhập</strong>. Hệ thống chuyển vào trang Bảng điều khiển (Dashboard).</p>
+      </div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 3.4] Màn hình sau khi đăng nhập thành công – Trang Dashboard</em></div>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s4">
+    <div class="section-header"><h2>4. Giao Diện Trang Quản Trị (Dashboard)</h2></div>
+    <div class="section-body">
+      <p>Sau khi đăng nhập, bạn sẽ thấy giao diện gồm các khu vực chính:</p>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 4.1] Tổng quan giao diện Dashboard – chú thích các khu vực</em><p class="ph-note">→ Gợi ý: Chụp toàn màn hình dashboard rồi dùng mũi tên để chú thích</p></div>
+      <table class="info-table">
+        <thead><tr><th style="width:200px">Khu vực</th><th>Chức năng</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Thanh bên trái (Sidebar)</strong></td><td>Điều hướng đến các mục: Bài viết, Tài liệu, Hình ảnh (Media)...</td></tr>
+          <tr><td><strong>Vùng nội dung chính</strong></td><td>Hiển thị danh sách bài viết / nút tạo bài mới</td></tr>
+          <tr><td><strong>Góc trên bên phải</strong></td><td>Thông tin tài khoản đang đăng nhập, nút Đăng xuất</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s5">
+    <div class="section-header"><h2>5. Tạo Bài Viết Mới</h2></div>
+    <div class="section-body">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h3>Vào mục “Bài viết” trên thanh bên trái</h3><p>Ờ thanh điều hướng bên trái, nhấp vào <strong>Bài viết</strong>.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 5.1] Nhấp vào mục “Bài viết” trên sidebar</em></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h3>Nhấn nút “+ Tạo bài viết mới”</h3><p>Ờ góc trên bên phải màn hình, nhấn nút <strong>+ Tạo bài viết mới</strong>.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 5.2] Nút “+ Tạo bài viết mới” ở góc trên phải</em></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><h3>Điền Tiêu đề bài viết</h3><p>Nhập <strong>Tiêu đề</strong> đầy đủ, rõ ràng vào ô đầu tiên.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 5.3] Ô nhập tiêu đề bài viết</em></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><h3>Chọn Chuyên mục (Category)</h3><p>Chọn đúng <strong>Chuyên mục</strong> phù hợp với nội dung bài viết của khoa / phòng mình.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 5.4] Dropdown chọn chuyên mục bài viết</em></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><h3>Nhập nội dung bài viết</h3><p>Sử dụng trình soạn thảo có các nút định dạng: <strong>In đậm</strong>, <em>In nghiêng</em>, danh sách, tiêu đề phụ, chèn hình ảnh...</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 5.5] Trình soạn thảo nội dung bài viết (Rich Text Editor)</em><p class="ph-note">→ Gợi ý: Chụp màn hình trình soạn thảo khi đang nhập nội dung, chú thích các nút chức năng</p></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><h3>Chèn hình ảnh vào bài (nếu có)</h3><p>Nhấn nút <strong>Chèn hình ảnh</strong> trong thanh công cụ soạn thảo, chọn file từ máy tính, nhấn <strong>Upload</strong>.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 5.6] Cửa sổ upload hình ảnh vào bài viết</em></div>
+      <div class="step"><div class="step-num">7</div><div class="step-content"><h3>Chọn ảnh đại diện bài viết</h3><p>Kéo xuống mục <strong>Ảnh đại diện</strong> và chọn / upload ảnh phù hợp. Ảnh này sẽ hiển thị ngoài trang chủ.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 5.7] Khu vực chọn ảnh đại diện bài viết</em></div>
+      <div class="step"><div class="step-num">8</div><div class="step-content"><h3>Lưu bài viết</h3><p>Nhấn <strong>Lưu nháp</strong> để lưu chưa gửi duyệt, hoặc <strong>Gửi duyệt</strong> để gửi bài cho biên tập viên xét duyệt và đăng lên website.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 5.8] Nút “Lưu nháp” và “Gửi duyệt” (Save / Submit)</em></div>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s6">
+    <div class="section-header"><h2>6. Chỉnh Sửa và Xóa Bài Viết</h2></div>
+    <div class="section-body">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h3>Vào danh sách Bài viết</h3><p>Nhấp vào <strong>Bài viết</strong> trên sidebar.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h3>Nhấn vào tên bài viết cần sửa</h3><p>Nhấp trực tiếp vào <strong>tiêu đề bài viết</strong> trong danh sách để mở bài.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 6.1] Danh sách bài viết – nhấn vào tên bài để mở chỉnh sửa</em></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><h3>Chỉnh sửa nội dung rồi lưu lại</h3><p>Thực hiện thay đổi nội dung, rồi nhấn <strong>Lưu</strong> (Save) ở góc trên bên phải.</p></div></div>
+      <hr class="divider" />
+      <h3 style="color:#c0392b; margin-bottom:12px;">Cách xóa bài viết</h3>
+      <div class="note danger"><span class="note-icon">&#128680;</span><div class="note-body"><strong>Cảnh báo:</strong> Xóa bài viết là thao tác <em>không thể hoàn tác</em>. Hãy chắc chắn trước khi xóa.</div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h3>Mở bài viết cần xóa</h3><p>Nhấp vào bài viết trong danh sách.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h3>Nhấn nút “Xóa” (Delete)</h3><p>Kéo xuống cuối trang để tìm nút <strong>Xóa</strong> màu đỏ. Hệ thống sẽ hỏi xác nhận trước khi xóa.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 6.2] Hộp thoại xác nhận xóa bài viết</em></div>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s7">
+    <div class="section-header"><h2>7. Đăng Tải Hình Ảnh / Tài Liệu</h2></div>
+    <div class="section-body">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h3>Vào mục “Media” hoặc “Tài liệu” trên sidebar</h3></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 7.1] Mục Media trong sidebar</em></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h3>Nhấn “+ Tải lên file mới”</h3><p>Nhấn nút <strong>+ Tạo mới</strong>, chọn file từ máy tính (hình ảnh JPG/PNG hoặc tài liệu PDF/Word).</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><h3>Nhập mô tả (Alt Text) cho hình ảnh</h3><p>Nhập ngắn gọn nội dung hình ảnh vào ô <strong>Alt Text</strong>. Ví dụ: <em>“Hoạt động tiêm vắc xin tháng 8/2026”</em>.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 7.2] Form upload ảnh – ô nhập Alt Text</em></div>
+      <div class="note info"><span class="note-icon">&#128161;</span><div class="note-body"><strong>Yêu cầu về file hình ảnh:</strong><ul style="padding-left:18px; margin-top:6px;"><li>Định dạng: JPG, PNG, WebP</li><li>Kích thước tối đa: <strong>5 MB</strong> / file</li><li>Tỷ lệ khuyến nghị cho ảnh đại diện: <strong>16:9</strong> (ví dụ: 1200×675 px)</li></ul></div></div>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s8">
+    <div class="section-header"><h2>8. Quy Trình Duyệt và Xuất Bản Bài Viết</h2></div>
+    <div class="section-body">
+      <p style="margin-bottom:20px;">Bài viết của Khoa / Phòng phải qua các bước sau trước khi được đăng lên website:</p>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center; margin:24px 0;">
+        <div style="text-align:center; background:#e8f4fd; border:2px solid #2196f3; border-radius:10px; padding:14px 20px; min-width:130px;"><div style="font-size:28px;">&#9997;&#65039;</div><strong style="display:block;font-size:11pt;">Tạo bài<br>(Khoa/Phòng)</strong></div>
+        <div style="font-size:24px; color:#2196f3; padding:0 6px;">→</div>
+        <div style="text-align:center; background:#fff8e1; border:2px solid #f0a500; border-radius:10px; padding:14px 20px; min-width:130px;"><div style="font-size:28px;">&#128228;</div><strong style="display:block;font-size:11pt;">Gửi duyệt<br>(Submit)</strong></div>
+        <div style="font-size:24px; color:#f0a500; padding:0 6px;">→</div>
+        <div style="text-align:center; background:#fce4ec; border:2px solid #e91e63; border-radius:10px; padding:14px 20px; min-width:130px;"><div style="font-size:28px;">&#128065;&#65039;</div><strong style="display:block;font-size:11pt;">Biên tập<br>xét duyệt</strong></div>
+        <div style="font-size:24px; color:#43a047; padding:0 6px;">→</div>
+        <div style="text-align:center; background:#e8f5e9; border:2px solid #43a047; border-radius:10px; padding:14px 20px; min-width:130px;"><div style="font-size:28px;">&#127760;</div><strong style="display:block;font-size:11pt;">Đăng lên<br>website</strong></div>
+      </div>
+      <div class="note warning"><span class="note-icon">⚠️</span><div class="note-body"><strong>Lưu ý quan trọng:</strong> Bài viết ở trạng thái <strong>Nháp (Draft)</strong> chưa hiển thị trên website. Bài chỉ hiển thị khi biên tập viên chuyển sang trạng thái <strong>Đã xuất bản (Published)</strong>.</div></div>
+      <table class="info-table" style="margin-top:16px;">
+        <thead><tr><th>Trạng thái</th><th>Ý nghĩa</th></tr></thead>
+        <tbody>
+          <tr><td><span style="background:#eee; padding:2px 8px; border-radius:4px;">Nháp (Draft)</span></td><td>Chỉ bạn thấy, chưa gửi duyệt</td></tr>
+          <tr><td><span style="background:#fff3cd; padding:2px 8px; border-radius:4px;">Chờ duyệt</span></td><td>Đã gửi, đang chờ biên tập duyệt</td></tr>
+          <tr><td><span style="background:#d4edda; padding:2px 8px; border-radius:4px; color:#155724;">Đã xuất bản</span></td><td>Đã hiển thị trên website</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s9">
+    <div class="section-header"><h2>9. Đổi Mật Khẩu Cá Nhân</h2></div>
+    <div class="section-body">
+      <div class="note danger"><span class="note-icon">&#128680;</span><div class="note-body"><strong>Bắt buộc đổi mật khẩu sau lần đăng nhập đầu tiên!</strong><br>Mật khẩu ban đầu <code>118ldl</code> là mật khẩu chung — cần đổi ngay để bảo mật tài khoản.</div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h3>Nhấn vào tên tài khoản góc trên bên phải</h3><p>Nhấp vào tên hoặc avatar ở góc trên bên phải, chọn <strong>Hồ sơ cá nhân</strong>.</p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 9.1] Menu tài khoản cá nhân – nút “Hồ sơ cá nhân”</em></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h3>Cuộn xuống mục “Mật khẩu”</h3><p>Tìm mục <strong>Thay đổi mật khẩu</strong>, nhập mật khẩu mới và xác nhận lại.<br><em>Mật khẩu mạnh nên có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số.</em></p></div></div>
+      <div class="img-placeholder"><span class="ph-icon">&#128444;&#65039;</span><em>[Hình 9.2] Form thay đổi mật khẩu</em></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><h3>Nhấn “Lưu” để xác nhận đổi mật khẩu</h3></div></div>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s10">
+    <div class="section-header"><h2>10. Các Lỗi Thường Gặp &amp; Cách Xử Lý</h2></div>
+    <div class="section-body">
+      <table class="info-table">
+        <thead><tr style="background:#c62828; color:white;"><th style="padding:10px 14px; width:38%; color:white;">Lỗi / Hiện tượng</th><th style="padding:10px 14px; color:white;">Nguyên nhân &amp; Cách xử lý</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Không đăng nhập được</strong><br><small style="color:#888;">“Sai tên tài khoản hoặc mật khẩu”</small></td><td>✔ Chỉ nhập <strong>6 ký tự tên tài khoản</strong> (không có @...)<br>✔ Kiểm tra Caps Lock trên bàn phím<br>✔ Mật khẩu chính xác: <code>118ldl</code> (chữ thường, số 1-1-8-l-d-l)</td></tr>
+          <tr><td><strong>Bài viết lưu xong không thấy trên website</strong></td><td>✔ Bình thường — bài cần <strong>biên tập viên duyệt</strong> trước<br>✔ Kiểm tra trạng thái bài phải là <strong>Đã xuất bản</strong></td></tr>
+          <tr><td><strong>Upload ảnh bị lỗi</strong></td><td>✔ File phải dưới <strong>5 MB</strong><br>✔ Chỉ dùng định dạng: <strong>JPG, PNG, WebP</strong><br>✔ Nén ảnh tại: squoosh.app</td></tr>
+          <tr><td><strong>Bị đăng xuất tự động</strong></td><td>✔ Phiên đăng nhập hết hạn sau <strong>8 tiếng</strong><br>✔ Đăng nhập lại bình thường</td></tr>
+          <tr><td><strong>Quên mật khẩu</strong></td><td>✔ Liên hệ <strong>Phòng Kế hoạch Nghiệp vụ</strong> hoặc cán bộ quản trị hệ thống để đặt lại mật khẩu</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-section page-break" id="s11">
+    <div class="section-header"><h2>11. Danh Sách Kiểm Tra Trước Khi Đăng Bài</h2></div>
+    <div class="section-body">
+      <p style="margin-bottom:14px;">Trước khi nhấn <strong>Gửi duyệt</strong>, hãy kiểm tra lại các điểm sau:</p>
+      <ul class="checklist">
+        <li>Tiêu đề bài viết rõ ràng, đầy đủ ý, không có lỗi chính tả</li>
+        <li>Nội dung bài đã hoàn chỉnh, không bị thiếu đoạn hoặc cắt giửa chừng</li>
+        <li>Đã chọn đúng <strong>Chuyên mục</strong> phù hợp với Khoa / Phòng</li>
+        <li>Đã chọn <strong>Ảnh đại diện (Featured Image)</strong> có chất lượng tốt</li>
+        <li>Hình ảnh trong bài đã có mô tả <strong>Alt Text</strong></li>
+        <li>Các đường link (nếu có) đều hoạt động đúng</li>
+        <li>Thông tin ngày tháng, số liệu trong bài đã chính xác</li>
+        <li>Bài viết không có thông tin bảo mật / nội bộ không được phép đăng</li>
+        <li>Đã đọc soát lại lần cuối trước khi gửi duyệt</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-section" style="margin-bottom:20px;">
+    <div class="section-header"><h2>Liên Hệ Hỗ Trợ Kỹ Thuật</h2></div>
+    <div class="section-body">
+      <div class="two-col">
+        <div class="note info" style="margin:0;"><span class="note-icon">&#127962;</span><div class="note-body"><strong>Phòng Kế hoạch – Nghiệp vụ</strong><br>Phụ trách nội dung &amp; quy trình đăng bài<br>Email: khnvdn@cdcdanang.vn</div></div>
+        <div class="note success" style="margin:0;"><span class="note-icon">&#128187;</span><div class="note-body"><strong>Tổ CNTT / Quản trị hệ thống</strong><br>Hỗ trợ kỹ thuật, tài khoản, lỗi hệ thống<br>Email: tchcdn@cdcdanang.vn</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <p>&#127973; <strong>Trung tâm Kiểm soát Bệnh tật Đà Nẵng (CDC Đà Nẵng)</strong></p>
+    <p style="margin-top:4px;">Tài liệu tập huấn nội bộ – Phiên bản 1.0 – Năm 2026</p>
+    <p style="margin-top:4px; font-size:9.5pt;">Tài liệu này chỉ dành cho cán bộ nội bộ. Không phát tán ra bên ngoài.</p>
+  </div>
+
+</div>
+</body>
+</html>
