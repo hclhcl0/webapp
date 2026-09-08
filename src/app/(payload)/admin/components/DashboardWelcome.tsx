@@ -567,3 +567,6 @@ export const DashboardWelcome = () => {
       return null
   }
 }
+
+export default DashboardWelcome;
+

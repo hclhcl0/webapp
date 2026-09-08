@@ -36,3 +36,6 @@ export const ColorPickerField: React.FC<any> = ({ field, path }) => {
     </div>
   )
 }
+
+export default ColorPickerField;
+

@@ -80,3 +80,6 @@ export const SlugField: React.FC<any> = ({ field, path }) => {
     </div>
   )
 }
+
+export default SlugField;
+

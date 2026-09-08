@@ -50,3 +50,6 @@ export const GlobalLogoutButton = ({ children }: { children: React.ReactNode }) 
     </>
   )
 }
+
+export default GlobalLogoutButton;
+

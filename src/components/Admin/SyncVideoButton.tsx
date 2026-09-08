@@ -82,3 +82,6 @@ export const SyncVideoButton: React.FC = () => {
     </div>
   );
 };
+
+export default SyncVideoButton;
+

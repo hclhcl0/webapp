@@ -284,3 +284,6 @@ export function UserPermissionsNote() {
     </div>
   );
 }
+
+export default UserPermissionsNote;
+

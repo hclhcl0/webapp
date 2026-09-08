@@ -86,3 +86,6 @@ export const AuthorWelcome = () => {
     </div>
   )
 }
+
+export default AuthorWelcome;
+

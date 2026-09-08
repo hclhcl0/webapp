@@ -158,3 +158,6 @@ export const HeaderSaveButton: React.FC = () => {
     </button>
   );
 };
+
+export default HeaderSaveButton;
+

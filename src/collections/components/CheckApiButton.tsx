@@ -104,3 +104,6 @@ export const CheckApiButton: React.FC = () => {
     </div>
   )
 }
+
+export default CheckApiButton;
+

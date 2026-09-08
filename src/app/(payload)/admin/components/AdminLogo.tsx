@@ -23,41 +23,43 @@ export const AdminLogo = () => {
         style={{
           width: '46px',
           height: '46px',
-          minWidth: '46px',
-          minHeight: '46px',
           objectFit: 'contain',
           display: 'block',
         }}
       />
-      <div style={{ textAlign: 'center' }}>
-        <h2
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          lineHeight: '1.2',
+        }}
+      >
+        <span
           style={{
-            margin: 0,
             fontSize: '0.95rem',
             fontWeight: 800,
             color: 'var(--theme-text)',
-            letterSpacing: '0.02em',
-            textTransform: 'uppercase',
-            lineHeight: 1.2,
+            letterSpacing: '0.05em',
           }}
         >
-          CDC Đà Nẵng
-        </h2>
-        <p
+          CDC ĐÀ NẴNG
+        </span>
+        <span
           style={{
-            margin: '0.15rem 0 0 0',
-            fontSize: '0.68rem',
-            color: 'var(--theme-text)',
-            opacity: 0.65,
+            fontSize: '0.65rem',
             fontWeight: 600,
+            color: 'var(--theme-elevation-500)',
             textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            lineHeight: 1.2,
+            letterSpacing: '0.02em',
           }}
         >
-          Hệ Thống Quản Trị Cổng TTĐT
-        </p>
+          Hệ thống Quản trị
+        </span>
       </div>
     </div>
   )
 }
+
+export default AdminLogo
