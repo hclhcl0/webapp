@@ -39,15 +39,15 @@ function getAllowedCategoryIds(user: any): string[] | null {
  * Tạo Payload query filter theo danh sách chuyên mục.
  * Dùng cho các vai trò cần lọc theo chuyên mục (Editor, Moderator, Author).
  */
-function buildCategoryFilter(allowedIds: string[], userId: string | number, includeOwn: boolean) {
+function buildCategoryFilter(allowedIds: string[], userId: string | number, includeOwn: boolean = true) {
   const categoryCondition = { 
     or: [
       { category: { in: allowedIds } },
       { additionalCategories: { in: allowedIds } }
     ] 
   };
-  if (!includeOwn) return categoryCondition; // Moderator/Editor: chỉ lọc category
-  // Author: xem bài trong chuyên mục OR bài nháp của chính mình
+  if (!includeOwn) return categoryCondition;
+  // Bất kể Editor, Moderator hay Author: luôn được xem/sửa bài do chính mình tạo
   return {
     or: [
       { category: { in: allowedIds } },
@@ -163,21 +163,20 @@ export const Articles: CollectionConfig = {
       // Admin: xem tất cả, không giới hạn
       if (role === 'admin') return true;
 
-      // Editor & Moderator: xem tất cả HOẶC chỉ chuyên mục được phân công
+      // Editor & Moderator: xem tất cả HOẶC theo chuyên mục + bài của chính mình
       if (user && ['editor', 'moderator'].includes(role as string)) {
         const allowedIds = getAllowedCategoryIds(user);
         if (!allowedIds) return true; // Không giới hạn nếu để trống
-        // Lọc theo chuyên mục (kể cả bài nháp trong chuyên mục đó)
-        return buildCategoryFilter(allowedIds, user.id, false);
+        return buildCategoryFilter(allowedIds, user.id, true);
       }
 
-      // Author: xem bài trong chuyên mục được phân công + bài nháp của chính mình
+      // Author: xem bài trong chuyên mục được phân công + bài của chính mình
       if (role === 'author') {
         const allowedIds = getAllowedCategoryIds(user);
         if (allowedIds) {
           return buildCategoryFilter(allowedIds, user.id, true);
         }
-        // Chưa phân chuyên mục: xem bài public + bài nháp của mình
+        // Chưa phân chuyên mục: xem bài public + bài của mình
         return {
           or: [
             { _status: { equals: 'published' } },
@@ -204,14 +203,18 @@ export const Articles: CollectionConfig = {
       // Admin: sửa tất cả
       if (role === 'admin') return true;
 
-      // Editor & Moderator: sửa tất cả HOẶC chỉ chuyên mục được phân công
+      // Editor & Moderator: sửa tất cả HOẶC chỉ chuyên mục được phân công + bài của mình
       if (['editor', 'moderator'].includes(role as string)) {
         const allowedIds = getAllowedCategoryIds(user);
         if (!allowedIds) return true; // Không giới hạn
-        return { or: [{ category: { in: allowedIds } }, { additionalCategories: { in: allowedIds } }] };
+        return buildCategoryFilter(allowedIds, user.id, true);
       }
 
-      // Author: chỉ sửa bài của chính mình
+      // Author: sửa bài của chính mình HOẶC theo chuyên mục phân công
+      const allowedIds = getAllowedCategoryIds(user);
+      if (allowedIds) {
+        return buildCategoryFilter(allowedIds, user.id, true);
+      }
       return { author: { equals: user.id } };
     },
 
@@ -223,11 +226,11 @@ export const Articles: CollectionConfig = {
       // Admin: xóa tất cả
       if (role === 'admin') return true;
 
-      // Editor: xóa tất cả HOẶC chỉ chuyên mục được phân công
+      // Editor: xóa tất cả HOẶC chỉ chuyên mục được phân công + bài của mình
       if (role === 'editor') {
         const allowedIds = getAllowedCategoryIds(user);
         if (!allowedIds) return true; // Không giới hạn
-        return { or: [{ category: { in: allowedIds } }, { additionalCategories: { in: allowedIds } }] };
+        return buildCategoryFilter(allowedIds, user.id, true);
       }
 
       // Moderator: KHÔNG được xóa bài (dù có phân chuyên mục hay không)
@@ -244,6 +247,11 @@ export const Articles: CollectionConfig = {
 
     beforeChange: [
       ({ req: { user }, data, operation }) => {
+        // Tự động gán author là người đang tạo/soạn bài nếu chưa có
+        if (user && !data.author) {
+          data.author = user.id;
+        }
+
         // Tự động điền publishedAt cho các bài viết mới nếu chưa có
         if (operation === 'create' && !data.publishedAt) {
           data.publishedAt = new Date().toISOString();
@@ -478,13 +486,14 @@ export const Articles: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       label: 'Tác giả',
+      defaultValue: ({ user }: any) => user?.id,
       admin: {
         position: 'sidebar',
       },
       hooks: {
         beforeChange: [
-          ({ req, operation, value }) => {
-            if (operation === 'create' && req.user && !value) {
+          ({ req, value }) => {
+            if (req?.user && !value) {
               return req.user.id;
             }
             return value;
