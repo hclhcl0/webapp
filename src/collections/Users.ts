@@ -122,6 +122,12 @@ export const Users: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ req, data, operation }) => {
+        // ── Tự động sinh email từ username nếu không nhập email ──────────
+        // Tránh lỗi "null value in column email violates not-null constraint"
+        if (operation === 'create' && !data.email && data.username) {
+          data.email = `${data.username}@cdcdanang.vn`;
+        }
+
         const actorRole = getRole(req.user);
         if (actorRole === 'editor') {
           // Editor không được đặt role cao hơn editor (admin/moderator)
