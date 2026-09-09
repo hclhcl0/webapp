@@ -5,7 +5,8 @@ import { getPayload } from 'payload';
 import configPromise from '@/payload.config';
 import * as cheerio from 'cheerio';
 
-const BASE_URL = 'https://ksbtdanang.vn';
+// Seed từ backup (nội dung chuẩn), tải file qua backup.ksbtdanang.vn
+const BASE_URL = 'https://backup.ksbtdanang.vn';
 const SEED_SECRET = 'vnos-cdc-seed';
 
 async function fetchPage(url: string): Promise<string> {
