@@ -49,6 +49,22 @@ function formatDate(d: string | null | undefined) {
   });
 }
 
+function formatDeadline(d: string | null | undefined) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  const hours = dt.getHours();
+  const minutes = dt.getMinutes();
+  const dateStr = dt.toLocaleDateString('vi-VN', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+  });
+  // Nếu có giờ cụ thể (không phải 00:00) thì hiển thị kèm giờ
+  if (hours !== 0 || minutes !== 0) {
+    const timeStr = dt.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
+    return `${dateStr} lúc ${timeStr}`;
+  }
+  return dateStr;
+}
+
 interface ProcurementItem {
   id: number | string;
   title: string;
@@ -186,7 +202,7 @@ export function ProcurementList({ items }: ProcurementListProps) {
                       <Clock size={14} />
                       <span>
                         Hạn nộp:{' '}
-                        <strong>{formatDate(item.deadline)}</strong>
+                        <strong>{formatDeadline(item.deadline)}</strong>
                         {item.expired && <span className={styles.deadlineBadge}>Đã hết hạn</span>}
                         {deadlineUrgent && <span className={styles.deadlineBadge}>Sắp hết hạn</span>}
                       </span>

@@ -83,10 +83,11 @@ export const Procurements: CollectionConfig = {
       label: 'Hạn nộp hồ sơ',
       admin: {
         date: {
-          pickerAppearance: 'dayOnly',
-          displayFormat: 'dd/MM/yyyy',
+          pickerAppearance: 'dayAndTime',
+          displayFormat: 'dd/MM/yyyy HH:mm',
+          timeIntervals: 15,
         },
-        description: 'Để trống nếu không có hạn nộp cụ thể',
+        description: 'Ngày và giờ hết hạn nộp hồ sơ. Để trống nếu không có hạn nộp cụ thể.',
       },
     },
     {
