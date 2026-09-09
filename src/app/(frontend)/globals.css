@@ -537,8 +537,8 @@
 .columns-block-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
-  margin: 1.5rem 0;
+  gap: 1rem;
+  margin: 1rem 0;
   width: 100%;
   max-width: none !important;
 }
@@ -568,6 +568,13 @@
   overflow: hidden;
 }
 
+.columns-block-grid > div .article-image-wrapper,
+.columns-block-grid > div span[class*="flex"],
+.columns-block-grid > div span[class*="block"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .columns-block-grid > div img,
 .columns-block-grid > div figure img {
   width: 100% !important;
@@ -575,6 +582,39 @@
   height: auto !important;
   margin: 0 !important;
   display: block !important;
+}
+
+/* Ẩn các đoạn văn bản rỗng phát sinh trong cột */
+.columns-block-grid p:empty,
+.columns-block-grid p:has(> br:only-child) {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+  line-height: 0 !important;
+}
+
+/* Chú thích ảnh (caption) ngay sau columns-block-grid hoặc sau ảnh đơn */
+.prose .columns-block-grid:has(+ p) {
+  margin-bottom: 0.35rem !important;
+}
+
+.prose .columns-block-grid + p[style*="text-align: center"],
+.prose .columns-block-grid + p[style*="text-align:center"],
+.prose .columns-block-grid + p:has(> em),
+.prose .article-image-wrapper + p[style*="text-align: center"],
+.prose .article-image-wrapper + p[style*="text-align:center"],
+.prose .article-image-wrapper + p:has(> em),
+.prose img + p[style*="text-align: center"],
+.prose img + p[style*="text-align:center"],
+.prose img + p:has(> em) {
+  margin-top: 0.35rem !important;
+  margin-bottom: 1.25rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  color: #475569 !important;
+  font-style: italic !important;
+  text-align: center !important;
 }
 
 /* ══════════════════════════════════════════════════

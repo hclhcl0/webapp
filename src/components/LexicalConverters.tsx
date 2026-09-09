@@ -35,6 +35,27 @@ function getGDriveEmbedUrl(url: string): { embedUrl: string; directUrl: string }
 
 import VideoBlock from './blocks/VideoBlock';
 
+function cleanColumnRichText(data: any) {
+  if (!data?.root?.children || !Array.isArray(data.root.children)) return data;
+  const filtered = data.root.children.filter((child: any) => {
+    if (child?.type === 'paragraph') {
+      if (!child.children || child.children.length === 0) return false;
+      const isOnlyEmpty = child.children.every((c: any) => 
+        c.type === 'linebreak' || (c.type === 'text' && (!c.text || c.text.trim() === ''))
+      );
+      if (isOnlyEmpty) return false;
+    }
+    return true;
+  });
+  return {
+    ...data,
+    root: {
+      ...data.root,
+      children: filtered,
+    },
+  };
+}
+
 export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }: any) => ({
   ...defaultConverters,
   upload: ({ node }: any) => <UploadBlock node={node} fallbackAlt={fallbackAlt} />,
@@ -53,9 +74,9 @@ export const getJsxConverters = (fallbackAlt?: string) => ({ defaultConverters }
 
       return (
         <div className={`columns-block-grid ${layoutClass}`}>
-          <div>{col1 ? <RichText data={col1} converters={getJsxConverters(fallbackAlt)} /> : null}</div>
-          <div>{col2 ? <RichText data={col2} converters={getJsxConverters(fallbackAlt)} /> : null}</div>
-          {layout === 'third' && col3 && <div><RichText data={col3} converters={getJsxConverters(fallbackAlt)} /></div>}
+          <div>{col1 ? <RichText data={cleanColumnRichText(col1)} converters={getJsxConverters(fallbackAlt)} /> : null}</div>
+          <div>{col2 ? <RichText data={cleanColumnRichText(col2)} converters={getJsxConverters(fallbackAlt)} /> : null}</div>
+          {layout === 'third' && col3 && <div><RichText data={cleanColumnRichText(col3)} converters={getJsxConverters(fallbackAlt)} /></div>}
         </div>
       );
     },

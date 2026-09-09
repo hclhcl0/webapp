@@ -10,7 +10,7 @@ export async function UploadBlock({ node, fallbackAlt }: { node: any, fallbackAl
   if (typeof node.value === 'object' && node.value.url) {
     const altText = node.value.alt || fallbackAlt || "Hình ảnh minh họa";
     return (
-      <span className="block my-6 w-full flex justify-center">
+      <span className="article-image-wrapper block my-2 md:my-3 w-full flex justify-center">
         <img 
           src={node.value.url} 
           alt={altText} 
@@ -37,7 +37,7 @@ export async function UploadBlock({ node, fallbackAlt }: { node: any, fallbackAl
     if (media?.url) {
       const altText = media.alt || fallbackAlt || "Hình ảnh minh họa";
       return (
-        <span className="block my-6 w-full flex justify-center">
+        <span className="article-image-wrapper block my-2 md:my-3 w-full flex justify-center">
           <img 
             src={media.url} 
             alt={altText} 
