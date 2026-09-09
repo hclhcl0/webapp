@@ -4218,5 +4218,87 @@ export const MIGRATION_STATEMENTS = [
         );
     EXCEPTION WHEN others THEN null;
     END $$;
+  `,
+
+  // ==================================================
+  // BATCH: Auto-extract thumbnail image_id from content for articles missing thumbnail
+  // ==================================================
+  `
+    DO $$
+    DECLARE
+      rec RECORD;
+      found_id integer;
+    BEGIN
+      FOR rec IN SELECT id, content FROM "articles" WHERE "image_id" IS NULL AND "content" IS NOT NULL LOOP
+        found_id := NULL;
+
+        -- 1. Tìm trong direct upload node (value là integer)
+        SELECT (elem->>'value')::integer INTO found_id
+        FROM jsonb_array_elements(rec.content->'root'->'children') elem
+        WHERE elem->>'type' = 'upload' AND (elem->>'value') ~ '^[0-9]+$'
+        LIMIT 1;
+
+        -- 2. Nếu value là object { id: 123 }
+        IF found_id IS NULL THEN
+          SELECT (elem->'value'->>'id')::integer INTO found_id
+          FROM jsonb_array_elements(rec.content->'root'->'children') elem
+          WHERE elem->>'type' = 'upload' AND (elem->'value'->>'id') ~ '^[0-9]+$'
+          LIMIT 1;
+        END IF;
+
+        -- 3. Tìm trong columnsBlock col1 (value là integer)
+        IF found_id IS NULL THEN
+          SELECT (sub_elem->>'value')::integer INTO found_id
+          FROM jsonb_array_elements(rec.content->'root'->'children') elem,
+               jsonb_array_elements(elem->'fields'->'col1'->'root'->'children') sub_elem
+          WHERE elem->>'type' = 'block' 
+            AND elem->'fields'->>'blockType' = 'columnsBlock'
+            AND sub_elem->>'type' = 'upload'
+            AND (sub_elem->>'value') ~ '^[0-9]+$'
+          LIMIT 1;
+        END IF;
+
+        -- 4. Tìm trong columnsBlock col1 (value là object { id: 123 })
+        IF found_id IS NULL THEN
+          SELECT (sub_elem->'value'->>'id')::integer INTO found_id
+          FROM jsonb_array_elements(rec.content->'root'->'children') elem,
+               jsonb_array_elements(elem->'fields'->'col1'->'root'->'children') sub_elem
+          WHERE elem->>'type' = 'block' 
+            AND elem->'fields'->>'blockType' = 'columnsBlock'
+            AND sub_elem->>'type' = 'upload'
+            AND (sub_elem->'value'->>'id') ~ '^[0-9]+$'
+          LIMIT 1;
+        END IF;
+
+        -- 5. Tìm trong columnsBlock col2
+        IF found_id IS NULL THEN
+          SELECT (sub_elem->>'value')::integer INTO found_id
+          FROM jsonb_array_elements(rec.content->'root'->'children') elem,
+               jsonb_array_elements(elem->'fields'->'col2'->'root'->'children') sub_elem
+          WHERE elem->>'type' = 'block' 
+            AND elem->'fields'->>'blockType' = 'columnsBlock'
+            AND sub_elem->>'type' = 'upload'
+            AND (sub_elem->>'value') ~ '^[0-9]+$'
+          LIMIT 1;
+        END IF;
+
+        IF found_id IS NULL THEN
+          SELECT (sub_elem->'value'->>'id')::integer INTO found_id
+          FROM jsonb_array_elements(rec.content->'root'->'children') elem,
+               jsonb_array_elements(elem->'fields'->'col2'->'root'->'children') sub_elem
+          WHERE elem->>'type' = 'block' 
+            AND elem->'fields'->>'blockType' = 'columnsBlock'
+            AND sub_elem->>'type' = 'upload'
+            AND (sub_elem->'value'->>'id') ~ '^[0-9]+$'
+          LIMIT 1;
+        END IF;
+
+        -- 6. Cập nhật nếu ID hợp lệ
+        IF found_id IS NOT NULL AND EXISTS(SELECT 1 FROM "media" WHERE id = found_id) THEN
+          UPDATE "articles" SET "image_id" = found_id WHERE id = rec.id;
+        END IF;
+      END LOOP;
+    EXCEPTION WHEN others THEN null;
+    END $$;
   `
 ];

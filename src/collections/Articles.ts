@@ -303,21 +303,91 @@ export const Articles: CollectionConfig = {
       // Extract first image from content if no image is provided
       async ({ data }) => {
         if (!data.image && data.content && data.content.root) {
-          // Recursive function to find first upload block
-          const findFirstImage = (nodes: any[]): any => {
-            for (const node of nodes) {
-              if (node.type === 'upload' && node.relationTo === 'media') {
-                return node.value?.id || node.value;
-              }
-              if (node.children) {
-                const found = findFirstImage(node.children);
-                if (found) return found;
-              }
+          const extractId = (val: any): any => {
+            if (!val) return null;
+            if (typeof val === 'number' || typeof val === 'string') return val;
+            if (typeof val === 'object') {
+              if (val.id) return val.id;
+              if (val.value) return extractId(val.value);
             }
             return null;
           };
-          
-          const firstImageId = findFirstImage(data.content.root.children || []);
+
+          const traverse = (nodeOrArray: any): any => {
+            if (!nodeOrArray) return null;
+
+            if (Array.isArray(nodeOrArray)) {
+              for (const item of nodeOrArray) {
+                const found = traverse(item);
+                if (found) return found;
+              }
+              return null;
+            }
+
+            const node = nodeOrArray;
+
+            // 1. Direct upload node
+            if (node.type === 'upload') {
+              const id = extractId(node.value || node.fields?.media || node.fields?.file);
+              if (id) return id;
+            }
+
+            // 2. Blocks
+            if (node.type === 'block' && node.fields) {
+              const { blockType } = node.fields;
+
+              // 2.1 Columns Block (col1, col2, col3)
+              if (blockType === 'columnsBlock') {
+                const inCol1 = traverse(node.fields.col1?.root?.children);
+                if (inCol1) return inCol1;
+                const inCol2 = traverse(node.fields.col2?.root?.children);
+                if (inCol2) return inCol2;
+                const inCol3 = traverse(node.fields.col3?.root?.children);
+                if (inCol3) return inCol3;
+              }
+
+              // 2.2 Gallery Block
+              if (blockType === 'galleryBlock' && Array.isArray(node.fields.images)) {
+                for (const img of node.fields.images) {
+                  const id = extractId(img?.image || img);
+                  if (id) return id;
+                }
+              }
+
+              // 2.3 Card / ImageLink Block
+              if (node.fields.image) {
+                const id = extractId(node.fields.image);
+                if (id) return id;
+              }
+
+              // 2.4 Slider Block
+              if (blockType === 'sliderBlock' && Array.isArray(node.fields.slides)) {
+                for (const slide of node.fields.slides) {
+                  const id = extractId(slide?.image);
+                  if (id) return id;
+                }
+              }
+
+              // 2.5 Any child object containing root.children
+              for (const key of Object.keys(node.fields)) {
+                const val = node.fields[key];
+                if (val && typeof val === 'object' && val.root?.children) {
+                  const found = traverse(val.root.children);
+                  if (found) return found;
+                }
+              }
+            }
+
+            // 3. Children
+            if (Array.isArray(node.children)) {
+              const found = traverse(node.children);
+              if (found) return found;
+            }
+
+            return null;
+          };
+
+          const firstImageId = traverse(data.content.root.children || []);
           if (firstImageId) {
             data.image = firstImageId;
           }
