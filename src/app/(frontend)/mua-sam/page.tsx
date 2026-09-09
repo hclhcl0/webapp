@@ -4,49 +4,15 @@ import React from 'react';
 import Link from 'next/link';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
-import { FileText, Download, Clock, AlertCircle, CheckCircle2, ChevronRight, ShoppingCart, Search } from 'lucide-react';
+import { ShoppingCart, Search } from 'lucide-react';
 import styles from './Procurements.module.css';
-import { resolveFileUrl, isGoogleDriveUrl, driveLinkLabel } from '@/lib/driveUrl';
 import { Pagination } from '@/components/Pagination';
+import { ProcurementList } from './ProcurementList';
 
 export const metadata = {
   title: 'Thông tin mua sắm | CDC Đà Nẵng',
   description: 'Thông tin mua sắm, đấu thầu của Trung tâm Kiểm soát bệnh tật Đà Nẵng.',
 };
-
-const TYPE_LABELS: Record<string, string> = {
-  'thu-moi-chao-gia': 'Thư mời chào giá',
-  'ket-qua-lua-chon':  'Kết quả lựa chọn nhà thầu',
-  'moi-thau':          'Thông báo mời thầu',
-  'thong-bao':         'Thông báo',
-  'bao-cao':           'Báo cáo',
-  'khac':              'Khác',
-};
-
-const STATUS_CONFIG: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
-  open: {
-    label: 'Đang mở',
-    className: styles.statusOpen,
-    icon: <Clock size={12} />,
-  },
-  closed: {
-    label: 'Đã đóng',
-    className: styles.statusClosed,
-    icon: <AlertCircle size={12} />,
-  },
-  evaluated: {
-    label: 'Đã xét thầu',
-    className: styles.statusEvaluated,
-    icon: <CheckCircle2 size={12} />,
-  },
-};
-
-function formatDate(d: string | null | undefined) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('vi-VN', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
-  });
-}
 
 function isExpired(deadline: string | null | undefined) {
   if (!deadline) return false;
@@ -57,7 +23,7 @@ async function getProcurements() {
   try {
     const payload = await getPayload({ config: configPromise });
     const { docs } = await payload.find({
-      collection: 'procurements',
+      collection: 'procurements' as any,
       sort: '-publishedDate',
       limit: 2000,
       depth: 1,
@@ -185,91 +151,7 @@ export default async function ProcurementsPage({ searchParams }: PageProps) {
           <p>Không có thông tin mua sắm nào.</p>
         </div>
       ) : (
-        <div className={styles.list}>
-          {items.map((item: any) => {
-            const sc       = STATUS_CONFIG[item.effectiveStatus] ?? STATUS_CONFIG.closed;
-            const typeLabel = TYPE_LABELS[item.procurementType] ?? item.procurementType;
-            const fileUrl  = resolveFileUrl(item.file?.url, item.driveUrl) || item.thumbnail?.url;
-            const fileName = item.file?.filename
-              ?? (item.driveUrl ? driveLinkLabel(item.driveUrl) : null)
-              ?? 'file';
-            const isFromDrive = !item.file?.url && isGoogleDriveUrl(item.driveUrl);
-            const isNew = item.publishedDate && (Date.now() - new Date(item.publishedDate).getTime()) < 7 * 24 * 60 * 60 * 1000; // < 7 ngày
-            const deadlineUrgent =
-              item.deadline &&
-              !item.expired &&
-              (new Date(item.deadline).getTime() - Date.now()) < 3 * 24 * 60 * 60 * 1000; // < 3 ngày
-
-             return (
-              <div key={item.id} className={`${styles.card} ${item.effectiveStatus === 'open' ? styles.cardOpen : ''}`}>
-                {/* Left accent bar */}
-                <div className={`${styles.accent} ${item.effectiveStatus === 'open' ? styles.accentOpen : styles.accentClosed}`} />
-
-                <div className={styles.cardBody}>
-                  {/* Top meta row */}
-                  <div className={styles.metaRow}>
-                    <span className={`${styles.statusBadge} ${sc.className}`}>
-                      {sc.icon} {sc.label}
-                    </span>
-                    <span className={styles.typeChip}>{typeLabel}</span>
-                    {item.documentNumber && (
-                      <span className={styles.docNum}>{item.documentNumber}</span>
-                    )}
-                    <span className={styles.flex1} />
-                    <span className={styles.publishDate}>Ngày đăng: {formatDate(item.publishedDate)}</span>
-                  </div>
-
-                  {/* Title */}
-                  {fileUrl ? (
-                    <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="hover:text-gov-primary transition-colors cursor-pointer">
-                      <h2 className={styles.title}>
-                        {isNew && <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-600 mr-2 align-middle uppercase tracking-wide relative -top-[1px]">Mới</span>}
-                        {item.title}
-                      </h2>
-                    </a>
-                  ) : (
-                    <h2 className={styles.title}>
-                      {isNew && <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-600 mr-2 align-middle uppercase tracking-wide relative -top-[1px]">Mới</span>}
-                      {item.title}
-                    </h2>
-                  )}
-
-                  {/* Note */}
-                  {item.note && <p className={styles.note}>{item.note}</p>}
-
-                  {/* Bottom row: deadline + download */}
-                  <div className={styles.bottomRow}>
-                    {item.deadline ? (
-                      <div className={`${styles.deadline} ${item.expired ? styles.deadlineExpired : ''} ${deadlineUrgent ? styles.deadlineUrgent : ''}`}>
-                        <Clock size={14} />
-                        <span>
-                          Hạn nộp:{' '}
-                          <strong>{formatDate(item.deadline)}</strong>
-                          {item.expired && <span className={styles.deadlineBadge}>Đã hết hạn</span>}
-                          {deadlineUrgent && <span className={styles.deadlineBadge}>Sắp hết hạn</span>}
-                        </span>
-                      </div>
-                    ) : (
-                      <div />
-                    )}
-
-                    {fileUrl && (
-                      <a
-                        href={fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.downloadBtn}
-                        title={isFromDrive ? 'Mở Google Drive' : 'Tải file đính kèm'}
-                      >
-                        <Download size={16} />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <ProcurementList items={items} />
       )}
       
       {totalPages > 1 && (

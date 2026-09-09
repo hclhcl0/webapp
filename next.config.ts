@@ -28,7 +28,7 @@ function buildAllowedHosts(): string[] {
 
 const allowedHosts = buildAllowedHosts();
 
-const nextConfig: NextConfig = {
+const nextConfig: any = {
   output: 'standalone',
   compress: true,
   outputFileTracingRoot: path.resolve(__dirname),
@@ -90,6 +90,16 @@ const nextConfig: NextConfig = {
         source: '/admin/globals/settings',
         destination: '/admin/globals/site-settings',
         permanent: false,
+      },
+      {
+        source: '/laws',
+        destination: '/mua-sam',
+        permanent: true,
+      },
+      {
+        source: '/laws/page-:page',
+        destination: '/mua-sam?page=:page',
+        permanent: true,
       },
     ];
   },

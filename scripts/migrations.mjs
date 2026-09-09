@@ -4197,5 +4197,26 @@ export const MIGRATION_STATEMENTS = [
   `
     ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "username" varchar;
     CREATE UNIQUE INDEX IF NOT EXISTS "users_username_idx" ON "users" USING btree ("username");
+  `,
+
+  // ==================================================
+  // BATCH: Link procurements file_id from media where drive_url contains /laws/detail/
+  // ==================================================
+  `
+    DO $$
+    BEGIN
+      UPDATE "procurements" p
+      SET "file_id" = m.id
+      FROM "media" m
+      WHERE p.file_id IS NULL
+        AND p.drive_url ~ '/laws/detail/'
+        AND (
+          m.filename LIKE substring(p.drive_url from '-([0-9]+)(?:/|\\?|$)') || '_0001.pdf'
+          OR m.filename LIKE substring(p.drive_url from '-([0-9]+)(?:/|\\?|$)') || '.%'
+          OR m.filename LIKE substring(p.drive_url from '-([0-9]+)(?:/|\\?|$)') || '-%'
+          OR m.filename = substring(p.drive_url from '-([0-9]+)(?:/|\\?|$)') || '.pdf'
+        );
+    EXCEPTION WHEN others THEN null;
+    END $$;
   `
 ];

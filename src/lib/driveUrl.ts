@@ -73,6 +73,14 @@ export function resolveFileUrl(
   driveUrl: string | null | undefined
 ): string | null {
   if (fileUrl) return fileUrl;
+  if (!driveUrl) return null;
+
+  // Nếu là link laws/detail từ cổng cũ (ksbtdanang.vn/laws/detail/...)
+  const lawsMatch = driveUrl.match(/\/laws\/detail\/(.+)/i);
+  if (lawsMatch) {
+    return `/laws/detail/${lawsMatch[1]}`;
+  }
+
   return toDriveDownloadUrl(driveUrl);
 }
 
