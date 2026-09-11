@@ -76,31 +76,53 @@ export async function getHealthData({
     activeTopic = topicsWithChildren.find((t: any) => t.slug === topicSlug) || null;
 
     if (subtopicSlug && activeTopic) {
-      // Đang xem chủ đề con → lọc chỉ theo subtopic
+      // Đang xem chủ đề con → lọc theo subtopic (cả chính lẫn phụ)
       activeSubTopic = (activeTopic.children || []).find((c: any) => c.slug === subtopicSlug) || null;
       if (activeSubTopic) {
-        articleFilter = { category: { equals: activeSubTopic.id } };
+        articleFilter = {
+          or: [
+            { category: { equals: activeSubTopic.id } },
+            { additionalCategories: { equals: activeSubTopic.id } },
+          ],
+        };
       }
     } else if (activeTopic) {
-      // Đang xem chủ đề mẹ → gộp bài của mẹ + tất cả con
+      // Đang xem chủ đề mẹ → gộp bài của mẹ + tất cả con (cả chính lẫn phụ)
       const childIds = (activeTopic.children || []).map((c: any) => c.id);
       const allIds = [activeTopic.id, ...childIds];
-      articleFilter = { category: { in: allIds } };
+      articleFilter = {
+        or: [
+          { category: { in: allIds } },
+          { additionalCategories: { in: allIds } },
+        ],
+      };
     }
   } else if (rootCat) {
-    // Trang /suc-khoe: lấy bài của tất cả topic cấp 1 + cấp 2
+    // Trang /suc-khoe: lấy bài của chính chuyên mục gốc Sức khỏe + tất cả topic cấp 1 + cấp 2
     const subIds = allSubTopics.map((s: any) => s.id);
-    const allIds = [...topicIds, ...subIds];
+    const allIds = [rootCat.id, ...topicIds, ...subIds];
     if (allIds.length > 0) {
-      articleFilter = { category: { in: allIds } };
+      articleFilter = {
+        or: [
+          { category: { in: allIds } },
+          { additionalCategories: { in: allIds } },
+        ],
+      };
     }
   }
 
   // 6. Lấy bài viết
+  const whereConditions: any[] = [{ _status: { equals: 'published' } }];
+  if (articleFilter.or) {
+    whereConditions.push({ or: articleFilter.or });
+  } else if (Object.keys(articleFilter).length > 0) {
+    whereConditions.push(articleFilter);
+  }
+
   const { docs: articles, totalPages, page: currentPage, hasPrevPage, hasNextPage } =
     await payload.find({
       collection: 'articles',
-      where: { ...articleFilter, _status: { equals: 'published' } },
+      where: { and: whereConditions },
       sort: ['-publishedAt', '-createdAt'],
       limit: 12,
       page,
