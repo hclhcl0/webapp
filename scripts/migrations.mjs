@@ -4300,5 +4300,16 @@ export const MIGRATION_STATEMENTS = [
       END LOOP;
     EXCEPTION WHEN others THEN null;
     END $$;
+  `,
+
+  // ==================================================
+  // BATCH: Alter vaccine_packages_items id column to varchar
+  // ==================================================
+  `
+    DO $$
+    BEGIN
+      ALTER TABLE "vaccine_packages_items" ALTER COLUMN "id" TYPE varchar USING "id"::varchar;
+    EXCEPTION WHEN others THEN null;
+    END $$;
   `
 ];
