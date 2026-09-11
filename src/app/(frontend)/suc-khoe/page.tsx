@@ -101,7 +101,7 @@ export async function getHealthData({
     await payload.find({
       collection: 'articles',
       where: { ...articleFilter, _status: { equals: 'published' } },
-      sort: ['-isPinned', '-publishedAt'],
+      sort: ['-publishedAt', '-createdAt'],
       limit: 12,
       page,
       depth: 1,
