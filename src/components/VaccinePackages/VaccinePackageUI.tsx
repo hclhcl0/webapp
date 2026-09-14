@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { Phone, ChevronRight, Shield, Clock, Package, ChevronDown } from "lucide-react";
 
@@ -15,12 +15,29 @@ interface VaccineItem {
   originalUnitPrice?: number;
 }
 
+interface GroupOption {
+  id: string | number;
+  name: string;
+  origin?: string;
+  price: number;
+  doses: number;
+  protocol?: string;
+  scheduleDoses?: number;
+}
+
+interface GroupedPackageItem {
+  key: string;
+  name: string;
+  options: GroupOption[];
+  defaultOption: GroupOption;
+}
+
 interface VaccinePackage {
   id: string;
   name: string;
   targetGroup: string;
   packageType: string;
-  image?: { url: string };
+  image?: { url?: string; filename?: string };
   description?: string;
   originalPrice?: number;
   discountPrice: number;
@@ -43,19 +60,99 @@ function formatPrice(price: number) {
 export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact = false }: Props) {
   const featured = packages.find((p) => p.isFeatured) || packages[0];
   const [selected, setSelected] = useState<VaccinePackage | null>(featured || null);
-  const [customDoses, setCustomDoses] = useState<Record<number, number>>({});
-  const [selectedAlternatives, setSelectedAlternatives] = useState<Record<number, any>>({});
+  const [customDoses, setCustomDoses] = useState<Record<string, number>>({});
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, GroupOption>>({});
 
   useEffect(() => {
     setCustomDoses({});
-    setSelectedAlternatives({});
+    setSelectedVariants({});
   }, [selected?.id]);
 
-  const handleDoseChange = (idx: number, delta: number, originalDoses: number, maxDoses?: number) => {
-    const current = customDoses[idx] !== undefined ? customDoses[idx] : originalDoses;
+  const groupedItems: GroupedPackageItem[] = useMemo(() => {
+    if (!selected?.items?.length) return [];
+
+    const map = new Map<string, { key: string; name: string; options: GroupOption[] }>();
+    const order: string[] = [];
+
+    selected.items.forEach((item, itemIdx) => {
+      let key = '';
+      let name = '';
+
+      if (item.group && typeof item.group === 'object' && item.group.name) {
+        key = `group_${item.group.id || item.group.name}`;
+        name = item.group.name;
+      } else if (item.diseaseName && item.diseaseName.trim()) {
+        key = `disease_${item.diseaseName.trim().toLowerCase()}`;
+        name = item.diseaseName.trim();
+      } else {
+        key = `item_${item.id || itemIdx}`;
+        name = item.vaccine?.disease || 'Nhiều nguyên nhân';
+      }
+
+      const opt: GroupOption = {
+        id: item.vaccine?.id || `item_${itemIdx}`,
+        name: item.vaccine?.name || 'Vắc xin',
+        origin: item.vaccine?.origin,
+        price: item.unitPrice || item.vaccine?.price || 0,
+        doses: item.doses || 1,
+        protocol: item.protocol,
+        scheduleDoses: item.vaccine?.scheduleDoses,
+      };
+
+      if (!map.has(key)) {
+        map.set(key, { key, name, options: [opt] });
+        order.push(key);
+      } else {
+        const existing = map.get(key)!;
+        if (!existing.options.some((o) => String(o.id) === String(opt.id))) {
+          existing.options.push(opt);
+        }
+      }
+    });
+
+    return order.map((key) => {
+      const g = map.get(key)!;
+      const defaultOpt = g.options[0];
+
+      // Enrich with in-stock catalog vaccines if matching disease exists
+      const diseaseName = selected.items.find((it) => {
+        const itKey = it.group?.name
+          ? `group_${it.group.id || it.group.name}`
+          : (it.diseaseName?.trim() ? `disease_${it.diseaseName.trim().toLowerCase()}` : `item_${it.id}`);
+        return itKey === key;
+      })?.vaccine?.disease;
+
+      if (diseaseName && vaccines?.length) {
+        const alts = vaccines.filter((v: any) => v.disease === diseaseName && v.status === 'in_stock');
+        alts.forEach((alt: any) => {
+          if (!g.options.some((o) => String(o.id) === String(alt.id))) {
+            g.options.push({
+              id: alt.id,
+              name: alt.name,
+              origin: alt.origin,
+              price: alt.price,
+              doses: defaultOpt.doses,
+              protocol: defaultOpt.protocol,
+              scheduleDoses: alt.scheduleDoses,
+            });
+          }
+        });
+      }
+
+      return {
+        key: g.key,
+        name: g.name,
+        options: g.options,
+        defaultOption: defaultOpt,
+      };
+    });
+  }, [selected?.items, vaccines]);
+
+  const handleDoseChange = (groupKey: string, delta: number, originalDoses: number, maxDoses?: number) => {
+    const current = customDoses[groupKey] !== undefined ? customDoses[groupKey] : originalDoses;
     let newVal = Math.max(0, current + delta);
     if (maxDoses != null && newVal > maxDoses) newVal = maxDoses;
-    setCustomDoses(prev => ({ ...prev, [idx]: newVal }));
+    setCustomDoses((prev) => ({ ...prev, [groupKey]: newVal }));
   };
 
   // Tính giá theo số liều: Liều 1 tính đủ giá; từ liều thứ 2 trở đi giảm 50.000đ/liều (miễn phí tư vấn)
@@ -68,21 +165,23 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
   const getDynamicPrice = () => {
     if (!selected) return 0;
     let total = selected.discountPrice;
-    selected.items?.forEach((item, idx) => {
-      const maxDoses = item.vaccine?.scheduleDoses ?? item.doses;
-      const originalQty = maxDoses != null ? Math.min(item.doses || 1, maxDoses) : (item.doses || 1);
-      const currentQty = customDoses[idx] !== undefined ? customDoses[idx] : originalQty;
-      const alt = selectedAlternatives[idx];
 
-      const basePrice = item.vaccine?.price || 0;
-      const newPrice = alt ? alt.price : basePrice;
+    groupedItems.forEach((g) => {
+      const defaultOpt = g.defaultOption;
+      const defaultMax = defaultOpt.scheduleDoses ?? defaultOpt.doses;
+      const defaultQty = defaultMax != null ? Math.min(defaultOpt.doses || 1, defaultMax) : (defaultOpt.doses || 1);
+      const originalCost = calcDosePrice(defaultOpt.price, defaultQty);
 
-      const originalCost = calcDosePrice(basePrice, originalQty);
-      const currentCost = calcDosePrice(newPrice, currentQty);
+      const activeOpt = selectedVariants[g.key] || defaultOpt;
+      const activeMax = activeOpt.scheduleDoses ?? activeOpt.doses;
+      const activeOriginalQty = activeMax != null ? Math.min(activeOpt.doses || 1, activeMax) : (activeOpt.doses || 1);
+      const currentQty = customDoses[g.key] !== undefined ? customDoses[g.key] : activeOriginalQty;
+      const currentCost = calcDosePrice(activeOpt.price, currentQty);
 
       total -= originalCost;
       total += currentCost;
     });
+
     return Math.max(0, total);
   };
 
@@ -168,7 +267,7 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
             </div>
 
             {/* Table header */}
-            {selected?.items && selected.items.length > 0 && (
+            {groupedItems.length > 0 && (
               <div className="px-6 py-3 grid grid-cols-[1fr_auto_auto] md:grid-cols-[1fr_100px_100px_120px] gap-4 border-b border-dashed border-gray-200 bg-white">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 rounded bg-[#00a4ff] flex items-center justify-center flex-shrink-0">
@@ -189,62 +288,63 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
 
             {/* Vaccine items */}
             <div className={`px-6 divide-y divide-dashed divide-gray-200 overflow-y-auto custom-scrollbar ${compact ? 'max-h-[280px]' : 'flex-1'}`}>
-              {selected?.items?.map((item, idx) => (
-                <div key={idx} className="py-2.5">
-                  <div className="text-[14px] font-medium text-[#00a4ff] mb-1.5 flex items-center gap-2">
-                    {(() => {
-                      const maxDoses = item.vaccine?.scheduleDoses ?? item.doses;
-                      const originalQty = maxDoses != null ? Math.min(item.doses || 1, maxDoses) : (item.doses || 1);
-                      const currentQty = customDoses[idx] !== undefined ? customDoses[idx] : originalQty;
-                      const isChecked = currentQty > 0;
-                      
-                      return (
-                        <button 
-                          onClick={() => {
-                            if (isChecked) {
-                              setCustomDoses(prev => ({ ...prev, [idx]: 0 }));
-                            } else {
-                              setCustomDoses(prev => ({ ...prev, [idx]: originalQty }));
-                            }
-                          }}
-                          className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 cursor-pointer transition-colors ${isChecked ? 'bg-[#00a4ff]' : 'bg-gray-200 border border-gray-300'}`}
-                        >
-                          {isChecked && (
-                            <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          )}
-                        </button>
-                      );
-                    })()}
-                    <span className={customDoses[idx] === 0 ? 'text-gray-400 line-through' : ''}>{item.group?.name || item.diseaseName || 'Nhiều nguyên nhân'}</span>
-                  </div>
-                  <div className="grid grid-cols-[1fr_auto_auto] md:grid-cols-[1fr_100px_100px_120px] gap-3 items-center">
-                    {/* Vaccine dropdown / display */}
-                    <div className="flex-1">
-                      {(() => {
-                        const disease = item.vaccine?.disease;
-                        const alts = disease ? vaccines.filter((v: any) => v.disease === disease && v.status === 'in_stock') : [];
-                        const isDropdown = alts.length > 1;
-                        return isDropdown ? (
+              {groupedItems.map((g) => {
+                const activeOption = selectedVariants[g.key] || g.defaultOption;
+                const maxDoses = activeOption.scheduleDoses ?? activeOption.doses;
+                const originalQty = maxDoses != null ? Math.min(activeOption.doses || 1, maxDoses) : (activeOption.doses || 1);
+                const currentQty = customDoses[g.key] !== undefined ? customDoses[g.key] : originalQty;
+                const isChecked = currentQty > 0;
+                const atMax = maxDoses != null && currentQty >= maxDoses;
+                const isDropdown = g.options.length > 1;
+
+                return (
+                  <div key={g.key} className="py-2.5">
+                    <div className="text-[14px] font-medium text-[#00a4ff] mb-1.5 flex items-center gap-2">
+                      <button 
+                        onClick={() => {
+                          if (isChecked) {
+                            setCustomDoses(prev => ({ ...prev, [g.key]: 0 }));
+                          } else {
+                            setCustomDoses(prev => ({ ...prev, [g.key]: originalQty }));
+                          }
+                        }}
+                        className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 cursor-pointer transition-colors ${isChecked ? 'bg-[#00a4ff]' : 'bg-gray-200 border border-gray-300'}`}
+                      >
+                        {isChecked && (
+                          <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        )}
+                      </button>
+                      <span className={!isChecked ? 'text-gray-400 line-through' : ''}>{g.name}</span>
+                    </div>
+                    <div className="grid grid-cols-[1fr_auto_auto] md:grid-cols-[1fr_100px_100px_120px] gap-3 items-center">
+                      {/* Vaccine dropdown / display */}
+                      <div className="flex-1">
+                        {isDropdown ? (
                           <div className="relative border border-gray-200 rounded-lg bg-white hover:border-[#00a4ff] transition-colors cursor-pointer">
                             <select
                               className="w-full appearance-none bg-transparent py-1.5 pl-3 pr-8 text-[13px] font-medium text-gray-700 uppercase truncate cursor-pointer focus:outline-none"
-                              value={String(selectedAlternatives[idx]?.id || item.vaccine?.id || '')}
+                              value={String(activeOption.id)}
                               onChange={(e) => {
-                                const match = alts.find((a: any) => String(a.id) === String(e.target.value));
-                                if (match && String(match.id) !== String(item.vaccine?.id)) {
-                                  setSelectedAlternatives(prev => ({ ...prev, [idx]: match }));
-                                } else {
-                                  const newObj = { ...selectedAlternatives };
-                                  delete newObj[idx];
-                                  setSelectedAlternatives(newObj);
+                                const match = g.options.find((opt) => String(opt.id) === String(e.target.value));
+                                if (match) {
+                                  setSelectedVariants(prev => ({ ...prev, [g.key]: match }));
+                                  setCustomDoses(prev => {
+                                    if (prev[g.key] === undefined) return prev;
+                                    const matchMax = match.scheduleDoses ?? match.doses;
+                                    if (matchMax != null && prev[g.key] > matchMax) {
+                                      return { ...prev, [g.key]: matchMax };
+                                    }
+                                    return prev;
+                                  });
                                 }
                               }}
                             >
-                              <option value={String(item.vaccine?.id || '')}>{item.vaccine?.origin ? `${item.vaccine.origin} - ` : ''}{item.vaccine?.name}</option>
-                              {alts.filter((a: any) => String(a.id) !== String(item.vaccine?.id)).map((alt: any) => (
-                                <option key={alt.id} value={String(alt.id)}>{alt.origin ? `${alt.origin} - ` : ''}{alt.name}</option>
+                              {g.options.map((opt) => (
+                                <option key={opt.id} value={String(opt.id)}>
+                                  {opt.origin ? `${opt.origin} - ` : ''}{opt.name}
+                                </option>
                               ))}
                             </select>
                             <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
@@ -255,66 +355,49 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
                           <div className="border border-gray-200 rounded-lg px-3 py-1.5 flex items-center bg-gray-50">
                             <div className="flex items-center gap-2 overflow-hidden w-full">
                               <span className="text-[13px] font-medium text-gray-700 uppercase truncate">
-                                {item.vaccine?.origin ? `${item.vaccine.origin} - ` : ''}{item.vaccine?.name}
+                                {activeOption.origin ? `${activeOption.origin} - ` : ''}{activeOption.name}
                               </span>
                             </div>
                           </div>
-                        );
-                      })()}
-                    </div>
-                    {/* Protocol */}
-                    <p className="text-[13px] text-gray-600 hidden md:block text-center">
-                      {item.protocol || `${item.vaccine?.scheduleDoses != null ? Math.min(item.doses || 1, item.vaccine.scheduleDoses) : (item.doses || 1)} Liều`}
-                    </p>
-                    {/* Quantity */}
-                    <div className="hidden md:flex justify-center">
-                      {(() => {
-                        const maxDoses = item.vaccine?.scheduleDoses ?? item.doses;
-                        const originalQty = maxDoses != null ? Math.min(item.doses || 1, maxDoses) : (item.doses || 1);
-                        const currentQty2 = customDoses[idx] !== undefined ? customDoses[idx] : originalQty;
-                        const atMax = maxDoses != null && currentQty2 >= maxDoses;
-                        return (
-                          <div className="flex flex-col items-center gap-0.5">
-                            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-white">
-                              <button
-                                onClick={() => handleDoseChange(idx, -1, originalQty, maxDoses)}
-                                className="px-2.5 py-1 text-gray-400 hover:bg-gray-50 transition-colors"
-                              >—</button>
-                              <span className="px-3 text-[13px] font-medium text-gray-700 border-x border-gray-100">
-                                {currentQty2}
-                              </span>
-                              <button
-                                onClick={() => handleDoseChange(idx, 1, originalQty, maxDoses)}
-                                disabled={atMax}
-                                title={atMax ? `Tối đa ${maxDoses} liều theo phác đồ` : undefined}
-                                className={`px-2.5 py-1 transition-colors ${
-                                  atMax
-                                    ? 'text-gray-200 cursor-not-allowed bg-gray-50'
-                                    : 'text-gray-400 hover:bg-gray-50'
-                                }`}
-                              >+</button>
-                            </div>
-                            {maxDoses != null && (
-                              <span className="text-[10px] text-gray-400">tối đa {maxDoses} liều</span>
-                            )}
+                        )}
+                      </div>
+                      {/* Protocol */}
+                      <p className="text-[13px] text-gray-600 hidden md:block text-center">
+                        {activeOption.protocol || `${originalQty} Liều`}
+                      </p>
+                      {/* Quantity */}
+                      <div className="hidden md:flex justify-center">
+                        <div className="flex flex-col items-center gap-0.5">
+                          <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-white">
+                            <button
+                              onClick={() => handleDoseChange(g.key, -1, originalQty, maxDoses)}
+                              className="px-2.5 py-1 text-gray-400 hover:bg-gray-50 transition-colors"
+                            >—</button>
+                            <span className="px-3 text-[13px] font-medium text-gray-700 border-x border-gray-100">
+                              {currentQty}
+                            </span>
+                            <button
+                              onClick={() => handleDoseChange(g.key, 1, originalQty, maxDoses)}
+                              disabled={atMax}
+                              title={atMax ? `Tối đa ${maxDoses} liều theo phác đồ` : undefined}
+                              className={`px-2.5 py-1 transition-colors ${
+                                atMax
+                                  ? 'text-gray-200 cursor-not-allowed bg-gray-50'
+                                  : 'text-gray-400 hover:bg-gray-50'
+                              }`}
+                            >+</button>
                           </div>
-                        );
-                      })()}
-                    </div>
-                    {/* Price */}
-                    <div className="text-right">
-                      {(() => {
-                        const alt = selectedAlternatives[idx];
-                        const displayPrice = alt ? alt.price : item.vaccine?.price;
-                        
-                        const maxDoses = item.vaccine?.scheduleDoses ?? item.doses;
-                        const originalQty = maxDoses != null ? Math.min(item.doses || 1, maxDoses) : (item.doses || 1);
-                        const currentQty = customDoses[idx] !== undefined ? customDoses[idx] : originalQty;
-
-                        return displayPrice && currentQty > 0 ? (
+                          {maxDoses != null && (
+                            <span className="text-[10px] text-gray-400">tối đa {maxDoses} liều</span>
+                          )}
+                        </div>
+                      </div>
+                      {/* Price */}
+                      <div className="text-right">
+                        {activeOption.price && currentQty > 0 ? (
                           <div className="flex flex-col items-end">
                             <p className="text-[14px] font-bold text-gray-800">
-                              {formatPrice(calcDosePrice(displayPrice, currentQty))}
+                              {formatPrice(calcDosePrice(activeOption.price, currentQty))}
                             </p>
                             {currentQty >= 2 ? (
                               <span className="text-[10px] text-emerald-600 font-semibold inline-flex items-center gap-0.5 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60 mt-0.5" title="Mỗi liều từ liều thứ 2 được giảm 50.000đ do miễn phí khám & tư vấn">
@@ -322,18 +405,18 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
                               </span>
                             ) : (
                               <span className="text-[10px] text-gray-400">
-                                {formatPrice(displayPrice)}/liều
+                                {formatPrice(activeOption.price)}/liều
                               </span>
                             )}
                           </div>
                         ) : (
                           <p className="text-sm text-gray-400">—</p>
-                        );
-                      })()}
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Footer */}
