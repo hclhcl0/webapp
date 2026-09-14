@@ -4326,5 +4326,6 @@ export const MIGRATION_STATEMENTS = [
     );
     CREATE INDEX IF NOT EXISTS "vaccine_groups_created_at_idx" ON "vaccine_groups" ("created_at");
     DO $$ BEGIN ALTER TABLE "vaccine_packages_items" ADD COLUMN "group_id" integer REFERENCES "vaccine_groups"("id") ON DELETE SET NULL; EXCEPTION WHEN duplicate_column THEN null; END $$;
+    DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "vaccine_groups_id" integer REFERENCES "vaccine_groups"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_column THEN null; END $$;
   `
 ];
