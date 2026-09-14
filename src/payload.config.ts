@@ -40,6 +40,7 @@ import { ApiKeys } from './collections/ApiKeys.ts';
 import { Procurements } from './collections/Procurements.ts';
 import { Vaccines } from './collections/Vaccines.ts';
 import { VaccinePackages } from './collections/VaccinePackages.ts';
+import { VaccineGroups } from './collections/VaccineGroups.ts';
 
 
 import { seedAccounts } from './lib/seedAccounts.ts';
@@ -157,6 +158,7 @@ export default buildConfig({
     Procurements,
     Vaccines,
     VaccinePackages,
+    VaccineGroups,
     Videos,
     VideoChannels,
     OrgUnits,

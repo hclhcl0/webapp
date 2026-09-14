@@ -7,6 +7,7 @@ import { Phone, ChevronRight, Shield, Clock, Package, ChevronDown } from "lucide
 interface VaccineItem {
   id: string;
   vaccine: { id?: string; name: string; origin?: string; disease?: string; price?: number; scheduleDoses?: number };
+  group?: { id: string; name: string };
   diseaseName?: string;
   doses: number;
   protocol?: string;
@@ -216,7 +217,7 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
                         </button>
                       );
                     })()}
-                    <span className={customDoses[idx] === 0 ? 'text-gray-400 line-through' : ''}>{item.diseaseName || 'Nhiều nguyên nhân'}</span>
+                    <span className={customDoses[idx] === 0 ? 'text-gray-400 line-through' : ''}>{item.group?.name || item.diseaseName || 'Nhiều nguyên nhân'}</span>
                   </div>
                   <div className="grid grid-cols-[1fr_auto_auto] md:grid-cols-[1fr_100px_100px_120px] gap-3 items-center">
                     {/* Vaccine dropdown / display */}

@@ -4311,5 +4311,20 @@ export const MIGRATION_STATEMENTS = [
       ALTER TABLE "vaccine_packages_items" ALTER COLUMN "id" TYPE varchar USING "id"::varchar;
     EXCEPTION WHEN others THEN null;
     END $$;
+  `,
+
+  // ==================================================
+  // BATCH: VaccineGroups collection + group_id FK in vaccine_packages_items
+  // ==================================================
+  `
+    CREATE TABLE IF NOT EXISTS "vaccine_groups" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "name" varchar NOT NULL,
+      "order" integer DEFAULT 0,
+      "updated_at" timestamptz DEFAULT now() NOT NULL,
+      "created_at" timestamptz DEFAULT now() NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS "vaccine_groups_created_at_idx" ON "vaccine_groups" ("created_at");
+    DO $$ BEGIN ALTER TABLE "vaccine_packages_items" ADD COLUMN "group_id" integer REFERENCES "vaccine_groups"("id") ON DELETE SET NULL; EXCEPTION WHEN duplicate_column THEN null; END $$;
   `
 ];

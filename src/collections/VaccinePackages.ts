@@ -135,11 +135,21 @@ export const VaccinePackages: CollectionConfig = {
           required: true,
         },
         {
+          name: 'group',
+          type: 'relationship',
+          relationTo: 'vaccine-groups',
+          label: 'Nhóm bệnh phòng',
+          admin: {
+            description: 'Chọn nhóm bệnh phòng từ danh sách — sẽ hiển thị như tiêu đề nhóm trên trang web',
+          },
+        },
+        {
           name: 'diseaseName',
           type: 'text',
-          label: 'Nhóm bệnh phòng (tiêu đề nhóm)',
+          label: 'Nhóm bệnh phòng (text tự do - cũ)',
           admin: {
-            description: 'VD: Phòng bệnh Não mô cầu B — sẽ hiển thị như tiêu đề nhóm',
+            description: '⚠️ Trường cũ — hãy dùng "Nhóm bệnh phòng" phía trên thay thế. Chỉ hiển thị khi chưa chọn nhóm.',
+            condition: (_data: any, siblingData: any) => !siblingData?.group,
           },
         },
         {
