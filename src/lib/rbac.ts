@@ -6,7 +6,7 @@ import type { CollectionConfig, GlobalConfig } from 'payload';
 export const MODULE_COLLECTION_MAP: Record<string, string[]> = {
   'articles': ['articles'],
   'videos': ['videos', 'video-channels', 'video-warning-settings'],
-  'vaccines': ['vaccines', 'vaccine-packages'],
+  'vaccines': ['vaccines', 'vaccine-packages', 'vaccine-groups'],
   'ai-knowledge': ['ai-knowledge'],
   'banners': ['banners', 'banner-settings', 'popup-settings'],
   'documents': ['documents', 'document-signers'],
@@ -103,6 +103,7 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
       case 'banners':
       case 'vaccines':
       case 'vaccine-packages':
+      case 'vaccine-groups':
         allowedRoles = ['admin', 'moderator', 'editor'];
         break;
       case 'pages':

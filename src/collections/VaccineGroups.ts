@@ -15,9 +15,9 @@ export const VaccineGroups: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => canAccessModule(user, 'vaccines', ['admin', 'moderator', 'editor']),
-    update: ({ req: { user } }) => canAccessModule(user, 'vaccines', ['admin', 'moderator', 'editor']),
-    delete: ({ req: { user } }) => canAccessModule(user, 'vaccines', ['admin', 'moderator']),
+    create: ({ req: { user } }) => canAccessModule(user, 'vaccine-groups', ['admin', 'moderator', 'editor']),
+    update: ({ req: { user } }) => canAccessModule(user, 'vaccine-groups', ['admin', 'moderator', 'editor']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'vaccine-groups', ['admin', 'moderator']),
   },
   fields: [
     {

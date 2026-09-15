@@ -238,7 +238,7 @@ export const Users: CollectionConfig = {
         { label: '🖼️ [Báo chí & Tin tức] Banner & Sidebar Quảng cáo', value: 'banners' },
 
         // ── 💉 Dịch vụ Y tế & Tiêm chủng ──
-        { label: '💉 [Dịch vụ Y tế] Vắc xin & Gói tiêm chủng', value: 'vaccines' },
+        { label: '💉 [Dịch vụ Y tế] Vắc xin, Nhóm bệnh & Gói tiêm', value: 'vaccines' },
         { label: '📝 [Dịch vụ Y tế] Khách hàng đăng ký tiêm / Liên hệ', value: 'form-submissions' },
 
         // ── 🏛️ Thông tin Đơn vị & Pháp quy ──
