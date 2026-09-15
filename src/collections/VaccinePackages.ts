@@ -26,19 +26,44 @@ export const VaccinePackages: CollectionConfig = {
         if (!items.length) return data;
 
         const errors: string[] = [];
+        const seenGroupKeys = new Set<string>();
+        let autoOriginalPrice = 0;
 
         await Promise.all(
-          items.map(async (item: any) => {
+          items.map(async (item: any, itemIdx: number) => {
             const vaccineId = typeof item.vaccine === 'object' ? item.vaccine?.id : item.vaccine;
-            if (!vaccineId || !item.doses) return;
+            if (!vaccineId) return;
 
             try {
-              const vaccine = await req.payload.findByID({ collection: 'vaccines', id: vaccineId });
-              const maxDoses = (vaccine as any)?.scheduleDoses;
-              if (maxDoses != null && item.doses > maxDoses) {
+              const vaccine = await req.payload.findByID({ collection: 'vaccines' as any, id: vaccineId });
+              const v = vaccine as any;
+              const maxDoses = v?.scheduleDoses;
+              if (item.doses && maxDoses != null && item.doses > maxDoses) {
                 errors.push(
-                  `Vắc xin "${(vaccine as any)?.name || vaccineId}": số liều trong gói (${item.doses}) vượt quá phác đồ chuẩn (${maxDoses} liều)`
+                  `Vắc xin "${v?.name || vaccineId}": số liều trong gói (${item.doses}) vượt quá phác đồ chuẩn (${maxDoses} liều)`
                 );
+              }
+
+              // Tự động lấy giá từ Danh mục vắc xin nếu chưa có
+              if (v?.price != null) {
+                if (!item.unitPrice) {
+                  item.unitPrice = v.price;
+                }
+                if (!item.originalUnitPrice) {
+                  item.originalUnitPrice = v.price;
+                }
+              }
+
+              // Tính giá gói: mỗi nhóm bệnh chỉ tính 1 vắc xin đầu tiên
+              const groupId = typeof item.group === 'object' ? item.group?.id : item.group;
+              const groupKey = groupId
+                ? `group_${groupId}`
+                : (item.diseaseName?.trim() ? `disease_${item.diseaseName.trim().toLowerCase()}` : `item_${item.id || itemIdx}`);
+
+              if (!seenGroupKeys.has(groupKey)) {
+                seenGroupKeys.add(groupKey);
+                const price = v?.price ?? item.unitPrice ?? 0;
+                autoOriginalPrice += (item.doses || 1) * price;
               }
             } catch {
               // Vắc xin không tìm thấy — bỏ qua
@@ -50,6 +75,18 @@ export const VaccinePackages: CollectionConfig = {
           throw new Error(
             `Không thể lưu gói vắc xin:\n${errors.join('\n')}`
           );
+        }
+
+        // Tự động tính giá gói nếu để trống
+        if (!data.originalPrice && autoOriginalPrice > 0) {
+          data.originalPrice = autoOriginalPrice;
+        }
+        if (!data.discountPrice && (data.originalPrice || autoOriginalPrice > 0)) {
+          const basePrice = data.originalPrice || autoOriginalPrice;
+          data.discountPrice = Math.round(basePrice * 0.9);
+        }
+        if (!data.discountLabel) {
+          data.discountLabel = 'Giá tham khảo tại CDC Đà Nẵng';
         }
 
         return data;
@@ -101,20 +138,19 @@ export const VaccinePackages: CollectionConfig = {
       name: 'originalPrice',
       type: 'number',
       label: 'Giá gốc (VNĐ)',
-      admin: { description: 'Giá trước khi giảm, để trống nếu không có' },
+      admin: { description: 'Để trống hệ thống sẽ tự động tính từ tổng giá các vắc xin trong gói' },
     },
     {
       name: 'discountPrice',
       type: 'number',
       label: 'Giá ưu đãi (VNĐ)',
-      required: true,
-      admin: { description: 'Giá thực tế hiển thị cho người dùng' },
+      admin: { description: 'Để trống hệ thống sẽ tự động tính giảm 10% từ giá gốc' },
     },
     {
       name: 'discountLabel',
       type: 'text',
       label: 'Nhãn khuyến mãi',
-      admin: { description: 'VD: Giảm tới 616.690đ — hiển thị trên thẻ gói' },
+      admin: { description: 'VD: Giá tham khảo tại CDC Đà Nẵng — hiển thị trên thẻ gói' },
     },
 
     // ─── Danh sách vắc xin trong gói ───────────────────────────
@@ -130,14 +166,14 @@ export const VaccinePackages: CollectionConfig = {
         {
           name: 'vaccine',
           type: 'relationship',
-          relationTo: 'vaccines',
+          relationTo: 'vaccines' as any,
           label: 'Vắc xin',
           required: true,
         },
         {
           name: 'group',
           type: 'relationship',
-          relationTo: 'vaccine-groups',
+          relationTo: 'vaccine-groups' as any,
           label: 'Nhóm bệnh phòng',
           admin: {
             description: 'Chọn nhóm bệnh phòng từ danh sách — sẽ hiển thị như tiêu đề nhóm trên trang web',
@@ -173,13 +209,13 @@ export const VaccinePackages: CollectionConfig = {
           name: 'unitPrice',
           type: 'number',
           label: 'Đơn giá / liều (VNĐ)',
-          admin: { description: 'Giá mỗi liều sau khuyến mãi trong gói' },
+          admin: { description: 'Để trống hệ thống sẽ tự động lấy từ Danh mục vắc xin' },
         },
         {
           name: 'originalUnitPrice',
           type: 'number',
           label: 'Đơn giá gốc / liều (VNĐ)',
-          admin: { description: 'Giá gốc mỗi liều (hiển thị gạch ngang)' },
+          admin: { description: 'Để trống hệ thống sẽ tự động lấy từ Danh mục vắc xin' },
         },
       ],
     },

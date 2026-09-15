@@ -93,7 +93,7 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
         id: item.vaccine?.id || `item_${itemIdx}`,
         name: item.vaccine?.name || 'Vắc xin',
         origin: item.vaccine?.origin,
-        price: item.unitPrice || item.vaccine?.price || 0,
+        price: item.vaccine?.price ?? item.unitPrice ?? 0,
         doses: item.doses || 1,
         protocol: item.protocol,
         scheduleDoses: item.vaccine?.scheduleDoses,
@@ -164,8 +164,21 @@ export function VaccinePackageUI({ packages, vaccines = [], phoneNumber, compact
 
   const getDynamicPrice = () => {
     if (!selected) return 0;
-    let total = selected.discountPrice;
 
+    // Tỷ lệ ưu đãi của gói (nếu có giá ưu đãi so với giá gốc, ví dụ giảm 10% tức discountRatio = 0.9)
+    const discountRatio = (selected.originalPrice && selected.discountPrice)
+      ? (selected.discountPrice / selected.originalPrice)
+      : 0.9;
+
+    // Tính tổng giá gói cơ bản trực tiếp từ giá các vắc xin mặc định trong danh mục
+    const liveBaseRawTotal = groupedItems.reduce((sum, g) => {
+      const defaultOpt = g.defaultOption;
+      return sum + ((defaultOpt.price || 0) * (defaultOpt.doses || 1));
+    }, 0);
+
+    let total = Math.round(liveBaseRawTotal * discountRatio);
+
+    // Điều chỉnh nếu người dùng thay đổi số liều hoặc chọn vắc xin thay thế
     groupedItems.forEach((g) => {
       const defaultOpt = g.defaultOption;
       const defaultMax = defaultOpt.scheduleDoses ?? defaultOpt.doses;
