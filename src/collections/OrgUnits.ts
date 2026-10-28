@@ -127,6 +127,7 @@ export const OrgUnits: CollectionConfig = {
                 { label: 'Giám đốc', value: 'giam_doc' },
                 { label: 'Phó Giám đốc', value: 'pho_giam_doc' },
                 { label: 'Trưởng phòng/khoa', value: 'truong' },
+                { label: 'Quyền Trưởng phòng/khoa', value: 'quyen_truong' },
                 { label: 'Phó Trưởng phòng/khoa', value: 'pho_truong' },
                 { label: 'Bác sĩ', value: 'bac_si' },
                 { label: 'Y sĩ', value: 'y_si' },

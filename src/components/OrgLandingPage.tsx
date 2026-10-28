@@ -19,6 +19,7 @@ const POSITION_LABEL: Record<string, string> = {
   giam_doc:      'Giám đốc',
   pho_giam_doc:  'Phó Giám đốc',
   truong:        'Trưởng khoa/phòng',
+  quyen_truong:  'Quyền Trưởng phòng/khoa',
   pho_truong:    'Phó Trưởng',
   bac_si:        'Bác sĩ',
   y_si:          'Y sĩ',
@@ -41,7 +42,7 @@ function MemberCard({ member }: { member: any }) {
   const avatarUrl = typeof member.avatar === 'object' ? member.avatar?.url : null;
   const prefix    = ACADEMIC_LABEL[member.academicTitle] || '';
   const fullName  = prefix ? `${prefix} ${member.memberName}` : member.memberName;
-  const isLeader  = ['giam_doc', 'pho_giam_doc', 'truong'].includes(member.position);
+  const isLeader  = ['giam_doc', 'pho_giam_doc', 'truong', 'quyen_truong'].includes(member.position);
 
   return (
     <div className="flex flex-col items-center text-center gap-2 p-3" style={{ minWidth: 90, maxWidth: 110 }}>

@@ -305,8 +305,16 @@ export async function loadKnowledgeBase() {
     if (orgUnits.length > 0) {
       const unitLines = orgUnits.map((u: any) => {
         const leaders = (u.members || [])
-          .filter((m: any) => ['giam_doc', 'pho_giam_doc', 'truong', 'pho_truong'].includes(m.position))
-          .map((m: any) => `${m.memberName} (${m.position === 'giam_doc' ? 'Giám đốc' : m.position === 'pho_giam_doc' ? 'Phó Giám đốc' : m.position === 'truong' ? 'Trưởng đơn vị' : 'Phó Trưởng đơn vị'})`)
+          .filter((m: any) => ['giam_doc', 'pho_giam_doc', 'truong', 'quyen_truong', 'pho_truong'].includes(m.position))
+          .map((m: any) => {
+            const posLabel =
+              m.position === 'giam_doc' ? 'Giám đốc' :
+              m.position === 'pho_giam_doc' ? 'Phó Giám đốc' :
+              m.position === 'truong' ? 'Trưởng đơn vị' :
+              m.position === 'quyen_truong' ? 'Quyền Trưởng phòng/khoa' :
+              'Phó Trưởng đơn vị';
+            return `${m.memberName} (${posLabel})`;
+          })
           .join(", ");
         return [
           `+ **${u.name}**`,
