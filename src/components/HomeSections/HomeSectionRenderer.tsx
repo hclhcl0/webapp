@@ -9,6 +9,7 @@ import { VideoSection } from './VideoSection';
 import { TikTokSection } from './TikTokSection';
 import { ScheduleBlock } from '../blocks/ScheduleBlock';
 import { VaccineSection } from './VaccineSection';
+import { CdcMediaSection } from './CdcMediaSection';
 import { AdSlider } from './AdSlider';
 
 interface HomeSectionRendererProps {
@@ -174,6 +175,19 @@ export async function HomeSectionRenderer({ sections }: HomeSectionRendererProps
                 subtitle={section.subtitle}
                 limit={section.limit}
                 showViewAll={section.showViewAll !== false}
+              />
+            );
+
+          case 'cdcMediaSection':
+            return (
+              <CdcMediaSection
+                key={`${blockType}-${index}`}
+                title={section.title}
+                subtitle={section.subtitle}
+                defaultLayout={section.defaultLayout || 'grid'}
+                limit={section.limit || 8}
+                showStats={section.showStats !== false}
+                allowLayoutSwitch={section.allowLayoutSwitch !== false}
               />
             );
 

@@ -273,6 +273,75 @@ export const Settings: GlobalConfig = {
           ],
         },
 
+        // ── Block Ngân hàng Tài liệu Truyền thông (CDCMedia) ──
+        {
+          slug: 'cdcMediaSection',
+          interfaceName: 'CdcMediaSectionBlock',
+          labels: {
+            singular: '📚 Khu vực Ngân hàng Tài liệu Truyền thông (CDCMedia)',
+            plural: 'Khu vực Ngân hàng Tài liệu Truyền thông (CDCMedia)',
+          },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'Tiêu đề khu vực',
+                  defaultValue: 'Ngân hàng Tài liệu Truyền thông',
+                },
+                {
+                  name: 'subtitle',
+                  type: 'text',
+                  label: 'Mô tả phụ',
+                  defaultValue: 'Kho lưu trữ tập trung tài liệu, hình ảnh, video và ấn phẩm phòng chống dịch bệnh CDC Đà Nẵng.',
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'defaultLayout',
+                  type: 'select',
+                  label: 'Kiểu hiển thị mặc định',
+                  defaultValue: 'grid',
+                  options: [
+                    { label: '🖼️ Kiểu 1: Lưới Thẻ AppleTV (Có ảnh Thumbnail - giống CDCMedia)', value: 'grid' },
+                    { label: '📋 Kiểu 2: Danh sách 2 Cột Rút gọn (Giống Top Tài liệu CDCMedia)', value: 'list' },
+                  ],
+                },
+                {
+                  name: 'limit',
+                  type: 'number',
+                  label: 'Số tài liệu hiển thị',
+                  defaultValue: 8,
+                  min: 4,
+                  max: 24,
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'showStats',
+                  type: 'checkbox',
+                  label: 'Hiển thị 4 ô thống kê (Tài liệu, Chuyên mục, Lượt tải, Dung lượng)',
+                  defaultValue: true,
+                },
+                {
+                  name: 'allowLayoutSwitch',
+                  type: 'checkbox',
+                  label: 'Cho phép người xem bấm chuyển đổi Kiểu 1 (Lưới) / Kiểu 2 (Danh sách)',
+                  defaultValue: true,
+                },
+              ],
+            },
+          ],
+        },
+
         // ── Block 1: Khu vực tin tức theo chuyên mục ──
         {
           slug: 'newsCategorySection',

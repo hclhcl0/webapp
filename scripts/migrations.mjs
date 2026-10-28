@@ -4364,5 +4364,74 @@ export const MIGRATION_STATEMENTS = [
     DO $$ BEGIN ALTER TABLE "payload_preferences_rels" ADD COLUMN "ai_chat_logs_id" integer REFERENCES "ai_chat_logs"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_column THEN null; END $$;
     CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_ai_chat_logs_id_idx" ON "payload_locked_documents_rels" ("ai_chat_logs_id");
     CREATE INDEX IF NOT EXISTS "payload_preferences_rels_ai_chat_logs_id_idx" ON "payload_preferences_rels" ("ai_chat_logs_id");
+  `,
+
+  // ==================================================
+  // BATCH: cdcMediaSection block for settings & site_settings homeSections
+  // ==================================================
+  `
+    CREATE TABLE IF NOT EXISTS "settings_blocks_cdc_media_section" (
+      "id" varchar PRIMARY KEY NOT NULL,
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "_path" text NOT NULL,
+      "block_name" varchar,
+      "title" varchar DEFAULT 'Ngân hàng Tài liệu Truyền thông',
+      "subtitle" varchar DEFAULT 'Kho lưu trữ tập trung tài liệu, hình ảnh, video và ấn phẩm phòng chống dịch bệnh CDC Đà Nẵng.',
+      "default_layout" varchar DEFAULT 'grid',
+      "limit" numeric DEFAULT 8,
+      "show_stats" boolean DEFAULT true,
+      "allow_layout_switch" boolean DEFAULT true,
+      CONSTRAINT "settings_blocks_cdc_media_section_parent_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "settings" ("id") ON DELETE cascade ON UPDATE no action
+    );
+    CREATE INDEX IF NOT EXISTS "settings_blocks_cdc_media_section_order_idx" ON "settings_blocks_cdc_media_section" USING btree ("_order");
+    CREATE INDEX IF NOT EXISTS "settings_blocks_cdc_media_section_parent_idx" ON "settings_blocks_cdc_media_section" USING btree ("_parent_id");
+    CREATE INDEX IF NOT EXISTS "settings_blocks_cdc_media_section_path_idx" ON "settings_blocks_cdc_media_section" USING btree ("_path");
+
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_cdc_media_section" (
+      "id" varchar PRIMARY KEY NOT NULL,
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "_path" text NOT NULL,
+      "block_name" varchar,
+      "title" varchar DEFAULT 'Ngân hàng Tài liệu Truyền thông',
+      "subtitle" varchar DEFAULT 'Kho lưu trữ tập trung tài liệu, hình ảnh, video và ấn phẩm phòng chống dịch bệnh CDC Đà Nẵng.',
+      "default_layout" varchar DEFAULT 'grid',
+      "limit" numeric DEFAULT 8,
+      "show_stats" boolean DEFAULT true,
+      "allow_layout_switch" boolean DEFAULT true,
+      CONSTRAINT "site_settings_blocks_cdc_media_section_parent_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action
+    );
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_cdc_media_section_order_idx" ON "site_settings_blocks_cdc_media_section" USING btree ("_order");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_cdc_media_section_parent_idx" ON "site_settings_blocks_cdc_media_section" USING btree ("_parent_id");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_cdc_media_section_path_idx" ON "site_settings_blocks_cdc_media_section" USING btree ("_path");
+
+    DO $$
+    DECLARE
+      v_parent_id integer;
+    BEGIN
+      SELECT id INTO v_parent_id FROM "site_settings" ORDER BY id DESC LIMIT 1;
+      IF v_parent_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM "site_settings_blocks_cdc_media_section" WHERE "_parent_id" = v_parent_id) THEN
+        INSERT INTO "site_settings_blocks_cdc_media_section" (
+          "id", "_order", "_parent_id", "_path", "block_name",
+          "title", "subtitle", "default_layout", "limit", "show_stats", "allow_layout_switch"
+        ) VALUES (
+          '6a61c5c878c399da8bb5c001',
+          6,
+          v_parent_id,
+          'homeSections',
+          '',
+          'Ngân hàng Tài liệu Truyền thông',
+          'Kho lưu trữ tập trung tài liệu, hình ảnh, video và ấn phẩm phòng chống dịch bệnh CDC Đà Nẵng.',
+          'grid',
+          8,
+          true,
+          true
+        );
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
   `
 ];
