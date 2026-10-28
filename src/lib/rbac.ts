@@ -104,12 +104,12 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
       case 'vaccines':
       case 'vaccine-packages':
       case 'vaccine-groups':
+      case 'pages':
+      case 'procurements':
+      case 'org-units':
         allowedRoles = ['admin', 'moderator', 'editor'];
         break;
-      case 'pages':
-      case 'org-units':
       case 'form-submissions':
-      case 'procurements':
       case 'procedures':
       case 'procedure-groups':
       case 'services':

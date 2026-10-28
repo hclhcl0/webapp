@@ -14,9 +14,9 @@ export const OrgUnits: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin', 'editor']),
-    update: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin', 'editor']),
-    delete: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin']),
+    create: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin', 'moderator', 'editor']),
+    update: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin', 'moderator', 'editor']),
+    delete: ({ req: { user } }) => canAccessModule(user, 'org-units', ['admin', 'moderator']),
   },
   fields: [
     {
