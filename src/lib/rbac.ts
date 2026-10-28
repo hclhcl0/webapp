@@ -7,7 +7,7 @@ export const MODULE_COLLECTION_MAP: Record<string, string[]> = {
   'articles': ['articles'],
   'videos': ['videos', 'video-channels', 'video-warning-settings'],
   'vaccines': ['vaccines', 'vaccine-packages', 'vaccine-groups'],
-  'ai-knowledge': ['ai-knowledge'],
+  'ai-knowledge': ['ai-knowledge', 'ai-chat-logs'],
   'banners': ['banners', 'banner-settings', 'popup-settings'],
   'documents': ['documents', 'document-signers'],
   'procurements': ['procurements'],
@@ -107,6 +107,8 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
       case 'pages':
       case 'procurements':
       case 'org-units':
+      case 'ai-knowledge':
+      case 'ai-chat-logs':
         allowedRoles = ['admin', 'moderator', 'editor'];
         break;
       case 'form-submissions':
@@ -114,7 +116,6 @@ export const withRBAC = (collections: CollectionConfig[]): CollectionConfig[] =>
       case 'procedure-groups':
       case 'services':
       case 'service-categories':
-      case 'ai-knowledge':
         allowedRoles = ['admin', 'moderator'];
         break;
       case 'users':

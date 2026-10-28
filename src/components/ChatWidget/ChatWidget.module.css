@@ -324,12 +324,48 @@
   background: rgba(var(--primary-rgb, 0, 122, 140), 0.22);
 }
 
+/* Markdown Table inside Chat Bubble */
+.tableWrap {
+  margin: 6px 0;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #d8e2ec;
+  background: #ffffff;
+}
+
+.chatTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.chatTable th {
+  background: #e2ecf5;
+  color: #0d3b4c;
+  font-weight: 700;
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.chatTable td {
+  padding: 5px 8px;
+  border-bottom: 1px solid #eef2f6;
+  color: #1e293b;
+}
+
+.chatTable tr:last-child td {
+  border-bottom: none;
+}
+
 .bubbleMeta {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 3px;
   padding: 0 4px;
+  gap: 8px;
 }
 
 .bubbleTime {
@@ -339,6 +375,40 @@
 
 .userBubble .bubbleMeta {
   justify-content: flex-end;
+}
+
+.metaActions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.feedbackBtn {
+  background: none;
+  border: none;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  opacity: 0.55;
+  transition: opacity 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.feedbackBtn:hover {
+  opacity: 1;
+  background: rgba(var(--primary-rgb, 0, 122, 140), 0.08);
+  transform: scale(1.1);
+}
+
+.feedbackActiveGood {
+  opacity: 1;
+  background: #dcfce7;
+}
+
+.feedbackActiveBad {
+  opacity: 1;
+  background: #fee2e2;
 }
 
 .copyBtn {

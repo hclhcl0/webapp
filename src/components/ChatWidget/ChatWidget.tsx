@@ -9,6 +9,8 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   timestamp: number;
+  logId?: number | string | null;
+  feedback?: "helpful" | "not_helpful";
 }
 
 const STORAGE_KEY = "cdc_chat_history";
@@ -30,7 +32,6 @@ const SUGGESTED_QUESTIONS = [
  * - Số điện thoại / Hotline (1900..., 0236..., 09...) bấm gọi trực tiếp
  */
 function renderInlineTokens(text: string): React.ReactNode[] {
-  // Tách trước theo **in đậm**
   const boldParts = text.split(/(\*\*[^*]+\*\*)/g);
   const nodes: React.ReactNode[] = [];
 
@@ -51,11 +52,6 @@ function renderInlineTokens(text: string): React.ReactNode[] {
 }
 
 function renderLinksAndPhones(text: string, keyPrefix: string): React.ReactNode[] {
-  // Regex nhận diện:
-  // 1. Markdown link: [label](url)
-  // 2. URL đầy đủ: https?://[^\s),]+
-  // 3. Đường dẫn nội bộ: /(?:goi-vac-xin|bai-viet|suc-khoe|dich-vu|documents|mua-sam|contact)(?:/[^\s),.]*)?
-  // 4. Số điện thoại / Hotline: \b(?:1900[\s.]?\d{4,6}|0236[\s.]?\d{3}[\s.]?\d{3,4}|0[35789]\d{8})\b
   const tokenRegex = /(\[[^\]]+\]\([^)]+\)|https?:\/\/[^\s),]+|\/(?:goi-vac-xin|bai-viet|suc-khoe|dich-vu|documents|mua-sam|contact)(?:\/[^\s),.]*)?|\b(?:1900[\s.]?\d{4,6}|0236[\s.]?\d{3}[\s.]?\d{3,4}|0[35789]\d{8})\b)/g;
 
   const parts = text.split(tokenRegex);
@@ -114,6 +110,95 @@ function renderLinksAndPhones(text: string, keyPrefix: string): React.ReactNode[
 
     return <React.Fragment key={key}>{segment}</React.Fragment>;
   });
+}
+
+/**
+ * Render nội dung tin nhắn, hỗ trợ cả bảng Markdown (| Cột 1 | Cột 2 |) và danh sách dòng
+ */
+function renderMessageBlocks(content: string, role: "user" | "assistant"): React.ReactNode {
+  if (role === "user") {
+    return content.split("\n").map((line, j) => (
+      <div key={j} className={line.trim() === "" ? styles.emptyLine : styles.normalLine}>
+        {line}
+      </div>
+    ));
+  }
+
+  const lines = content.split("\n");
+  const blocks: React.ReactNode[] = [];
+  let idx = 0;
+
+  while (idx < lines.length) {
+    const trimmed = lines[idx].trim();
+
+    // Nhận diện bảng Markdown (bắt đầu và kết thúc bằng |)
+    if (trimmed.startsWith("|") && trimmed.endsWith("|") && trimmed.split("|").length > 2) {
+      const tableLines: string[] = [];
+      while (idx < lines.length && lines[idx].trim().startsWith("|")) {
+        tableLines.push(lines[idx].trim());
+        idx++;
+      }
+
+      const dataRows = tableLines
+        .filter((row) => !/^\|[\s:|-]+\|$/.test(row))
+        .map((row) =>
+          row
+            .replace(/^\||\|$/g, "")
+            .split("|")
+            .map((cell) => cell.trim())
+        );
+
+      if (dataRows.length > 0) {
+        const header = dataRows[0];
+        const body = dataRows.slice(1);
+        blocks.push(
+          <div key={`tbl-${idx}`} className={styles.tableWrap}>
+            <table className={styles.chatTable}>
+              <thead>
+                <tr>
+                  {header.map((h, cIdx) => (
+                    <th key={cIdx}>{renderInlineTokens(h)}</th>
+                  ))}
+                </tr>
+              </thead>
+              {body.length > 0 && (
+                <tbody>
+                  {body.map((r, rIdx) => (
+                    <tr key={rIdx}>
+                      {r.map((cell, cIdx) => (
+                        <td key={cIdx}>{renderInlineTokens(cell)}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              )}
+            </table>
+          </div>
+        );
+        continue;
+      }
+    }
+
+    const line = lines[idx];
+    const isBullet = /^[•+]\s+/.test(trimmed) || /^\d+\.\s+/.test(trimmed);
+    blocks.push(
+      <div
+        key={`ln-${idx}`}
+        className={
+          trimmed === ""
+            ? styles.emptyLine
+            : isBullet
+            ? styles.listLine
+            : styles.normalLine
+        }
+      >
+        {renderInlineTokens(line)}
+      </div>
+    );
+    idx++;
+  }
+
+  return blocks;
 }
 
 export default function ChatWidget() {
@@ -241,6 +326,7 @@ export default function ChatWidget() {
             ? data.answer
             : data.error || "Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại.",
           timestamp: Date.now(),
+          logId: data.logId || null,
         };
 
         setMessages((prev) => [...prev, botMsg]);
@@ -289,6 +375,27 @@ export default function ChatWidget() {
     navigator.clipboard?.writeText(plain);
     setCopiedIndex(idx);
     setTimeout(() => setCopiedIndex(null), 2000);
+  };
+
+  const handleFeedback = async (idx: number, feedback: "helpful" | "not_helpful") => {
+    const targetMsg = messages[idx];
+    if (!targetMsg || targetMsg.feedback === feedback) return;
+
+    setMessages((prev) =>
+      prev.map((m, i) => (i === idx ? { ...m, feedback } : m))
+    );
+
+    if (targetMsg.logId) {
+      try {
+        await fetch("/api/chat/public", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ logId: targetMsg.logId, feedback }),
+        });
+      } catch {
+        // Bỏ qua lỗi mạng nhẹ khi gửi đánh giá
+      }
+    }
   };
 
   const formatTime = (ts: number) =>
@@ -376,45 +483,49 @@ export default function ChatWidget() {
 
             {/* Messages */}
             <div className={styles.messages} role="log" aria-live="polite">
-              {messages.map((msg, i) => {
-                const lines = msg.content.split("\n");
-                return (
-                  <motion.div
-                    key={i}
-                    className={`${styles.messageBubble} ${
-                      msg.role === "user" ? styles.userBubble : styles.botBubble
-                    }`}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {msg.role === "assistant" && (
-                      <div className={styles.botIcon}>🤖</div>
-                    )}
-                    <div className={styles.bubbleContent}>
-                      <div className={styles.bubbleText}>
-                        {lines.map((line, j) => {
-                          const trimmedLine = line.trim();
-                          const isBullet = /^[•+]\s+/.test(trimmedLine) || /^\d+\.\s+/.test(trimmedLine);
-                          return (
-                            <div
-                              key={j}
-                              className={
-                                trimmedLine === ""
-                                  ? styles.emptyLine
-                                  : isBullet
-                                  ? styles.listLine
-                                  : styles.normalLine
-                              }
-                            >
-                              {msg.role === "assistant" ? renderInlineTokens(line) : line}
-                            </div>
-                          );
-                        })}
-                      </div>
-                      <div className={styles.bubbleMeta}>
-                        <span className={styles.bubbleTime}>{formatTime(msg.timestamp)}</span>
-                        {msg.role === "assistant" && i > 0 && (
+              {messages.map((msg, i) => (
+                <motion.div
+                  key={i}
+                  className={`${styles.messageBubble} ${
+                    msg.role === "user" ? styles.userBubble : styles.botBubble
+                  }`}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {msg.role === "assistant" && (
+                    <div className={styles.botIcon}>🤖</div>
+                  )}
+                  <div className={styles.bubbleContent}>
+                    <div className={styles.bubbleText}>
+                      {renderMessageBlocks(msg.content, msg.role)}
+                    </div>
+                    <div className={styles.bubbleMeta}>
+                      <span className={styles.bubbleTime}>{formatTime(msg.timestamp)}</span>
+                      {msg.role === "assistant" && i > 0 && (
+                        <div className={styles.metaActions}>
+                          <button
+                            type="button"
+                            className={`${styles.feedbackBtn} ${
+                              msg.feedback === "helpful" ? styles.feedbackActiveGood : ""
+                            }`}
+                            onClick={() => handleFeedback(i, "helpful")}
+                            title="Câu trả lời hữu ích"
+                            aria-label="Hữu ích"
+                          >
+                            👍
+                          </button>
+                          <button
+                            type="button"
+                            className={`${styles.feedbackBtn} ${
+                              msg.feedback === "not_helpful" ? styles.feedbackActiveBad : ""
+                            }`}
+                            onClick={() => handleFeedback(i, "not_helpful")}
+                            title="Câu trả lời chưa đúng / chưa đủ thông tin"
+                            aria-label="Chưa hài lòng"
+                          >
+                            👎
+                          </button>
                           <button
                             type="button"
                             className={styles.copyBtn}
@@ -423,12 +534,12 @@ export default function ChatWidget() {
                           >
                             {copiedIndex === i ? "✓ Đã chép" : "Sao chép"}
                           </button>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
-                  </motion.div>
-                );
-              })}
+                  </div>
+                </motion.div>
+              ))}
 
               {/* Typing indicator */}
               {isLoading && (

@@ -4,7 +4,20 @@ import { clearApiKeyCache, clearGroqKeyCache } from '../lib/gemini.ts';
 export const ApiKeys: CollectionConfig = {
   slug: 'api-keys',
   hooks: {
-    afterChange: [() => { clearApiKeyCache(); clearGroqKeyCache(); }],
+    afterChange: [
+      ({ doc, previousDoc, operation }) => {
+        if (
+          operation === 'create' ||
+          doc.apiKey !== previousDoc?.apiKey ||
+          doc.isActive !== previousDoc?.isActive ||
+          doc.provider !== previousDoc?.provider ||
+          doc.preferredModel !== previousDoc?.preferredModel
+        ) {
+          clearApiKeyCache();
+          clearGroqKeyCache();
+        }
+      },
+    ],
     afterDelete: [() => { clearApiKeyCache(); clearGroqKeyCache(); }],
   },
   labels: {

@@ -4334,5 +4334,35 @@ export const MIGRATION_STATEMENTS = [
   // ==================================================
   `
     DO $$ BEGIN ALTER TABLE "vaccine_packages" ALTER COLUMN "discount_price" DROP NOT NULL; EXCEPTION WHEN others THEN null; END $$;
+  `,
+
+  // ==================================================
+  // BATCH: AiChatLogs collection (Phase 2 AI Assistant Analytics & Logs)
+  // ==================================================
+  `
+    CREATE TABLE IF NOT EXISTS "ai_chat_logs" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "question" varchar NOT NULL,
+      "answer" varchar NOT NULL,
+      "status" varchar DEFAULT 'answered' NOT NULL,
+      "feedback" varchar DEFAULT 'none',
+      "is_resolved" boolean DEFAULT false,
+      "admin_note" varchar,
+      "matched_sources" varchar,
+      "model_used" varchar,
+      "response_time_ms" numeric,
+      "client_ip" varchar,
+      "updated_at" timestamptz DEFAULT now() NOT NULL,
+      "created_at" timestamptz DEFAULT now() NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS "ai_chat_logs_created_at_idx" ON "ai_chat_logs" ("created_at");
+    CREATE INDEX IF NOT EXISTS "ai_chat_logs_updated_at_idx" ON "ai_chat_logs" ("updated_at");
+    CREATE INDEX IF NOT EXISTS "ai_chat_logs_status_idx" ON "ai_chat_logs" ("status");
+    CREATE INDEX IF NOT EXISTS "ai_chat_logs_feedback_idx" ON "ai_chat_logs" ("feedback");
+    CREATE INDEX IF NOT EXISTS "ai_chat_logs_is_resolved_idx" ON "ai_chat_logs" ("is_resolved");
+    DO $$ BEGIN ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "ai_chat_logs_id" integer REFERENCES "ai_chat_logs"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_column THEN null; END $$;
+    DO $$ BEGIN ALTER TABLE "payload_preferences_rels" ADD COLUMN "ai_chat_logs_id" integer REFERENCES "ai_chat_logs"("id") ON DELETE cascade ON UPDATE no action; EXCEPTION WHEN duplicate_column THEN null; END $$;
+    CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_ai_chat_logs_id_idx" ON "payload_locked_documents_rels" ("ai_chat_logs_id");
+    CREATE INDEX IF NOT EXISTS "payload_preferences_rels_ai_chat_logs_id_idx" ON "payload_preferences_rels" ("ai_chat_logs_id");
   `
 ];

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { askAI } from "@/lib/gemini";
+import { askAIWithMeta } from "@/lib/gemini";
 
 // ============================================================
 // GET /api/chat/public - Lấy cấu hình bật/tắt & tin nhắn chào mừng
@@ -31,7 +31,7 @@ export async function GET(request) {
 // Rate Limiting đơn giản theo IP (in-memory)
 // ============================================================
 const rateMap = new Map(); // IP -> { count, resetAt }
-const RATE_LIMIT = 10;     // tối đa 10 requests
+const RATE_LIMIT = 12;     // tối đa 12 requests
 const RATE_WINDOW = 60_000; // trong 60 giây
 
 function checkRateLimit(ip) {
@@ -46,6 +46,20 @@ function checkRateLimit(ip) {
   if (entry.count >= RATE_LIMIT) return false;
   entry.count++;
   return true;
+}
+
+// Ẩn danh một phần IP để bảo vệ quyền riêng tư người dân
+function maskClientIp(ip) {
+  if (!ip || ip === "unknown") return "unknown";
+  if (ip.includes(".")) {
+    const parts = ip.split(".");
+    if (parts.length === 4) return `${parts[0]}.${parts[1]}.${parts[2]}.***`;
+  }
+  if (ip.includes(":")) {
+    const parts = ip.split(":");
+    return parts.slice(0, 3).join(":") + ":***";
+  }
+  return ip;
 }
 
 // Cleanup cũ mỗi 5 phút để tránh memory leak
@@ -96,13 +110,80 @@ export async function POST(request) {
       (m) => m && typeof m.role === "string" && typeof m.content === "string"
     );
 
-    const answer = await askAI("public_" + ip, question, trimmedHistory);
+    const aiResult = await askAIWithMeta("public_" + ip, question, trimmedHistory);
 
-    return NextResponse.json({ success: true, answer });
+    // Lưu lịch sử hỏi đáp vào CSDL để thống kê & phát hiện câu hỏi thiếu tri thức
+    let logId = null;
+    try {
+      const { getPayload } = await import("payload");
+      const config = await import("@payload-config");
+      const payload = await getPayload({ config: config.default });
+      const createdLog = await payload.create({
+        collection: "ai-chat-logs",
+        data: {
+          question,
+          answer: aiResult.answer,
+          status: aiResult.status,
+          feedback: "none",
+          matchedSources: aiResult.matchedSources || "Không khớp trực tiếp",
+          modelUsed: aiResult.modelUsed || "gemini-2.5-flash",
+          responseTimeMs: aiResult.responseTimeMs || 0,
+          clientIp: maskClientIp(ip),
+          isResolved: false,
+        },
+      });
+      logId = createdLog?.id || null;
+    } catch (logErr) {
+      console.error("[POST /api/chat/public] Không thể ghi log AI:", logErr?.message || logErr);
+    }
+
+    return NextResponse.json({
+      success: true,
+      answer: aiResult.answer,
+      logId,
+    });
   } catch (error) {
     console.error("[POST /api/chat/public] Error:", error);
     return NextResponse.json(
       { success: false, error: "Hệ thống đang gặp sự cố. Vui lòng thử lại sau." },
+      { status: 500 }
+    );
+  }
+}
+
+// ============================================================
+// PATCH /api/chat/public - Ghi nhận đánh giá 👍 / 👎 của người dân
+// Body: { logId: number | string, feedback: 'helpful' | 'not_helpful' }
+// ============================================================
+export async function PATCH(request) {
+  try {
+    const body = await request.json();
+    const { logId, feedback } = body || {};
+
+    if (!logId || !["helpful", "not_helpful"].includes(feedback)) {
+      return NextResponse.json(
+        { success: false, error: "Dữ liệu đánh giá không hợp lệ." },
+        { status: 400 }
+      );
+    }
+
+    const { getPayload } = await import("payload");
+    const config = await import("@payload-config");
+    const payload = await getPayload({ config: config.default });
+
+    await payload.update({
+      collection: "ai-chat-logs",
+      id: logId,
+      data: {
+        feedback,
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("[PATCH /api/chat/public] Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Không thể lưu đánh giá." },
       { status: 500 }
     );
   }

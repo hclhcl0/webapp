@@ -38,6 +38,7 @@ import { default as default_1aa2999a49364743565bf91f3348acdc } from '@/component
 import { default as default_11bea0dfd321d7b114d61c03fc2ce164 } from '@/components/Admin/BulkUploadView.tsx'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { HeaderSaveButton as HeaderSaveButton_custom } from '@/components/Admin/HeaderSaveButton.tsx'
+import { AiChatStatsBanner as AiChatStatsBanner_custom } from '@/components/Admin/AiChatStatsBanner.tsx'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
@@ -80,5 +81,6 @@ export const importMap = {
   "@/components/Admin/UserGuideView.tsx#default": default_1aa2999a49364743565bf91f3348acdc,
   "@/components/Admin/BulkUploadView.tsx#default": default_11bea0dfd321d7b114d61c03fc2ce164,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
-  "@/components/Admin/HeaderSaveButton.tsx#HeaderSaveButton": HeaderSaveButton_custom
+  "@/components/Admin/HeaderSaveButton.tsx#HeaderSaveButton": HeaderSaveButton_custom,
+  "@/components/Admin/AiChatStatsBanner.tsx#AiChatStatsBanner": AiChatStatsBanner_custom
 }

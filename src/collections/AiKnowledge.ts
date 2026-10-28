@@ -15,9 +15,9 @@ export const AiKnowledge: CollectionConfig = {
     group: 'Quản trị hệ thống',
   },
   access: {
-    read: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),
-    create: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),
-    update: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),
+    read: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator', 'editor']),
+    create: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator', 'editor']),
+    update: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator', 'editor']),
     delete: ({ req: { user } }) => canAccessModule(user, 'ai-knowledge', ['admin', 'moderator']),
   },
   upload: {

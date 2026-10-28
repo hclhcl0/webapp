@@ -36,6 +36,7 @@ import { VideoChannels } from './collections/VideoChannels.ts';
 import { FormSubmissions } from './collections/FormSubmissions.ts';
 import { OrgUnits } from './collections/OrgUnits.ts';
 import { AiKnowledge } from './collections/AiKnowledge.ts';
+import { AiChatLogs } from './collections/AiChatLogs.ts';
 import { ApiKeys } from './collections/ApiKeys.ts';
 import { Procurements } from './collections/Procurements.ts';
 import { Vaccines } from './collections/Vaccines.ts';
@@ -165,6 +166,7 @@ export default buildConfig({
     Banners,
     FormSubmissions,
     AiKnowledge,
+    AiChatLogs,
     ApiKeys,
     Departments,
     Users,

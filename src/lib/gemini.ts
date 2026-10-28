@@ -473,11 +473,44 @@ function retrieveRelevantKnowledge(question: string, chunks: any[], history: any
   }
 
   let combinedText = "";
+  const matchedTitlesSet = new Set<string>();
   for (const chunk of selectedChunks) {
+    if (chunk.title) matchedTitlesSet.add(chunk.title);
     combinedText += `\n\n[CHUYÊN MÔN: ${(chunk.category || "").toUpperCase()}]\n--- Tài liệu: ${chunk.title} ---\n${chunk.content}`;
   }
 
-  return combinedText.trim();
+  return {
+    combinedText: combinedText.trim(),
+    matchedSources: Array.from(matchedTitlesSet).join(" | "),
+  };
+}
+
+/**
+ * Tự động phân loại trạng thái câu trả lời của AI để phục vụ thống kê và bổ sung Kho tri thức
+ */
+export function classifyAnswerStatus(answer: string): "answered" | "unanswered" | "out_of_scope" | "error" {
+  const lower = (answer || "").toLowerCase();
+  if (
+    lower.includes("đang xử lý lượng lớn yêu cầu") ||
+    lower.includes("hệ thống tạm thời gián đoạn") ||
+    lower.includes("không có phản hồi từ ai")
+  ) {
+    return "error";
+  }
+  if (
+    lower.includes("chỉ hỗ trợ các thông tin về y tế và dịch vụ của cdc đà nẵng")
+  ) {
+    return "out_of_scope";
+  }
+  if (
+    lower.includes("chưa có thông tin chi tiết trong hệ thống") ||
+    lower.includes("chưa có thông tin trong hệ thống") ||
+    lower.includes("tôi chưa có thông tin") ||
+    lower.includes("chưa được cập nhật trong hệ thống")
+  ) {
+    return "unanswered";
+  }
+  return "answered";
 }
 
 /**
@@ -511,7 +544,9 @@ async function prepareAIContext(userId: string, question: string, providedHistor
   const customPrompt = aiChat.chatCustomPrompt || "";
   const aiModel = aiChat.aiModel || "gemini-2.5-flash";
 
-  const knowledgeText = retrieveRelevantKnowledge(question, knowledgeChunks, providedHistory);
+  const retrievalResult = retrieveRelevantKnowledge(question, knowledgeChunks, providedHistory);
+  const knowledgeText = typeof retrievalResult === "string" ? retrievalResult : retrievalResult.combinedText;
+  const matchedSources = typeof retrievalResult === "string" ? "" : retrievalResult.matchedSources;
 
   const uniqueCategories = [...new Set(knowledgeChunks.map((c: any) => c.category).filter(Boolean))];
   const categoryList = uniqueCategories.length > 0 ? uniqueCategories.join(", ") : "Tiêm chủng, Vắc xin, Phòng chống dịch bệnh, Xét nghiệm";
@@ -544,18 +579,36 @@ ${knowledgeText || `(Chưa có tài liệu. Vui lòng liên hệ hotline ${hotli
     }
   }
 
-  return { systemInstruction, history, hotline, address, footerMsg: null, aiModel };
+  return { systemInstruction, history, hotline, address, footerMsg: null, aiModel, matchedSources };
 }
 
-export async function askAI(userId: string, question: string, providedHistory: any[] = []) {
+export async function askAIWithMeta(userId: string, question: string, providedHistory: any[] = []) {
+  const startTime = Date.now();
   const ctx = await prepareAIContext(userId, question, providedHistory);
   const aiModel = ctx.aiModel || "gemini-2.5-flash";
 
+  let answer = "";
   if (aiModel.includes("llama") || aiModel.includes("groq")) {
-    return await askGroq(userId, question, providedHistory, ctx);
+    answer = await askGroq(userId, question, providedHistory, ctx);
   } else {
-    return await askGemini(userId, question, providedHistory, ctx, aiModel);
+    answer = await askGemini(userId, question, providedHistory, ctx, aiModel);
   }
+
+  const responseTimeMs = Date.now() - startTime;
+  const status = classifyAnswerStatus(answer);
+
+  return {
+    answer,
+    status,
+    matchedSources: ctx.matchedSources || "",
+    modelUsed: aiModel,
+    responseTimeMs,
+  };
+}
+
+export async function askAI(userId: string, question: string, providedHistory: any[] = []) {
+  const res = await askAIWithMeta(userId, question, providedHistory);
+  return res.answer;
 }
 
 async function askGemini(userId: string, question: string, providedHistory: any[] = [], contextOverride?: any, aiModel: string = "gemini-2.5-flash") {
