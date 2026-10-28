@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload';
 import { extractAiKnowledgeHook } from './hooks/extractAiKnowledge.ts';
 import { canAccessModule } from '../lib/rbac.ts';
+import { clearKnowledgeCache } from '../lib/gemini.ts';
 
 export const AiKnowledge: CollectionConfig = {
   slug: 'ai-knowledge',
@@ -76,5 +77,7 @@ export const AiKnowledge: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [extractAiKnowledgeHook],
+    afterChange: [() => { clearKnowledgeCache(); }],
+    afterDelete: [() => { clearKnowledgeCache(); }],
   },
 };

@@ -1,7 +1,12 @@
 import type { CollectionConfig } from 'payload';
+import { clearApiKeyCache, clearGroqKeyCache } from '../lib/gemini.ts';
 
 export const ApiKeys: CollectionConfig = {
   slug: 'api-keys',
+  hooks: {
+    afterChange: [() => { clearApiKeyCache(); clearGroqKeyCache(); }],
+    afterDelete: [() => { clearApiKeyCache(); clearGroqKeyCache(); }],
+  },
   labels: {
     singular: 'API Key',
     plural: 'Danh sách API Keys',

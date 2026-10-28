@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload';
 import { canAccessModule } from '../lib/rbac.ts';
+import { clearKnowledgeCache } from '../lib/gemini.ts';
 
 export const VaccinePackages: CollectionConfig = {
   slug: 'vaccine-packages',
@@ -92,6 +93,8 @@ export const VaccinePackages: CollectionConfig = {
         return data;
       },
     ],
+    afterChange: [() => { clearKnowledgeCache(); }],
+    afterDelete: [() => { clearKnowledgeCache(); }],
   },
   fields: [
     // ─── Thông tin cơ bản ───────────────────────────────────────

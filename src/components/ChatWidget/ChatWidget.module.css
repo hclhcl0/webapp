@@ -161,6 +161,46 @@
   background: rgba(255, 255, 255, 0.28);
 }
 
+/* Quick Action Bar */
+.quickBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-bottom: 1px solid #eef2f6;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.quickBar::-webkit-scrollbar {
+  height: 0;
+}
+
+.quickActionChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid rgba(var(--primary-rgb, 0, 122, 140), 0.25);
+  color: var(--primary, #007a8c);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-family, system-ui, sans-serif);
+}
+
+.quickActionChip:hover {
+  background: var(--primary, #007a8c);
+  color: #fff;
+  border-color: var(--primary, #007a8c);
+}
+
 /* Messages area */
 .messages {
   flex: 1;
@@ -227,16 +267,94 @@
   border-bottom-right-radius: 4px;
 }
 
-.bubbleTime {
-  font-size: 10px;
-  color: #aab;
-  margin-top: 3px;
-  padding: 0 4px;
-  text-align: right;
+.normalLine {
+  margin-bottom: 3px;
 }
 
-.userBubble .bubbleTime {
-  text-align: right;
+.normalLine:last-child {
+  margin-bottom: 0;
+}
+
+.listLine {
+  margin-bottom: 5px;
+  padding-left: 4px;
+}
+
+.emptyLine {
+  height: 6px;
+}
+
+.boldText {
+  font-weight: 700;
+  color: #0d3b4c;
+}
+
+.userBubble .boldText {
+  color: #fff;
+}
+
+.chatLink {
+  display: inline-block;
+  color: var(--primary, #007a8c);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  margin: 1px 0;
+}
+
+.chatLink:hover {
+  opacity: 0.85;
+}
+
+.phoneLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(var(--primary-rgb, 0, 122, 140), 0.12);
+  color: var(--primary, #007a8c);
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 12.5px;
+  transition: background 0.15s ease;
+}
+
+.phoneLink:hover {
+  background: rgba(var(--primary-rgb, 0, 122, 140), 0.22);
+}
+
+.bubbleMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3px;
+  padding: 0 4px;
+}
+
+.bubbleTime {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.userBubble .bubbleMeta {
+  justify-content: flex-end;
+}
+
+.copyBtn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 10.5px;
+  cursor: pointer;
+  padding: 1px 4px;
+  border-radius: 4px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.copyBtn:hover {
+  color: var(--primary, #007a8c);
+  background: rgba(var(--primary-rgb, 0, 122, 140), 0.08);
 }
 
 /* Typing indicator */

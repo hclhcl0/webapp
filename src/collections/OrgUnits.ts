@@ -1,8 +1,13 @@
 import type { CollectionConfig } from 'payload';
 import { canAccessModule } from '../lib/rbac.ts';
+import { clearKnowledgeCache } from '../lib/gemini.ts';
 
 export const OrgUnits: CollectionConfig = {
   slug: 'org-units',
+  hooks: {
+    afterChange: [() => { clearKnowledgeCache(); }],
+    afterDelete: [() => { clearKnowledgeCache(); }],
+  },
   labels: {
     singular: 'Phòng/Khoa/Ban',
     plural: 'Cơ cấu tổ chức',

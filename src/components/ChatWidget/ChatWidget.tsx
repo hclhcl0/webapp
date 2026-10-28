@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import styles from "./ChatWidget.module.css";
 
 interface Message {
@@ -14,22 +15,118 @@ const STORAGE_KEY = "cdc_chat_history";
 const MAX_STORED_MESSAGES = 20;
 
 const SUGGESTED_QUESTIONS = [
-  "Giá tiêm vắc xin tại CDC Đà Nẵng?",
-  "Lịch làm việc của CDC Đà Nẵng?",
-  "Cách phòng ngừa sốt xuất huyết?",
-  "Xét nghiệm HIV ở đâu tại Đà Nẵng?",
+  "💉 Bảng giá vắc xin dịch vụ tại CDC Đà Nẵng?",
+  "📅 Lịch tiêm chủng và khám của CDC Đà Nẵng?",
+  "👶 Các gói vắc xin combo cho trẻ em?",
+  "🏥 Quy trình tiêm chủng tại CDC Đà Nẵng?",
+  "🦟 Cách phòng ngừa bệnh sốt xuất huyết?",
 ];
 
-const BOT_GREETING = `Xin chào! Tôi là Trợ lý AI của Trung tâm Kiểm soát Bệnh tật TP. Đà Nẵng.\n\nTôi có thể giúp bạn tìm hiểu về các dịch vụ y tế, phòng bệnh, lịch tiêm chủng và nhiều thông tin sức khỏe khác.\n\nBạn muốn hỏi gì hôm nay?`;
+/**
+ * Render một dòng văn bản hỗ trợ:
+ * - **in đậm**
+ * - [Text](url)
+ * - Đường dẫn nội bộ (/goi-vac-xin, /bai-viet/..., /suc-khoe, /dich-vu) hoặc https://...
+ * - Số điện thoại / Hotline (1900..., 0236..., 09...) bấm gọi trực tiếp
+ */
+function renderInlineTokens(text: string): React.ReactNode[] {
+  // Tách trước theo **in đậm**
+  const boldParts = text.split(/(\*\*[^*]+\*\*)/g);
+  const nodes: React.ReactNode[] = [];
+
+  boldParts.forEach((part, idx) => {
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+      const inner = part.slice(2, -2);
+      nodes.push(
+        <strong key={`b-${idx}`} className={styles.boldText}>
+          {renderLinksAndPhones(inner, `b-${idx}`)}
+        </strong>
+      );
+    } else {
+      nodes.push(...renderLinksAndPhones(part, `t-${idx}`));
+    }
+  });
+
+  return nodes;
+}
+
+function renderLinksAndPhones(text: string, keyPrefix: string): React.ReactNode[] {
+  // Regex nhận diện:
+  // 1. Markdown link: [label](url)
+  // 2. URL đầy đủ: https?://[^\s),]+
+  // 3. Đường dẫn nội bộ: /(?:goi-vac-xin|bai-viet|suc-khoe|dich-vu|documents|mua-sam|contact)(?:/[^\s),.]*)?
+  // 4. Số điện thoại / Hotline: \b(?:1900[\s.]?\d{4,6}|0236[\s.]?\d{3}[\s.]?\d{3,4}|0[35789]\d{8})\b
+  const tokenRegex = /(\[[^\]]+\]\([^)]+\)|https?:\/\/[^\s),]+|\/(?:goi-vac-xin|bai-viet|suc-khoe|dich-vu|documents|mua-sam|contact)(?:\/[^\s),.]*)?|\b(?:1900[\s.]?\d{4,6}|0236[\s.]?\d{3}[\s.]?\d{3,4}|0[35789]\d{8})\b)/g;
+
+  const parts = text.split(tokenRegex);
+  return parts.map((segment, i) => {
+    if (!segment) return null;
+    const key = `${keyPrefix}-${i}`;
+
+    // 1. Markdown link [label](url)
+    const mdMatch = segment.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (mdMatch) {
+      const [, label, url] = mdMatch;
+      const isInternal = url.startsWith("/");
+      return isInternal ? (
+        <Link key={key} href={url} className={styles.chatLink}>
+          {label}
+        </Link>
+      ) : (
+        <a key={key} href={url} target="_blank" rel="noopener noreferrer" className={styles.chatLink}>
+          {label}
+        </a>
+      );
+    }
+
+    // 2. Đường dẫn nội bộ (/goi-vac-xin...)
+    if (segment.startsWith("/")) {
+      const labelMap: Record<string, string> = {
+        "/goi-vac-xin": "👉 Xem bảng giá & gói vắc xin (/goi-vac-xin)",
+        "/dich-vu": "👉 Xem dịch vụ y tế (/dich-vu)",
+        "/suc-khoe": "👉 Chuyên mục sức khỏe (/suc-khoe)",
+      };
+      return (
+        <Link key={key} href={segment} className={styles.chatLink}>
+          {labelMap[segment] || segment}
+        </Link>
+      );
+    }
+
+    // 3. URL https://...
+    if (/^https?:\/\//.test(segment)) {
+      return (
+        <a key={key} href={segment} target="_blank" rel="noopener noreferrer" className={styles.chatLink}>
+          {segment}
+        </a>
+      );
+    }
+
+    // 4. Số điện thoại / Hotline
+    if (/^(?:1900|0236|0[35789])/.test(segment)) {
+      const cleanTel = segment.replace(/[\s.]/g, "");
+      return (
+        <a key={key} href={`tel:${cleanTel}`} className={styles.phoneLink} title={`Gọi ${segment}`}>
+          📞 {segment}
+        </a>
+      );
+    }
+
+    return <React.Fragment key={key}>{segment}</React.Fragment>;
+  });
+}
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isEnabled, setIsEnabled] = useState<boolean | null>(null);
   const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [hotline, setHotline] = useState("1900988975");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const isInitialized = useRef(false);
@@ -43,7 +140,8 @@ export default function ChatWidget() {
         if (data.success) {
           setIsEnabled(data.enabled);
           setWelcomeMessage(data.welcomeMessage);
-          
+          if (data.hotline) setHotline(data.hotline);
+
           if (!data.enabled) return;
 
           // Load history from sessionStorage
@@ -92,7 +190,7 @@ export default function ChatWidget() {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isOpen, isLoading]);
+  }, [messages, isOpen, isLoading, showSuggestions]);
 
   // Focus input when opened
   useEffect(() => {
@@ -108,17 +206,18 @@ export default function ChatWidget() {
 
   const sendMessage = useCallback(
     async (text: string) => {
-      const trimmed = text.trim();
-      if (!trimmed || isLoading) return;
+      const cleanQuestion = text.replace(/^[💉📅👶🏥🦟]\s*/, "").trim();
+      if (!cleanQuestion || isLoading) return;
 
       const userMsg: Message = {
         role: "user",
-        content: trimmed,
+        content: cleanQuestion,
         timestamp: Date.now(),
       };
 
       setMessages((prev) => [...prev, userMsg]);
       setInput("");
+      setShowSuggestions(false);
       setIsLoading(true);
 
       // Build history for API (exclude greeting, last 10 messages)
@@ -131,7 +230,7 @@ export default function ChatWidget() {
         const res = await fetch("/api/chat/public", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question: trimmed, history }),
+          body: JSON.stringify({ question: cleanQuestion, history }),
         });
 
         const data = await res.json();
@@ -175,6 +274,7 @@ export default function ChatWidget() {
     try {
       sessionStorage.removeItem(STORAGE_KEY);
     } catch {}
+    setShowSuggestions(false);
     setMessages([
       {
         role: "assistant",
@@ -182,6 +282,13 @@ export default function ChatWidget() {
         timestamp: Date.now(),
       },
     ]);
+  };
+
+  const handleCopy = (text: string, idx: number) => {
+    const plain = text.replace(/\*\*(.*?)\*\*/g, "$1");
+    navigator.clipboard?.writeText(plain);
+    setCopiedIndex(idx);
+    setTimeout(() => setCopiedIndex(null), 2000);
   };
 
   const formatTime = (ts: number) =>
@@ -193,6 +300,8 @@ export default function ChatWidget() {
   if (isEnabled === null || !isEnabled) {
     return null;
   }
+
+  const isOnlyGreeting = messages.length === 1 && messages[0].role === "assistant";
 
   return (
     <>
@@ -215,14 +324,14 @@ export default function ChatWidget() {
                 </div>
                 <div>
                   <div className={styles.headerTitle}>Trợ lý AI CDC Đà Nẵng</div>
-                  <div className={styles.headerSub}>Hỗ trợ thông tin y tế</div>
+                  <div className={styles.headerSub}>Hỗ trợ tra cứu y tế & tiêm chủng 24/7</div>
                 </div>
               </div>
               <div className={styles.headerActions}>
                 <button
                   className={styles.iconBtn}
                   onClick={handleClearHistory}
-                  title="Xóa lịch sử hội thoại"
+                  title="Làm mới cuộc trò chuyện"
                   aria-label="Xóa lịch sử"
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -246,34 +355,80 @@ export default function ChatWidget() {
               </div>
             </div>
 
+            {/* Quick Action Bar */}
+            <div className={styles.quickBar}>
+              <Link href="/goi-vac-xin" className={styles.quickActionChip}>
+                💉 Bảng giá Vắc xin
+              </Link>
+              <a href={`tel:${hotline.replace(/[\s.]/g, "")}`} className={styles.quickActionChip}>
+                📞 Gọi {hotline}
+              </a>
+              {!isOnlyGreeting && (
+                <button
+                  type="button"
+                  className={styles.quickActionChip}
+                  onClick={() => setShowSuggestions((prev) => !prev)}
+                >
+                  💡 Câu hỏi gợi ý
+                </button>
+              )}
+            </div>
+
             {/* Messages */}
             <div className={styles.messages} role="log" aria-live="polite">
-              {messages.map((msg, i) => (
-                <motion.div
-                  key={i}
-                  className={`${styles.messageBubble} ${
-                    msg.role === "user" ? styles.userBubble : styles.botBubble
-                  }`}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {msg.role === "assistant" && (
-                    <div className={styles.botIcon}>🤖</div>
-                  )}
-                  <div className={styles.bubbleContent}>
-                    <div className={styles.bubbleText}>
-                      {msg.content.split("\n").map((line, j) => (
-                        <span key={j}>
-                          {line}
-                          {j < msg.content.split("\n").length - 1 && <br />}
-                        </span>
-                      ))}
+              {messages.map((msg, i) => {
+                const lines = msg.content.split("\n");
+                return (
+                  <motion.div
+                    key={i}
+                    className={`${styles.messageBubble} ${
+                      msg.role === "user" ? styles.userBubble : styles.botBubble
+                    }`}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {msg.role === "assistant" && (
+                      <div className={styles.botIcon}>🤖</div>
+                    )}
+                    <div className={styles.bubbleContent}>
+                      <div className={styles.bubbleText}>
+                        {lines.map((line, j) => {
+                          const trimmedLine = line.trim();
+                          const isBullet = /^[•+]\s+/.test(trimmedLine) || /^\d+\.\s+/.test(trimmedLine);
+                          return (
+                            <div
+                              key={j}
+                              className={
+                                trimmedLine === ""
+                                  ? styles.emptyLine
+                                  : isBullet
+                                  ? styles.listLine
+                                  : styles.normalLine
+                              }
+                            >
+                              {msg.role === "assistant" ? renderInlineTokens(line) : line}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className={styles.bubbleMeta}>
+                        <span className={styles.bubbleTime}>{formatTime(msg.timestamp)}</span>
+                        {msg.role === "assistant" && i > 0 && (
+                          <button
+                            type="button"
+                            className={styles.copyBtn}
+                            onClick={() => handleCopy(msg.content, i)}
+                            title="Sao chép câu trả lời"
+                          >
+                            {copiedIndex === i ? "✓ Đã chép" : "Sao chép"}
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <div className={styles.bubbleTime}>{formatTime(msg.timestamp)}</div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
 
               {/* Typing indicator */}
               {isLoading && (
@@ -296,8 +451,8 @@ export default function ChatWidget() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Suggested questions (shown when only greeting exists) */}
-            {messages.length === 1 && messages[0].role === "assistant" && (
+            {/* Suggested questions */}
+            {(isOnlyGreeting || showSuggestions) && (
               <div className={styles.suggestions}>
                 {SUGGESTED_QUESTIONS.map((q, i) => (
                   <button
@@ -320,7 +475,7 @@ export default function ChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Nhập câu hỏi... (Enter để gửi)"
+                placeholder="Nhập câu hỏi y tế, vắc xin... (Enter để gửi)"
                 rows={1}
                 maxLength={1000}
                 disabled={isLoading}

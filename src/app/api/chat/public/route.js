@@ -16,6 +16,7 @@ export async function GET(request) {
       success: true,
       enabled: aiChat?.chatEnabled !== false, // Mặc định là true nếu chưa lưu cấu hình
       welcomeMessage: aiChat?.chatWelcomeMessage || "Xin chào! Tôi là Trợ lý AI của CDC Đà Nẵng. Tôi có thể giúp gì cho bạn hôm nay?",
+      hotline: aiChat?.aiHotline || "1900988975",
     });
   } catch (error) {
     console.error("[GET /api/chat/public] Error:", error);
