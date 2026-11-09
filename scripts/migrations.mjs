@@ -4433,5 +4433,77 @@ export const MIGRATION_STATEMENTS = [
       END IF;
     EXCEPTION WHEN others THEN null;
     END $$;
+  `,
+
+  // ==================================================
+  // BATCH: procurementSection block for settings & site_settings homeSections
+  // ==================================================
+  `
+    CREATE TABLE IF NOT EXISTS "settings_blocks_procurement_section" (
+      "id" varchar PRIMARY KEY NOT NULL,
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "_path" text NOT NULL,
+      "block_name" varchar,
+      "title" varchar DEFAULT 'Thông tin Mua sắm & Đấu thầu',
+      "subtitle" varchar DEFAULT 'Công khai, minh bạch các gói mua sắm, thư mời chào giá và kết quả lựa chọn nhà thầu.',
+      "columns" varchar DEFAULT '4',
+      "limit" numeric DEFAULT 8,
+      "filter_status" varchar DEFAULT 'all',
+      "show_tabs" boolean DEFAULT true,
+      "show_view_all" boolean DEFAULT true,
+      CONSTRAINT "settings_blocks_procurement_section_parent_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "settings" ("id") ON DELETE cascade ON UPDATE no action
+    );
+    CREATE INDEX IF NOT EXISTS "settings_blocks_procurement_section_order_idx" ON "settings_blocks_procurement_section" USING btree ("_order");
+    CREATE INDEX IF NOT EXISTS "settings_blocks_procurement_section_parent_idx" ON "settings_blocks_procurement_section" USING btree ("_parent_id");
+    CREATE INDEX IF NOT EXISTS "settings_blocks_procurement_section_path_idx" ON "settings_blocks_procurement_section" USING btree ("_path");
+
+    CREATE TABLE IF NOT EXISTS "site_settings_blocks_procurement_section" (
+      "id" varchar PRIMARY KEY NOT NULL,
+      "_order" integer NOT NULL,
+      "_parent_id" integer NOT NULL,
+      "_path" text NOT NULL,
+      "block_name" varchar,
+      "title" varchar DEFAULT 'Thông tin Mua sắm & Đấu thầu',
+      "subtitle" varchar DEFAULT 'Công khai, minh bạch các gói mua sắm, thư mời chào giá và kết quả lựa chọn nhà thầu.',
+      "columns" varchar DEFAULT '4',
+      "limit" numeric DEFAULT 8,
+      "filter_status" varchar DEFAULT 'all',
+      "show_tabs" boolean DEFAULT true,
+      "show_view_all" boolean DEFAULT true,
+      CONSTRAINT "site_settings_blocks_procurement_section_parent_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "public"."site_settings"("id") ON DELETE cascade ON UPDATE no action
+    );
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_procurement_section_order_idx" ON "site_settings_blocks_procurement_section" USING btree ("_order");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_procurement_section_parent_idx" ON "site_settings_blocks_procurement_section" USING btree ("_parent_id");
+    CREATE INDEX IF NOT EXISTS "site_settings_blocks_procurement_section_path_idx" ON "site_settings_blocks_procurement_section" USING btree ("_path");
+
+    DO $$
+    DECLARE
+      v_parent_id integer;
+    BEGIN
+      SELECT id INTO v_parent_id FROM "site_settings" ORDER BY id DESC LIMIT 1;
+      IF v_parent_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM "site_settings_blocks_procurement_section" WHERE "_parent_id" = v_parent_id) THEN
+        INSERT INTO "site_settings_blocks_procurement_section" (
+          "id", "_order", "_parent_id", "_path", "block_name",
+          "title", "subtitle", "columns", "limit", "filter_status", "show_tabs", "show_view_all"
+        ) VALUES (
+          '7b72d6d989d499eb9cc6d002',
+          7,
+          v_parent_id,
+          'homeSections',
+          '',
+          'Thông tin Mua sắm & Đấu thầu',
+          'Công khai, minh bạch các gói mua sắm, thư mời chào giá và kết quả lựa chọn nhà thầu.',
+          '4',
+          8,
+          'all',
+          true,
+          true
+        );
+      END IF;
+    EXCEPTION WHEN others THEN null;
+    END $$;
   `
 ];

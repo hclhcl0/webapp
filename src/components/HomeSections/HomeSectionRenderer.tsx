@@ -10,6 +10,7 @@ import { TikTokSection } from './TikTokSection';
 import { ScheduleBlock } from '../blocks/ScheduleBlock';
 import { VaccineSection } from './VaccineSection';
 import { CdcMediaSection } from './CdcMediaSection';
+import { ProcurementSection } from './ProcurementSection';
 import { AdSlider } from './AdSlider';
 
 interface HomeSectionRendererProps {
@@ -188,6 +189,20 @@ export async function HomeSectionRenderer({ sections }: HomeSectionRendererProps
                 limit={section.limit || 8}
                 showStats={section.showStats !== false}
                 allowLayoutSwitch={section.allowLayoutSwitch !== false}
+              />
+            );
+
+          case 'procurementSection':
+            return (
+              <ProcurementSection
+                key={`${blockType}-${index}`}
+                title={section.title}
+                subtitle={section.subtitle}
+                columns={section.columns || '4'}
+                limit={section.limit || 8}
+                filterStatus={section.filterStatus || 'all'}
+                showTabs={section.showTabs !== false}
+                showViewAll={section.showViewAll !== false}
               />
             );
 

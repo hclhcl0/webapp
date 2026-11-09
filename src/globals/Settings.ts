@@ -342,6 +342,85 @@ export const Settings: GlobalConfig = {
           ],
         },
 
+        // ── Block Thông tin Mua sắm & Đấu thầu ──
+        {
+          slug: 'procurementSection',
+          interfaceName: 'ProcurementSectionBlock',
+          labels: {
+            singular: '🛒 Khu vực Thông tin Mua sắm & Đấu thầu',
+            plural: 'Khu vực Thông tin Mua sắm & Đấu thầu',
+          },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'Tiêu đề khu vực',
+                  defaultValue: 'Thông tin Mua sắm & Đấu thầu',
+                },
+                {
+                  name: 'subtitle',
+                  type: 'text',
+                  label: 'Mô tả phụ',
+                  defaultValue: 'Công khai, minh bạch các gói mua sắm, thư mời chào giá và kết quả lựa chọn nhà thầu.',
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'columns',
+                  type: 'select',
+                  label: 'Số cột hiển thị trên máy tính',
+                  defaultValue: '4',
+                  options: [
+                    { label: '3 cột', value: '3' },
+                    { label: '4 cột', value: '4' },
+                  ],
+                },
+                {
+                  name: 'limit',
+                  type: 'number',
+                  label: 'Số văn bản hiển thị tối đa',
+                  defaultValue: 8,
+                  min: 3,
+                  max: 24,
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'filterStatus',
+                  type: 'select',
+                  label: 'Lọc dữ liệu ban đầu',
+                  defaultValue: 'all',
+                  options: [
+                    { label: 'Tất cả văn bản', value: 'all' },
+                    { label: 'Chỉ các gói Đang mở hồ sơ', value: 'open_only' },
+                  ],
+                },
+                {
+                  name: 'showTabs',
+                  type: 'checkbox',
+                  label: 'Hiển thị các Tab lọc nhanh (Tất cả / Đang mở / Đã đóng / Xét thầu)',
+                  defaultValue: true,
+                },
+                {
+                  name: 'showViewAll',
+                  type: 'checkbox',
+                  label: 'Hiển thị nút "Xem tất cả thông báo mua sắm"',
+                  defaultValue: true,
+                },
+              ],
+            },
+          ],
+        },
+
         // ── Block 1: Khu vực tin tức theo chuyên mục ──
         {
           slug: 'newsCategorySection',
