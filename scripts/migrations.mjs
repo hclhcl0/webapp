@@ -4458,24 +4458,27 @@ export const MIGRATION_STATEMENTS = [
       v_parent_id integer;
     BEGIN
       SELECT id INTO v_parent_id FROM "site_settings" ORDER BY id DESC LIMIT 1;
-      IF v_parent_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM "site_settings_blocks_procurement_section" WHERE "_parent_id" = v_parent_id) THEN
-        INSERT INTO "site_settings_blocks_procurement_section" (
-          "id", "_order", "_parent_id", "_path", "block_name",
-          "title", "subtitle", "columns", "limit", "filter_status", "show_tabs", "show_view_all"
-        ) VALUES (
-          '7b72d6d989d499eb9cc6d002',
-          7,
-          v_parent_id,
-          'homeSections',
-          '',
-          'Thông tin Mua sắm & Đấu thầu',
-          'Công khai, minh bạch các gói mua sắm, thư mời chào giá và kết quả lựa chọn nhà thầu.',
-          '4',
-          8,
-          'all',
-          true,
-          true
-        );
+      IF v_parent_id IS NOT NULL THEN
+        UPDATE "site_settings_blocks_video_section" SET "_order" = 8 WHERE "_parent_id" = v_parent_id AND "_order" <= 7;
+        IF NOT EXISTS (SELECT 1 FROM "site_settings_blocks_procurement_section" WHERE "_parent_id" = v_parent_id) THEN
+          INSERT INTO "site_settings_blocks_procurement_section" (
+            "id", "_order", "_parent_id", "_path", "block_name",
+            "title", "subtitle", "columns", "limit", "filter_status", "show_tabs", "show_view_all"
+          ) VALUES (
+            '7b72d6d989d499eb9cc6d002',
+            7,
+            v_parent_id,
+            'homeSections',
+            '',
+            'Thông tin Mua sắm & Đấu thầu',
+            'Công khai, minh bạch các gói mua sắm, thư mời chào giá và kết quả lựa chọn nhà thầu.',
+            '4',
+            8,
+            'all',
+            true,
+            true
+          );
+        END IF;
       END IF;
     EXCEPTION WHEN others THEN null;
     END $$;
