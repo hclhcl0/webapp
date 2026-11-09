@@ -70,7 +70,7 @@ export async function ProcurementSection({
     if (initialItems.length === 0) return null;
 
     return (
-      <section className="w-full py-10 md:py-12 bg-slate-50/70 border-t border-slate-200/60 relative">
+      <section className="w-full py-6 md:py-8 bg-slate-50/60 border-t border-slate-200/60 relative">
         <div className="container mx-auto px-4 max-w-7xl relative z-10">
           <HomeProcurementGrid
             title={title}

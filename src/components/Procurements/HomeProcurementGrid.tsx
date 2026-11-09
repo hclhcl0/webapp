@@ -6,16 +6,13 @@ import {
   FileText, 
   Download, 
   Clock, 
-  AlertCircle, 
-  CheckCircle2, 
   Eye, 
   ExternalLink, 
-  X,
-  Calendar,
-  ArrowRight,
-  ShoppingBag,
-  Sparkles,
-  Inbox
+  X, 
+  Calendar, 
+  ArrowRight, 
+  ShoppingBag, 
+  Inbox 
 } from 'lucide-react';
 import { resolveFileUrl, isGoogleDriveUrl, toDrivePreviewUrl } from '@/lib/driveUrl';
 
@@ -54,7 +51,7 @@ const TYPE_CONFIG: Record<string, { label: string; badgeClass: string }> = {
     badgeClass: 'bg-blue-50 text-blue-800 border-blue-200/80',
   },
   'ket-qua-lua-chon': {
-    label: 'Kết quả lựa chọn nhà thầu',
+    label: 'Kết quả lựa chọn',
     badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
   },
   'thong-bao': {
@@ -73,13 +70,13 @@ const TYPE_CONFIG: Record<string, { label: string; badgeClass: string }> = {
 
 const STATUS_CONFIG: Record<string, { label: string; badgeClass: string; dotClass?: string }> = {
   open: {
-    label: 'Đang mở hồ sơ',
+    label: 'Đang mở',
     badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200/90',
     dotClass: 'bg-emerald-500 animate-pulse',
   },
   closed: {
     label: 'Đã đóng',
-    badgeClass: 'bg-slate-100 text-slate-600 border-slate-200',
+    badgeClass: 'bg-slate-100 text-slate-500 border-slate-200',
     dotClass: 'bg-slate-400',
   },
   evaluated: {
@@ -110,7 +107,7 @@ function formatDeadline(d: string | null | undefined): string {
   });
   if (hours !== 0 || minutes !== 0) {
     const timeStr = dt.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
-    return `${timeStr} ngày ${dateStr}`;
+    return `${timeStr} ${dateStr}`;
   }
   return dateStr;
 }
@@ -188,23 +185,23 @@ export function HomeProcurementGrid({
   }, [items, activeTab, limit]);
 
   const gridColsClass = columns === '3' 
-    ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5' 
-    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5';
+    ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4' 
+    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4';
 
   return (
     <div className="w-full">
-      {/* ── Section Header ── */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+      {/* ── Section Header (Gọn gàng) ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3.5">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-2 border border-emerald-200/80">
-            <ShoppingBag size={13} className="text-emerald-600" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold uppercase tracking-wider mb-1 border border-emerald-200/80">
+            <ShoppingBag size={12} className="text-emerald-600" />
             <span>Mua sắm & Đấu thầu</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs text-slate-500 mt-0.5 max-w-2xl">
               {subtitle}
             </p>
           )}
@@ -213,28 +210,28 @@ export function HomeProcurementGrid({
         {showViewAll && (
           <Link
             href="/mua-sam"
-            className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-emerald-700 text-sm font-semibold transition-all shadow-sm group self-start md:self-auto"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline group"
           >
             <span>Xem tất cả thông báo</span>
-            <ArrowRight size={16} className="text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
+            <ArrowRight size={14} className="text-emerald-600 group-hover:translate-x-1 transition-transform" />
           </Link>
         )}
       </div>
 
-      {/* ── Tab Filter Bar ── */}
+      {/* ── Tab Filter Bar (Gọn gàng) ── */}
       {showTabs && (
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 mb-3.5 scrollbar-none">
           <button
             type="button"
             onClick={() => setActiveTab('all')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               activeTab === 'all'
-                ? 'bg-slate-900 text-white shadow-sm'
+                ? 'bg-slate-900 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
             <span>Tất cả</span>
-            <span className={`px-2 py-0.5 rounded-full text-xs ${activeTab === 'all' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}`}>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${activeTab === 'all' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}`}>
               {counts.all}
             </span>
           </button>
@@ -242,15 +239,15 @@ export function HomeProcurementGrid({
           <button
             type="button"
             onClick={() => setActiveTab('open')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               activeTab === 'open'
-                ? 'bg-emerald-600 text-white shadow-sm'
+                ? 'bg-emerald-600 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 border border-slate-200'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>Đang mở hồ sơ</span>
-            <span className={`px-2 py-0.5 rounded-full text-xs ${activeTab === 'open' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'}`}>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${activeTab === 'open' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'}`}>
               {counts.open}
             </span>
           </button>
@@ -258,14 +255,14 @@ export function HomeProcurementGrid({
           <button
             type="button"
             onClick={() => setActiveTab('closed')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               activeTab === 'closed'
-                ? 'bg-slate-700 text-white shadow-sm'
+                ? 'bg-slate-700 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
             <span>Đã đóng</span>
-            <span className={`px-2 py-0.5 rounded-full text-xs ${activeTab === 'closed' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}`}>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${activeTab === 'closed' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}`}>
               {counts.closed}
             </span>
           </button>
@@ -273,28 +270,28 @@ export function HomeProcurementGrid({
           <button
             type="button"
             onClick={() => setActiveTab('evaluated')}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               activeTab === 'evaluated'
-                ? 'bg-blue-600 text-white shadow-sm'
+                ? 'bg-blue-600 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-blue-50 hover:text-blue-700 border border-slate-200'
             }`}
           >
             <span>Kết quả xét thầu</span>
-            <span className={`px-2 py-0.5 rounded-full text-xs ${activeTab === 'evaluated' ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-800'}`}>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${activeTab === 'evaluated' ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-800'}`}>
               {counts.evaluated}
             </span>
           </button>
         </div>
       )}
 
-      {/* ── Modern Grid Cards ── */}
+      {/* ── Compact Grid Cards ── */}
       {displayedItems.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center flex flex-col items-center justify-center">
-          <div className="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mb-3">
-            <Inbox size={26} />
+        <div className="bg-white rounded-xl border border-slate-200 p-8 text-center flex flex-col items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center mb-2">
+            <Inbox size={20} />
           </div>
-          <h3 className="text-base font-semibold text-slate-700">Chưa có thông báo nào trong mục này</h3>
-          <p className="text-xs text-slate-500 mt-1">Vui lòng chọn tab khác hoặc quay lại xem sau.</p>
+          <h3 className="text-sm font-semibold text-slate-700">Chưa có thông báo nào trong mục này</h3>
+          <p className="text-xs text-slate-500 mt-0.5">Vui lòng chọn tab khác hoặc quay lại xem sau.</p>
         </div>
       ) : (
         <div className={gridColsClass}>
@@ -333,17 +330,23 @@ export function HomeProcurementGrid({
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-2xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] hover:border-emerald-300 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden group p-5"
+                className="bg-white rounded-xl border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.06)] hover:border-emerald-400 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between overflow-hidden group p-3.5"
               >
                 <div>
-                  {/* Card Top: Document number & Status Pill */}
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 text-[11px] font-mono font-bold tracking-wide">
-                      <FileText size={12} className="text-slate-400" />
-                      <span className="truncate max-w-[120px]">{item.documentNumber || 'VĂN BẢN'}</span>
+                  {/* Card Top: Type + Doc Number & Status in 1 Single Row */}
+                  <div className="flex items-center justify-between gap-1.5 mb-2">
+                    <div className="flex items-center gap-1 min-w-0 flex-1">
+                      <span className={`inline-block text-[10px] font-bold px-1.5 py-0.5 rounded border truncate ${typeInfo.badgeClass}`}>
+                        {typeInfo.label}
+                      </span>
+                      {item.documentNumber && (
+                        <span className="text-[10px] font-mono text-slate-500 truncate" title={item.documentNumber}>
+                          #{item.documentNumber}
+                        </span>
+                      )}
                     </div>
 
-                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${statusInfo.badgeClass}`}>
+                    <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border flex-shrink-0 ${statusInfo.badgeClass}`}>
                       {statusInfo.dotClass && (
                         <span className={`w-1.5 h-1.5 rounded-full ${statusInfo.dotClass}`} />
                       )}
@@ -351,62 +354,40 @@ export function HomeProcurementGrid({
                     </div>
                   </div>
 
-                  {/* Procurement Type Badge */}
-                  <div className="mb-2.5">
-                    <span className={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-md border ${typeInfo.badgeClass}`}>
-                      {typeInfo.label}
-                    </span>
-                  </div>
-
-                  {/* Title */}
+                  {/* Title (2 lines clamp, neat typography) */}
                   <h3
                     onClick={fileUrl ? handleOpenPreview : undefined}
-                    className={`text-[15px] font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-3 leading-snug mb-3.5 ${
+                    className={`text-[13px] font-bold text-slate-800 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug mb-2 ${
                       fileUrl ? 'cursor-pointer' : ''
                     }`}
                     title={item.title}
                   >
                     {isNew && (
-                      <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-extrabold bg-red-500 text-white mr-1.5 align-middle uppercase tracking-wider">
+                      <span className="inline-flex items-center px-1 py-0.2 rounded text-[9px] font-extrabold bg-red-500 text-white mr-1 align-middle uppercase tracking-wide">
                         Mới
                       </span>
                     )}
                     {item.title}
                   </h3>
-
-                  {/* Note if any */}
-                  {item.note && (
-                    <p className="text-xs text-slate-500 line-clamp-2 italic mb-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                      {item.note}
-                    </p>
-                  )}
                 </div>
 
-                {/* Card Bottom: Metadata, Deadline Box & Actions */}
-                <div className="mt-2 pt-3 border-t border-slate-100">
-                  {/* Published Date */}
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-2.5">
-                    <Calendar size={13} className="text-slate-400" />
-                    <span>
-                      Ngày đăng: <strong className="text-slate-700 font-semibold">{formatDate(item.publishedDate)}</strong>
-                    </span>
-                  </div>
-
-                  {/* Deadline Box */}
+                {/* Card Bottom: Compact Deadline & Slim Actions */}
+                <div className="mt-1">
+                  {/* Compact Deadline / Date Row */}
                   {item.deadline ? (
                     <div
-                      className={`rounded-xl p-2.5 text-xs border mb-3.5 transition-all ${
+                      className={`rounded-lg px-2.5 py-1.5 text-[11px] border mb-2.5 flex items-center justify-between gap-1.5 ${
                         isUrgent
-                          ? 'bg-amber-50/90 border-amber-200 text-amber-950 shadow-sm'
+                          ? 'bg-amber-50/90 border-amber-200 text-amber-950 font-medium'
                           : item.effectiveStatus === 'open'
-                          ? 'bg-emerald-50/60 border-emerald-200/80 text-emerald-950'
-                          : 'bg-slate-50 border-slate-200 text-slate-600'
+                          ? 'bg-emerald-50/60 border-emerald-200/70 text-emerald-950'
+                          : 'bg-slate-50 border-slate-200 text-slate-500'
                       }`}
                     >
-                      <div className="flex items-start gap-2">
+                      <div className="flex items-center gap-1.5 truncate">
                         <Clock
-                          size={14}
-                          className={`flex-shrink-0 mt-0.5 ${
+                          size={12}
+                          className={`flex-shrink-0 ${
                             isUrgent
                               ? 'text-amber-600'
                               : item.effectiveStatus === 'open'
@@ -414,43 +395,36 @@ export function HomeProcurementGrid({
                               : 'text-slate-400'
                           }`}
                         />
-                        <div className="min-w-0 flex-1 leading-snug">
-                          <div className="font-semibold text-[11px] uppercase tracking-wider text-slate-500 mb-0.5">
-                            {item.effectiveStatus === 'open' ? 'Hạn nộp hồ sơ' : 'Thời hạn nộp'}
-                          </div>
-                          <div className="font-bold text-[12px] text-slate-800">
-                            {formatDeadline(item.deadline)}
-                          </div>
-                          {isUrgent && (
-                            <span className="inline-block mt-1 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px] font-bold">
-                              ⚡ {urgentLabel}
-                            </span>
-                          )}
-                          {item.expired && (
-                            <span className="inline-block mt-1 px-1.5 py-0.5 bg-slate-200 text-slate-700 rounded text-[10px] font-medium">
-                              Đã hết hạn nộp
-                            </span>
-                          )}
-                        </div>
+                        <span className="truncate">Hạn: <strong>{formatDeadline(item.deadline)}</strong></span>
                       </div>
+                      {isUrgent && (
+                        <span className="px-1.5 py-0.2 bg-amber-500 text-white rounded text-[9px] font-bold flex-shrink-0">
+                          {urgentLabel}
+                        </span>
+                      )}
+                      {item.expired && (
+                        <span className="text-[10px] text-slate-400 flex-shrink-0">
+                          Hết hạn
+                        </span>
+                      )}
                     </div>
                   ) : (
-                    <div className="rounded-xl p-2.5 text-xs bg-slate-50 border border-slate-100 text-slate-500 mb-3.5 flex items-center gap-2">
-                      <Clock size={13} className="text-slate-400" />
-                      <span>Không quy định thời hạn</span>
+                    <div className="px-2 py-1 text-[11px] text-slate-400 mb-2 flex items-center gap-1.5">
+                      <Calendar size={12} className="text-slate-400 flex-shrink-0" />
+                      <span>Đăng ngày: {formatDate(item.publishedDate)}</span>
                     </div>
                   )}
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-2">
+                  {/* Action Buttons (Slim) */}
+                  <div className="pt-2 border-t border-slate-100 flex items-center gap-1.5">
                     {fileUrl ? (
                       <>
                         <button
                           type="button"
                           onClick={handleOpenPreview}
-                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-xl text-xs font-semibold transition-all shadow-sm group/btn"
+                          className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-lg text-[11px] font-semibold transition-all shadow-2xs group/btn"
                         >
-                          <Eye size={14} className="group-hover/btn:scale-110 transition-transform" />
+                          <Eye size={13} className="group-hover/btn:scale-110 transition-transform" />
                           <span>Xem văn bản</span>
                         </button>
 
@@ -459,19 +433,19 @@ export function HomeProcurementGrid({
                           target="_blank"
                           rel="noopener noreferrer"
                           download={!isFromDrive}
-                          className="inline-flex items-center justify-center p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+                          className="inline-flex items-center justify-center p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
                           title={isFromDrive ? 'Mở Google Drive' : 'Tải file đính kèm'}
                         >
-                          <Download size={15} />
+                          <Download size={13} />
                         </a>
                       </>
                     ) : (
                       <Link
                         href="/mua-sam"
-                        className="flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors"
+                        className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[11px] font-semibold transition-colors"
                       >
                         <span>Xem chi tiết</span>
-                        <ArrowRight size={13} />
+                        <ArrowRight size={12} />
                       </Link>
                     )}
                   </div>
@@ -484,13 +458,13 @@ export function HomeProcurementGrid({
 
       {/* Mobile view all link */}
       {showViewAll && (
-        <div className="mt-6 text-center md:hidden">
+        <div className="mt-4 text-center sm:hidden">
           <Link
             href="/mua-sam"
-            className="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm shadow-sm hover:bg-slate-50"
+            className="inline-flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-white border border-slate-200 text-slate-700 font-semibold text-xs shadow-xs hover:bg-slate-50"
           >
             <span>Xem tất cả thông báo mua sắm</span>
-            <ArrowRight size={16} />
+            <ArrowRight size={14} />
           </Link>
         </div>
       )}
@@ -506,10 +480,10 @@ export function HomeProcurementGrid({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-gray-200 bg-gray-50/80 gap-3">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50/80 gap-3">
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
                 <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
-                  <FileText size={18} />
+                  <FileText size={16} />
                 </div>
                 <div className="min-w-0 flex-1">
                   <h3 className="text-sm sm:text-base font-bold text-gray-900 truncate leading-snug">
@@ -528,10 +502,10 @@ export function HomeProcurementGrid({
                 <a
                   href={previewDoc.url}
                   download={!previewDoc.isFromDrive}
-                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 text-white hover:bg-emerald-700 rounded-xl text-xs font-semibold transition-colors shadow-sm"
+                  className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg text-xs font-semibold transition-colors shadow-xs"
                   title="Tải văn bản về máy"
                 >
-                  <Download size={14} />
+                  <Download size={13} />
                   <span>Tải về</span>
                 </a>
 
@@ -539,20 +513,20 @@ export function HomeProcurementGrid({
                   href={previewDoc.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 rounded-xl text-xs font-semibold transition-colors shadow-sm"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 rounded-lg text-xs font-semibold transition-colors shadow-xs"
                   title="Mở trong cửa sổ mới"
                 >
-                  <ExternalLink size={14} />
+                  <ExternalLink size={13} />
                   <span className="hidden sm:inline">Mở tab mới</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={() => setPreviewDoc(null)}
-                  className="w-8 h-8 rounded-xl bg-gray-200/80 hover:bg-gray-300 text-gray-700 flex items-center justify-center transition-colors ml-1"
+                  className="w-7 h-7 rounded-lg bg-gray-200/80 hover:bg-gray-300 text-gray-700 flex items-center justify-center transition-colors ml-1"
                   title="Đóng cửa sổ"
                 >
-                  <X size={16} />
+                  <X size={15} />
                 </button>
               </div>
             </div>
