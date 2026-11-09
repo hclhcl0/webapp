@@ -4148,36 +4148,10 @@ export const MIGRATION_STATEMENTS = [
     CREATE INDEX IF NOT EXISTS "popup_settings_rels_parent_idx" ON "popup_settings_rels" ("parent_id");
     CREATE INDEX IF NOT EXISTS "popup_settings_rels_path_idx" ON "popup_settings_rels" ("path");
 
-    -- Tự động chuyển dữ liệu popup từ site_settings
+    -- Tự động chuyển dữ liệu popup từ site_settings (chỉ khởi tạo nếu chưa có)
     INSERT INTO "popup_settings" ("id", "enabled", "type", "title", "updated_at", "created_at")
     VALUES (1, false, 'manual', 'THÔNG BÁO QUAN TRỌNG', now(), now())
     ON CONFLICT ("id") DO NOTHING;
-
-    DO $$
-    BEGIN
-      IF EXISTS (SELECT FROM information_schema.columns WHERE table_name = 'site_settings' AND column_name = 'popup_title') THEN
-        UPDATE "popup_settings" ps
-        SET
-          "enabled" = COALESCE(ss.popup_enabled, ps.enabled),
-          "type" = COALESCE(ss.popup_type, ps.type),
-          "services_title" = COALESCE(ss.popup_services_title, ps.services_title),
-          "services_subtitle" = COALESCE(ss.popup_services_subtitle, ps.services_subtitle),
-          "services_mascot_id" = COALESCE(ss.popup_services_mascot_id, ps.services_mascot_id),
-          "services_header_color" = COALESCE(ss.popup_services_header_color, ps.services_header_color),
-          "transparent_background" = COALESCE(ss.popup_transparent_background, ps.transparent_background),
-          "article_id" = COALESCE(ss.popup_article_id, ps.article_id),
-          "title" = COALESCE(ss.popup_title, ps.title),
-          "image_id" = COALESCE(ss.popup_image_id, ps.image_id),
-          "video_url" = COALESCE(ss.popup_video_url, ps.video_url),
-          "content" = COALESCE(ss.popup_content, ps.content),
-          "link_url" = COALESCE(ss.popup_link_url, ps.link_url),
-          "delay_seconds" = COALESCE(ss.popup_delay_seconds, ps.delay_seconds),
-          "show_once" = COALESCE(ss.popup_show_once, ps.show_once)
-        FROM "site_settings" ss
-        WHERE ps.id = 1;
-      END IF;
-    EXCEPTION WHEN others THEN null;
-    END $$;
 
     DO $$
     BEGIN
