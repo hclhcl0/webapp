@@ -52,7 +52,7 @@ const TYPE_CONFIG: Record<string, { label: string; badgeClass: string }> = {
   },
   'ket-qua-lua-chon': {
     label: 'Kết quả lựa chọn',
-    badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
+    badgeClass: 'bg-blue-50 text-blue-800 border-blue-200/80',
   },
   'thong-bao': {
     label: 'Thông báo',
@@ -71,8 +71,8 @@ const TYPE_CONFIG: Record<string, { label: string; badgeClass: string }> = {
 const STATUS_CONFIG: Record<string, { label: string; badgeClass: string; dotClass?: string }> = {
   open: {
     label: 'Đang mở',
-    badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200/90',
-    dotClass: 'bg-emerald-500 animate-pulse',
+    badgeClass: 'bg-[#f0f9fa] text-[#007a8c] border-[#d0eef2]',
+    dotClass: 'bg-[#009aae] animate-pulse',
   },
   closed: {
     label: 'Đã đóng',
@@ -190,14 +190,14 @@ export function HomeProcurementGrid({
 
   return (
     <div className="w-full">
-      {/* ── Section Header (Gọn gàng) ── */}
+      {/* ── Section Header (Gọn gàng & Đồng bộ màu CDC) ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3.5">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold uppercase tracking-wider mb-1 border border-emerald-200/80">
-            <ShoppingBag size={12} className="text-emerald-600" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#f0f9fa] text-[#007a8c] text-[11px] font-bold uppercase tracking-wider mb-1 border border-[#d0eef2]">
+            <ShoppingBag size={12} className="text-[#007a8c]" />
             <span>Mua sắm & Đấu thầu</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-[#005a68] tracking-tight">
             {title}
           </h2>
           {subtitle && (
@@ -210,15 +210,15 @@ export function HomeProcurementGrid({
         {showViewAll && (
           <Link
             href="/mua-sam"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline group"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-[#007a8c] hover:text-[#005a68] hover:underline group"
           >
             <span>Xem tất cả thông báo</span>
-            <ArrowRight size={14} className="text-emerald-600 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={14} className="text-[#007a8c] group-hover:translate-x-1 transition-transform" />
           </Link>
         )}
       </div>
 
-      {/* ── Tab Filter Bar (Gọn gàng) ── */}
+      {/* ── Tab Filter Bar (Gọn gàng & Đồng bộ màu CDC) ── */}
       {showTabs && (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 mb-3.5 scrollbar-none">
           <button
@@ -226,8 +226,8 @@ export function HomeProcurementGrid({
             onClick={() => setActiveTab('all')}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               activeTab === 'all'
-                ? 'bg-slate-900 text-white shadow-xs'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-[#005a68] text-white shadow-xs'
+                : 'bg-white text-slate-600 hover:bg-[#f0f9fa] hover:text-[#007a8c] border border-slate-200'
             }`}
           >
             <span>Tất cả</span>
@@ -241,13 +241,13 @@ export function HomeProcurementGrid({
             onClick={() => setActiveTab('open')}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               activeTab === 'open'
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'bg-white text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 border border-slate-200'
+                ? 'bg-[#007a8c] text-white shadow-xs'
+                : 'bg-white text-slate-600 hover:bg-[#f0f9fa] hover:text-[#007a8c] border border-slate-200'
             }`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#38d4eb] animate-pulse" />
             <span>Đang mở hồ sơ</span>
-            <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${activeTab === 'open' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'}`}>
+            <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${activeTab === 'open' ? 'bg-white/20 text-white' : 'bg-[#d0eef2] text-[#005a68]'}`}>
               {counts.open}
             </span>
           </button>
@@ -272,7 +272,7 @@ export function HomeProcurementGrid({
             onClick={() => setActiveTab('evaluated')}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               activeTab === 'evaluated'
-                ? 'bg-blue-600 text-white shadow-xs'
+                ? 'bg-[#2563eb] text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-blue-50 hover:text-blue-700 border border-slate-200'
             }`}
           >
@@ -330,7 +330,7 @@ export function HomeProcurementGrid({
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-xl border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.06)] hover:border-emerald-400 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between overflow-hidden group p-3.5"
+                className="bg-white rounded-xl border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)] hover:shadow-[0_6px_16px_rgba(0,122,140,0.08)] hover:border-[#007a8c]/50 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between overflow-hidden group p-3.5"
               >
                 <div>
                   {/* Card Top: Type + Doc Number & Status in 1 Single Row */}
@@ -357,7 +357,7 @@ export function HomeProcurementGrid({
                   {/* Title (2 lines clamp, neat typography) */}
                   <h3
                     onClick={fileUrl ? handleOpenPreview : undefined}
-                    className={`text-[13px] font-bold text-slate-800 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug mb-2 ${
+                    className={`text-[13px] font-bold text-slate-800 group-hover:text-[#007a8c] transition-colors line-clamp-2 leading-snug mb-2 ${
                       fileUrl ? 'cursor-pointer' : ''
                     }`}
                     title={item.title}
@@ -380,7 +380,7 @@ export function HomeProcurementGrid({
                         isUrgent
                           ? 'bg-amber-50/90 border-amber-200 text-amber-950 font-medium'
                           : item.effectiveStatus === 'open'
-                          ? 'bg-emerald-50/60 border-emerald-200/70 text-emerald-950'
+                          ? 'bg-[#f0f9fa] border-[#d0eef2] text-slate-800'
                           : 'bg-slate-50 border-slate-200 text-slate-500'
                       }`}
                     >
@@ -391,7 +391,7 @@ export function HomeProcurementGrid({
                             isUrgent
                               ? 'text-amber-600'
                               : item.effectiveStatus === 'open'
-                              ? 'text-emerald-600'
+                              ? 'text-[#007a8c]'
                               : 'text-slate-400'
                           }`}
                         />
@@ -422,7 +422,7 @@ export function HomeProcurementGrid({
                         <button
                           type="button"
                           onClick={handleOpenPreview}
-                          className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white rounded-lg text-[11px] font-semibold transition-all shadow-2xs group/btn"
+                          className="flex-1 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 bg-[#f0f9fa] hover:bg-[#007a8c] text-[#007a8c] hover:text-white border border-[#d0eef2] hover:border-[#007a8c] rounded-lg text-[11px] font-semibold transition-all shadow-2xs group/btn"
                         >
                           <Eye size={13} className="group-hover/btn:scale-110 transition-transform" />
                           <span>Xem văn bản</span>
@@ -461,7 +461,7 @@ export function HomeProcurementGrid({
         <div className="mt-4 text-center sm:hidden">
           <Link
             href="/mua-sam"
-            className="inline-flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-white border border-slate-200 text-slate-700 font-semibold text-xs shadow-xs hover:bg-slate-50"
+            className="inline-flex items-center justify-center gap-1.5 w-full py-2 rounded-lg bg-white border border-[#d0eef2] text-[#007a8c] font-semibold text-xs shadow-xs hover:bg-[#f0f9fa]"
           >
             <span>Xem tất cả thông báo mua sắm</span>
             <ArrowRight size={14} />
@@ -482,7 +482,7 @@ export function HomeProcurementGrid({
             {/* Modal Header */}
             <div className="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-gray-200 bg-gray-50/80 gap-3">
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-[#f0f9fa] border border-[#d0eef2] text-[#007a8c] flex items-center justify-center flex-shrink-0">
                   <FileText size={16} />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -502,7 +502,7 @@ export function HomeProcurementGrid({
                 <a
                   href={previewDoc.url}
                   download={!previewDoc.isFromDrive}
-                  className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg text-xs font-semibold transition-colors shadow-xs"
+                  className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 bg-[#007a8c] text-white hover:bg-[#005a68] rounded-lg text-xs font-semibold transition-colors shadow-xs"
                   title="Tải văn bản về máy"
                 >
                   <Download size={13} />
