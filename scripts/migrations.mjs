@@ -4482,5 +4482,84 @@ export const MIGRATION_STATEMENTS = [
       END IF;
     EXCEPTION WHEN others THEN null;
     END $$;
+  `,
+
+  // ====================================================
+  // BATCH: Restore sequence DEFAULT on varchar block/array id columns (fixes version & block saves)
+  // ====================================================
+  `
+    DO $$
+    DECLARE
+      rec RECORD;
+      v_seq text;
+      v_seq_ref text;
+      v_cur bigint;
+      v_called boolean;
+      v_max bigint;
+      v_target bigint;
+    BEGIN
+      FOR rec IN
+        SELECT table_name
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND column_name = 'id'
+          AND data_type IN ('character varying', 'text')
+          AND is_nullable = 'NO'
+          AND column_default IS NULL
+          AND table_name <> 'users_sessions'
+        ORDER BY table_name
+      LOOP
+        SELECT s.sequencename INTO v_seq
+        FROM pg_sequences s
+        WHERE s.schemaname = 'public'
+          AND (
+            s.sequencename = rec.table_name || '_id_seq'
+            OR (length(rec.table_name) > 56 AND s.sequencename = left(rec.table_name, 56) || '_id_seq')
+          )
+        LIMIT 1;
+
+        IF v_seq IS NULL THEN
+          IF length(rec.table_name) <= 56 THEN
+            v_seq := rec.table_name || '_id_seq';
+          ELSE
+            v_seq := left(rec.table_name, 47) || '_' || substr(md5(rec.table_name), 1, 8) || '_id_seq';
+          END IF;
+          EXECUTE format('CREATE SEQUENCE IF NOT EXISTS public.%I', v_seq);
+        END IF;
+
+        v_seq_ref := 'public.' || quote_ident(v_seq);
+
+        EXECUTE format('SELECT last_value, is_called FROM public.%I', v_seq) INTO v_cur, v_called;
+        IF NOT COALESCE(v_called, false) THEN
+          v_cur := NULL;
+        END IF;
+
+        EXECUTE format(
+          'SELECT max(CASE WHEN id ~ ''^[0-9]{1,15}$'' THEN id::bigint END) FROM public.%I',
+          rec.table_name
+        ) INTO v_max;
+
+        v_target := GREATEST(COALESCE(v_cur, 0), COALESCE(v_max, 0));
+        IF v_target > 0 THEN
+          EXECUTE format('SELECT setval(%L, %s, true)', v_seq_ref, v_target);
+        END IF;
+
+        EXECUTE format(
+          'ALTER TABLE public.%I ALTER COLUMN "id" SET DEFAULT nextval(%L::regclass)',
+          rec.table_name,
+          v_seq_ref
+        );
+      END LOOP;
+
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='_pages_v_blocks_magazine_block' AND column_name='cover_image_id' AND is_nullable='NO') THEN
+        ALTER TABLE "public"."_pages_v_blocks_magazine_block" ALTER COLUMN "cover_image_id" DROP NOT NULL;
+      END IF;
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='_pages_v_blocks_magazine_block' AND column_name='title' AND is_nullable='NO') THEN
+        ALTER TABLE "public"."_pages_v_blocks_magazine_block" ALTER COLUMN "title" DROP NOT NULL;
+      END IF;
+      IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='_pages_v_blocks_magazine_block_magazine_pages' AND column_name='page_image_id' AND is_nullable='NO') THEN
+        ALTER TABLE "public"."_pages_v_blocks_magazine_block_magazine_pages" ALTER COLUMN "page_image_id" DROP NOT NULL;
+      END IF;
+    END $$;
   `
 ];
