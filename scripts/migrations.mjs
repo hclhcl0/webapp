@@ -4561,5 +4561,38 @@ export const MIGRATION_STATEMENTS = [
         ALTER TABLE "public"."_pages_v_blocks_magazine_block_magazine_pages" ALTER COLUMN "page_image_id" DROP NOT NULL;
       END IF;
     END $$;
+  `,
+
+  // ====================================================
+  // BATCH: Create backup_settings global table for Admin Google Drive Backup
+  // ====================================================
+  `
+    DO $$ BEGIN
+      CREATE TYPE "public"."enum_backup_settings_auth_method" AS ENUM('oauth2', 'service_account');
+    EXCEPTION WHEN duplicate_object THEN null;
+    END $$;
+
+    CREATE TABLE IF NOT EXISTS "backup_settings" (
+      "id" serial PRIMARY KEY NOT NULL,
+      "auth_method" "enum_backup_settings_auth_method" DEFAULT 'oauth2',
+      "oauth_client_id" varchar,
+      "oauth_client_secret" varchar,
+      "oauth_email" varchar,
+      "oauth_refresh_token" varchar,
+      "oauth_access_token" varchar,
+      "oauth_token_expiry" varchar,
+      "service_account_json" varchar,
+      "drive_folder_input" varchar,
+      "auto_backup_enabled" boolean DEFAULT true,
+      "backup_include_media" boolean DEFAULT true,
+      "backup_hour" numeric DEFAULT 2,
+      "retain_local_days" numeric DEFAULT 7,
+      "retain_drive_count" numeric DEFAULT 30,
+      "last_backup_at" varchar,
+      "last_backup_status" varchar,
+      "last_backup_summary" varchar,
+      "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+      "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+    );
   `
 ];

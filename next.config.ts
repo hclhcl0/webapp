@@ -32,7 +32,7 @@ const nextConfig: any = {
   output: 'standalone',
   compress: true,
   outputFileTracingRoot: path.resolve(__dirname),
-  serverExternalPackages: ['sharp'],
+  serverExternalPackages: ['sharp', 'googleapis'],
   typescript: {
     ignoreBuildErrors: true,
   },

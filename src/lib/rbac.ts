@@ -191,6 +191,7 @@ export const globalsWithRBAC = (globals: GlobalConfig[]): GlobalConfig[] => {
         break;
       case 'site-settings':
       case 'settings':
+      case 'backup-settings':
       default:
         allowedRoles = ['admin'];
         break;

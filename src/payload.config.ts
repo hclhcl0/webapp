@@ -31,6 +31,7 @@ import { SiteStats } from './globals/SiteStats.ts';
 import { BannerSettings } from './globals/BannerSettings.ts';
 import { VideoWarningSettings } from './globals/VideoWarningSettings.ts';
 import { PopupSettings } from './globals/PopupSettings.ts';
+import { BackupSettings } from './globals/BackupSettings.ts';
 import { Videos } from './collections/Videos.ts';
 import { VideoChannels } from './collections/VideoChannels.ts';
 import { FormSubmissions } from './collections/FormSubmissions.ts';
@@ -108,6 +109,8 @@ export default buildConfig({
     if (process.env.NODE_ENV !== 'development') { // Tránh chạy nhiều lần khi dev hot-reload
       const { initVideoSyncCron } = await import('./cron/videoSync.ts');
       initVideoSyncCron();
+      const { initAutoBackupCron } = await import('./cron/autoBackup.ts');
+      initAutoBackupCron();
     }
   },
   admin: {
@@ -177,6 +180,7 @@ export default buildConfig({
     BannerSettings,
     VideoWarningSettings,
     PopupSettings,
+    BackupSettings,
   ]),
   plugins: [
     ...(process.env.BLOB_READ_WRITE_TOKEN
